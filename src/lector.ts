@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { crearUbicador, type Ubicacion } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
 import { unir, type Mantenimiento } from './mantenimiento.ts';
 
@@ -15,6 +16,10 @@ async function leerGuardados(): Promise<Mantenimiento[]> {
   }
 }
 
+async function leerJson<T>(archivo: string): Promise<T> {
+  return JSON.parse(await readFile(archivo, 'utf8'));
+}
+
 const urls = (await buscarNotas()).slice(0, NOTAS_A_LEER);
 if (urls.length === 0) console.warn('⚠️  No encontré notas de cortes en el sitemap de El Doce.');
 
@@ -26,7 +31,19 @@ for (const url of urls) {
   nuevos.push(...mantenimientos);
 }
 
-const todos = unir(await leerGuardados(), nuevos);
+// Ubicamos todos los cortes (también los viejos), así una mejora en los alias corrige el historial.
+const mapa = await leerJson<{ features: { properties: { nombre: string | null } }[] }>('data/barrios.geojson');
+const ubicar = crearUbicador(
+  mapa.features.flatMap((f) => f.properties.nombre ?? []),
+  await leerJson<Record<string, string>>('data/alias-barrios.json'),
+);
+const todos: (Mantenimiento & Ubicacion)[] = unir(await leerGuardados(), nuevos).map((m) => ({ ...m, ...ubicar(m.zona) }));
+
 await mkdir('data', { recursive: true });
 await writeFile(ARCHIVO, JSON.stringify(todos, null, 2) + '\n');
 console.log(`Guardados ${todos.length} cortes en ${ARCHIVO}`);
+
+const sinUbicar = [...new Set(todos.flatMap((m) => m.sinUbicar))];
+const conBarrio = todos.filter((m) => m.barrios.length > 0).length;
+console.log(`📍 ${conBarrio} de ${todos.length} cortes tienen al menos un barrio en el mapa.`);
+if (sinUbicar.length) console.log(`❓ Sin ubicar (se pueden agregar a data/alias-barrios.json):\n   - ${sinUbicar.join('\n   - ')}`);

@@ -10,6 +10,7 @@
   },
   "scripts": {
     "lector": "node src/lector.ts",
+    "barrios": "node src/descargar-barrios.ts",
     "test": "node --test \"src/**/*.test.ts\"",
     "typecheck": "tsc"
   },
