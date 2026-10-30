@@ -1,0 +1,20 @@
+{
+  "name": "tengo-luz",
+  "version": "0.1.0",
+  "description": "Mapa de cortes y mantenimientos de luz por barrio en Córdoba",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lector": "node src/lector.ts",
+    "test": "node --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}

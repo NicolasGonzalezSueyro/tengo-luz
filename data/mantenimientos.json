@@ -1,0 +1,82 @@
+[
+  {
+    "fecha": "2026-10-29",
+    "desde": "08:00",
+    "hasta": "12:30",
+    "zona": "barrios La Favela y Villa Urquiza.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/28/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-29",
+    "desde": "14:00",
+    "hasta": "17:00",
+    "zona": "barrio Los Olmos.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/28/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-30",
+    "desde": "08:00",
+    "hasta": "13:00",
+    "zona": "zona rural sobre Ruta Nacional 9 hacia el norte, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/29/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-30",
+    "desde": "14:30",
+    "hasta": "16:30",
+    "zona": "barrio Las Palmas en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/29/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-31",
+    "desde": "07:30",
+    "hasta": "10:30",
+    "zona": "Barrio Argüello, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-31",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "Barrios Los Paraísos, San Martín Anexo y Alta Córdoba, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-31",
+    "desde": "08:00",
+    "hasta": "13:00",
+    "zona": "Sector comprendido por Camino 60 Cuadras, desde el Km. 13 en adelante, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-31",
+    "desde": "08:30",
+    "hasta": "09:30",
+    "zona": "Barrio Los Boulevares, comprendido por calle M. P. Cabrera, entre Bv. De Los Rusos y De Los Alemanes, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-31",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "Barrios Solares de Santa María, Loteo Mutual Docente, SMATA, Los Manantiales, Loteo Santa Mónica, Parque Atlántica, Parque Horizonte y Parque Los Molinos, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/"
+  },
+  {
+    "fecha": "2026-10-31",
+    "desde": "14:30",
+    "hasta": "18:30",
+    "zona": "Barrio San Lorenzo Sud, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/"
+  }
+]
