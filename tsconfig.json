@@ -3,13 +3,19 @@
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "lib": ["esnext", "dom", "dom.iterable"],
     "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "leaflet"],
+    // La página (web/) es JavaScript común, pero igual la revisamos con los tipos de TypeScript.
+    "allowJs": true,
+    "checkJs": true,
+    // Leaflet se carga con un <script> y queda disponible como "L" global.
+    "allowUmdGlobalAccess": true
   },
-  "include": ["src"]
+  "include": ["src", "web"]
 }

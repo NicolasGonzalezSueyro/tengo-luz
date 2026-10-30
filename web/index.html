@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>¿Tengo luz? · Cortes programados en Córdoba</title>
+  <meta name="description" content="Mapa de los cortes de luz programados por barrio en Córdoba capital. Sitio no oficial.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div class="marca">
+      <h1>¿Tengo luz?</h1>
+      <p>Cortes de luz programados en Córdoba capital</p>
+    </div>
+    <div class="controles">
+      <label class="campo">
+        <span>Día</span>
+        <select id="dia"></select>
+      </label>
+      <form class="campo buscador" id="form-buscar">
+        <label for="buscar">Barrio</label>
+        <input id="buscar" list="lista-barrios" placeholder="Buscá tu barrio" autocomplete="off">
+        <datalist id="lista-barrios"></datalist>
+      </form>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <div id="mapa" role="region" aria-label="Mapa de barrios de Córdoba"></div>
+    <aside id="panel" class="panel" aria-live="polite">
+      <p class="cargando">Cargando cortes…</p>
+    </aside>
+  </main>
+
+  <footer class="pie">
+    Sitio <strong>no oficial</strong>, sin relación con EPEC. Cortes: anuncios publicados por El Doce.
+    Barrios: Municipalidad de Córdoba y © colaboradores de OpenStreetMap.
+    <a href="https://github.com/NicolasGonzalezSueyro/tengo-luz">Código en GitHub</a>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

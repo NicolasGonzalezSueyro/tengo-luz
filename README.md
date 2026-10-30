@@ -6,9 +6,19 @@ Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
 
 ## Estado
 
-🚧 En desarrollo — Fase 2: del texto al barrio.
+🚧 En desarrollo — Fase 3: el mapa interactivo (funciona en la compu; todavía no está publicado).
 
-## Cómo funciona (por ahora)
+## La página
+
+Un mapa de Córdoba con los barrios pintados según los cortes programados del día elegido:
+
+- 🟡 corte programado · 🟠 corte total · borde marrón: en curso ahora.
+- Tocás un barrio y ves sus cortes del día, el próximo y el último.
+- Buscador de barrios (no importan las tildes) y lista de todos los cortes del día, incluidos los que no se pueden marcar en el mapa.
+
+Está hecha con HTML, CSS y JavaScript sin frameworks, y [Leaflet](https://leafletjs.com) para el mapa. La lógica de estados está en [`web/estado.js`](web/estado.js), con tests.
+
+## Cómo funcionan los datos
 
 1. `src/fuentes/eldoce.ts` busca en el sitemap de noticias de [El Doce](https://eldoce.tv) las notas diarias con los cortes programados que anuncia EPEC.
 2. De cada nota toma solo la sección de Córdoba capital y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
@@ -33,6 +43,7 @@ Requiere Node.js 24 o más nuevo.
 
 ```bash
 npm install
+npm run dev        # abre la página en http://localhost:4321
 npm test           # corre los tests
 npm run lector     # actualiza data/mantenimientos.json
 npm run barrios    # vuelve a descargar los límites de barrios (casi nunca hace falta)

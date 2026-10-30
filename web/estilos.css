@@ -1,0 +1,154 @@
+:root {
+  --fondo: #f8fafc;
+  --superficie: #ffffff;
+  --texto: #0f172a;
+  --texto-suave: #475569;
+  --borde: #e2e8f0;
+  --acento: #1d4ed8;
+  --programado: #facc15;
+  --total: #f59e0b;
+  --en-curso: #b45309;
+  --sin-cortes: #cbd5e1;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--texto);
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--fondo);
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 12px 16px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borde);
+}
+
+.marca h1 { margin: 0; font-size: 1.5rem; }
+.marca p { margin: 2px 0 0; color: var(--texto-suave); font-size: 0.9rem; }
+
+.controles { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.campo { display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; color: var(--texto-suave); }
+.campo select, .campo input {
+  font: inherit;
+  font-size: 1rem;
+  color: var(--texto);
+  padding: 8px 10px;
+  min-width: 220px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--superficie);
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  min-height: 0;
+}
+
+#mapa { min-height: 300px; }
+.fondo-suave { filter: grayscale(0.85) brightness(1.05) contrast(0.85); }
+
+.panel {
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--superficie);
+  border-left: 1px solid var(--borde);
+}
+
+.panel h2 { margin: 0 0 4px; font-size: 1.25rem; }
+.panel h3 { margin: 20px 0 8px; font-size: 1rem; }
+.panel .resumen { margin: 0 0 12px; color: var(--texto-suave); }
+
+.cortes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.corte { padding: 10px 12px; border: 1px solid var(--borde); border-left: 4px solid var(--programado); border-radius: 8px; }
+.corte.total { border-left-color: var(--total); }
+.corte.en-curso { border-left-color: var(--en-curso); background: #fffbeb; }
+.corte .horario { font-weight: 600; }
+.corte .zona { margin: 4px 0 0; color: var(--texto-suave); font-size: 0.9rem; }
+.corte .sin-mapa { margin: 4px 0 0; font-size: 0.85rem; color: #92400e; }
+.corte .fuente { font-size: 0.8rem; }
+
+.etiqueta {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #fef9c3;
+  color: #713f12;
+}
+.etiqueta.total { background: #fde68a; }
+.etiqueta.en-curso { background: var(--en-curso); color: white; }
+
+.barrios { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.barrio-link {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--fondo);
+  color: var(--acento);
+  cursor: pointer;
+}
+.barrio-link:hover, .barrio-link:focus-visible { border-color: var(--acento); }
+
+.volver {
+  font: inherit;
+  padding: 0;
+  margin-bottom: 12px;
+  border: 0;
+  background: none;
+  color: var(--acento);
+  cursor: pointer;
+}
+
+.historial { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+.historial dt { color: var(--texto-suave); }
+.historial dd { margin: 0; }
+
+.aviso { margin-top: 20px; padding: 10px 12px; border-radius: 8px; background: var(--fondo); font-size: 0.85rem; color: var(--texto-suave); }
+
+.cargando, .error { color: var(--texto-suave); }
+.error { color: #b91c1c; }
+
+.leyenda {
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+.leyenda span { display: inline-block; width: 14px; height: 14px; margin-right: 6px; vertical-align: -2px; border-radius: 3px; border: 1px solid rgba(0, 0, 0, 0.2); }
+
+.pie {
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+  background: var(--superficie);
+  border-top: 1px solid var(--borde);
+}
+.pie a { color: var(--acento); }
+
+/* Celular: el mapa arriba y el panel abajo, con scroll de toda la página. */
+@media (max-width: 760px) {
+  body { display: block; height: auto; }
+  .contenido { display: block; }
+  #mapa { height: 55vh; }
+  .panel { border-left: 0; border-top: 1px solid var(--borde); overflow: visible; }
+  .controles, .campo, .campo select, .campo input { width: 100%; min-width: 0; }
+}
