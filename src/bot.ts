@@ -58,7 +58,11 @@ export async function responder(
     case '/start':
     case '/ayuda':
     case '/help':
-      return `${AYUDA}${esAdmin ? AYUDA_ADMIN : ''}\n\nTu número de chat es ${chat}.`;
+      return `${AYUDA}${esAdmin ? AYUDA_ADMIN : ''}`;
+
+    // No figura en la ayuda: sirve para saber qué número poner en TELEGRAM_ADMIN.
+    case '/mi_id':
+      return `Tu número de chat es ${chat}.`;
 
     case '/barrio': {
       if (!argumento) return 'Escribí el barrio después del comando. Por ejemplo: /barrio Alberdi';

@@ -32,7 +32,8 @@ test('buscarLugar: exacto sin tildes, o los que contienen el texto', () => {
 
 test('seguir, listar y borrar barrios', async () => {
   const db = baseLocal();
-  assert.match(await responder(db, 1, '/start', usuario), /Tu número de chat es 1\./);
+  assert.doesNotMatch(await responder(db, 1, '/start', usuario), /número de chat/);
+  assert.equal(await responder(db, 1, '/mi_id', usuario), 'Tu número de chat es 1.');
   assert.match(await responder(db, 1, '/barrio alberdi', usuario), /Te aviso .* Alberdi/);
   assert.match(await responder(db, 1, '/barrio Alberdi', usuario), /Ya te aviso/);
   assert.match(await responder(db, 1, '/barrio alberd', usuario), /Encontré 2 lugares/);
