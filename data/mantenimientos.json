@@ -10,7 +10,8 @@
       "Villa de Emergencia  \"La Favela\"",
       "Villa General Urquiza"
     ],
-    "sinUbicar": []
+    "sinUbicar": [],
+    "zonas": []
   },
   {
     "fecha": "2026-10-29",
@@ -22,7 +23,8 @@
     "barrios": [
       "Los Olmos"
     ],
-    "sinUbicar": []
+    "sinUbicar": [],
+    "zonas": []
   },
   {
     "fecha": "2026-10-30",
@@ -32,9 +34,10 @@
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/10/29/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [],
-    "sinUbicar": [
-      "zona rural sobre ruta nacional 9 hacia el norte"
-    ]
+    "zonas": [
+      "Zona rural Ruta 9 Norte"
+    ],
+    "sinUbicar": []
   },
   {
     "fecha": "2026-10-30",
@@ -46,6 +49,7 @@
     "barrios": [
       "Las Palmas"
     ],
+    "zonas": [],
     "sinUbicar": []
   },
   {
@@ -58,6 +62,7 @@
     "barrios": [
       "Argüello"
     ],
+    "zonas": [],
     "sinUbicar": []
   },
   {
@@ -72,6 +77,7 @@
       "San Martin Anexo",
       "Alta Córdoba"
     ],
+    "zonas": [],
     "sinUbicar": []
   },
   {
@@ -82,9 +88,10 @@
     "afectacion": "total",
     "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [],
-    "sinUbicar": [
-      "sector comprendido por camino 60 cuadras desde el km 13 en adelante"
-    ]
+    "zonas": [
+      "Camino a 60 Cuadras (desde el Km 13)"
+    ],
+    "sinUbicar": []
   },
   {
     "fecha": "2026-10-31",
@@ -96,6 +103,7 @@
     "barrios": [
       "Los Boulevares"
     ],
+    "zonas": [],
     "sinUbicar": [
       "comprendido por calle m p cabrera entre bv de los rusos y de los alemanes"
     ]
@@ -116,6 +124,7 @@
       "Horizonte",
       "Parque Los Molinos"
     ],
+    "zonas": [],
     "sinUbicar": [
       "santa monica"
     ]
@@ -130,6 +139,7 @@
     "barrios": [
       "San Lorenzo Sur"
     ],
+    "zonas": [],
     "sinUbicar": []
   }
 ]
