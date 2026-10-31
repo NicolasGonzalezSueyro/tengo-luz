@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaCorta, etiquetaDia, historialDelBarrio,
+  barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaCorta, etiquetaDia, hace, historialDelBarrio,
   momentoEnCordoba, sumarDias,
 } from './estado.js';
 
@@ -105,4 +105,11 @@ test('etiquetaDia', () => {
   assert.equal(etiquetaDia('2026-10-30', '2026-10-30'), 'Hoy · viernes 30 de octubre');
   assert.equal(etiquetaDia('2026-10-31', '2026-10-30'), 'Mañana · sábado 31 de octubre');
   assert.equal(etiquetaDia('2026-11-03', '2026-10-30'), 'Martes 3 de noviembre');
+});
+
+test('hace', () => {
+  const t = Date.UTC(2026, 9, 30, 15, 0);
+  assert.equal(hace(t, t + 20_000), 'recién');
+  assert.equal(hace(t, t + 5 * 60_000), 'hace 5 min');
+  assert.equal(hace(t, t + 150 * 60_000), 'hace 2 h');
 });

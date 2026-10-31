@@ -190,3 +190,15 @@ export function etiquetaDia(fecha, hoy) {
   if (fecha === sumarDias(hoy, 1)) return `Mañana · ${fechaLarga(fecha)}`;
   return fechaLarga(fecha).replace(/^./, (l) => l.toUpperCase());
 }
+
+/**
+ * Cuánto pasó desde un momento, para los reportes de vecinos: "recién", "hace 5 min", "hace 2 h".
+ * @param {number} momento milisegundos (Date.now())
+ * @param {number} [ahora]
+ */
+export function hace(momento, ahora = Date.now()) {
+  const minutos = Math.max(0, Math.round((ahora - momento) / 60_000));
+  if (minutos < 1) return 'recién';
+  if (minutos < 60) return `hace ${minutos} min`;
+  return `hace ${Math.floor(minutos / 60)} h`;
+}

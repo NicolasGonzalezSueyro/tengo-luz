@@ -18,6 +18,7 @@
   --luz-texto: #713f12;
   --vivo: #ea580c; /* naranja: corte en curso ahora */
   --zona: #92400e; /* marrón: zona aproximada */
+  --sin-luz: #dc2626; /* rojo: vecinos sin luz, sin aviso */
   --sombra: 0 10px 30px -12px rgba(46, 16, 101, 0.25);
   --degradado: linear-gradient(120deg, #6d28d9 0%, #c026d3 45%, #f97316 100%);
   --radio: 16px;
@@ -40,6 +41,7 @@
   --luz-texto: #fde68a;
   --vivo: #fb923c;
   --zona: #d6a46b;
+  --sin-luz: #ef4444;
   --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
   --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
   color-scheme: dark;
@@ -62,6 +64,7 @@
     --luz-texto: #fde68a;
     --vivo: #fb923c;
     --zona: #d6a46b;
+    --sin-luz: #ef4444;
     --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
     --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
     color-scheme: dark;
@@ -223,6 +226,11 @@ a { color: var(--acento); }
 .boton-primario { background: var(--degradado); color: #fff; box-shadow: 0 8px 20px -8px rgba(192, 38, 211, 0.6); }
 .boton-primario:hover { filter: brightness(1.08); }
 .boton-primario[aria-busy="true"] .icono { animation: girar 1s linear infinite; }
+.boton-peligro { background: var(--sin-luz); color: #fff; box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--sin-luz) 80%, transparent); }
+.boton-peligro:hover { filter: brightness(1.08); }
+.boton-peligro:disabled { opacity: 0.6; cursor: wait; }
+.boton-secundario { border: 1px solid var(--borde); background: var(--superficie); color: var(--texto); text-decoration: none; white-space: normal; }
+.boton-secundario:hover { border-color: var(--acento); }
 
 @keyframes girar { to { transform: rotate(360deg); } }
 
@@ -290,6 +298,7 @@ a { color: var(--acento); }
 .estado.sin-cortes { background: #dcfce7; color: #166534; }
 .estado.programado { background: var(--luz-suave); color: var(--luz-texto); }
 .estado.en-curso { background: var(--vivo); color: #fff; }
+.estado.sin-luz { background: var(--sin-luz); color: #fff; }
 :root[data-tema="oscuro"] .estado.sin-cortes { background: #12351f; color: #86efac; }
 @media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .estado.sin-cortes { background: #12351f; color: #86efac; } }
 
@@ -362,6 +371,29 @@ a { color: var(--acento); }
 .barrio-link:active { transform: scale(0.95); }
 .barrio-link.zona { color: var(--zona); border-style: dashed; border-color: var(--zona); }
 .barrio-link.zona:hover { background: var(--zona); color: #fff; }
+.barrio-link.sin-luz { color: var(--sin-luz); border-color: var(--sin-luz); }
+.barrio-link.sin-luz:hover { background: var(--sin-luz); color: #fff; }
+.barrio-link .chip-cuenta { background: var(--sin-luz); color: #fff; }
+
+/* ---------- Vecinos sin luz y reclamo ---------- */
+.vecinos, .caja-sin-luz {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--sin-luz) 45%, transparent);
+  border-radius: var(--radio);
+  background: color-mix(in srgb, var(--sin-luz) 8%, var(--superficie));
+  animation: aparecer 0.4s both;
+}
+.vecinos h3, .caja-sin-luz h3 { margin: 0 0 8px; color: var(--sin-luz); }
+.vecinos .barrios { margin-top: 0; }
+.caja-sin-luz p { margin: 0 0 12px; font-size: 0.9rem; }
+.caja-sin-luz > .boton-peligro { width: 100%; padding: 11px; font-size: 1.05rem; }
+.reclamo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.reclamo .boton { justify-content: flex-start; padding: 8px 12px; font-size: 0.85rem; text-align: left; }
+.reclamo .icono { flex: none; }
+.nota { margin: 10px 0 0; font-size: 0.78rem; color: var(--texto-suave); }
+.vecinos-cuenta { display: flex; align-items: center; gap: 6px; margin: 0 0 12px; font-weight: 600; color: var(--sin-luz); font-size: 0.9rem; }
+.punto-vivo.rojo { background: var(--sin-luz); }
 
 /* ---------- Historial y avisos ---------- */
 .historial { display: grid; gap: 10px; margin: 0; }
@@ -469,6 +501,12 @@ a { color: var(--acento); }
 @keyframes latido {
   0%, 100% { fill-opacity: 0.55; filter: drop-shadow(0 0 2px rgba(249, 115, 22, 0.4)); }
   50% { fill-opacity: 0.9; filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.95)); }
+}
+/* Barrios donde los vecinos reportan que no tienen luz (sin corte anunciado): rojo que late. */
+.barrio-sin-luz { animation: latido-rojo 1.8s ease-in-out infinite; }
+@keyframes latido-rojo {
+  0%, 100% { fill-opacity: 0.55; filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.4)); }
+  50% { fill-opacity: 0.9; filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.95)); }
 }
 :root[data-tema="oscuro"] .barrio-con-corte { filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.55)); }
 @media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .barrio-con-corte { filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.55)); } }

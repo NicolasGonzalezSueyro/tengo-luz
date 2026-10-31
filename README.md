@@ -8,13 +8,15 @@ Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
 
 ## Estado
 
-✅ Publicado y actualizándose solo cada hora. Próximo: reportes de vecinos y alertas por Telegram.
+✅ Publicado y actualizándose solo cada hora, con reportes de vecinos. Próximo: alertas por Telegram.
 
 ## La página
 
 Un mapa de Córdoba con los barrios pintados según los cortes programados del día elegido:
 
 - 🟡 Barrios con corte programado; 🟠 los que tienen un corte **en curso ahora** laten y brillan.
+- 🔴 **Vecinos sin luz:** cualquiera puede tocar "No tengo luz" en su barrio. Si no hay un corte anunciado en curso, el barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
+- 📣 **Ayuda para reclamar a EPEC:** WhatsApp con el mensaje ya escrito, el formulario oficial, el texto para copiar y el 0800. La página nunca manda reclamos por su cuenta.
 - 🟫 **Zonas aproximadas** (contorno marrón punteado) para los cortes que EPEC describe por una ruta en vez de por barrios.
 - ☰ Menú con "¿Cómo funciona?", modo claro/oscuro y accesos para reclamar a EPEC.
 - 📍 **Mi ubicación:** con el GPS encuentra tu barrio. La ubicación se usa solo en tu navegador, no se envía a ningún lado.
@@ -47,6 +49,16 @@ Algunos anuncios no nombran barrios sino una ruta ("zona rural sobre Ruta Nacion
 Cada alias dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono asignado. Por ejemplo, la plaza "B° Parque Horizonte" queda dentro del barrio oficial **Horizonte**.
 
 Un alias en `null` marca un nombre que **no se debe ubicar** automáticamente: es ambiguo o queda fuera de la ciudad (ej.: "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
+
+## Reportes de vecinos
+
+La única parte con servidor, y también gratis:
+
+- [`functions/api/reportes.ts`](functions/api/reportes.ts) es una **Cloudflare Pages Function**: Cloudflare la convierte en la dirección `/api/reportes`. `GET` devuelve cuántos reportes tiene cada barrio en las últimas 3 horas y `POST` suma uno.
+- Los reportes se guardan en **Cloudflare D1**, una base SQLite. La tabla está en [`src/esquema.sql`](src/esquema.sql).
+- La lógica está en [`src/reportes.ts`](src/reportes.ts), con tests que usan un SQLite en memoria ([`src/base-local.ts`](src/base-local.ts)). `npm run dev` usa esa misma base para probar sin internet.
+
+**Privacidad y abuso.** No se guarda la IP. Se guarda una "huella": el hash SHA-256 de la IP junto con una clave secreta y la fecha, así que cambia todos los días. Con la huella se limita a un reporte por barrio cada 3 horas y a 5 barrios por hora por persona. Los reportes se borran al día siguiente.
 
 ## Cómo se mantiene al día
 

@@ -1,9 +1,14 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
+import { text } from 'node:stream/consumers';
+import { onRequestGet, onRequestPost } from '../functions/api/reportes.ts';
+import { baseLocal } from './base-local.ts';
 
 // Servidor solo para probar la página en la compu (`npm run dev`).
 // Sirve web/ en la raíz y data/ en /data, igual que lo va a hacer el hosting.
+// También responde /api/reportes con la misma API que Cloudflare, pero con una base en memoria
+// que se borra al cortar el servidor.
 
 const PUERTO = 4321;
 const TIPOS: Record<string, string> = {
@@ -14,9 +19,27 @@ const TIPOS: Record<string, string> = {
   '.geojson': 'application/geo+json; charset=utf-8',
   '.svg': 'image/svg+xml',
 };
+const entornoDePrueba = { DB: baseLocal(), CLAVE: 'solo-para-probar' };
 
 createServer(async (req, res) => {
   const ruta = decodeURIComponent(new URL(req.url ?? '/', 'http://localhost').pathname);
+
+  if (ruta === '/api/reportes') {
+    const manejador = req.method === 'GET' ? onRequestGet : req.method === 'POST' ? onRequestPost : null;
+    if (!manejador) {
+      res.writeHead(405).end('Método no permitido');
+      return;
+    }
+    const request = new Request(`http://localhost${req.url}`, {
+      method: req.method,
+      headers: req.headers as Record<string, string>,
+      body: req.method === 'POST' ? await text(req) : undefined,
+    });
+    const respuesta = await manejador({ request, env: entornoDePrueba });
+    res.writeHead(respuesta.status, Object.fromEntries(respuesta.headers)).end(await respuesta.text());
+    return;
+  }
+
   const [carpeta, relativa] = ruta.startsWith('/data/') ? ['data', ruta.slice('/data/'.length)] : ['web', ruta.slice(1) || 'index.html'];
   const base = join(process.cwd(), carpeta);
   const archivo = normalize(join(base, relativa));

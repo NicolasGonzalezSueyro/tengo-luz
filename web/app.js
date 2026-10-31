@@ -4,7 +4,7 @@
 
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaEnCurso, etiquetaCorta, etiquetaDia, fechaLarga,
-  historialDelBarrio, lugaresDelCorte, momentoEnCordoba,
+  hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba,
 } from './estado.js';
 import { completarIconos, icono } from './iconos.js';
 
@@ -17,17 +17,18 @@ import { completarIconos, icono } from './iconos.js';
 
 const CORDOBA = /** @type {L.LatLngTuple} */ ([-31.4167, -64.1833]);
 const RECLAMO_EPEC = 'https://www.epec.com.ar/tramites/reclamo-tecnico';
+const WHATSAPP_EPEC = '5493512004343';
 const ES_CELULAR = window.matchMedia('(max-width: 860px)');
 
 // Colores de los barrios en el mapa, según el tema. El resto de los colores está en estilos.css.
 const PALETAS = {
   claro: {
     borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
-    enCurso: '#f97316', bordeEnCurso: '#c2410c', zona: '#92400e', elegido: '#6d28d9',
+    enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', bordeSinLuz: '#7f1d1d', zona: '#92400e', elegido: '#6d28d9',
   },
   oscuro: {
     borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
-    enCurso: '#fb923c', bordeEnCurso: '#fdba74', zona: '#d6a46b', elegido: '#c4b5fd',
+    enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', bordeSinLuz: '#fecaca', zona: '#d6a46b', elegido: '#c4b5fd',
   },
 };
 
@@ -98,6 +99,8 @@ const [mapaBarrios, cortes, mapaZonas] = datos;
 const zonasPorNombre = new Map(mapaZonas.features.map((f) => [f.properties.nombre, f]));
 const poligonosBarrios = mapaBarrios.features.filter((f) => f.properties.tipo === 'poligono');
 const primerRegistro = cortes.map((c) => c.fecha).sort()[0];
+// Todo lo que se puede elegir en el mapa. Los reportes con otros nombres se ignoran.
+const lugaresDelMapa = new Set([...mapaBarrios.features.flatMap((f) => f.properties.nombre ?? []), ...zonasPorNombre.keys()]);
 
 let ahora = momentoEnCordoba();
 let diaElegido = ahora.fecha;
@@ -105,6 +108,19 @@ let diaElegido = ahora.fecha;
 let estados = new Map();
 /** @type {string | null} */
 let barrioElegido = null;
+/** Reportes de vecinos de las últimas 3 horas, por barrio (vienen de /api/reportes). @type {Record<string, { cantidad: number, ultimo: number }>} */
+let reportes = {};
+/** Barrios que reportaste desde esta pestaña, para no mostrarte el botón de nuevo. */
+const reportadosPorMi = new Set();
+
+/** Cuántos vecinos dicen que no tienen luz. Son reportes de "ahora", así que solo cuentan mirando el día de hoy. @param {string | null} nombre */
+function vecinosSinLuz(nombre) {
+  if (!nombre || diaElegido !== ahora.fecha || !lugaresDelMapa.has(nombre)) return 0;
+  return reportes[nombre]?.cantidad ?? 0;
+}
+
+/** Los barrios con reportes, de más a menos. */
+const barriosReportados = () => Object.keys(reportes).filter((n) => vecinosSinLuz(n) > 0).sort((a, b) => vecinosSinLuz(b) - vecinosSinLuz(a));
 
 // ---------------------------------------------------------------------------------------------
 // Tema claro / oscuro
@@ -159,6 +175,10 @@ function estilo(nombre) {
   const p = PALETAS[temaActual()];
   const estado = nombre ? estados.get(nombre) : undefined;
   const elegido = nombre !== null && nombre === barrioElegido;
+  // Rojo: los vecinos dicen que no tienen luz y no hay un corte anunciado en curso que lo explique.
+  if (vecinosSinLuz(nombre) > 0 && !estado?.enCurso) {
+    return { color: elegido ? p.elegido : p.bordeSinLuz, weight: elegido ? 3.5 : 2, fillColor: p.sinLuz, fillOpacity: 0.6 };
+  }
   if (!estado) {
     return { color: elegido ? p.elegido : p.borde, weight: elegido ? 3.5 : 0.7, fillColor: p.relleno, fillOpacity: elegido ? 0.25 : p.rellenoOp };
   }
@@ -212,6 +232,7 @@ function clasesDeBarrio(/** @type {L.Path} */ capa, /** @type {string | null} */
   const elemento = capa.getElement();
   elemento?.classList.toggle('barrio-con-corte', Boolean(estado));
   elemento?.classList.toggle('barrio-en-curso', Boolean(estado?.enCurso));
+  elemento?.classList.toggle('barrio-sin-luz', vecinosSinLuz(nombre) > 0 && !estado?.enCurso);
 }
 
 function pintarMapa() {
@@ -225,7 +246,7 @@ function pintarMapa() {
 
   capaZonas.clearLayers();
   capaPuntos.clearLayers();
-  for (const nombre of estados.keys()) {
+  for (const nombre of new Set([...estados.keys(), ...barriosReportados()])) {
     const zona = zonasPorNombre.get(nombre);
     if (zona) {
       const capa = L.geoJSON(zona, { style: () => estiloZona(nombre) })
@@ -255,6 +276,7 @@ leyenda.onAdd = () =>
     h('div', {}, h('i', { style: 'background:#facc15' }), 'Corte programado'),
     h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Programado total'),
     h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'En curso ahora'),
+    h('div', {}, h('i', { style: 'background:#dc2626;box-shadow:0 0 8px #dc2626' }), 'Sin luz sin aviso (vecinos)'),
     h('div', {}, h('i', { style: 'background:#facc1555;outline:2px dashed #92400e;outline-offset:-2px' }), 'Zona aproximada'),
     h('div', {}, h('i', { style: 'background:#a5a1c255;outline:1px solid #8e8aa8;outline-offset:-1px' }), 'Sin cortes anunciados'),
   );
@@ -309,6 +331,7 @@ function mostrarResumen() {
   const delDia = cortesDelDia(cortes, diaElegido);
   mostrar(
     tarjetaDelDia(delDia),
+    seccionVecinos(),
     delDia.length === 0 && diaElegido > ahora.fecha &&
       h('div', { class: 'aviso' }, icono('info'), h('p', {}, 'Los cortes se suelen anunciar el día anterior: volvé a mirar más tarde.')),
     delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i))),
@@ -323,26 +346,98 @@ function mostrarBarrio(nombre) {
   const { ultimo, proximo } = historialDelBarrio(cortes, nombre, ahora);
   /** @param {Corte | null} c */
   const describir = (c) => (c ? `${fechaLarga(c.fecha)}, de ${horario(c)}` : 'Sin registros');
+  const vecinos = vecinosSinLuz(nombre);
   const [claseEstado, textoEstado] = estado?.enCurso
     ? ['en-curso', 'Corte en curso ahora']
-    : estado
-      ? ['programado', `Corte programado · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`]
-      : ['sin-cortes', `Sin cortes · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`];
+    : vecinos > 0
+      ? ['sin-luz', 'Sin luz sin aviso']
+      : estado
+        ? ['programado', `Corte programado · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`]
+        : ['sin-cortes', `Sin cortes · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`];
   const zona = zonasPorNombre.get(nombre);
   mostrar(
     h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
     h('h2', {}, icono(zona ? 'ruta' : 'pin'), nombre),
-    h('span', { class: `estado ${claseEstado}` }, estado ? icono('rayo') : icono('ok'), textoEstado),
+    h('span', { class: `estado ${claseEstado}` }, icono(vecinos > 0 && !estado?.enCurso ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
+    vecinos > 0 && h('p', { class: 'vecinos-cuenta' }, icono('vecinos'),
+      `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
     zona && h('div', { class: 'aviso' }, icono('info'),
       h('p', {}, `${zona.properties.descripcion} EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.`)),
     delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false }))),
+    cajaSinLuz(nombre),
     h('h3', {}, icono('historial'), 'Historial'),
     h('dl', { class: 'historial' },
       h('div', {}, icono('proximo'), h('span', {}, h('dt', {}, 'Próximo corte'), h('dd', {}, describir(proximo)))),
       h('div', {}, icono('historial'), h('span', {}, h('dt', {}, 'Último corte'), h('dd', {}, describir(ultimo)))),
     ),
     h('div', { class: 'aviso' }, icono('info'), h('p', {}, `Registramos cortes desde el ${fechaLarga(primerRegistro)}.`)),
-    avisoReclamo(),
+  );
+}
+
+/** Lo que aparece en la ficha de cada barrio: el botón "No tengo luz" y cómo reclamar. @param {string} nombre */
+function cajaSinLuz(nombre) {
+  const yaReporte = reportadosPorMi.has(nombre);
+  const texto = `Hola, quiero hacer un reclamo técnico: no tengo luz en el barrio ${nombre}, Córdoba capital. Mi número de contrato o dirección es: `;
+  return h('section', { class: 'caja-sin-luz' },
+    h('h3', {}, icono('alerta'), '¿No tenés luz?'),
+    yaReporte
+      ? h('p', {}, '¡Gracias por avisar! Ahora hacé el reclamo a EPEC: es lo que pone en marcha la reparación.')
+      : h('p', {}, 'Avisales a tus vecinos: el barrio se pinta de rojo en el mapa. Es anónimo y dura 3 horas. No es un reclamo a EPEC.'),
+    !yaReporte && h('button', { class: 'boton boton-peligro', type: 'button', onclick: (e) => reportar(nombre, e) }, icono('rayo'), 'No tengo luz'),
+    h('div', { class: 'reclamo' },
+      h('a', { class: 'boton boton-secundario', href: `https://wa.me/${WHATSAPP_EPEC}?text=${encodeURIComponent(texto)}`, target: '_blank', rel: 'noopener' },
+        icono('mensaje'), 'Reclamar por WhatsApp'),
+      h('a', { class: 'boton boton-secundario', href: RECLAMO_EPEC, target: '_blank', rel: 'noopener' }, icono('enlace'), 'Formulario de EPEC'),
+      h('button', { class: 'boton boton-secundario', type: 'button', onclick: () => copiar(texto) }, icono('copiar'), 'Copiar texto del reclamo'),
+      h('a', { class: 'boton boton-secundario', href: 'tel:08007770000' }, icono('telefono'), '0800 777 0000'),
+    ),
+  );
+}
+
+/** En la portada: los barrios donde los vecinos reportan que no tienen luz. */
+function seccionVecinos() {
+  const reportados = barriosReportados();
+  if (reportados.length === 0) return null;
+  return h('section', { class: 'vecinos' },
+    h('h3', {}, h('span', { class: 'punto-vivo rojo' }), 'Vecinos sin luz ahora'),
+    h('div', { class: 'barrios' },
+      ...reportados.map((b) => h('button', { class: 'barrio-link sin-luz', type: 'button', onclick: () => elegirBarrio(b) },
+        icono('alerta'), b, h('span', { class: 'chip-cuenta', title: 'Reportes' }, String(vecinosSinLuz(b)))))),
+    h('p', { class: 'nota' }, 'Reportes anónimos de las últimas 3 horas, sin verificar.'),
+  );
+}
+
+/** Manda el reporte "No tengo luz". @param {string} nombre @param {Event} evento */
+async function reportar(nombre, evento) {
+  const boton = /** @type {HTMLButtonElement} */ (evento.currentTarget);
+  boton.disabled = true;
+  try {
+    const res = await fetch('api/reportes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ barrio: nombre }),
+    });
+    const { resultado } = await res.json();
+    if (resultado === 'demasiados') {
+      avisar('Mandaste muchos reportes seguidos. Probá de nuevo en un rato.');
+      boton.disabled = false;
+      return;
+    }
+    if (!res.ok) throw new Error(`La API respondió ${res.status}`);
+    reportadosPorMi.add(nombre);
+    avisar(resultado === 'repetido' ? 'Ya habías reportado este barrio.' : '¡Gracias! Tu reporte ya está en el mapa.');
+    await cargarReportes();
+  } catch {
+    avisar('No se pudo mandar el reporte. Probá de nuevo.');
+    boton.disabled = false;
+  }
+}
+
+/** @param {string} texto */
+function copiar(texto) {
+  navigator.clipboard.writeText(texto).then(
+    () => avisar('Texto copiado: pegalo en el formulario de EPEC y completá tus datos.'),
+    () => avisar('No se pudo copiar el texto.'),
   );
 }
 
@@ -365,7 +460,9 @@ function avisoReclamo() {
   return h('div', { class: 'aviso' },
     icono('alerta'),
     h('p', {},
-      '¿No tenés luz y no figura acá? Puede ser un corte no programado. Reclamá a EPEC desde ',
+      '¿No tenés luz y no figura acá? Puede ser un corte no programado. Buscá tu barrio y tocá ',
+      h('strong', {}, 'No tengo luz'),
+      ' para avisarles a tus vecinos, y reclamá a EPEC desde ',
       h('a', { href: RECLAMO_EPEC, target: '_blank', rel: 'noopener' }, 'su formulario'),
       ' o al ',
       h('a', { href: 'tel:08007770000' }, '0800 777 0000'),
@@ -396,6 +493,15 @@ menu.addEventListener('click', (e) => {
 /** @type {Record<string, () => void>} */
 const ACCIONES_MENU = {
   inicio: () => elegirBarrio(null),
+  reportar: () => {
+    if (barrioElegido) {
+      document.querySelector('.caja-sin-luz')?.scrollIntoView({ behavior: 'smooth' });
+      if (ES_CELULAR.matches) abrirPanel(true);
+      return;
+    }
+    buscador.focus();
+    avisar('Buscá tu barrio (o tocá "Mi ubicación") y después "No tengo luz".');
+  },
   'como-funciona': () => {
     barrioElegido = null;
     pintarMapa();
@@ -406,8 +512,9 @@ const ACCIONES_MENU = {
 };
 for (const boton of menu.querySelectorAll('[data-accion]')) {
   boton.addEventListener('click', () => {
-    ACCIONES_MENU[boton.getAttribute('data-accion') ?? '']?.();
+    // Primero se cierra: al cerrarse, el menú devuelve el foco al botón ☰ y le ganaría a la acción.
     menu.close();
+    ACCIONES_MENU[boton.getAttribute('data-accion') ?? '']?.();
   });
 }
 
@@ -557,7 +664,18 @@ botonUbicacion.addEventListener('click', () => {
   );
 });
 
+/** Trae los reportes de vecinos y vuelve a pintar todo. */
+async function cargarReportes() {
+  try {
+    reportes = await pedir('api/reportes');
+  } catch {
+    // Si la API no responde, el mapa sigue andando igual, solo que sin reportes nuevos.
+  }
+  actualizar();
+}
+
 aplicarTema();
 actualizar();
-// Cada minuto, para que "En curso" se prenda y se apague a tiempo.
-setInterval(actualizar, 60_000);
+cargarReportes();
+// Cada minuto: trae reportes nuevos y hace que "En curso" se prenda y se apague a tiempo.
+setInterval(cargarReportes, 60_000);
