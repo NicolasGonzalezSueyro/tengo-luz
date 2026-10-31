@@ -1,5 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 import { normalizar } from './barrios.ts';
+import { simplificarGeometria } from './simplificar.ts';
 
 // Arma data/barrios.geojson, el mapa de barrios de Córdoba capital. Se corre a mano de vez en cuando
 // (`npm run barrios`): los límites de los barrios casi no cambian.
@@ -105,6 +106,9 @@ const puntos = osm.flatMap((e) => {
   }];
 });
 
-const barrios = [...poligonos, ...puntos].sort((a, b) => (a.properties.nombre ?? '').localeCompare(b.properties.nombre ?? '', 'es'));
+const barrios = [...poligonos, ...puntos]
+  .sort((a, b) => (a.properties.nombre ?? '').localeCompare(b.properties.nombre ?? '', 'es'))
+  // Contornos simplificados (src/simplificar.ts): el archivo pesa 4 veces menos y a la vista queda igual.
+  .map((f) => ({ ...f, geometry: simplificarGeometria(f.geometry) }));
 await writeFile(ARCHIVO, JSON.stringify({ type: 'FeatureCollection', features: barrios }) + '\n');
 console.log(`Guardados ${poligonos.length} barrios de la Municipalidad y ${puntos.length} puntos de OSM en ${ARCHIVO}`);

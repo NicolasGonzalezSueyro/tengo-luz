@@ -18,9 +18,13 @@
     "dev": "node src/servidor.ts",
     "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/zonas.geojson data/mantenimientos.json dist/data/",
     "test": "node --test \"src/**/*.test.ts\" \"web/**/*.test.js\"",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "simplificar": "node src/simplificar.ts",
+    "claves-push": "node src/push.ts",
+    "e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^26.6.6",
     "typescript": "^7.0.2"

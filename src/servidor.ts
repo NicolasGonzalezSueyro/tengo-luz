@@ -4,9 +4,11 @@ import { extname, join, normalize, sep } from 'node:path';
 import { text } from 'node:stream/consumers';
 import * as admin from '../functions/api/admin.ts';
 import * as calendario from '../functions/api/calendario.ts';
+import * as push from '../functions/api/push.ts';
 import * as reportes from '../functions/api/reportes.ts';
 import * as telegram from '../functions/api/telegram.ts';
 import { baseLocal } from './base-local.ts';
+import { generarClave } from './push.ts';
 
 // Servidor solo para probar la página en la compu (`npm run dev`).
 // Sirve web/ en la raíz y data/ en /data, igual que lo va a hacer el hosting.
@@ -17,11 +19,12 @@ import { baseLocal } from './base-local.ts';
 const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }> = {
   '/api/admin': admin,
   '/api/calendario': calendario,
+  '/api/push': push,
   '/api/reportes': reportes,
   '/api/telegram': telegram,
 };
 
-const PUERTO = 4321;
+const PUERTO = Number(process.env.PUERTO ?? 4321); // los tests de punta a punta usan otro, así arrancan siempre de cero
 const TIPOS: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -61,6 +64,8 @@ const entornoDePrueba = {
   SECRETO_BOT: 'solo-para-probar',
   TELEGRAM_ADMIN: '1',
   ADMIN_CLAVE: 'solo-para-probar',
+  // Una clave de notificaciones nueva cada vez que arranca: sirve para probar suscribirse en la compu.
+  PUSH_CLAVE: JSON.stringify(await generarClave()),
   // Como en Cloudflare: los archivos del sitio. Las funciones solo piden cosas de /data.
   ASSETS: { fetch: async (url: URL) => new Response(await readFile(join(process.cwd(), url.pathname))) },
 };

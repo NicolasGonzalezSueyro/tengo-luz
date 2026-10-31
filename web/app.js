@@ -8,6 +8,7 @@ import {
 } from './estado.js';
 import { linkGoogleCalendar } from './calendario.js';
 import { h } from './dom.js';
+import { activarAvisos, barriosConAviso, desactivarAvisos, soportaNotificaciones } from './notificaciones.js';
 import { completarIconos, icono } from './iconos.js';
 import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 
@@ -419,7 +420,10 @@ function mostrarBarrio(nombre) {
     h('h2', {}, iconoDeLugar(nombre), nombre),
     h('div', { class: 'ficha-estado' },
       h('span', { class: `estado ${claseEstado}` }, icono(vecinos > 0 && !estado?.enCurso ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
-      h('button', { class: 'boton boton-secundario boton-compartir', type: 'button', onclick: () => compartir(nombre) }, icono('compartir'), 'Compartir'),
+      h('div', { class: 'ficha-acciones' },
+        botonDeAvisos(nombre),
+        h('button', { class: 'boton boton-secundario boton-compartir', type: 'button', onclick: () => compartir(nombre) }, icono('compartir'), 'Compartir'),
+      ),
     ),
     vecinos > 0 && h('p', { class: 'vecinos-cuenta' }, icono('vecinos'),
       `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
@@ -436,6 +440,42 @@ function mostrarBarrio(nombre) {
     ),
     h('div', { class: 'aviso' }, icono('info'), h('p', {}, `Registramos cortes desde el ${fechaLarga(primerRegistro)}.`)),
   );
+}
+
+/**
+ * "Avisarme": notificación en el celular cuando anuncian un corte en este barrio (como el bot, sin Telegram).
+ * En iPhone solo funciona con la app instalada, así que ahí el botón explica cómo instalarla.
+ * @param {string} nombre
+ */
+function botonDeAvisos(nombre) {
+  const iphoneSinInstalar = esIphone && !yaInstalada;
+  if (!soportaNotificaciones() && !iphoneSinInstalar) return null;
+  const activo = barriosConAviso().includes(nombre);
+  return h('button', {
+    class: `boton boton-secundario boton-compartir${activo ? ' activo' : ''}`,
+    type: 'button',
+    'aria-pressed': String(activo),
+    onclick: async (e) => {
+      if (iphoneSinInstalar) {
+        mostrarInstalarEnIphone('Para recibir avisos en el iPhone, primero instalá la app (Apple lo pide así):');
+        return;
+      }
+      const boton = /** @type {HTMLButtonElement} */ (e.currentTarget);
+      boton.disabled = true;
+      try {
+        if (activo) {
+          await desactivarAvisos(nombre);
+          avisar(`Listo, ya no te avisamos de ${nombre}.`);
+        } else {
+          await activarAvisos(nombre);
+          avisar(`¡Listo! Te vamos a avisar cuando anuncien un corte en ${nombre}.`);
+        }
+      } catch (error) {
+        avisar(/** @type {Error} */ (error).message);
+      }
+      if (barrioElegido === nombre && !panelFijo) mostrarBarrio(nombre);
+    },
+  }, icono('campana'), activo ? 'Te avisamos' : 'Avisarme');
 }
 
 /** El link que abre la página directo en un barrio. @param {string} nombre */
@@ -977,11 +1017,12 @@ window.addEventListener('appinstalled', () => {
   avisar('¡Listo! Ya podés abrir ¿Tengo luz? desde la pantalla de inicio.');
 });
 
-function mostrarInstalarEnIphone() {
+/** @param {string} [motivo] por qué hace falta instalarla (por ejemplo, para recibir avisos) */
+function mostrarInstalarEnIphone(motivo = 'En iPhone se instala desde Safari, en tres toques:') {
   mostrar(
     h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
     h('h2', {}, icono('descargar'), 'Instalar la app'),
-    h('p', { class: 'bajada' }, 'En iPhone se instala desde Safari, en tres toques:'),
+    h('p', { class: 'bajada' }, motivo),
     h('ol', { class: 'pasos' },
       h('li', {}, 'Tocá el botón ', h('strong', {}, 'Compartir '), icono('compartir'), ' (abajo en el medio, o arriba en iPad).'),
       h('li', {}, 'Bajá y elegí ', h('strong', {}, 'Agregar a inicio'), '.'),

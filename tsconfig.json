@@ -17,5 +17,5 @@
     // Leaflet se carga con un <script> y queda disponible como "L" global.
     "allowUmdGlobalAccess": true
   },
-  "include": ["src", "web", "functions"]
+  "include": ["src", "web", "functions", "e2e", "playwright.config.ts"]
 }

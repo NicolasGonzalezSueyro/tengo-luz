@@ -109,6 +109,7 @@ export async function responder(
           '📊 Estado',
           `Personas con avisos: ${e.personas}`,
           `Barrios seguidos: ${e.barriosSeguidos}`,
+          `Celulares con notificaciones: ${e.notificaciones}`,
           `Avisos mandados (últimos 30 días): ${e.avisos}`,
           `Barrios con reportes ahora: ${Object.keys(e.reportes).length}`,
           `Panel completo: ${SITIO}/admin`,
@@ -159,28 +160,41 @@ function textoDelAviso(corte: Corte, barrios: string[], hoy: string) {
   ].join('\n');
 }
 
-/** Los avisos que faltan mandar: un mensaje por persona y por corte de hoy en adelante en sus barrios. */
+/**
+ * Lo común a Telegram y a las notificaciones push: para cada corte de hoy en adelante, un aviso por destino
+ * (un chat, o un navegador) con sus barrios que toca ese corte, salvo que ya se le haya avisado.
+ * Un solo aviso aunque siga dos barrios del mismo corte.
+ */
+export function agruparAvisos<D extends string | number>(
+  suscripciones: { destino: D; barrio: string }[],
+  yaAvisados: Set<string>, // "destino|clave"
+  cortes: Corte[],
+  hoy: string,
+): { destino: D; clave: string; corte: Corte; barrios: string[] }[] {
+  const avisos = [];
+  for (const corte of cortes.filter((c) => c.fecha >= hoy)) {
+    const clave = claveDelCorte(corte);
+    const lugares = lugaresDelCorte(corte);
+    const porDestino = new Map<D, string[]>();
+    for (const { destino, barrio } of suscripciones) {
+      if (lugares.includes(barrio)) porDestino.set(destino, [...(porDestino.get(destino) ?? []), barrio]);
+    }
+    for (const [destino, barrios] of porDestino) {
+      if (!yaAvisados.has(`${destino}|${clave}`)) avisos.push({ destino, clave, corte, barrios });
+    }
+  }
+  return avisos;
+}
+
+/** Los avisos de Telegram que faltan mandar. */
 export async function avisosPendientes(db: BaseDeDatos, cortes: Corte[], hoy: string): Promise<Aviso[]> {
-  const futuros = cortes.filter((c) => c.fecha >= hoy);
-  if (futuros.length === 0) return [];
+  if (!cortes.some((c) => c.fecha >= hoy)) return [];
   const suscripciones = (await db.prepare('SELECT chat, barrio FROM suscripciones').bind().all()).results;
   const yaAvisados = new Set(
     (await db.prepare('SELECT chat, clave FROM avisados').bind().all()).results.map((r) => `${r.chat}|${r.clave}`),
   );
-  const avisos: Aviso[] = [];
-  for (const corte of futuros) {
-    const clave = claveDelCorte(corte);
-    const lugares = lugaresDelCorte(corte);
-    // chat → sus barrios que toca este corte (un solo mensaje aunque siga dos barrios del mismo corte)
-    const porChat = new Map<number, string[]>();
-    for (const { chat, barrio } of suscripciones) {
-      if (lugares.includes(String(barrio))) porChat.set(Number(chat), [...(porChat.get(Number(chat)) ?? []), String(barrio)]);
-    }
-    for (const [chat, barrios] of porChat) {
-      if (!yaAvisados.has(`${chat}|${clave}`)) avisos.push({ chat, clave, texto: textoDelAviso(corte, barrios, hoy) });
-    }
-  }
-  return avisos;
+  return agruparAvisos(suscripciones.map((s) => ({ destino: Number(s.chat), barrio: String(s.barrio) })), yaAvisados, cortes, hoy)
+    .map(({ destino, clave, corte, barrios }) => ({ chat: destino, clave, texto: textoDelAviso(corte, barrios, hoy) }));
 }
 
 export async function yaAvisado(db: BaseDeDatos, aviso: Pick<Aviso, 'chat' | 'clave'>): Promise<boolean> {

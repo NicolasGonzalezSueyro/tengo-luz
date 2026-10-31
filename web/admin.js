@@ -65,6 +65,18 @@ async function cargar() {
   }
 }
 
+/** Manda una notificación de prueba a todos los celulares suscriptos. */
+async function probarNotificaciones() {
+  try {
+    const { entregadas, total } = await api('POST', { accion: 'probar-notificaciones' });
+    $('mensaje').textContent = total === 0
+      ? 'Todavía no hay celulares suscriptos: tocá "Avisarme" en la ficha de un barrio desde tu celu.'
+      : `🔔 Notificación de prueba: llegó a ${entregadas} de ${total}.`;
+  } catch (error) {
+    $('mensaje').textContent = `No se pudo mandar: ${/** @type {Error} */ (error).message}`;
+  }
+}
+
 /** @param {string | undefined} [barrio] sin barrio: todos */
 async function limpiar(barrio) {
   if (!confirm(barrio ? `¿Borrar los reportes de ${barrio}?` : '¿Borrar todos los reportes de vecinos?')) return;
@@ -94,6 +106,7 @@ function mostrarPanel(e) {
     h('div', { class: 'datos' },
       dato(e.personas, 'personas con avisos'),
       dato(e.barriosSeguidos, 'barrios seguidos'),
+      dato(e.notificaciones, 'celulares con notificaciones'),
       dato(e.avisos, 'avisos en 30 días'),
       dato(reportes.length, 'barrios con reportes'),
     ),
@@ -108,6 +121,13 @@ function mostrarPanel(e) {
           h('span', {}, h('strong', {}, barrio), ` · ${cantidad(r.cantidad, 'reporte', 'reportes')} · último ${hace(r.ultimo)}`),
           h('button', { class: 'boton boton-secundario', type: 'button', onclick: () => limpiar(barrio) }, 'Borrar'),
         ))),
+    ),
+    h('section', { class: 'tarjeta-admin' },
+      h('div', { class: 'titulo-seccion' },
+        h('h2', {}, icono('campana'), 'Notificaciones del navegador'),
+        h('button', { class: 'boton boton-secundario', type: 'button', onclick: probarNotificaciones }, 'Mandar una de prueba'),
+      ),
+      h('p', { class: 'nota' }, cantidad(e.notificaciones, 'celular suscripto', 'celulares suscriptos'), '. La prueba les llega a todos: suscribite vos primero desde la ficha de un barrio.'),
     ),
     h('section', { class: 'tarjeta-admin' },
       h('h2', {}, icono('vecinos'), 'Barrios más seguidos en Telegram'),

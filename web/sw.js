@@ -9,7 +9,7 @@
 // - Leaflet: primero la copia, porque esa dirección (con la versión) nunca cambia de contenido.
 // - /api (reportes de vecinos) y el mapa de fondo: siempre en vivo, sin copia.
 
-const VERSION = 'v3'; // cambiarla solo si cambia la lista PRECARGA: así se descarga de nuevo y se borra la vieja
+const VERSION = 'v4'; // cambiarla solo si cambia la lista PRECARGA: así se descarga de nuevo y se borra la vieja
 const CACHE = `tengo-luz-${VERSION}`;
 const PLAZO_MS = 4000;
 const PRECARGA = [
@@ -21,6 +21,7 @@ const PRECARGA = [
   'reclamo.js',
   'calendario.js',
   'dom.js',
+  'notificaciones.js',
   'tema.js',
   'fuentes/outfit-latin.woff2',
   'manifest.webmanifest',
@@ -83,3 +84,21 @@ async function primeroLaCopia(request) {
   if (respuesta.ok) cache.put(request, respuesta.clone());
   return respuesta;
 }
+
+// Notificaciones de cortes (las manda functions/api/avisar.ts): se muestran aunque la página esté cerrada.
+self.addEventListener('push', (evento) => {
+  const datos = evento.data?.json() ?? {};
+  evento.waitUntil(self.registration.showNotification(datos.titulo ?? '¿Tengo luz?', {
+    body: datos.cuerpo,
+    icon: 'icono-192.png',
+    badge: 'icono-192.png',
+    tag: datos.url, // dos avisos del mismo barrio se reemplazan en vez de apilarse
+    data: { url: datos.url ?? './' },
+  }));
+});
+
+// Al tocar la notificación, se abre la página en el barrio del corte.
+self.addEventListener('notificationclick', (evento) => {
+  evento.notification.close();
+  evento.waitUntil(self.clients.openWindow(new URL(evento.notification.data?.url ?? './', self.registration.scope).href));
+});

@@ -21,3 +21,20 @@ CREATE TABLE IF NOT EXISTS avisados (
   creado INTEGER NOT NULL,
   PRIMARY KEY (chat, clave)
 );
+
+-- Notificaciones push: qué navegador quiere avisos de qué barrio, y qué avisos ya se mandaron.
+-- "endpoint" es la dirección anónima que da el navegador; p256dh y auth son sus claves para cifrar el aviso.
+CREATE TABLE IF NOT EXISTS push_suscripciones (
+  endpoint TEXT NOT NULL,
+  barrio TEXT NOT NULL,
+  p256dh TEXT NOT NULL,
+  auth TEXT NOT NULL,
+  creado INTEGER NOT NULL,
+  PRIMARY KEY (endpoint, barrio)
+);
+CREATE TABLE IF NOT EXISTS push_avisados (
+  endpoint TEXT NOT NULL,
+  clave TEXT NOT NULL,
+  creado INTEGER NOT NULL,
+  PRIMARY KEY (endpoint, clave)
+);

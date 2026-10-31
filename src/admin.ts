@@ -6,6 +6,7 @@ import { contarReportes, type BaseDeDatos, type Resumen } from './reportes.ts';
 export type Estadisticas = {
   personas: number; // chats de Telegram con al menos un barrio
   barriosSeguidos: number;
+  notificaciones: number; // navegadores con avisos push activados
   avisos: number; // avisos mandados en los últimos 30 días
   reportes: Resumen; // reportes de vecinos vigentes, por barrio
   masSeguidos: { barrio: string; personas: number }[];
@@ -21,6 +22,7 @@ export async function estadisticas(db: BaseDeDatos, ahora: number): Promise<Esta
   return {
     personas: await numero(db, 'SELECT COUNT(DISTINCT chat) AS n FROM suscripciones'),
     barriosSeguidos: await numero(db, 'SELECT COUNT(*) AS n FROM suscripciones'),
+    notificaciones: await numero(db, 'SELECT COUNT(DISTINCT endpoint) AS n FROM push_suscripciones'),
     avisos: await numero(db, 'SELECT COUNT(*) AS n FROM avisados'),
     reportes: await contarReportes(db, ahora),
     masSeguidos: results.map((r) => ({ barrio: String(r.barrio), personas: Number(r.personas) })),

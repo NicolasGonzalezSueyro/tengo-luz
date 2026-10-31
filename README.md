@@ -25,6 +25,7 @@
 - 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas. Solo se puede reportar que **no** hay luz (nadie puede "apagar" un corte), y cada conexión puede reportar una sola vez cada 3 horas.
 - 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
 - 🤖 **Bot de Telegram.** `/barrio Alberdi` y te avisa cuando anuncian un corte ahí.
+- 🔔 **Notificaciones en el celular, sin Telegram.** "Avisarme" en la ficha de un barrio y llega una notificación cuando anuncian un corte (en iPhone, con la app instalada).
 - 📤 **Compartir.** Cada barrio tiene su link (`?barrio=Alberdi`) y un botón para mandar el horario del corte por WhatsApp.
 - 📅 **Agendar el corte** en Google Calendar o en el calendario del celu (archivo `.ics` para iPhone, Android y Outlook), con recordatorios la noche anterior y una hora antes.
 - 🛠️ **Panel de admin** (`/admin`, protegido con clave): números del sitio y del bot, y borrar reportes de vecinos.
@@ -69,11 +70,11 @@ flowchart LR
 |---|---|---|
 | Página | HTML, CSS y JavaScript sin frameworks, [Leaflet](https://leafletjs.com) | Liviana, rápida en celulares viejos y sin paso de compilación |
 | Lógica y scripts | TypeScript, ejecutado directo por Node.js 24 | Tipos sin compilar: Node quita los tipos al correr |
-| Tests | `node:test` + chequeo de tipos con `tsc` (también en el JavaScript de la página) | ~70 tests que corren en cada push |
+| Tests | `node:test` + chequeo de tipos con `tsc`, y [Playwright](https://playwright.dev) de punta a punta | ~100 tests unitarios y recorridos reales en una compu y un celular simulados, en cada push |
 | Automatización | GitHub Actions (cada hora) | Gratis para repos públicos |
 | Hosting y API | Cloudflare Pages + Pages Functions + D1 (SQLite) | Gratis, siempre online, sin servidores que mantener |
 | App | Manifest + service worker (PWA) | Instalable y usable sin conexión |
-| Avisos | Bot de Telegram con webhook | El único canal de avisos gratis (SMS y WhatsApp cobran por mensaje) |
+| Avisos | Bot de Telegram con webhook, y notificaciones Web Push | Los dos son gratis (SMS y WhatsApp cobran por mensaje) |
 
 ## Decisiones de diseño
 
@@ -96,7 +97,7 @@ flowchart LR
 
 El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con `npm run barrios`:
 
-- **485 polígonos oficiales** de la capa de barrios de la Municipalidad de Córdoba.
+- **485 polígonos oficiales** de la capa de barrios de la Municipalidad de Córdoba, simplificados con el algoritmo de Douglas-Peucker ([`src/simplificar.ts`](src/simplificar.ts)): se sacan los puntos que mueven el contorno menos de 4 m. El archivo pasó de 1,3 MB a 310 KB (57 KB comprimido) y a la vista queda igual.
 - **~320 puntos** de OpenStreetMap para lugares que la Municipalidad no tiene (asentamientos, loteos nuevos). De esos se sabe dónde quedan, no su forma.
 - Los nombres municipales vienen en mayúsculas y sin tildes; si OSM tiene el mismo barrio, se usa su nombre ("Argüello").
 
@@ -138,6 +139,22 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 </details>
 
 <details>
+<summary><b>Notificaciones push</b></summary>
+
+- El navegador da una dirección anónima y unas claves; se guardan en D1 junto con el barrio ([`functions/api/push.ts`](functions/api/push.ts)). Solo se aceptan direcciones de los servicios de push de Google, Apple, Mozilla y Microsoft.
+- Cada hora, [`functions/api/avisar.ts`](functions/api/avisar.ts) manda a cada suscripto un aviso por corte, igual que el bot. Si el servicio responde que la suscripción ya no existe, se borra.
+- [`src/push.ts`](src/push.ts) implementa los dos estándares sin librerías, con WebCrypto: la firma **VAPID** (RFC 8292, un JWT ES256) y el **cifrado** del mensaje (RFC 8291, ECDH + HKDF + AES-128-GCM). Un test compara el resultado byte por byte con el ejemplo oficial del RFC.
+- La clave privada es el secreto `PUSH_CLAVE` de Cloudflare (`npm run claves-push` la genera). El panel de admin tiene un botón para mandar una notificación de prueba.
+</details>
+
+<details>
+<summary><b>Tests</b></summary>
+
+- **Unitarios** (`npm test`): la lógica de cada parte, incluidas las funciones de Cloudflare contra un SQLite en memoria.
+- **De punta a punta** (`npm run e2e`, [`e2e/`](e2e/)): Playwright abre la página en Chromium, como compu y como celular, y recorre lo que haría una persona: buscar con autocompletado, abrir un link compartido, reportar (y comprobar el límite por conexión), armar el reclamo de WhatsApp, entrar al panel de admin, revisar que nada se salga de la pantalla en el celular y que estén las cabeceras de seguridad. Corre en GitHub Actions en cada push; si falla, queda un informe con capturas.
+</details>
+
+<details>
 <summary><b>App instalable y sin conexión</b></summary>
 
 [`web/sw.js`](web/sw.js) es un service worker que guarda una copia de la página y de los datos. Siempre intenta traer lo más nuevo, y si no hay red o tarda más de 4 segundos, usa la copia. Los reportes de vecinos siempre se piden en vivo. El menú tiene "Instalar la app": en Android abre el instalador y en iPhone explica cómo hacerlo desde Safari.
@@ -168,6 +185,9 @@ npm run build      # arma la carpeta dist/ que se publica
 npm run barrios    # vuelve a descargar los límites de barrios (casi nunca hace falta)
 npm run zonas      # vuelve a armar las zonas aproximadas sobre rutas
 npm run bot        # configura el bot de Telegram (lee el token de .env, ver .env.example)
+npm run e2e        # tests de punta a punta (la primera vez: npx playwright install chromium)
+npm run claves-push   # genera la clave de las notificaciones (para el secreto PUSH_CLAVE)
+npm run simplificar   # vuelve a simplificar los contornos del mapa
 ```
 
 ## Qué aprendí
@@ -180,6 +200,9 @@ npm run bot        # configura el bot de Telegram (lee el token de .env, ver .en
 - **Privacidad por diseño:** guardar lo mínimo, hashear con una clave secreta y dejar los datos sensibles en el navegador.
 - **PWA:** manifest, service worker y estrategias de caché para usar la app sin conexión.
 - **Bots y webhooks** con Telegram, incluyendo validar que los pedidos sean legítimos.
+- **Criptografía aplicada:** implementar Web Push leyendo los RFC (firmas ECDSA, intercambio ECDH, HKDF, AES-GCM) y verificarlo contra sus ejemplos oficiales.
+- **Rendimiento:** simplificar geometrías con Douglas-Peucker para que la página pese 4 veces menos.
+- **Tests de punta a punta** con Playwright: probar la página como la usa una persona, en compu y celular.
 - **Monitoreo:** que el sistema avise cuando algo falla en vez de romperse en silencio.
 - **Ética con los datos:** respetar `robots.txt` y las protecciones de los sitios, y pedir acceso oficial en vez de esquivarlas.
 
