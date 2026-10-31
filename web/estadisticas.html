@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estadísticas · ¿Tengo luz?</title>
+  <meta name="description" content="Qué barrios de Córdoba tienen más cortes de luz programados, en qué días y horarios.">
+  <meta name="theme-color" content="#6d28d9">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <script src="tema.js"></script>
+  <link rel="preload" href="fuentes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="pagina-admin">
+  <header class="cabecera">
+    <a class="marca" href="./">
+      <strong>¿Tengo luz? · Estadísticas</strong>
+      <small id="periodo">Cortes programados en Córdoba y alrededores</small>
+    </a>
+    <a class="boton-icono" href="./" aria-label="Volver al mapa"><span data-icono="volver"></span></a>
+  </header>
+
+  <main class="admin" id="estadisticas">
+    <p class="cargando">Calculando…</p>
+  </main>
+
+  <script type="module" src="pagina-estadisticas.js"></script>
+</body>
+</html>

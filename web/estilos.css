@@ -29,6 +29,7 @@
   --vivo: #ea580c; /* naranja: corte en curso ahora */
   --zona: #92400e; /* marrón: zona aproximada */
   --terminado: #16a34a; /* verde: el corte de hoy ya terminó */
+  --barra: #6d28d9; /* barras de los gráficos de estadísticas */
   --sin-luz: #dc2626; /* rojo: vecinos sin luz, sin aviso */
   --sombra: 0 10px 30px -12px rgba(46, 16, 101, 0.25);
   --degradado: linear-gradient(120deg, #6d28d9 0%, #c026d3 45%, #f97316 100%);
@@ -53,6 +54,7 @@
   --vivo: #fb923c;
   --zona: #d6a46b;
   --terminado: #16a34a;
+  --barra: #8b5cf6;
   --sin-luz: #ef4444;
   --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
   --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
@@ -77,6 +79,7 @@
     --vivo: #fb923c;
     --zona: #d6a46b;
     --terminado: #16a34a;
+    --barra: #8b5cf6;
     --sin-luz: #ef4444;
     --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
     --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
@@ -500,6 +503,17 @@ a { color: var(--acento); }
 .mensaje-admin { margin: 0; font-weight: 600; }
 .mensaje-admin:empty { display: none; }
 .enlace-boton { padding: 0; border: 0; background: none; color: var(--acento); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
+
+/* ---------- Gráficos de barras (estadisticas.html) ---------- */
+.barras { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.barra-fila { display: grid; grid-template-columns: minmax(96px, 36%) 1fr auto; align-items: center; gap: 10px; font-size: 0.88rem; }
+.barra-nombre { overflow: hidden; color: var(--texto); text-overflow: ellipsis; white-space: nowrap; }
+a.barra-nombre { color: var(--acento); font-weight: 600; text-decoration: none; }
+a.barra-nombre:hover { text-decoration: underline; }
+.barra-pista { height: 14px; border-left: 1px solid var(--borde); } /* la línea de base, apenas visible */
+.barra-relleno { display: block; height: 100%; min-width: 2px; border-radius: 0 4px 4px 0; background: var(--barra); transition: filter 0.15s; }
+.barra-fila:hover .barra-relleno { filter: brightness(1.2); }
+.barra-valor { min-width: 4ch; color: var(--texto-suave); font-variant-numeric: tabular-nums; text-align: right; }
 
 /* ---------- Formulario de reclamo ---------- */
 .bajada { margin: 4px 0 12px; color: var(--texto-suave); font-size: 0.9rem; }

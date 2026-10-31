@@ -28,6 +28,7 @@
 - 🔔 **Notificaciones en el celular, sin Telegram.** "Avisarme" en la ficha de un barrio y llega una notificación cuando anuncian un corte (en iPhone, con la app instalada).
 - 📤 **Compartir.** Cada barrio tiene su link (`?barrio=Alberdi`) y un botón para mandar el horario del corte por WhatsApp.
 - 📅 **Agendar el corte** en Google Calendar o en el calendario del celu (archivo `.ics` para iPhone, Android y Outlook), con recordatorios la noche anterior y una hora antes.
+- 📊 **Estadísticas** (`/estadisticas.html`): qué barrios y localidades tienen más cortes, qué días y a qué hora empiezan, con gráficos de barras hechos en HTML (sin librerías).
 - 🛠️ **Panel de admin** (`/admin`, protegido con clave): números del sitio y del bot, y borrar reportes de vecinos.
 - 📲 **App instalable que anda sin conexión,** justo cuando el corte se lleva también el wifi. Modo claro y oscuro.
 
@@ -132,10 +133,11 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 </details>
 
 <details>
-<summary><b>Calendario y panel de admin</b></summary>
+<summary><b>Calendario, panel de admin y estadísticas</b></summary>
 
 - [`web/calendario.js`](web/calendario.js) arma el evento de cada corte: un link de Google Calendar y un archivo `.ics` (con horarios en UTC, textos escapados, renglones de hasta 75 bytes y dos recordatorios), con tests. [`functions/api/calendario.ts`](functions/api/calendario.ts) entrega el `.ics` desde una dirección real, porque así el iPhone abre directo "Agregar al calendario", y solo para cortes que existen en los datos.
 - [`web/admin.html`](web/admin.html) es el panel de admin. Usa [`functions/api/admin.ts`](functions/api/admin.ts), que pide la clave `ADMIN_CLAVE` configurada en Cloudflare y la compara sin dar pistas por el tiempo de respuesta. El panel y los comandos del bot comparten la misma lógica ([`src/admin.ts`](src/admin.ts)).
+- [`web/estadisticas.html`](web/estadisticas.html) calcula todo en el navegador a partir del historial (`data/mantenimientos.json`), sin base de datos: la cuenta está en [`web/estadisticas.js`](web/estadisticas.js), con tests. Cada horario anunciado cuenta como un corte, la duración típica es la mediana (no la deja torcida un corte larguísimo) y los cortes que pasan la medianoche se miden bien.
 </details>
 
 <details>
@@ -151,7 +153,7 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 <summary><b>Tests</b></summary>
 
 - **Unitarios** (`npm test`): la lógica de cada parte, incluidas las funciones de Cloudflare contra un SQLite en memoria.
-- **De punta a punta** (`npm run e2e`, [`e2e/`](e2e/)): Playwright abre la página en Chromium, como compu y como celular, y recorre lo que haría una persona: buscar con autocompletado, abrir un link compartido, reportar (y comprobar el límite por conexión), armar el reclamo de WhatsApp, entrar al panel de admin, revisar que nada se salga de la pantalla en el celular y que estén las cabeceras de seguridad. Corre en GitHub Actions en cada push; si falla, queda un informe con capturas.
+- **De punta a punta** (`npm run e2e`, [`e2e/`](e2e/)): Playwright abre la página en Chromium, como compu y como celular, y recorre lo que haría una persona: buscar con autocompletado, abrir un link compartido, reportar (y comprobar el límite por conexión), armar el reclamo de WhatsApp, entrar al panel de admin, abrir las estadísticas desde el menú, revisar que nada se salga de la pantalla en el celular y que estén las cabeceras de seguridad. Corre en GitHub Actions en cada push; si falla, queda un informe con capturas.
 </details>
 
 <details>
@@ -210,7 +212,7 @@ npm run simplificar   # vuelve a simplificar los contornos del mapa
 
 - [ ] Acceso oficial a los datos de cortes de EPEC.
 - [ ] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
-- [ ] Estadísticas: qué barrios tienen más cortes y en qué horarios.
+- [x] Estadísticas: qué barrios tienen más cortes y en qué horarios.
 
 ## Fuentes y licencia
 

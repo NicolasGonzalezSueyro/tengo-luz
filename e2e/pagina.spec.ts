@@ -103,6 +103,17 @@ test('el panel de admin pide la clave y muestra los números', async ({ page }) 
   await expect(page.getByText('barrios con reportes')).toBeVisible();
 });
 
+test('la página de estadísticas dibuja los gráficos y se llega desde el menú', async ({ page }) => {
+  const errores = vigilarErrores(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Abrir menú' }).click();
+  await page.getByRole('link', { name: 'Estadísticas' }).click();
+  await expect(page.getByRole('heading', { name: 'Barrios y localidades con más cortes' })).toBeVisible();
+  await expect.poll(() => page.locator('.barra-relleno').count()).toBeGreaterThan(0);
+  await expect(page.getByText('cortes anunciados')).toBeVisible();
+  expect(errores).toEqual([]);
+});
+
 test('el sitio manda las cabeceras de seguridad', async ({ request }) => {
   const respuesta = await request.get('/');
   const cabeceras = respuesta.headers();
