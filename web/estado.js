@@ -7,7 +7,7 @@
  * @typedef {{
  *   fecha: string, desde: string, hasta: string, zona: string,
  *   afectacion: 'parcial' | 'total' | null, fuente: string,
- *   barrios: string[], zonas?: string[], sinUbicar: string[], localidad?: string
+ *   barrios: string[], zonas?: string[], sinUbicar: string[], localidad?: string, sector?: [number, number][]
  * }} Corte
  */
 
@@ -23,8 +23,9 @@ export function lugaresDelCorte(corte) {
 /** @typedef {{ fecha: string, hora: string }} Momento  fecha AAAA-MM-DD y hora HH:MM, en hora de Córdoba */
 
 /**
- * @typedef {{ cortes: Corte[], enCurso: boolean, total: boolean }} EstadoBarrio
+ * @typedef {{ cortes: Corte[], enCurso: boolean, total: boolean, terminado: boolean }} EstadoBarrio
  *   total: si algún corte del día es "en forma total"
+ *   terminado: si es hoy y todos los cortes del barrio ya terminaron
  */
 
 /**
@@ -79,13 +80,14 @@ export function estadoPorBarrio(cortes, fecha, ahora) {
   for (const corte of cortes) {
     if (corte.fecha !== fecha) continue;
     for (const barrio of lugaresDelCorte(corte)) {
-      const estado = estados.get(barrio) ?? { cortes: [], enCurso: false, total: false };
+      const estado = estados.get(barrio) ?? { cortes: [], enCurso: false, total: false, terminado: false };
       estado.cortes.push(corte);
       estado.enCurso ||= estaEnCurso(corte, ahora);
       estado.total ||= corte.afectacion === 'total';
       estados.set(barrio, estado);
     }
   }
+  for (const estado of estados.values()) estado.terminado = estado.cortes.every((c) => estaTerminado(c, ahora));
   return estados;
 }
 
@@ -95,6 +97,15 @@ export function estadoPorBarrio(cortes, fecha, ahora) {
  */
 export function estaEnCurso(corte, ahora) {
   return corte.fecha === ahora.fecha && corte.desde <= ahora.hora && ahora.hora < corte.hasta;
+}
+
+/**
+ * Si el corte es de hoy y ya terminó (para pintarlo de verde). Uno que pasa la medianoche termina mañana.
+ * @param {Corte} corte
+ * @param {Momento} ahora
+ */
+export function estaTerminado(corte, ahora) {
+  return corte.fecha === ahora.fecha && corte.desde < corte.hasta && corte.hasta <= ahora.hora;
 }
 
 /**

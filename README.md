@@ -19,7 +19,7 @@
 
 ## Qué hace
 
-- 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟫 zona aproximada (cuando el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar).
+- 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟢 terminado hoy, 🟫 zona aproximada (cuando el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar).
 - 🏘️ **Gran Córdoba.** Además de capital: Villa Allende, Mendiolaza, Unquillo, Río Ceballos, Saldán, La Calera, Malagueño, Villa Carlos Paz, Alta Gracia, Estación Juárez Celman y Colonia Tirolesa.
 - 🔎 **Buscador con autocompletado** (no importan las tildes), **"Mi ubicación"** con GPS y una **ficha por barrio** con el próximo y el último corte.
 - 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
@@ -103,6 +103,7 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 **Zonas aproximadas.** [`data/zonas.geojson`](data/zonas.geojson) (`npm run zonas`) tiene dos tipos, armados con datos de OpenStreetMap. Son una referencia visual, no el límite real del corte, que EPEC no publica.
 
 - **Rutas:** algunos anuncios de capital no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte"). Para esos hay un corredor de unos 450 m a cada lado del tramo de la ruta.
+- **Sector exacto** ([`src/sectores.ts`](src/sectores.ts)): cuando el anuncio nombra calles ("sector comprendido por calles Alberdi, Caseros, Alvear…"), lugares ("Teatro del Lago, Terminal de Ómnibus") o barrios, se buscan en OpenStreetMap dentro de la zona, se calculan las esquinas donde se cruzan esas calles (también las "T") y se dibuja el área que encierran. Se descartan los puntos sueltos (calles con el mismo nombre en otra punta) y lo que cae fuera de la localidad. Si no se puede armar algo confiable (por ejemplo, el anuncio nombra 20 barrios y se encuentran 3), se marca la zona entera: mejor de más que un área chica engañosa. Cada sector se busca una sola vez y queda guardado en [`data/sectores.json`](data/sectores.json).
 - **Localidades de Gran Córdoba:** fuera de capital no hay un mapa oficial de barrios, y EPEC suele describir los cortes por calles ("sector comprendido por calles Alberdi, Caseros…"). Por eso se marca el límite municipal de la localidad entera, que se obtiene de Nominatim. Cada localidad se reconoce por su nombre en el título de la sección de la nota o en el texto del corte, y nunca se buscan barrios de capital en esos cortes: un "barrio Don Bosco" de Alta Gracia no pinta uno de capital.
 
 **Alias.** [`data/alias-barrios.json`](data/alias-barrios.json) dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono. Un alias en `null` marca un nombre que no se debe ubicar solo (por ejemplo, "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).

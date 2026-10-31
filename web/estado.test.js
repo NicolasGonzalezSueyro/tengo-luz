@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaCorta, etiquetaDia, hace, historialDelBarrio,
+  barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaTerminado, etiquetaCorta, etiquetaDia, hace, historialDelBarrio,
   momentoEnCordoba, posicionCoincidencia, sugerencias, sumarDias, textoParaCompartir,
 } from './estado.js';
 
@@ -137,4 +137,25 @@ test('textoParaCompartir', () => {
     '✅ Sin cortes de luz programados en Centro\n📅 Hoy · viernes 30 de octubre\n🔴 2 vecinos reportan que no tienen luz');
   // Los reportes son de 'ahora': mirando otro día no se mencionan.
   assert.doesNotMatch(textoParaCompartir('Centro', [], '2026-10-31', '2026-10-30', 2), /vecino/);
+});
+
+test('estaTerminado y el estado "terminado" de un barrio (todos sus cortes de hoy ya pasaron)', () => {
+  /** @param {string} desde @param {string} hasta @param {string} barrio */
+  const corte = (desde, hasta, barrio) => ({
+    fecha: '2026-10-31', desde, hasta, zona: '', afectacion: null, fuente: '', barrios: [barrio], sinUbicar: [],
+  });
+  const ahora = { fecha: '2026-10-31', hora: '12:00' };
+  assert.equal(estaTerminado(corte('08:00', '11:00', 'A'), ahora), true);
+  assert.equal(estaTerminado(corte('08:00', '12:00', 'A'), ahora), true);
+  assert.equal(estaTerminado(corte('11:00', '13:00', 'A'), ahora), false);
+  assert.equal(estaTerminado(corte('22:00', '02:00', 'A'), ahora), false); // pasa la medianoche
+  assert.equal(estaTerminado(corte('08:00', '11:00', 'A'), { fecha: '2026-11-01', hora: '12:00' }), false); // solo hoy
+
+  const estados = estadoPorBarrio(
+    [corte('07:00', '09:00', 'Alberdi'), corte('08:00', '10:00', 'Centro'), corte('14:00', '16:00', 'Centro')],
+    '2026-10-31',
+    ahora,
+  );
+  assert.equal(estados.get('Alberdi')?.terminado, true);
+  assert.equal(estados.get('Centro')?.terminado, false); // le falta el de la tarde
 });

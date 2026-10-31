@@ -1,10 +1,11 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { momentoEnCordoba } from '../web/estado.js';
+import { barrioEnPunto, momentoEnCordoba } from '../web/estado.js';
 import { alertar } from './alertar.ts';
 import {
   centro, crearUbicador, esDescripcion, localidadesQueNombra, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
+import { sectorDelCorte, type Caja } from './sectores.ts';
 import { CAPITAL, unir, type Mantenimiento } from './mantenimiento.ts';
 
 const ARCHIVO = 'data/mantenimientos.json';
@@ -23,6 +24,14 @@ async function leerGuardados(): Promise<Mantenimiento[]> {
 
 async function leerJson<T>(archivo: string): Promise<T> {
   return JSON.parse(await readFile(archivo, 'utf8'));
+}
+
+/** La caja [sur, oeste, norte, este] que encierra a todas las geometrías, agrandada `margen` grados. */
+function cajaDe(features: { geometry: { coordinates: unknown } }[], margen: number): Caja {
+  const puntos = features.flatMap((f) => (f.geometry.coordinates as unknown[]).flat(3) as number[]);
+  const lons = puntos.filter((_, i) => i % 2 === 0);
+  const lats = puntos.filter((_, i) => i % 2 === 1);
+  return [Math.min(...lats) - margen, Math.min(...lons) - margen, Math.max(...lats) + margen, Math.max(...lons) + margen];
 }
 
 // Lo que haya que revisar a mano: al final se manda por Telegram al admin (src/alertar.ts).
@@ -71,12 +80,60 @@ const ubicarCorte = (m: Mantenimiento): Ubicacion =>
     ? ubicar(m.zona)
     : { barrios: [], zonas: localidadesQueNombra(`${m.localidad} ${m.zona}`, localidades), sinUbicar: [] };
 
-const todos: (Mantenimiento & Ubicacion)[] = unir(await leerGuardados(), nuevos)
+const todos: (Mantenimiento & Ubicacion & { sector?: Punto[] })[] = unir(await leerGuardados(), nuevos)
   .map((m) => ({ ...m, ...ubicarCorte(m) }))
   // De fuera de capital, solo los cortes de Gran Córdoba (el resto de la provincia no está en el mapa).
   .filter((m) => m.localidad === CAPITAL || m.zonas.length > 0);
 
+// Sectores exactos (src/sectores.ts) para los cortes descriptos por calles o lugares. Cada uno se busca en
+// OpenStreetMap una sola vez y queda guardado en data/sectores.json (null = no se pudo armar: se marca la zona entera).
+const SECTORES = 'data/sectores.json';
+const sectoresGuardados = await leerJson<Record<string, Punto[] | null>>(SECTORES).catch(() => ({}) as Record<string, Punto[] | null>);
+const sectores: Record<string, Punto[] | null> = {};
+const porNombre = (features: { properties: { nombre: string | null }; geometry: Geometria }[], nombres: string[]) =>
+  features.filter((f) => f.properties.nombre && nombres.includes(f.properties.nombre));
+
+/** Dónde buscar el sector: la localidad (si es una sola), o los barrios del corte en capital si el texto nombra calles. */
+function zonaDeBusqueda(m: Mantenimiento & Ubicacion) {
+  if (m.localidad !== CAPITAL) return m.zonas.length === 1 ? porNombre(zonas.features, m.zonas) : [];
+  return m.barrios.length > 0 && m.sinUbicar.some(esDescripcion) ? porNombre(mapa.features, m.barrios) : [];
+}
+
+for (const m of todos) {
+  const zona = zonaDeBusqueda(m);
+  if (zona.length === 0) continue;
+  const clave = `${m.localidad}|${m.zona}`;
+  if (!(clave in sectores)) {
+    if (clave in sectoresGuardados) {
+      sectores[clave] = sectoresGuardados[clave];
+    } else {
+      try {
+        // En capital las calles nombradas suelen ser el borde del barrio, así que sus esquinas caen justo en el límite:
+        // se busca en la caja del barrio agrandada (~400 m). En las localidades sí se exige estar dentro del municipio,
+        // porque un mismo corte puede nombrar barrios de pueblos vecinos.
+        const enCapital = m.localidad === CAPITAL;
+        sectores[clave] = await sectorDelCorte(
+          m.zona,
+          cajaDe(zona, enCapital ? 0.004 : 0),
+          enCapital ? undefined : (p) => barrioEnPunto(zona, p) !== null,
+          { conBarrios: !enCapital },
+        );
+        console.log(`🧭 Sector de "${m.zona.slice(0, 60)}…": ${sectores[clave] ? 'armado' : 'no se pudo, se marca la zona entera'}`);
+        await new Promise((listo) => setTimeout(listo, 2000)); // sin apurar a Overpass, que es gratuito y compartido
+      } catch (error) {
+        // Sin conexión con OpenStreetMap: no se guarda nada y se vuelve a intentar en la próxima corrida.
+        console.warn(`⚠️  No pude buscar el sector de "${m.zona.slice(0, 60)}…": ${(error as Error).message}`);
+        continue;
+      }
+    }
+  }
+  const sector = sectores[clave];
+  if (sector) m.sector = sector;
+}
+
 await mkdir('data', { recursive: true });
+// Solo quedan los sectores de los cortes guardados: el archivo no crece para siempre.
+await writeFile(SECTORES, JSON.stringify(sectores) + '\n');
 await writeFile(ARCHIVO, JSON.stringify(todos, null, 2) + '\n');
 console.log(`Guardados ${todos.length} cortes en ${ARCHIVO}`);
 

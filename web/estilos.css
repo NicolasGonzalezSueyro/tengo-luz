@@ -28,6 +28,7 @@
   --luz-texto: #713f12;
   --vivo: #ea580c; /* naranja: corte en curso ahora */
   --zona: #92400e; /* marrón: zona aproximada */
+  --terminado: #16a34a; /* verde: el corte de hoy ya terminó */
   --sin-luz: #dc2626; /* rojo: vecinos sin luz, sin aviso */
   --sombra: 0 10px 30px -12px rgba(46, 16, 101, 0.25);
   --degradado: linear-gradient(120deg, #6d28d9 0%, #c026d3 45%, #f97316 100%);
@@ -51,6 +52,7 @@
   --luz-texto: #fde68a;
   --vivo: #fb923c;
   --zona: #d6a46b;
+  --terminado: #16a34a;
   --sin-luz: #ef4444;
   --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
   --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
@@ -74,6 +76,7 @@
     --luz-texto: #fde68a;
     --vivo: #fb923c;
     --zona: #d6a46b;
+    --terminado: #16a34a;
     --sin-luz: #ef4444;
     --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
     --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
@@ -313,6 +316,7 @@ a { color: var(--acento); }
 .estado.sin-cortes { background: #dcfce7; color: #166534; }
 .estado.programado { background: var(--luz-suave); color: var(--luz-texto); }
 .estado.en-curso { background: var(--vivo); color: #fff; }
+.estado.terminado { background: var(--terminado); color: #fff; }
 .estado.sin-luz { background: var(--sin-luz); color: #fff; }
 .ficha-estado { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0 12px; }
 .ficha-estado .estado { margin: 0; }
@@ -355,6 +359,8 @@ a { color: var(--acento); }
 .corte.total::before { background: repeating-linear-gradient(45deg, var(--luz-fuerte) 0 6px, #92400e 6px 9px); }
 .corte.en-curso { border-color: var(--vivo); box-shadow: 0 0 0 3px color-mix(in srgb, var(--vivo) 18%, transparent); }
 .corte.en-curso::before { background: var(--vivo); }
+.corte.terminado::before { background: var(--terminado); }
+.corte.terminado { opacity: 0.85; }
 
 @keyframes aparecer { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
@@ -388,6 +394,7 @@ a { color: var(--acento); }
 .etiqueta.parcial { background: var(--luz-suave); color: var(--luz-texto); }
 .etiqueta.total { background: var(--luz-fuerte); color: #422006; }
 .etiqueta.en-curso { background: var(--vivo); color: #fff; }
+.etiqueta.terminado { background: var(--terminado); color: #fff; }
 
 .barrios { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .barrio-link {

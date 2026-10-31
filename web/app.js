@@ -4,7 +4,7 @@
 
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaEnCurso, etiquetaCorta, etiquetaDia, fechaLarga,
-  hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba, posicionCoincidencia, sugerencias, textoParaCompartir,
+  estaTerminado, hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba, posicionCoincidencia, sugerencias, textoParaCompartir,
 } from './estado.js';
 import { linkGoogleCalendar } from './calendario.js';
 import { h } from './dom.js';
@@ -29,10 +29,12 @@ const PALETAS = {
   claro: {
     borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
     enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', bordeSinLuz: '#7f1d1d', zona: '#92400e', elegido: '#6d28d9',
+    terminado: '#22c55e', bordeTerminado: '#166534',
   },
   oscuro: {
     borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
     enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', bordeSinLuz: '#fecaca', zona: '#d6a46b', elegido: '#c4b5fd',
+    terminado: '#4ade80', bordeTerminado: '#bbf7d0',
   },
 };
 
@@ -183,6 +185,10 @@ function estilo(nombre) {
   if (!estado) {
     return { color: elegido ? p.elegido : p.borde, weight: elegido ? 3.5 : 0.7, fillColor: p.relleno, fillOpacity: elegido ? 0.25 : p.rellenoOp };
   }
+  // Verde: todos los cortes de hoy en este barrio ya terminaron.
+  if (estado.terminado) {
+    return { color: elegido ? p.elegido : p.bordeTerminado, weight: elegido ? 3.5 : 1.3, fillColor: p.terminado, fillOpacity: 0.5 };
+  }
   return {
     color: elegido ? p.elegido : estado.enCurso ? p.bordeEnCurso : estado.total ? p.bordeTotal : p.bordeLuz,
     weight: elegido ? 3.5 : estado.total ? 2.5 : 1.3,
@@ -223,6 +229,10 @@ const puntos = new Map(
 const capaPuntos = L.layerGroup().addTo(mapa);
 // Las zonas aproximadas (rutas rurales) también se dibujan solo el día que tienen un corte.
 const capaZonas = L.layerGroup().addTo(mapa);
+// Los sectores exactos de los cortes descriptos por calles o lugares (arriba de todo).
+const capaSectores = L.layerGroup().addTo(mapa);
+/** @type {Map<string, L.Layer[]>} los sectores de cada localidad, para hacer zoom a ellos y no a la localidad entera */
+const sectoresPorNombre = new Map();
 
 /** @type {L.CircleMarker | null} */
 let marcadorYo = null;
@@ -247,10 +257,15 @@ function pintarMapa() {
 
   capaZonas.clearLayers();
   capaPuntos.clearLayers();
+  capaSectores.clearLayers();
+  sectoresPorNombre.clear();
   for (const nombre of new Set([...estados.keys(), ...barriosReportados()])) {
     const zona = zonasPorNombre.get(nombre);
     if (zona) {
-      const capa = L.geoJSON(zona, { style: () => estiloZona(nombre) })
+      // Si todos los cortes de la localidad ese día tienen su sector, la localidad queda solo como contorno.
+      const delDia = estados.get(nombre)?.cortes ?? [];
+      const todoConSector = delDia.length > 0 && delDia.every((c) => c.sector);
+      const capa = L.geoJSON(zona, { style: () => ({ ...estiloZona(nombre), ...(todoConSector ? { fillOpacity: 0.04 } : {}) }) })
         .bindTooltip(comoTexto(`${nombre} (zona aproximada)`), { sticky: true })
         .on('click', () => elegirBarrio(nombre))
         .addTo(capaZonas);
@@ -267,6 +282,20 @@ function pintarMapa() {
     clasesDeBarrio(circulo, nombre);
     capasPorNombre.set(nombre, [circulo]);
   }
+
+  const p = PALETAS[temaActual()];
+  for (const corte of cortesDelDia(cortes, diaElegido)) {
+    if (!corte.sector) continue;
+    const [lugar] = lugaresDelCorte(corte);
+    const capa = L.polygon(corte.sector.map(([lon, lat]) => /** @type {L.LatLngTuple} */ ([lat, lon])), {
+      ...estilo(lugar), color: lugar === barrioElegido ? p.elegido : p.zona, weight: 2.5, dashArray: '4 4', fillOpacity: 0.6,
+    })
+      .bindTooltip(comoTexto(`${lugar}: sector del corte, ${horario(corte)} (aproximado)`), { sticky: true })
+      .on('click', () => elegirBarrio(lugar))
+      .addTo(capaSectores);
+    clasesDeBarrio(capa, lugar);
+    if (zonasPorNombre.has(lugar)) sectoresPorNombre.set(lugar, [...(sectoresPorNombre.get(lugar) ?? []), capa]);
+  }
   marcadorYo?.bringToFront();
 }
 
@@ -279,6 +308,7 @@ leyenda.onAdd = () => {
     h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Programado total'),
     h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'En curso ahora'),
     h('div', {}, h('i', { style: 'background:#dc2626;box-shadow:0 0 8px #dc2626' }), 'Sin luz sin aviso (vecinos)'),
+    h('div', {}, h('i', { style: 'background:#22c55e' }), 'Terminado hoy'),
     h('div', {}, h('i', { style: 'background:#facc1555;outline:2px dashed #92400e;outline-offset:-2px' }), 'Zona aproximada'),
     h('div', {}, h('i', { style: 'background:#a5a1c255;outline:1px solid #8e8aa8;outline-offset:-1px' }), 'Sin cortes anunciados'),
   );
@@ -317,12 +347,14 @@ function agendar(corte, lugar) {
 /** @param {Corte} corte @param {number} indice @param {{ conBarrios?: boolean, lugar?: string | null }} [opciones] */
 function tarjetaCorte(corte, indice, { conBarrios = true, lugar = null } = {}) {
   const enCurso = estaEnCurso(corte, ahora);
-  const clases = ['corte', corte.afectacion === 'total' && 'total', enCurso && 'en-curso'].filter(Boolean).join(' ');
+  const terminado = estaTerminado(corte, ahora);
+  const clases = ['corte', corte.afectacion === 'total' && 'total', enCurso && 'en-curso', terminado && 'terminado'].filter(Boolean).join(' ');
   return h('li', { class: clases, style: `--i:${indice}` },
     h('div', { class: 'horario' },
       icono('reloj'),
       horario(corte),
       enCurso && h('span', { class: 'etiqueta en-curso' }, h('span', { class: 'punto-vivo' }), 'En curso'),
+      terminado && h('span', { class: 'etiqueta terminado' }, icono('ok'), 'Terminado'),
       corte.afectacion && h('span', { class: `etiqueta ${corte.afectacion}` }, corte.afectacion === 'total' ? 'Total' : 'Parcial'),
     ),
     conBarrios && lugaresDelCorte(corte).length > 0 &&
@@ -376,6 +408,8 @@ function mostrarBarrio(nombre) {
     ? ['en-curso', 'Corte en curso ahora']
     : vecinos > 0
       ? ['sin-luz', 'Sin luz sin aviso']
+      : estado?.terminado
+        ? ['terminado', 'Corte terminado · hoy']
       : estado
         ? ['programado', `Corte programado · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`]
         : ['sin-cortes', `Sin cortes · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`];
@@ -389,7 +423,9 @@ function mostrarBarrio(nombre) {
     ),
     vecinos > 0 && h('p', { class: 'vecinos-cuenta' }, icono('vecinos'),
       `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
-    zona && h('div', { class: 'aviso' }, icono('info'),
+    delDia.some((c) => c.sector) && h('div', { class: 'aviso' }, icono('info'),
+      h('p', {}, 'El sector marcado se armó con las calles y lugares que nombra el anuncio, usando OpenStreetMap: es aproximado.')),
+    zona && !delDia.every((c) => c.sector) && h('div', { class: 'aviso' }, icono('info'),
       h('p', {}, zona.properties.descripcion)),
     delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false, lugar: nombre }))),
     cajaSinLuz(nombre),
@@ -724,7 +760,7 @@ function elegirBarrio(nombre) {
     return;
   }
   if (ES_CELULAR.matches) abrirPanel(true);
-  const capas = capasPorNombre.get(nombre) ?? [];
+  const capas = sectoresPorNombre.get(nombre) ?? capasPorNombre.get(nombre) ?? [];
   if (capas.length > 0) {
     // En el celu el panel abierto tapa la parte de abajo del mapa: dejamos ese espacio libre al hacer zoom.
     const tapado = ES_CELULAR.matches ? panel.getBoundingClientRect().height : 0;
