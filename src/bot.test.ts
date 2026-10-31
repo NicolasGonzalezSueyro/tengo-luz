@@ -140,3 +140,15 @@ test('/api/alerta le escribe al admin, una sola vez por día por cada alerta', a
   assert.deepEqual(await (await alerta({ request: pedido('secreto', { texto: 'Otra cosa' }), env })).json(), { enviada: true });
   assert.deepEqual(mandados.map((m) => [m.chat_id, m.text]), [[9, '🛠️ Falló\n\nlink 1'], [9, '🛠️ Otra cosa']]);
 });
+
+test('/api/alerta explica por qué falló', async (t) => {
+  const pedido = () => new Request('http://x/api/alerta', {
+    method: 'POST', headers: { Authorization: 'Bearer secreto' }, body: JSON.stringify({ texto: 'Prueba' }),
+  });
+  const error = async (env: object) => (await (await alerta({ request: pedido(), env: { DB: baseLocal(), SECRETO_BOT: 'secreto', ...env } })).json()).error;
+
+  assert.match(await error({ TELEGRAM_TOKEN: 'token' }), /Falta TELEGRAM_ADMIN/);
+  assert.match(await error({ TELEGRAM_TOKEN: 'token', TELEGRAM_ADMIN: '@nico' }), /no es un número/);
+  t.mock.method(globalThis, 'fetch', async () => new Response('{"ok":false,"description":"Bad Request: chat not found"}', { status: 400 }));
+  assert.match(await error({ TELEGRAM_TOKEN: 'token', TELEGRAM_ADMIN: '123' }), /Telegram respondió 400: .*chat not found/);
+});

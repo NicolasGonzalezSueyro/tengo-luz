@@ -11,7 +11,12 @@ export async function llamarApi(ruta: string, cuerpo: unknown): Promise<any> {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.SECRETO_BOT}` },
     body: JSON.stringify(cuerpo),
   });
-  if (!respuesta.ok) throw new Error(`${ruta} respondió ${respuesta.status}: ${await respuesta.text()}`);
+  if (!respuesta.ok) {
+    const texto = await respuesta.text();
+    // Si la función se cayó, Cloudflare devuelve una página HTML enorme: alcanza con decir eso.
+    const motivo = texto.trimStart().startsWith('<') ? 'la función falló en Cloudflare (mirá sus registros)' : texto.slice(0, 500);
+    throw new Error(`${ruta} respondió ${respuesta.status}: ${motivo}`);
+  }
   return respuesta.json();
 }
 
