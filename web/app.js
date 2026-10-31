@@ -156,6 +156,13 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   className: 'fondo-mapa',
 }).addTo(mapa);
 
+/**
+ * Leaflet interpreta como HTML el texto de los carteles (tooltips). Los nombres vienen de OpenStreetMap,
+ * que cualquiera puede editar, así que los pasamos como texto: un nombre con código no se ejecuta.
+ * @param {string} texto
+ */
+const comoTexto = (texto) => h('span', {}, texto);
+
 /** @param {string | null} nombre */
 function estilo(nombre) {
   const p = PALETAS[temaActual()];
@@ -193,7 +200,7 @@ const capaPoligonos = L.geoJSON(
       const nombre = /** @type {Barrio} */ (f.properties).nombre;
       if (!nombre) return;
       capasPorNombre.set(nombre, [...(capasPorNombre.get(nombre) ?? []), /** @type {L.Path} */ (capa)]);
-      capa.bindTooltip(nombre, { sticky: true });
+      capa.bindTooltip(comoTexto(nombre), { sticky: true });
       capa.on('click', () => elegirBarrio(nombre));
     },
   },
@@ -236,7 +243,7 @@ function pintarMapa() {
     const zona = zonasPorNombre.get(nombre);
     if (zona) {
       const capa = L.geoJSON(zona, { style: () => estiloZona(nombre) })
-        .bindTooltip(`${nombre} (zona aproximada)`, { sticky: true })
+        .bindTooltip(comoTexto(`${nombre} (zona aproximada)`), { sticky: true })
         .on('click', () => elegirBarrio(nombre))
         .addTo(capaZonas);
       capa.eachLayer((c) => clasesDeBarrio(/** @type {L.Path} */ (c), nombre));
@@ -246,7 +253,7 @@ function pintarMapa() {
     const coordenadas = puntos.get(nombre);
     if (!coordenadas) continue;
     const circulo = L.circleMarker([coordenadas[1], coordenadas[0]], { radius: 11, ...estilo(nombre) })
-      .bindTooltip(nombre)
+      .bindTooltip(comoTexto(nombre))
       .on('click', () => elegirBarrio(nombre))
       .addTo(capaPuntos);
     clasesDeBarrio(circulo, nombre);

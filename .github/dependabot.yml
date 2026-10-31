@@ -1,0 +1,12 @@
+# Dependabot revisa una vez por semana si hay versiones nuevas (sobre todo arreglos de seguridad) de las
+# herramientas de GitHub Actions y de los paquetes de npm, y abre un pull request para actualizarlas.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly

@@ -6,10 +6,10 @@
 // Estrategia:
 // - Archivos de la página y datos: primero internet (siempre lo más nuevo). Si no hay red, o tarda más de
 //   4 segundos, se usa la copia guardada.
-// - Leaflet y la tipografía: primero la copia, porque esas direcciones nunca cambian de contenido.
+// - Leaflet: primero la copia, porque esa dirección (con la versión) nunca cambia de contenido.
 // - /api (reportes de vecinos) y el mapa de fondo: siempre en vivo, sin copia.
 
-const VERSION = 'v2'; // cambiarla solo si cambia la lista PRECARGA: así se descarga de nuevo y se borra la vieja
+const VERSION = 'v3'; // cambiarla solo si cambia la lista PRECARGA: así se descarga de nuevo y se borra la vieja
 const CACHE = `tengo-luz-${VERSION}`;
 const PLAZO_MS = 4000;
 const PRECARGA = [
@@ -21,6 +21,8 @@ const PRECARGA = [
   'reclamo.js',
   'calendario.js',
   'dom.js',
+  'tema.js',
+  'fuentes/outfit-latin.woff2',
   'manifest.webmanifest',
   'icono-192.png',
   'data/barrios.geojson',
@@ -48,7 +50,7 @@ self.addEventListener('fetch', (evento) => {
   const url = new URL(request.url);
   if (request.method !== 'GET' || url.pathname.startsWith('/api/')) return;
   if (url.origin === location.origin) evento.respondWith(primeroLaRed(evento));
-  else if (url.hostname === 'unpkg.com' || url.hostname === 'fonts.gstatic.com') evento.respondWith(primeroLaCopia(request));
+  else if (url.hostname === 'unpkg.com') evento.respondWith(primeroLaCopia(request));
   // Todo lo demás (mapa de fondo de OpenStreetMap) lo maneja el navegador como siempre.
 });
 

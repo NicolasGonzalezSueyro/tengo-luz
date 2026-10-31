@@ -1,3 +1,13 @@
+/* Tipografía Outfit (licencia SIL Open Font License, ver fuentes/OFL.txt), servida desde el propio sitio:
+   así los visitantes no le pasan su IP a Google. Es una fuente "variable": un solo archivo para todos los grosores. */
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fuentes/outfit-latin.woff2") format("woff2");
+}
+
 /* ============================================================================================
    Colores. El tema claro es el de base; el oscuro se activa con el botón (data-tema="oscuro")
    o, si nunca se tocó el botón, siguiendo la configuración del celular/compu.

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { barrioValido, contarReportes, guardarReporte, huellaDe, VIGENCIA } from './reportes.ts';
+import { barrioValido, contarReportes, guardarReporte, huellaDe, redDeLaIp, VIGENCIA } from './reportes.ts';
 import { baseLocal } from './base-local.ts';
 import { onRequestGet, onRequestPost } from '../functions/api/reportes.ts';
 
@@ -58,7 +58,24 @@ test('API: POST guarda, GET devuelve la cuenta y se rechazan pedidos inválidos'
   assert.equal((await onRequestPost({ request: pedido('{"barrio":"Alberdi"}', 'text/plain'), env })).status, 415);
   assert.equal((await onRequestPost({ request: pedido('{"barrio":""}'), env })).status, 400);
   assert.equal((await onRequestPost({ request: pedido('no es json'), env })).status, 400);
+  // Solo lugares del mapa, y nada de cuerpos gigantes.
+  assert.equal((await onRequestPost({ request: pedido('{"barrio":"Barrio Inventado"}'), env })).status, 400);
+  assert.equal((await onRequestPost({ request: pedido(JSON.stringify({ barrio: 'Alberdi', relleno: 'x'.repeat(5000) })), env })).status, 413);
 
   const cuenta = await (await onRequestGet({ request: new Request('http://x/api/reportes'), env })).json();
+  assert.deepEqual(Object.keys(cuenta), ['Alberdi']);
   assert.equal(cuenta.Alberdi.cantidad, 1);
+});
+
+test('redDeLaIp: con IPv6 cuenta el bloque de la casa (/64), con IPv4 la dirección', () => {
+  assert.equal(redDeLaIp('181.1.2.3'), '181.1.2.3');
+  assert.equal(redDeLaIp('2800:810:4f2:a1::1'), '2800:810:4f2:a1::/64');
+  assert.equal(redDeLaIp('2800:0810:04f2:00a1:1234:5678:9abc:def0'), '2800:810:4f2:a1::/64');
+  assert.equal(redDeLaIp('2800:810::9'), '2800:810:0:0::/64');
+  assert.equal(redDeLaIp('::1'), '0:0:0:0::/64');
+});
+
+test('dos direcciones IPv6 de la misma casa tienen la misma huella', async () => {
+  assert.equal(await huellaDe('2800:810:4f2:a1::1', 'secreto', T), await huellaDe('2800:810:4f2:a1:ffff::9', 'secreto', T));
+  assert.notEqual(await huellaDe('2800:810:4f2:a1::1', 'secreto', T), await huellaDe('2800:810:4f2:a2::1', 'secreto', T));
 });

@@ -1,0 +1,22 @@
+# Cabeceras de seguridad que Cloudflare Pages agrega a cada respuesta del sitio.
+# (`npm run dev` también las aplica, para probarlas en la compu antes de publicar.)
+#
+# Content-Security-Policy es una "lista blanca": el navegador solo deja correr código y cargar cosas
+# de los orígenes que figuran acá. Si alguien lograra meter código en la página, no se ejecutaría.
+#   script-src   código: el propio sitio y Leaflet desde unpkg (que además se verifica con SRI)
+#   style-src    estilos: Leaflet y la página ponen estilos en los elementos, por eso 'unsafe-inline'
+#   img-src      el mapa de fondo de OpenStreetMap y el ícono de la pestaña (data:)
+#   connect-src  pedidos: solo al propio sitio (y unpkg, que el service worker guarda para usar sin conexión)
+#   frame-ancestors 'none'  ninguna otra página puede mostrar este sitio adentro (evita engaños con /admin)
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' https://unpkg.com 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org https://unpkg.com; font-src 'self'; connect-src 'self' https://unpkg.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000
+
+/admin*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow

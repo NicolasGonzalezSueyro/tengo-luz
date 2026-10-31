@@ -50,11 +50,24 @@ export async function guardarReporte(db: BaseDeDatos, barrio: string, huella: st
  */
 export async function huellaDe(ip: string, clave: string, ahora: number): Promise<string> {
   const dia = new Date(ahora).toISOString().slice(0, 10);
-  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${clave}|${dia}|${ip}`));
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${clave}|${dia}|${redDeLaIp(ip)}`));
   return Array.from(new Uint8Array(hash), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-/** El nombre del barrio tal como lo manda la página. La página ignora los nombres que no están en el mapa. */
+/**
+ * Con IPv6, cada casa recibe millones de direcciones (un bloque "/64"), así que limitar por dirección no
+ * frenaría a nadie: se usa el bloque. Con IPv4 se usa la dirección entera.
+ */
+export function redDeLaIp(ip: string): string {
+  if (!ip.includes(':')) return ip;
+  const [izquierda, derecha = ''] = ip.toLowerCase().split('::');
+  const partes = (texto: string) => (texto ? texto.split(':') : []);
+  const ceros = Array(8 - partes(izquierda).length - partes(derecha).length).fill('0');
+  const grupos = ip.includes('::') ? [...partes(izquierda), ...ceros, ...partes(derecha)] : partes(izquierda);
+  return `${grupos.slice(0, 4).map((g) => g.replace(/^0+(?=.)/, '')).join(':')}::/64`;
+}
+
+/** El nombre del barrio tal como lo manda la página. La API además exige que sea un lugar del mapa. */
 export function barrioValido(valor: unknown): string | null {
   if (typeof valor !== 'string') return null;
   const barrio = valor.trim();

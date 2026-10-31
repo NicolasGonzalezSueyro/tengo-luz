@@ -33,7 +33,28 @@ const TIPOS: Record<string, string> = {
   '.jpg': 'image/jpeg',
   '.ics': 'text/calendar; charset=utf-8',
   '.webmanifest': 'application/manifest+json',
+  '.woff2': 'font/woff2',
 };
+
+/**
+ * Las mismas cabeceras de seguridad que Cloudflare toma de web/_headers, para probarlas antes de publicar.
+ * El formato: una ruta (con * como comodín) y abajo, con sangría, sus cabeceras "Nombre: valor".
+ */
+function leerCabeceras(texto: string) {
+  const reglas: { patron: RegExp; cabeceras: [string, string][] }[] = [];
+  for (const renglon of texto.split('\n')) {
+    if (!renglon.trim() || renglon.startsWith('#')) continue;
+    if (!/^\s/.test(renglon)) {
+      const patron = renglon.trim().replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+      reglas.push({ patron: new RegExp(`^${patron}$`), cabeceras: [] });
+    } else {
+      const [nombre, ...valor] = renglon.trim().split(':');
+      reglas.at(-1)?.cabeceras.push([nombre.trim(), valor.join(':').trim()]);
+    }
+  }
+  return (ruta: string) => Object.fromEntries(reglas.filter((r) => r.patron.test(ruta)).flatMap((r) => r.cabeceras));
+}
+const cabecerasPara = leerCabeceras(await readFile(join(process.cwd(), 'web', '_headers'), 'utf8'));
 const entornoDePrueba = {
   DB: baseLocal(),
   CLAVE: 'solo-para-probar',
@@ -60,7 +81,7 @@ createServer(async (req, res) => {
       body: req.method === 'POST' ? await text(req) : undefined,
     });
     const respuesta = await manejador({ request, env: entornoDePrueba });
-    res.writeHead(respuesta.status, Object.fromEntries(respuesta.headers)).end(await respuesta.text());
+    res.writeHead(respuesta.status, { ...cabecerasPara(ruta), ...Object.fromEntries(respuesta.headers) }).end(await respuesta.text());
     return;
   }
 
@@ -74,7 +95,11 @@ createServer(async (req, res) => {
   }
   try {
     const contenido = await readFile(archivo);
-    res.writeHead(200, { 'Content-Type': TIPOS[extname(archivo)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' });
+    res.writeHead(200, {
+      ...cabecerasPara(ruta),
+      'Content-Type': TIPOS[extname(archivo)] ?? 'application/octet-stream',
+      'Cache-Control': 'no-store',
+    });
     res.end(contenido);
   } catch {
     res.writeHead(404).end('No encontrado');

@@ -81,6 +81,12 @@ flowchart LR
 - **Privacidad.** El reclamo se arma en el navegador: el contrato y la dirección viajan solo dentro del link de WhatsApp y nunca pasan por un servidor. Los reportes de vecinos no guardan la IP, sino un hash SHA-256 de la IP con una clave secreta y la fecha, que cambia cada día y no permite volver a la IP. La ubicación GPS se usa solo en el navegador.
 - **No fallar en silencio.** Si el robot falla, si El Doce deja de publicar, aparece un barrio desconocido o los barrios de un mismo corte quedan a más de 8 km entre sí (señal de que un nombre repetido se ubicó mal), el bot avisa al admin (como mucho una vez por día por problema). Una nota rara no frena a las demás, y un aviso que falla nunca impide guardar los cortes.
 - **Accesible.** Navegable con teclado, buscador con el patrón ARIA *combobox*, textos alternativos y respeto por "reducir movimiento".
+- **Seguridad en capas.**
+  - **Sin inyección de código:** todo texto externo se muestra como texto, nunca como HTML; incluso los nombres de OpenStreetMap en los carteles del mapa.
+  - **Lista blanca de código** ([`web/_headers`](web/_headers)): una *Content-Security-Policy* hace que el navegador solo ejecute código del propio sitio y de Leaflet (verificado con SRI), y ninguna otra página puede mostrar el sitio adentro de un marco.
+  - **API pública acotada:** solo acepta barrios que existen, limita por persona (con IPv6, por bloque de la casa) y rechaza pedidos grandes.
+  - **Robot con permisos mínimos:** las herramientas de GitHub Actions están fijadas por *commit* y Dependabot avisa de actualizaciones de seguridad.
+  - **Sin terceros innecesarios:** la tipografía se sirve desde el propio sitio, así que Google no ve a los visitantes.
 
 ## Más detalles
 
@@ -182,5 +188,6 @@ npm run bot        # configura el bot de Telegram (lee el token de .env, ver .en
 - **Cortes:** notas públicas de [El Doce](https://eldoce.tv), que replican los anuncios de EPEC. Cada corte guarda el link a la nota de origen.
 - **Barrios:** capa pública de barrios de la [Municipalidad de Córdoba](https://cordoba.maps.arcgis.com/home/item.html?id=60f4e6cbb6ee47e88679a76a5b763326), complementada con datos © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL).
 - **Íconos:** estilo [Lucide](https://lucide.dev) (ISC).
+- **Tipografía:** [Outfit](https://github.com/Outfitio/Outfit-Fonts) (SIL Open Font License, en [`web/fuentes/OFL.txt`](web/fuentes/OFL.txt)).
 
 Código bajo licencia [MIT](LICENSE). Hecho por Nicolás González Sueyro en Córdoba.
