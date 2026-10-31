@@ -4,7 +4,7 @@ import { avisosPendientes, buscarLugar, marcarAvisado, olvidarChat, responder } 
 import { baseLocal } from './base-local.ts';
 import { guardarReporte } from './reportes.ts';
 import { leer, listarLugares } from './lugares.ts';
-import lugaresGuardados from '../data/lugares.json' with { type: 'json' };
+import lugaresGuardados from '../data/lugares.js';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 import { onRequestPost as avisar } from '../functions/api/avisar.ts';
 import type { Corte } from '../web/estado.js';
@@ -19,7 +19,7 @@ const corte = (fecha: string, barrios: string[], zonas: string[] = []): Corte =>
   fuente: 'https://ejemplo', barrios, zonas, sinUbicar: [],
 });
 
-test('data/lugares.json está al día con los mapas (si falla: npm run lugares)', () => {
+test('data/lugares.js está al día con los mapas (si falla: npm run lugares)', () => {
   assert.deepEqual(lugaresGuardados, listarLugares(leer('barrios.geojson'), leer('zonas.geojson')));
 });
 

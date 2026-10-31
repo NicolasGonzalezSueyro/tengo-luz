@@ -67,7 +67,7 @@ Te avisa cuando EPEC anuncia un corte programado en los barrios que seguís: `/b
 - [`functions/api/telegram.ts`](functions/api/telegram.ts) recibe los mensajes ("webhook") y contesta en la misma respuesta. Un encabezado secreto (`SECRETO_BOT`) prueba que el pedido viene de Telegram.
 - Cada hora, después del lector, GitHub Actions corre [`src/avisar.ts`](src/avisar.ts), que le pasa los cortes de hoy en adelante a [`functions/api/avisar.ts`](functions/api/avisar.ts). Esa función manda los avisos y anota cuáles mandó, así nunca repite uno.
 - La lógica (comandos, a quién avisar) está en [`src/bot.ts`](src/bot.ts), con tests.
-- El bot reconoce barrios con [`data/lugares.json`](data/lugares.json), una lista liviana de nombres que se arma con `npm run lugares`.
+- El bot reconoce barrios con [`data/lugares.js`](data/lugares.js), una lista liviana de nombres que se arma con `npm run lugares`.
 - **Comandos de admin** (solo para el chat `TELEGRAM_ADMIN`): `/estado`, `/reportes`, `/limpiar` y `/limpiar Alberdi` para borrar reportes de vecinos.
 
 ¿Por qué Telegram? Es el único canal de avisos gratis y sin límites prácticos. Los SMS se pagan por mensaje, y WhatsApp cobra por cada aviso que inicia una empresa.

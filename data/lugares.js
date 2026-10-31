@@ -1,4 +1,5 @@
-[
+// Generado por `npm run lugares` a partir de los mapas: no editar a mano.
+export default [
  "1 de Julio",
  "16 de Noviembre",
  "1º de Mayo",
@@ -772,4 +773,4 @@
  "Zepa B",
  "Zepa C",
  "Zona rural Ruta 9 Norte"
-]
+];

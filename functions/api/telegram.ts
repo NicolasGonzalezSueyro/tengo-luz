@@ -1,4 +1,4 @@
-import lugares from '../../data/lugares.json' with { type: 'json' };
+import lugares from '../../data/lugares.js';
 import { responder } from '../../src/bot.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
 
