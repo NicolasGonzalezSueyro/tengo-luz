@@ -1,7 +1,7 @@
 {
   "name": "¿Tengo luz? · Cortes en Córdoba",
   "short_name": "¿Tengo luz?",
-  "description": "Mapa de los cortes de luz programados por barrio en Córdoba capital. Sitio no oficial.",
+  "description": "Mapa de los cortes de luz programados por barrio en Córdoba capital y Gran Córdoba. Sitio no oficial.",
   "lang": "es-AR",
   "start_url": "./",
   "scope": "./",

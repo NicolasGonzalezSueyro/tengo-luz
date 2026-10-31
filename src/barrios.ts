@@ -17,7 +17,17 @@ export type Ubicacion = {
 };
 
 /** Una zona aproximada: su nombre y la expresión regular que reconoce el texto del anuncio. */
-export type ZonaAproximada = { nombre: string; patron: string };
+// "ruta": corredor sobre una ruta de capital. "localidad": el límite de una localidad de Gran Córdoba.
+export type ZonaAproximada = { nombre: string; patron: string; tipo?: 'ruta' | 'localidad' };
+
+/**
+ * Las localidades de Gran Córdoba que nombra un corte de fuera de capital: se busca en el título de la sección
+ * ("Villa Carlos Paz") y en el texto ("Localidades de Alta Gracia, Los Aromos…: barrios…").
+ */
+export function localidadesQueNombra(texto: string, localidades: ZonaAproximada[]): string[] {
+  const normalizado = normalizar(texto);
+  return localidades.filter((l) => new RegExp(l.patron).test(normalizado)).map((l) => l.nombre);
+}
 
 // Palabras que marcan que empieza una descripción por calles o sectores, no un nombre de barrio.
 const DESCRIPCION = /\b(comprendid[oa]s?|entre|sobre|desde|hasta|calles?|area|sector|zona|frente|altura)\b/;

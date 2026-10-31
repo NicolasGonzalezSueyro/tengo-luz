@@ -9,7 +9,7 @@ export const SITIO = 'https://tengo-luz.pages.dev';
 const MAXIMO_BARRIOS = 10; // por chat, para que nadie llene la base
 
 const AYUDA = `¡Hola! Soy el bot de ¿Tengo luz? ⚡
-Te aviso cuando EPEC anuncia un corte programado en tus barrios de Córdoba capital.
+Te aviso cuando EPEC anuncia un corte programado en tus barrios de Córdoba capital o en tu localidad de Gran Córdoba (/barrio Villa Allende).
 
 /barrio Alberdi → recibir avisos de Alberdi
 /mis_barrios → ver tus barrios

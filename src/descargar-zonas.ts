@@ -1,14 +1,20 @@
 import { writeFile } from 'node:fs/promises';
 
-// Arma data/zonas.geojson: zonas APROXIMADAS para los cortes que EPEC describe por una ruta o camino
-// en vez de por barrios (ej. "zona rural sobre Ruta Nacional 9 hacia el norte"). Se corre a mano (`npm run zonas`).
+// Arma data/zonas.geojson: zonas APROXIMADAS que se marcan en el mapa cuando un corte no se puede ubicar por barrios.
+// Se corre a mano (`npm run zonas`). Hay dos tipos:
 //
-// Para cada zona tomamos el tramo de la ruta de OpenStreetMap y dibujamos un "corredor" de unos cientos de metros
-// a cada lado. No es el límite real del corte (EPEC no lo publica), solo una referencia visual de dónde queda.
-// Los tramos se eligieron ubicando las referencias del anuncio en un mapa (ej. el Km 13 del Camino a 60 Cuadras).
+// - "ruta": cortes de capital que EPEC describe por una ruta o camino ("zona rural sobre Ruta Nacional 9 hacia el
+//   norte"). Tomamos el tramo de la ruta de OpenStreetMap y dibujamos un "corredor" de unos cientos de metros a cada
+//   lado. Los tramos se eligieron ubicando las referencias del anuncio en un mapa (ej. el Km 13 del Camino a 60 Cuadras).
+// - "localidad": las localidades de Gran Córdoba. EPEC las describe por calles o "en la localidad", sin barrios que
+//   se puedan ubicar, así que se marca el límite del municipio entero, que da OpenStreetMap a través de Nominatim.
+//
+// Ninguna es el límite real del corte (EPEC no lo publica): son una referencia visual de dónde queda.
 // Datos © colaboradores de OpenStreetMap, licencia ODbL.
 
 const OVERPASS = 'https://overpass-api.de/api/interpreter';
+const NOMINATIM = 'https://nominatim.openstreetmap.org/lookup';
+const IDENTIFICACION = { 'User-Agent': 'tengo-luz/0.1 (+https://github.com/NicolasGonzalezSueyro/tengo-luz)' };
 const ARCHIVO = 'data/zonas.geojson';
 const ANCHO_METROS = 450;
 
@@ -19,18 +25,55 @@ const ZONAS = [
     nombre: 'Zona rural Ruta 9 Norte',
     // Se compara contra el texto normalizado del anuncio (minúsculas, sin tildes ni "de"/"del").
     patron: String.raw`\bruta (nacional )?9\b.*\bnorte\b|\bruta 9 norte\b`,
-    descripcion: 'Zona rural a los costados de la Ruta Nacional 9, al norte de Guiñazú.',
+    descripcion: 'Zona rural a los costados de la Ruta Nacional 9, al norte de Guiñazú. EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.',
     // Tramo de la RN9 desde el límite norte de la ciudad hasta unos 7 km más al norte.
     filtro: 'way["highway"]["ref"~"^RN ?9$"](-31.312,-64.200,-31.250,-64.150)',
   },
   {
     nombre: 'Camino a 60 Cuadras (desde el Km 13)',
     patron: String.raw`\bcamino (a )?60 cuadras\b`,
-    descripcion: 'Zona a los costados del Camino a 60 Cuadras, desde el Km 13 hacia el sur.',
+    descripcion: 'Zona a los costados del Camino a 60 Cuadras, desde el Km 13 hacia el sur. EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.',
     // El Km 13 queda cerca de la latitud -31,536; tomamos unos 5 km hacia el sur.
     filtro: 'way["highway"]["name"="Camino a 60 Cuadras"](-31.580,-64.200,-31.534,-64.050)',
   },
 ];
+
+// Localidades de Gran Córdoba (unos 40 km a la redonda), con su límite municipal en OpenStreetMap (número de relación).
+// El patrón se busca en el título de la sección de la nota y en el texto del corte (ej. "Localidades de Alta Gracia…").
+const LOCALIDADES = [
+  { nombre: 'Villa Allende', relacion: 6091815, patron: String.raw`\bvilla allende\b` },
+  { nombre: 'Mendiolaza', relacion: 9453753, patron: String.raw`\bmendiolaza\b` },
+  { nombre: 'Unquillo', relacion: 8804980, patron: String.raw`\bunquillo\b` },
+  { nombre: 'Río Ceballos', relacion: 9460381, patron: String.raw`\brio ceballos\b` },
+  { nombre: 'Saldán', relacion: 9414254, patron: String.raw`\bsaldan\b` },
+  { nombre: 'La Calera', relacion: 9435036, patron: String.raw`\bla calera\b` },
+  { nombre: 'Malagueño', relacion: 9450679, patron: String.raw`\bmalagueno\b` },
+  { nombre: 'Villa Carlos Paz', relacion: 2284280, patron: String.raw`\bcarlos paz\b` },
+  { nombre: 'Alta Gracia', relacion: 9720880, patron: String.raw`\balta gracia\b` },
+  { nombre: 'Estación Juárez Celman', relacion: 9427931, patron: String.raw`\bjuarez celman\b` },
+  { nombre: 'Colonia Tirolesa', relacion: 9409810, patron: String.raw`\bcolonia tirolesa\b` },
+];
+
+type Geometria = { type: 'Polygon' | 'MultiPolygon'; coordinates: unknown };
+
+/** Los límites de todas las localidades en un solo pedido a Nominatim (pide no hacer más de uno por segundo). */
+async function limitesDeLocalidades(): Promise<Map<number, Geometria>> {
+  const url = new URL(NOMINATIM);
+  url.search = new URLSearchParams({
+    osm_ids: LOCALIDADES.map((l) => `R${l.relacion}`).join(','),
+    format: 'json',
+    polygon_geojson: '1',
+    polygon_threshold: '0.0003', // simplifica el contorno (unos 30 m de detalle): el archivo queda liviano
+  }).toString();
+  const res = await fetch(url, { headers: IDENTIFICACION, signal: AbortSignal.timeout(60_000) });
+  if (!res.ok) throw new Error(`Nominatim respondió ${res.status}`);
+  const resultados = (await res.json()) as { osm_id: number; geojson: Geometria }[];
+  return new Map(resultados.map((r) => [r.osm_id, r.geojson]));
+}
+
+/** Redondea las coordenadas a 5 decimales (~1 m), en cualquier nivel de anidado. */
+const redondear = (valor: unknown): unknown =>
+  typeof valor === 'number' ? Math.round(valor * 1e5) / 1e5 : Array.isArray(valor) ? valor.map(redondear) : valor;
 
 // Overpass es un servicio gratuito y compartido: a veces responde "ocupado" o limita consultas. Reintentamos con calma.
 async function consultar(filtro: string, intentos = 5): Promise<Punto[]> {
@@ -38,7 +81,7 @@ async function consultar(filtro: string, intentos = 5): Promise<Punto[]> {
     const res = await fetch(OVERPASS, {
       method: 'POST',
       body: new URLSearchParams({ data: `[out:json][timeout:120];${filtro};out geom;` }),
-      headers: { 'User-Agent': 'tengo-luz/0.1 (+https://github.com/NicolasGonzalezSueyro/tengo-luz)' },
+      headers: IDENTIFICACION,
       signal: AbortSignal.timeout(180_000),
     });
     if (res.ok) {
@@ -87,10 +130,26 @@ if (import.meta.main) {
     const contorno = corredor(puntos, ANCHO_METROS).map(([lon, lat]): Punto => [Math.round(lon * 1e5) / 1e5, Math.round(lat * 1e5) / 1e5]);
     features.push({
       type: 'Feature',
-      properties: { nombre: zona.nombre, patron: zona.patron, descripcion: zona.descripcion },
+      properties: { nombre: zona.nombre, tipo: 'ruta', patron: zona.patron, descripcion: zona.descripcion },
       geometry: { type: 'Polygon', coordinates: [contorno] },
     });
     console.log(`${zona.nombre}: ${puntos.length} puntos de ruta → contorno de ${contorno.length} vértices`);
+  }
+  const limites = await limitesDeLocalidades();
+  for (const localidad of LOCALIDADES) {
+    const limite = limites.get(localidad.relacion);
+    if (!limite || !['Polygon', 'MultiPolygon'].includes(limite.type)) throw new Error(`No encontré el límite de ${localidad.nombre}`);
+    features.push({
+      type: 'Feature',
+      properties: {
+        nombre: localidad.nombre,
+        tipo: 'localidad',
+        patron: localidad.patron,
+        descripcion: `El anuncio de EPEC no nombra barrios de ${localidad.nombre} que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada.`,
+      },
+      geometry: { type: limite.type, coordinates: redondear(limite.coordinates) },
+    });
+    console.log(`${localidad.nombre}: límite municipal (${limite.type})`);
   }
   await writeFile(ARCHIVO, JSON.stringify({ type: 'FeatureCollection', features }, null, 1) + '\n');
   console.log(`Guardadas ${features.length} zonas aproximadas en ${ARCHIVO}`);

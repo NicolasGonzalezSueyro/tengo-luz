@@ -1,9 +1,11 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { momentoEnCordoba } from '../web/estado.js';
 import { alertar } from './alertar.ts';
-import { centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada } from './barrios.ts';
+import {
+  centro, crearUbicador, esDescripcion, localidadesQueNombra, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada,
+} from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
-import { unir, type Mantenimiento } from './mantenimiento.ts';
+import { CAPITAL, unir, type Mantenimiento } from './mantenimiento.ts';
 
 const ARCHIVO = 'data/mantenimientos.json';
 // Leemos las últimas notas por si alguna corrida anterior falló o la nota se actualizó.
@@ -11,7 +13,8 @@ const NOTAS_A_LEER = 3;
 
 async function leerGuardados(): Promise<Mantenimiento[]> {
   try {
-    return JSON.parse(await readFile(ARCHIVO, 'utf8'));
+    // Los cortes guardados antes de ampliar a Gran Córdoba no tienen localidad: eran todos de capital.
+    return (JSON.parse(await readFile(ARCHIVO, 'utf8')) as Mantenimiento[]).map((m) => ({ ...m, localidad: m.localidad ?? CAPITAL }));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') return []; // primera vez: todavía no hay archivo
     throw error;
@@ -37,7 +40,7 @@ for (const url of urls) {
   // Una nota rara no frena a las demás: se avisa y se sigue.
   try {
     const { mantenimientos, noReconocidas } = parsearNota(await descargar(url), url);
-    console.log(`${mantenimientos.length} cortes en capital ← ${url}`);
+    console.log(`${mantenimientos.filter((m) => m.localidad === CAPITAL).length} cortes en capital y ${mantenimientos.length} en total ← ${url}`);
     if (noReconocidas.length > 0) {
       alertas.push({ texto: `Hay renglones de cortes que no entendí:\n${noReconocidas.map((r) => `• ${r}`).join('\n')}`, detalle: url });
     }
@@ -52,12 +55,26 @@ type Geometria = { type: string; coordinates: unknown };
 const mapa = await leerJson<{ features: { properties: { nombre: string | null }; geometry: Geometria }[] }>('data/barrios.geojson');
 const zonas = await leerJson<{ features: { properties: ZonaAproximada; geometry: Geometria }[] }>('data/zonas.geojson');
 const alias = await leerJson<Record<string, string | null>>('data/alias-barrios.json');
+const localidades = zonas.features.map((f) => f.properties).filter((z) => z.tipo === 'localidad');
 const ubicar = crearUbicador(
   mapa.features.flatMap((f) => f.properties.nombre ?? []),
   alias,
-  zonas.features.map((f) => f.properties),
+  zonas.features.map((f) => f.properties).filter((z) => z.tipo !== 'localidad'),
 );
-const todos: (Mantenimiento & Ubicacion)[] = unir(await leerGuardados(), nuevos).map((m) => ({ ...m, ...ubicar(m.zona) }));
+
+/**
+ * Capital se ubica por barrios (y rutas). Fuera de capital solo se buscan las localidades de Gran Córdoba,
+ * y nunca barrios de capital: un "barrio Don Bosco" de Alta Gracia no tiene que pintar uno de capital.
+ */
+const ubicarCorte = (m: Mantenimiento): Ubicacion =>
+  m.localidad === CAPITAL
+    ? ubicar(m.zona)
+    : { barrios: [], zonas: localidadesQueNombra(`${m.localidad} ${m.zona}`, localidades), sinUbicar: [] };
+
+const todos: (Mantenimiento & Ubicacion)[] = unir(await leerGuardados(), nuevos)
+  .map((m) => ({ ...m, ...ubicarCorte(m) }))
+  // De fuera de capital, solo los cortes de Gran Córdoba (el resto de la provincia no está en el mapa).
+  .filter((m) => m.localidad === CAPITAL || m.zonas.length > 0);
 
 await mkdir('data', { recursive: true });
 await writeFile(ARCHIVO, JSON.stringify(todos, null, 2) + '\n');
@@ -84,7 +101,8 @@ if (desconocidos.length > 0) {
 const centros = new Map(
   [...mapa.features, ...zonas.features].flatMap((f): [string, Punto][] => (f.properties.nombre ? [[f.properties.nombre, centro(f.geometry)]] : [])),
 );
-for (const m of queVienen) {
+// Solo en capital: un renglón de "Otras localidades" puede nombrar pueblos lejanos entre sí, y está bien.
+for (const m of queVienen.filter((c) => c.localidad === CAPITAL)) {
   const separados = lugaresSeparados([...m.barrios, ...m.zonas], centros);
   if (separados) {
     alertas.push({

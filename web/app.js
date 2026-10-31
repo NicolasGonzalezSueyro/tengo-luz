@@ -16,7 +16,7 @@ import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 /** @typedef {import('./estado.js').EstadoBarrio} EstadoBarrio */
 /** @typedef {{ id: string, nombre: string | null, tipo: 'poligono' | 'punto', fuente: string }} Barrio */
 /** @typedef {GeoJSON.Feature<GeoJSON.Geometry, Barrio>} FeatureBarrio */
-/** @typedef {{ nombre: string, descripcion: string }} Zona */
+/** @typedef {{ nombre: string, descripcion: string, tipo?: 'ruta' | 'localidad' }} Zona */
 /** @typedef {import('./dom.js').Hijo} Hijo */
 
 const CORDOBA = /** @type {L.LatLngTuple} */ ([-31.4167, -64.1833]);
@@ -82,6 +82,8 @@ try {
 const [mapaBarrios, cortes, mapaZonas] = datos;
 const zonasPorNombre = new Map(mapaZonas.features.map((f) => [f.properties.nombre, f]));
 const poligonosBarrios = mapaBarrios.features.filter((f) => f.properties.tipo === 'poligono');
+// Las localidades de Gran Córdoba (Villa Allende, Carlos Paz…): sirven también para ubicar el GPS fuera de capital.
+const limitesLocalidades = mapaZonas.features.filter((f) => f.properties.tipo === 'localidad');
 const primerRegistro = cortes.map((c) => c.fecha).sort()[0];
 // Todo lo que se puede elegir en el mapa. Los reportes con otros nombres se ignoran.
 const lugaresDelMapa = new Set([...mapaBarrios.features.flatMap((f) => f.properties.nombre ?? []), ...zonasPorNombre.keys()]);
@@ -162,6 +164,12 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
  * @param {string} texto
  */
 const comoTexto = (texto) => h('span', {}, texto);
+
+/** El ícono de un lugar: un pin para los barrios, una ruta o un edificio para las zonas aproximadas. @param {string} nombre */
+function iconoDeLugar(nombre) {
+  const tipo = zonasPorNombre.get(nombre)?.properties.tipo;
+  return icono(!zonasPorNombre.has(nombre) ? 'pin' : tipo === 'localidad' ? 'ciudad' : 'ruta');
+}
 
 /** @param {string | null} nombre */
 function estilo(nombre) {
@@ -320,7 +328,7 @@ function tarjetaCorte(corte, indice, { conBarrios = true, lugar = null } = {}) {
     conBarrios && lugaresDelCorte(corte).length > 0 &&
       h('div', { class: 'barrios' },
         ...corte.barrios.map((b) => h('button', { class: 'barrio-link', type: 'button', onclick: () => elegirBarrio(b) }, icono('pin'), b)),
-        ...(corte.zonas ?? []).map((z) => h('button', { class: 'barrio-link zona', type: 'button', onclick: () => elegirBarrio(z) }, icono('ruta'), z))),
+        ...(corte.zonas ?? []).map((z) => h('button', { class: 'barrio-link zona', type: 'button', onclick: () => elegirBarrio(z) }, iconoDeLugar(z), z))),
     h('p', { class: 'zona' }, corte.zona),
     lugaresDelCorte(corte).length === 0 &&
       h('p', { class: 'sin-mapa' }, icono('info'), 'No se pudo marcar en el mapa: la zona está descripta por calles.'),
@@ -374,7 +382,7 @@ function mostrarBarrio(nombre) {
   const zona = zonasPorNombre.get(nombre);
   mostrar(
     h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
-    h('h2', {}, icono(zona ? 'ruta' : 'pin'), nombre),
+    h('h2', {}, iconoDeLugar(nombre), nombre),
     h('div', { class: 'ficha-estado' },
       h('span', { class: `estado ${claseEstado}` }, icono(vecinos > 0 && !estado?.enCurso ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
       h('button', { class: 'boton boton-secundario boton-compartir', type: 'button', onclick: () => compartir(nombre) }, icono('compartir'), 'Compartir'),
@@ -382,7 +390,7 @@ function mostrarBarrio(nombre) {
     vecinos > 0 && h('p', { class: 'vecinos-cuenta' }, icono('vecinos'),
       `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
     zona && h('div', { class: 'aviso' }, icono('info'),
-      h('p', {}, `${zona.properties.descripcion} EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.`)),
+      h('p', {}, zona.properties.descripcion)),
     delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false, lugar: nombre }))),
     cajaSinLuz(nombre),
     h('h3', {}, icono('historial'), 'Historial'),
@@ -583,8 +591,8 @@ function mostrarComoFunciona() {
     h('h2', {}, icono('ayuda'), '¿Cómo funciona?'),
     h('ol', { class: 'pasos' },
       h('li', {}, 'EPEC anuncia los cortes programados (mantenimientos, poda, obras) y los medios los publican, en general el día anterior.'),
-      h('li', {}, 'Cada hora, un programa lee esos anuncios, se queda con los de Córdoba capital y reconoce qué barrios nombran.'),
-      h('li', {}, 'Cada barrio se ubica en el mapa oficial de la Municipalidad. Si el anuncio habla de una ruta en vez de barrios, se marca una zona aproximada.'),
+      h('li', {}, 'Cada hora, un programa lee esos anuncios, se queda con los de Córdoba capital y Gran Córdoba, y reconoce qué barrios o localidades nombran.'),
+      h('li', {}, 'Cada barrio se ubica en el mapa oficial de la Municipalidad. Si el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar, se marca una zona aproximada.'),
       h('li', {}, 'El mapa se pinta según el día que elijas, y "en curso" se calcula con la hora actual de Córdoba.'),
     ),
     h('div', { class: 'aviso' }, icono('info'),
@@ -775,7 +783,7 @@ function opcionSugerida(nombre, buscado, id) {
     : vecinosSinLuz(nombre) > 0 ? ['sin-luz', 'Sin luz']
       : estado ? ['programado', 'Corte'] : ['', ''];
   return h('li', { id, class: 'sugerencia', role: 'option', 'aria-selected': 'false', 'data-nombre': nombre },
-    icono(zonasPorNombre.has(nombre) ? 'ruta' : 'pin'),
+    iconoDeLugar(nombre),
     h('span', { class: 'sugerencia-nombre' }, ...resaltar(nombre, buscado)),
     texto && h('span', { class: `etiqueta ${clase}` }, texto),
   );
@@ -888,13 +896,14 @@ botonUbicacion.addEventListener('click', () => {
       marcadorYo = L.circleMarker(punto, {
         radius: 8, color: '#6d28d9', weight: 3, fillColor: '#ffffff', fillOpacity: 1, className: 'yo',
       }).bindTooltip('Vos estás acá').addTo(mapa);
-      const barrio = barrioEnPunto(poligonosBarrios, [coords.longitude, coords.latitude]);
+      const lugar = /** @type {[number, number]} */ ([coords.longitude, coords.latitude]);
+      const barrio = barrioEnPunto(poligonosBarrios, lugar) ?? barrioEnPunto(limitesLocalidades, lugar);
       if (barrio) {
         avisar(`Estás en ${barrio}`);
         elegirBarrio(barrio);
       } else {
         mapa.flyTo(punto, 14);
-        avisar('Tu ubicación queda fuera de los barrios de Córdoba capital.');
+        avisar('Tu ubicación queda fuera de Córdoba capital y de las localidades de Gran Córdoba.');
       }
     },
     (error) => {

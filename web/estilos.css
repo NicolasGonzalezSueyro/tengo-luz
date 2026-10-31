@@ -643,11 +643,16 @@ a { color: var(--acento); }
 
 .leaflet-container { font: inherit; }
 
-/* Barrios con un corte en curso: naranja, laten y brillan. */
-.barrio-en-curso { animation: latido 1.8s ease-in-out infinite; }
+/* Barrios con un corte en curso: naranja, laten y brillan fuerte, con un halo doble (naranja y amarillo)
+   y el borde que se engrosa, para que se vean desde lejos. */
+.barrio-en-curso { animation: latido 1.6s ease-in-out infinite; }
 @keyframes latido {
-  0%, 100% { fill-opacity: 0.55; filter: drop-shadow(0 0 2px rgba(249, 115, 22, 0.4)); }
-  50% { fill-opacity: 0.9; filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.95)); }
+  0%, 100% { fill-opacity: 0.5; stroke-width: 2px; filter: drop-shadow(0 0 3px rgba(249, 115, 22, 0.6)); }
+  50% {
+    fill-opacity: 1;
+    stroke-width: 5px;
+    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 1)) drop-shadow(0 0 22px rgba(251, 191, 36, 0.9));
+  }
 }
 /* Barrios donde los vecinos reportan que no tienen luz (sin corte anunciado): rojo que late. */
 .barrio-sin-luz { animation: latido-rojo 1.8s ease-in-out infinite; }
@@ -758,4 +763,7 @@ a { color: var(--acento); }
 /* Para quien configuró su sistema para reducir animaciones. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  /* Sin animación, los cortes en curso y los reportes igual se destacan: con un brillo fijo. */
+  :root .barrio-con-corte.barrio-en-curso { fill-opacity: 0.9; stroke-width: 4px; filter: drop-shadow(0 0 8px rgba(249, 115, 22, 1)) drop-shadow(0 0 18px rgba(251, 191, 36, 0.8)); }
+  .barrio-sin-luz { fill-opacity: 0.9; filter: drop-shadow(0 0 8px rgba(220, 38, 38, 1)); }
 }

@@ -1,4 +1,4 @@
-import type { Mantenimiento } from '../mantenimiento.ts';
+import { CAPITAL, type Mantenimiento } from '../mantenimiento.ts';
 
 // Fuente temporal: las notas diarias de El Doce con los cortes programados que anuncia EPEC.
 // Si algún día EPEC da acceso a sus datos, se reemplaza este archivo y el resto queda igual.
@@ -38,11 +38,12 @@ export async function buscarNotas(): Promise<string[]> {
 }
 
 /**
- * Extrae los cortes de Córdoba capital de una nota de El Doce.
+ * Extrae los cortes de una nota de El Doce, con la localidad de cada uno.
  *
  * El formato del HTML cambia de un día a otro (listas, párrafos con guion, "Córdoba" o "Córdoba capital"),
- * así que convertimos la nota en renglones de texto y la recorremos así:
- * un título de ciudad abre una sección, y cada renglón "De HH a HH: zona" dentro de la de capital es un corte.
+ * así que convertimos la nota en renglones de texto y la recorremos así: cualquier renglón que no es un corte
+ * abre una sección (el título de una ciudad, "Otras localidades", o texto de la nota), y cada renglón
+ * "De HH a HH: zona" es un corte de esa sección. Qué secciones sirven lo decide el lector.
  */
 export function parsearNota(html: string, url: string): ResultadoNota {
   const fecha = fechaDeLosCortes(html, url);
@@ -51,22 +52,21 @@ export function parsearNota(html: string, url: string): ResultadoNota {
   const mantenimientos: Mantenimiento[] = [];
   const noReconocidas: string[] = [];
   let cortesEnLaNota = 0;
-  let enCapital = false;
+  let seccion: string | null = null;
 
   for (const renglon of renglones) {
     const corte = leerCorte(renglon);
     if (corte) cortesEnLaNota += corte.rangos.length;
 
-    if (/^C[oó]rdoba(?: capital)?$/i.test(renglon)) {
-      enCapital = true;
-    } else if (enCapital && corte) {
+    if (corte && seccion) {
+      const localidad = /^C[oó]rdoba(?: capital)?$/i.test(seccion) ? CAPITAL : seccion;
       for (const [desde, hasta] of corte.rangos) {
-        mantenimientos.push({ fecha, desde, hasta, zona: corte.zona, afectacion: afectacion(corte.zona), fuente: url });
+        mantenimientos.push({ localidad, fecha, desde, hasta, zona: corte.zona, afectacion: afectacion(corte.zona), fuente: url });
       }
-    } else if (enCapital && PARECE_CORTE.test(renglon)) {
-      noReconocidas.push(renglon);
-    } else if (enCapital) {
-      enCapital = false; // cualquier otro renglón (otra ciudad, el pie de la nota) cierra la sección
+    } else if (seccion && /^C[oó]rdoba(?: capital)?$/i.test(seccion) && PARECE_CORTE.test(renglon)) {
+      noReconocidas.push(renglon); // en capital, un renglón que parece corte pero no entendimos: no cierra la sección
+    } else if (!corte) {
+      seccion = renglon;
     }
   }
 

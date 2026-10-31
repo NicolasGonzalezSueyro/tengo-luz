@@ -1,6 +1,6 @@
 # ⚡ ¿Tengo luz?
 
-**Mapa de los cortes de luz programados por barrio en Córdoba capital, con reportes de vecinos, avisos por Telegram y ayuda para reclamar.**
+**Mapa de los cortes de luz programados por barrio en Córdoba capital y Gran Córdoba, con reportes de vecinos, avisos por Telegram y ayuda para reclamar.**
 
 [![Tests](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml)
 [![Actualizar cortes](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml)
@@ -19,7 +19,8 @@
 
 ## Qué hace
 
-- 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟫 zona aproximada (cuando el anuncio habla de una ruta y no de barrios).
+- 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟫 zona aproximada (cuando el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar).
+- 🏘️ **Gran Córdoba.** Además de capital: Villa Allende, Mendiolaza, Unquillo, Río Ceballos, Saldán, La Calera, Malagueño, Villa Carlos Paz, Alta Gracia, Estación Juárez Celman y Colonia Tirolesa.
 - 🔎 **Buscador con autocompletado** (no importan las tildes), **"Mi ubicación"** con GPS y una **ficha por barrio** con el próximo y el último corte.
 - 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
 - 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
@@ -57,7 +58,7 @@ flowchart LR
   api <--> telegram[Telegram]
 ```
 
-1. **Leer.** Cada hora, GitHub Actions busca en el sitemap de noticias de El Doce la nota diaria con los cortes de EPEC, se queda con la sección de Córdoba capital y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
+1. **Leer.** Cada hora, GitHub Actions busca en el sitemap de noticias de El Doce la nota diaria con los cortes de EPEC, se queda con la sección de Córdoba capital y con los cortes de las localidades de Gran Córdoba, y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
 2. **Ubicar.** Cada barrio del anuncio se busca en el mapa oficial de la Municipalidad, normalizando nombres ("Sud" = "Sur", sin tildes) y con una tabla de alias revisada a mano.
 3. **Publicar.** Si hay cortes nuevos, el robot hace un commit con los datos y Cloudflare Pages publica el sitio actualizado. No hay ninguna compu prendida.
 4. **Avisar.** El mismo robot le pasa los cortes al bot, que avisa a quienes siguen esos barrios. Si algo falla, el bot le escribe al admin.
@@ -99,7 +100,10 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 - **~320 puntos** de OpenStreetMap para lugares que la Municipalidad no tiene (asentamientos, loteos nuevos). De esos se sabe dónde quedan, no su forma.
 - Los nombres municipales vienen en mayúsculas y sin tildes; si OSM tiene el mismo barrio, se usa su nombre ("Argüello").
 
-**Zonas aproximadas.** Algunos anuncios no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte"). Para esos, [`data/zonas.geojson`](data/zonas.geojson) tiene un corredor de unos 450 m a cada lado del tramo de la ruta, armado con el trazado de OpenStreetMap (`npm run zonas`). Es una referencia visual, no el límite real del corte, que EPEC no publica.
+**Zonas aproximadas.** [`data/zonas.geojson`](data/zonas.geojson) (`npm run zonas`) tiene dos tipos, armados con datos de OpenStreetMap. Son una referencia visual, no el límite real del corte, que EPEC no publica.
+
+- **Rutas:** algunos anuncios de capital no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte"). Para esos hay un corredor de unos 450 m a cada lado del tramo de la ruta.
+- **Localidades de Gran Córdoba:** fuera de capital no hay un mapa oficial de barrios, y EPEC suele describir los cortes por calles ("sector comprendido por calles Alberdi, Caseros…"). Por eso se marca el límite municipal de la localidad entera, que se obtiene de Nominatim. Cada localidad se reconoce por su nombre en el título de la sección de la nota o en el texto del corte, y nunca se buscan barrios de capital en esos cortes: un "barrio Don Bosco" de Alta Gracia no pinta uno de capital.
 
 **Alias.** [`data/alias-barrios.json`](data/alias-barrios.json) dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono. Un alias en `null` marca un nombre que no se debe ubicar solo (por ejemplo, "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
 </details>

@@ -31,7 +31,7 @@ function conParrafos(ciudad: string, ...renglones: string[]): string {
 const SAN_FRANCISCO = conLista('San Francisco', 'De 07:30 a 10:30: barrio Roca, entre las calles 25 de mayo y Urquiza.');
 const URL = 'https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado/';
 
-test('formato lista: lee solo los cortes de Córdoba capital', () => {
+test('formato lista: lee los cortes de cada localidad, con capital como "Córdoba"', () => {
   const html = nota(
     conLista(
       'Córdoba capital',
@@ -43,8 +43,9 @@ test('formato lista: lee solo los cortes de Córdoba capital', () => {
 
   assert.deepEqual(noReconocidas, []);
   assert.deepEqual(mantenimientos, [
-    { fecha: '2026-10-31', desde: '07:30', hasta: '10:30', zona: 'Barrio Argüello, en forma parcial.', afectacion: 'parcial', fuente: URL },
-    { fecha: '2026-10-31', desde: '08:00', hasta: '13:00', zona: 'Sector comprendido por Camino 60 Cuadras, en forma total.', afectacion: 'total', fuente: URL },
+    { localidad: 'Córdoba', fecha: '2026-10-31', desde: '07:30', hasta: '10:30', zona: 'Barrio Argüello, en forma parcial.', afectacion: 'parcial', fuente: URL },
+    { localidad: 'Córdoba', fecha: '2026-10-31', desde: '08:00', hasta: '13:00', zona: 'Sector comprendido por Camino 60 Cuadras, en forma total.', afectacion: 'total', fuente: URL },
+    { localidad: 'San Francisco', fecha: '2026-10-31', desde: '07:30', hasta: '10:30', zona: 'barrio Roca, entre las calles 25 de mayo y Urquiza.', afectacion: null, fuente: URL },
   ]);
 });
 
@@ -55,12 +56,20 @@ test('formato párrafos: título "Córdoba", guiones y horas sin minutos', () =>
   );
   const { mantenimientos } = parsearNota(html, URL);
   assert.deepEqual(
-    mantenimientos.map((m) => [m.desde, m.hasta, m.zona]),
+    mantenimientos.map((m) => [m.localidad, m.desde, m.hasta, m.zona]),
     [
-      ['08:00', '12:30', 'barrios La Favela y Villa Urquiza.'],
-      ['14:00', '17:00', 'barrio Los Olmos.'],
+      ['Córdoba', '08:00', '12:30', 'barrios La Favela y Villa Urquiza.'],
+      ['Córdoba', '14:00', '17:00', 'barrio Los Olmos.'],
+      ['Villa Allende', '13:00', '13:20', 'barrios: Las Rosas, Español.'],
     ],
   );
+});
+
+test('"Otras localidades": el corte queda con esa sección y el texto nombra las localidades', () => {
+  const html = nota(conLista('Otras localidades', 'De 06:30 a 06:45: Localidades de Alta Gracia y Los Aromos: barrios Don Bosco y Villa Oviedo.'));
+  const [corte] = parsearNota(html, URL).mantenimientos;
+  assert.equal(corte.localidad, 'Otras localidades');
+  assert.match(corte.zona, /^Localidades de Alta Gracia/);
 });
 
 test('un renglón con dos horarios genera dos cortes', () => {
@@ -117,8 +126,10 @@ test('guarda aparte los renglones de capital que parecen cortes pero no entiende
   assert.deepEqual(noReconocidas, ['Mañana de 8 a 9 en barrio Jardín.']);
 });
 
-test('si no hay cortes en capital devuelve una lista vacía', () => {
-  assert.deepEqual(parsearNota(nota(SAN_FRANCISCO), URL), { mantenimientos: [], noReconocidas: [] });
+test('si no hay cortes en capital, devuelve solo los de otras localidades', () => {
+  const { mantenimientos, noReconocidas } = parsearNota(nota(SAN_FRANCISCO), URL);
+  assert.deepEqual(mantenimientos.map((m) => m.localidad), ['San Francisco']);
+  assert.deepEqual(noReconocidas, []);
 });
 
 test('falla si la nota no tiene ningún corte reconocible (cambió el formato)', () => {

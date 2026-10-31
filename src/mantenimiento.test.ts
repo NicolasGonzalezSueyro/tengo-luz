@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { unir, type Mantenimiento } from './mantenimiento.ts';
 
 function corte(fecha: string, desde: string, zona: string): Mantenimiento {
-  return { fecha, desde, hasta: '12:00', zona, afectacion: null, fuente: 'https://ejemplo' };
+  return { localidad: 'Córdoba', fecha, desde, hasta: '12:00', zona, afectacion: null, fuente: 'https://ejemplo' };
 }
 
 test('conserva los días viejos y agrega los nuevos, ordenados', () => {

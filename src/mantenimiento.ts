@@ -1,5 +1,9 @@
+/** Cómo se llama Córdoba capital en el campo `localidad` (los cortes viejos, de antes de ampliar, no lo tienen). */
+export const CAPITAL = 'Córdoba';
+
 /** Un corte de luz programado, tal como lo guardamos en data/mantenimientos.json. */
 export type Mantenimiento = {
+  localidad: string; // CAPITAL, o el título de la sección de la nota ("Villa Carlos Paz", "Otras localidades"…)
   fecha: string; // AAAA-MM-DD
   desde: string; // HH:MM
   hasta: string; // HH:MM
@@ -16,7 +20,7 @@ export function unir(anteriores: Mantenimiento[], nuevos: Mantenimiento[]): Mant
   const fechasNuevas = new Set(nuevos.map((m) => m.fecha));
   const porClave = new Map<string, Mantenimiento>();
   for (const m of [...anteriores.filter((m) => !fechasNuevas.has(m.fecha)), ...nuevos]) {
-    porClave.set(`${m.fecha}|${m.desde}|${m.hasta}|${m.zona}`, m);
+    porClave.set(`${m.localidad}|${m.fecha}|${m.desde}|${m.hasta}|${m.zona}`, m);
   }
   return [...porClave.values()].sort(
     (a, b) => a.fecha.localeCompare(b.fecha) || a.desde.localeCompare(b.desde) || a.zona.localeCompare(b.zona),
