@@ -4,7 +4,7 @@
 
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaEnCurso, etiquetaCorta, etiquetaDia, fechaLarga,
-  hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba, posicionCoincidencia, sugerencias,
+  hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba, posicionCoincidencia, sugerencias, textoParaCompartir,
 } from './estado.js';
 import { completarIconos, icono } from './iconos.js';
 import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
@@ -364,7 +364,10 @@ function mostrarBarrio(nombre) {
   mostrar(
     h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
     h('h2', {}, icono(zona ? 'ruta' : 'pin'), nombre),
-    h('span', { class: `estado ${claseEstado}` }, icono(vecinos > 0 && !estado?.enCurso ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
+    h('div', { class: 'ficha-estado' },
+      h('span', { class: `estado ${claseEstado}` }, icono(vecinos > 0 && !estado?.enCurso ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
+      h('button', { class: 'boton boton-secundario boton-compartir', type: 'button', onclick: () => compartir(nombre) }, icono('compartir'), 'Compartir'),
+    ),
     vecinos > 0 && h('p', { class: 'vecinos-cuenta' }, icono('vecinos'),
       `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
     zona && h('div', { class: 'aviso' }, icono('info'),
@@ -378,6 +381,28 @@ function mostrarBarrio(nombre) {
     ),
     h('div', { class: 'aviso' }, icono('info'), h('p', {}, `Registramos cortes desde el ${fechaLarga(primerRegistro)}.`)),
   );
+}
+
+/** El link que abre la página directo en un barrio. @param {string} nombre */
+const linkDelBarrio = (nombre) => `${location.origin}${location.pathname}?barrio=${encodeURIComponent(nombre)}`;
+
+/**
+ * Comparte el estado del barrio el día elegido. En el celu abre el menú de compartir del sistema
+ * (WhatsApp, Telegram, etc.); donde no existe, abre WhatsApp con el mensaje armado.
+ * @param {string} nombre
+ */
+async function compartir(nombre) {
+  const texto = textoParaCompartir(nombre, estados.get(nombre)?.cortes ?? [], diaElegido, ahora.fecha, vecinosSinLuz(nombre));
+  const url = linkDelBarrio(nombre);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: `¿Tengo luz? · ${nombre}`, text: texto, url });
+    } catch {
+      // La persona cerró el menú sin compartir: no pasa nada.
+    }
+    return;
+  }
+  window.open(linkWhatsApp('', `${texto}\n\nMirá el mapa: ${url}`), '_blank', 'noopener');
 }
 
 /** Lo que aparece en la ficha de cada barrio: el botón "No tengo luz" y cómo reclamar. @param {string} nombre */
@@ -672,6 +697,8 @@ asa.addEventListener('click', (e) => {
 /** @param {string | null} nombre */
 function elegirBarrio(nombre) {
   barrioElegido = nombre;
+  // La dirección de la página queda con el barrio (?barrio=Alberdi): se puede copiar, compartir o guardar.
+  history.replaceState(null, '', nombre ? linkDelBarrio(nombre) : location.pathname);
   pintarMapa();
   if (!nombre) {
     mostrarResumen();
@@ -933,6 +960,12 @@ async function cargarReportes() {
 
 aplicarTema();
 actualizar();
+// Si se abrió un link compartido (?barrio=Alberdi), arranca mostrando ese barrio.
+const barrioDelLink = new URLSearchParams(location.search).get('barrio');
+if (barrioDelLink) {
+  const [encontrado] = lugaresDelMapa.has(barrioDelLink) ? [barrioDelLink] : sugerencias(nombres, barrioDelLink, 1);
+  if (encontrado) elegirBarrio(encontrado);
+}
 cargarReportes();
 // Cada minuto: trae reportes nuevos y hace que "En curso" se prenda y se apague a tiempo.
 setInterval(cargarReportes, 60_000);

@@ -304,6 +304,9 @@ a { color: var(--acento); }
 .estado.programado { background: var(--luz-suave); color: var(--luz-texto); }
 .estado.en-curso { background: var(--vivo); color: #fff; }
 .estado.sin-luz { background: var(--sin-luz); color: #fff; }
+.ficha-estado { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0 12px; }
+.ficha-estado .estado { margin: 0; }
+.boton-compartir { padding: 5px 12px; font-size: 0.85rem; }
 :root[data-tema="oscuro"] .estado.sin-cortes { background: #12351f; color: #86efac; }
 @media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .estado.sin-cortes { background: #12351f; color: #86efac; } }
 

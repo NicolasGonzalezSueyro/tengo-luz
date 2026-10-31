@@ -1,115 +1,177 @@
-# ¿Tengo luz?
+# ⚡ ¿Tengo luz?
 
-Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
+**Mapa de los cortes de luz programados por barrio en Córdoba capital, con reportes de vecinos, avisos por Telegram y ayuda para reclamar.**
 
-**🌐 [tengo-luz.pages.dev](https://tengo-luz.pages.dev)**
+[![Tests](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml)
+[![Actualizar cortes](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml)
+![Licencia MIT](https://img.shields.io/badge/licencia-MIT-blue)
+![Costo: $0](https://img.shields.io/badge/costo-%240-brightgreen)
 
-> Proyecto personal, **no oficial**. No tiene relación con EPEC.
+### 🌐 [tengo-luz.pages.dev](https://tengo-luz.pages.dev)
 
-## Estado
+> Proyecto personal y **no oficial**: no tiene relación con EPEC.
 
-✅ Publicado y actualizándose solo cada hora, con reportes de vecinos y avisos por Telegram.
+![La página en la compu: el mapa de Córdoba con los barrios que tienen corte pintados de amarillo y la lista de cortes del día](docs/escritorio.jpg)
 
-## La página
+<p align="center">
+  <img src="docs/celulares.jpg" width="620" alt="La página en el celular, en modo claro mostrando la ficha de un barrio y en modo oscuro mostrando el mapa">
+</p>
 
-Un mapa de Córdoba con los barrios pintados según los cortes programados del día elegido:
+## Qué hace
 
-- 🟡 Barrios con corte programado; 🟠 los que tienen un corte **en curso ahora** laten y brillan.
-- 🔴 **Vecinos sin luz:** cualquiera puede tocar "No tengo luz" en su barrio. Si no hay un corte anunciado en curso, el barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
-- 📣 **Formulario de reclamo a EPEC:** completás el problema, el contrato y la dirección, y se abre WhatsApp con el mensaje armado para mandarlo vos. Los datos **no pasan por ningún servidor**: se arman en el navegador ([`web/reclamo.js`](web/reclamo.js)) y viajan solo dentro del link de WhatsApp. Si marcás "Recordar mis datos", quedan guardados únicamente en ese navegador. Si elegís "cables caídos o chispas", aparece un aviso para llamar ya al 0800. La página nunca manda reclamos por su cuenta.
-- 🟫 **Zonas aproximadas** (contorno marrón punteado) para los cortes que EPEC describe por una ruta en vez de por barrios.
-- ☰ Menú con "¿Cómo funciona?", modo claro/oscuro y accesos para reclamar a EPEC.
-- 📍 **Mi ubicación:** con el GPS encuentra tu barrio. La ubicación se usa solo en tu navegador, no se envía a ningún lado.
-- 🔎 Buscador de barrios (no importan las tildes) y botones por día con la cantidad de cortes.
-- 🗂️ Ficha de cada barrio: cortes del día, próximo y último corte.
-- 🌙 Modo claro y oscuro (sigue al sistema y recuerda tu elección).
-- 📱 En el celular, el mapa ocupa toda la pantalla y la lista es un panel que se desliza desde abajo.
-- 📲 **App instalable (PWA)** que **funciona sin conexión**: justo cuando se corta la luz suele caerse el wifi. [`web/sw.js`](web/sw.js) es un *service worker* que guarda una copia de la página y de los datos. Siempre intenta traer lo más nuevo, y si no hay red o tarda más de 4 segundos, usa la copia. El menú tiene "Instalar la app": en Android abre el instalador del navegador y en iPhone explica cómo hacerlo desde Safari.
+- 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟫 zona aproximada (cuando el anuncio habla de una ruta y no de barrios).
+- 🔎 **Buscador con autocompletado** (no importan las tildes), **"Mi ubicación"** con GPS y una **ficha por barrio** con el próximo y el último corte.
+- 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
+- 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
+- 🤖 **Bot de Telegram.** `/barrio Alberdi` y te avisa cuando anuncian un corte ahí.
+- 📤 **Compartir.** Cada barrio tiene su link (`?barrio=Alberdi`) y un botón para mandar el horario del corte por WhatsApp.
+- 📲 **App instalable que anda sin conexión,** justo cuando el corte se lleva también el wifi. Modo claro y oscuro.
 
-Está hecha con HTML, CSS y JavaScript sin frameworks, y [Leaflet](https://leafletjs.com) para el mapa. La lógica (estados, días, en qué barrio cae un punto) está en [`web/estado.js`](web/estado.js), con tests.
+## Cómo funciona
 
-## Cómo funcionan los datos
+```mermaid
+flowchart LR
+  subgraph fuentes[Fuentes públicas]
+    doce[El Doce<br/>nota diaria de cortes]
+    muni[Municipalidad<br/>polígonos de barrios]
+    osm[OpenStreetMap]
+  end
+  subgraph gh[GitHub Actions · cada hora]
+    lector[lector.ts<br/>lee, entiende y ubica los cortes]
+  end
+  subgraph cf[Cloudflare · plan gratis]
+    pages[Pages<br/>sitio + app instalable]
+    api["Functions<br/>/api/reportes · telegram · avisar · alerta"]
+    db[(D1<br/>SQLite)]
+  end
+  doce --> lector
+  muni --> pages
+  osm --> pages
+  lector -- commit con los datos --> pages
+  lector -- avisos y alertas --> api
+  pages <--> vecinos((Vecinos))
+  vecinos -- No tengo luz --> api
+  api <--> db
+  api <--> telegram[Telegram]
+```
 
-1. `src/fuentes/eldoce.ts` busca en el sitemap de noticias de [El Doce](https://eldoce.tv) las notas diarias con los cortes programados que anuncia EPEC.
-2. De cada nota toma solo la sección de Córdoba capital y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
-3. `src/barrios.ts` convierte la zona en barrios del mapa: normaliza los nombres (tildes, "Sud"/"Sur", "Loteo") y usa la tabla [`data/alias-barrios.json`](data/alias-barrios.json) para los que EPEC escribe distinto. Lo que no reconoce queda en `sinUbicar`.
-4. `src/lector.ts` junta todo y lo guarda en [`data/mantenimientos.json`](data/mantenimientos.json), que funciona como historial.
+1. **Leer.** Cada hora, GitHub Actions busca en el sitemap de noticias de El Doce la nota diaria con los cortes de EPEC, se queda con la sección de Córdoba capital y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
+2. **Ubicar.** Cada barrio del anuncio se busca en el mapa oficial de la Municipalidad, normalizando nombres ("Sud" = "Sur", sin tildes) y con una tabla de alias revisada a mano.
+3. **Publicar.** Si hay cortes nuevos, el robot hace un commit con los datos y Cloudflare Pages publica el sitio actualizado. No hay ninguna compu prendida.
+4. **Avisar.** El mismo robot le pasa los cortes al bot, que avisa a quienes siguen esos barrios. Si algo falla, el bot le escribe al admin.
+
+## Tecnologías
+
+| Parte | Con qué | Por qué |
+|---|---|---|
+| Página | HTML, CSS y JavaScript sin frameworks, [Leaflet](https://leafletjs.com) | Liviana, rápida en celulares viejos y sin paso de compilación |
+| Lógica y scripts | TypeScript, ejecutado directo por Node.js 24 | Tipos sin compilar: Node quita los tipos al correr |
+| Tests | `node:test` + chequeo de tipos con `tsc` (también en el JavaScript de la página) | ~70 tests que corren en cada push |
+| Automatización | GitHub Actions (cada hora) | Gratis para repos públicos |
+| Hosting y API | Cloudflare Pages + Pages Functions + D1 (SQLite) | Gratis, siempre online, sin servidores que mantener |
+| App | Manifest + service worker (PWA) | Instalable y usable sin conexión |
+| Avisos | Bot de Telegram con webhook | El único canal de avisos gratis (SMS y WhatsApp cobran por mensaje) |
+
+## Decisiones de diseño
+
+- **$0 y sin servidores.** Todo corre en planes gratuitos: no hay que pagar ni dejar nada prendido.
+- **Respetar a las fuentes.** El sitio de EPEC protege sus datos con una clave privada y un firewall contra programas automáticos, así que no se lee de ahí: sacar esa clave o esquivar el firewall sería saltarse una protección puesta a propósito. Se usan notas periodísticas públicas, con un `User-Agent` que identifica al proyecto, y se respetan los `robots.txt` (por eso se descartó Cba24n, que prohíbe los lectores automáticos). El objetivo es conseguir acceso oficial de EPEC.
+- **Privacidad.** El reclamo se arma en el navegador: el contrato y la dirección viajan solo dentro del link de WhatsApp y nunca pasan por un servidor. Los reportes de vecinos no guardan la IP, sino un hash SHA-256 de la IP con una clave secreta y la fecha, que cambia cada día y no permite volver a la IP. La ubicación GPS se usa solo en el navegador.
+- **No fallar en silencio.** Si el robot falla, si El Doce deja de publicar o aparece un barrio desconocido, el bot avisa al admin (como mucho una vez por día por problema). Una nota rara no frena a las demás, y un aviso que falla nunca impide guardar los cortes.
+- **Accesible.** Navegable con teclado, buscador con el patrón ARIA *combobox*, textos alternativos y respeto por "reducir movimiento".
+
+## Más detalles
+
+<details>
+<summary><b>Barrios, zonas aproximadas y alias</b></summary>
 
 El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con `npm run barrios`:
 
 - **485 polígonos oficiales** de la capa de barrios de la Municipalidad de Córdoba.
-- **~320 puntos** de OpenStreetMap para lugares que la Municipalidad no tiene (asentamientos, loteos nuevos). Solo se sabe dónde quedan, no su forma.
+- **~320 puntos** de OpenStreetMap para lugares que la Municipalidad no tiene (asentamientos, loteos nuevos). De esos se sabe dónde quedan, no su forma.
 - Los nombres municipales vienen en mayúsculas y sin tildes; si OSM tiene el mismo barrio, se usa su nombre ("Argüello").
 
-### Zonas aproximadas
+**Zonas aproximadas.** Algunos anuncios no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte"). Para esos, [`data/zonas.geojson`](data/zonas.geojson) tiene un corredor de unos 450 m a cada lado del tramo de la ruta, armado con el trazado de OpenStreetMap (`npm run zonas`). Es una referencia visual, no el límite real del corte, que EPEC no publica.
 
-Algunos anuncios no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte", "Camino 60 Cuadras desde el Km 13"). Para esos, [`data/zonas.geojson`](data/zonas.geojson) tiene un corredor de unos 450 m a cada lado del tramo de la ruta, armado con el trazado de OpenStreetMap (`npm run zonas`). Cada zona tiene una expresión regular que reconoce el texto del anuncio. No es el límite real del corte, que EPEC no publica: es una referencia visual.
+**Alias.** [`data/alias-barrios.json`](data/alias-barrios.json) dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono. Un alias en `null` marca un nombre que no se debe ubicar solo (por ejemplo, "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
+</details>
 
-### La tabla de alias
+<details>
+<summary><b>Reportes de vecinos (API y base de datos)</b></summary>
 
-Cada alias dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono asignado. Por ejemplo, la plaza "B° Parque Horizonte" queda dentro del barrio oficial **Horizonte**.
+- [`functions/api/reportes.ts`](functions/api/reportes.ts) es una Cloudflare Pages Function: `GET /api/reportes` devuelve cuántos reportes tiene cada barrio en las últimas 3 horas y `POST` suma uno.
+- Se guardan en Cloudflare D1. Las tablas están en [`src/esquema.sql`](src/esquema.sql).
+- La lógica está en [`src/reportes.ts`](src/reportes.ts), con tests sobre un SQLite en memoria ([`src/base-local.ts`](src/base-local.ts)), el mismo que usa `npm run dev`.
+- Límites contra abuso: un reporte por barrio cada 3 horas y hasta 5 barrios por hora por persona. Los reportes se borran al día siguiente.
+</details>
 
-Un alias en `null` marca un nombre que **no se debe ubicar** automáticamente: es ambiguo o queda fuera de la ciudad (ej.: "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
+<details>
+<summary><b>Bot de Telegram y alertas</b></summary>
 
-## Reportes de vecinos
+- [`functions/api/telegram.ts`](functions/api/telegram.ts) recibe los mensajes (webhook, validado con un encabezado secreto) y contesta en la misma respuesta.
+- [`functions/api/avisar.ts`](functions/api/avisar.ts) recibe los cortes de hoy en adelante desde GitHub Actions y avisa a cada suscripto una sola vez por corte.
+- [`functions/api/alerta.ts`](functions/api/alerta.ts) le escribe al admin cuando algo anda mal.
+- La lógica (comandos, a quién avisar) está en [`src/bot.ts`](src/bot.ts), con tests. Comandos de admin: `/estado`, `/reportes`, `/limpiar [barrio]`.
 
-La única parte con servidor, y también gratis:
+**¿Y otra fuente de respaldo?** Se evaluó: La Voz dejó de publicar la lista diaria en marzo de 2026, Hoy Día la publica de forma irregular y Cba24n prohíbe los lectores automáticos. Hoy El Doce es el único medio que la publica todos los días.
+</details>
 
-- [`functions/api/reportes.ts`](functions/api/reportes.ts) es una **Cloudflare Pages Function**: Cloudflare la convierte en la dirección `/api/reportes`. `GET` devuelve cuántos reportes tiene cada barrio en las últimas 3 horas y `POST` suma uno.
-- Los reportes se guardan en **Cloudflare D1**, una base SQLite. La tabla está en [`src/esquema.sql`](src/esquema.sql).
-- La lógica está en [`src/reportes.ts`](src/reportes.ts), con tests que usan un SQLite en memoria ([`src/base-local.ts`](src/base-local.ts)). `npm run dev` usa esa misma base para probar sin internet.
+<details>
+<summary><b>App instalable y sin conexión</b></summary>
 
-**Privacidad y abuso.** No se guarda la IP. Se guarda una "huella": el hash SHA-256 de la IP junto con una clave secreta y la fecha, así que cambia todos los días. Con la huella se limita a un reporte por barrio cada 3 horas y a 5 barrios por hora por persona. Los reportes se borran al día siguiente.
+[`web/sw.js`](web/sw.js) es un service worker que guarda una copia de la página y de los datos. Siempre intenta traer lo más nuevo, y si no hay red o tarda más de 4 segundos, usa la copia. Los reportes de vecinos siempre se piden en vivo. El menú tiene "Instalar la app": en Android abre el instalador y en iPhone explica cómo hacerlo desde Safari.
+</details>
 
-## Bot de Telegram
+## Estructura
 
-Te avisa cuando EPEC anuncia un corte programado en los barrios que seguís: `/barrio Alberdi`, `/mis_barrios`, `/borrar Alberdi`.
+```
+web/              la página: HTML, CSS, JavaScript, service worker e íconos
+functions/api/    funciones de Cloudflare: reportes, bot, avisos y alertas
+src/              lector de cortes, ubicación de barrios, lógica del bot y scripts
+data/             historial de cortes, barrios y zonas (GeoJSON), alias
+docs/             capturas para este README
+.github/          GitHub Actions: tests en cada push y actualización cada hora
+```
 
-- [`functions/api/telegram.ts`](functions/api/telegram.ts) recibe los mensajes ("webhook") y contesta en la misma respuesta. Un encabezado secreto (`SECRETO_BOT`) prueba que el pedido viene de Telegram.
-- Cada hora, después del lector, GitHub Actions corre [`src/avisar.ts`](src/avisar.ts), que le pasa los cortes de hoy en adelante a [`functions/api/avisar.ts`](functions/api/avisar.ts). Esa función manda los avisos y anota cuáles mandó, así nunca repite uno.
-- La lógica (comandos, a quién avisar) está en [`src/bot.ts`](src/bot.ts), con tests.
-- El bot reconoce barrios con [`data/lugares.js`](data/lugares.js), una lista liviana de nombres que se arma con `npm run lugares`.
-- **Comandos de admin** (solo para el chat `TELEGRAM_ADMIN`): `/estado`, `/reportes`, `/limpiar` y `/limpiar Alberdi` para borrar reportes de vecinos.
-
-### Alertas para el admin
-
-El sistema no falla en silencio. El bot le escribe al admin por Telegram (como mucho una vez por día por cada problema, con [`functions/api/alerta.ts`](functions/api/alerta.ts)) cuando:
-
-- el robot de GitHub falla en cualquier paso (manda el link al detalle);
-- no hay notas de cortes de El Doce en los últimos 2 días;
-- una nota no se puede leer, o tiene renglones de cortes que el lector no entiende (una nota rara no frena a las demás);
-- un corte que viene nombra un barrio que no está en el mapa ni en la tabla de alias.
-
-Si el aviso por Telegram falla, igual se guardan los cortes.
-
-**¿Y otra fuente de respaldo?** Se evaluó. La Voz dejó de publicar la lista diaria en marzo de 2026, Hoy Día la publica de forma irregular y Cba24n prohíbe que la lean programas. Hoy El Doce es el único medio que la publica todos los días. Por eso la prioridad es enterarse enseguida si deja de funcionar y conseguir acceso oficial a los datos de EPEC.
-
-¿Por qué Telegram? Es el único canal de avisos gratis y sin límites prácticos. Los SMS se pagan por mensaje, y WhatsApp cobra por cada aviso que inicia una empresa.
-
-## Cómo se mantiene al día
-
-Sin servidores ni ninguna compu prendida:
-
-1. **GitHub Actions** ([`actualizar.yml`](.github/workflows/actualizar.yml)) corre cada hora en una máquina Ubuntu: instala, corre los tests y ejecuta el lector. Si hay cortes nuevos, hace un commit con los datos.
-2. Ese commit dispara a **Cloudflare Pages**, que ejecuta `npm run build` y publica la carpeta `dist/`.
-3. Además, [`tests.yml`](.github/workflows/tests.yml) corre los tests y el chequeo de tipos en cada push.
-
-## Usarlo
+## Correrlo en tu compu
 
 Requiere Node.js 24 o más nuevo.
 
 ```bash
 npm install
-npm run dev        # abre la página en http://localhost:4321
-npm run build      # arma la carpeta dist/ que se publica
+npm run dev        # abre la página en http://localhost:4321 (con una base de prueba en memoria)
 npm test           # corre los tests
-npm run lector     # actualiza data/mantenimientos.json
+npm run typecheck  # revisa los tipos de todo el proyecto
+npm run lector     # actualiza data/mantenimientos.json con las notas nuevas
+npm run build      # arma la carpeta dist/ que se publica
 npm run barrios    # vuelve a descargar los límites de barrios (casi nunca hace falta)
 npm run zonas      # vuelve a armar las zonas aproximadas sobre rutas
 npm run bot        # configura el bot de Telegram (lee el token de .env, ver .env.example)
 ```
 
-## Fuente de los datos
+## Qué aprendí
 
-- **Cortes:** notas públicas de El Doce, que replican los anuncios de EPEC. Cada corte guarda el link a la nota de origen.
-- **Barrios:** capa pública de barrios de la [Municipalidad de Córdoba](https://cordoba.maps.arcgis.com/home/item.html?id=60f4e6cbb6ee47e88679a76a5b763326) (ArcGIS), complementada con datos © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright) bajo licencia ODbL.
+- **Linux y la terminal**, con Ubuntu en WSL: desde cero.
+- **Automatizar sin servidores:** GitHub Actions como "cron" gratuito que lee, testea y publica solo.
+- **Leer datos del mundo real:** las notas cambian de formato cada día, así que el lector trabaja renglón por renglón, avisa lo que no entiende y nunca inventa datos.
+- **Datos geográficos:** GeoJSON, polígonos, saber en qué barrio cae un punto (*ray casting*) y armar zonas a partir de rutas.
+- **Backend serverless:** funciones de Cloudflare y una base SQLite (D1), probadas con tests contra un SQLite local.
+- **Privacidad por diseño:** guardar lo mínimo, hashear con una clave secreta y dejar los datos sensibles en el navegador.
+- **PWA:** manifest, service worker y estrategias de caché para usar la app sin conexión.
+- **Bots y webhooks** con Telegram, incluyendo validar que los pedidos sean legítimos.
+- **Monitoreo:** que el sistema avise cuando algo falla en vez de romperse en silencio.
+- **Ética con los datos:** respetar `robots.txt` y las protecciones de los sitios, y pedir acceso oficial en vez de esquivarlas.
+
+## Próximos pasos
+
+- [ ] Acceso oficial a los datos de cortes de EPEC.
+- [ ] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
+- [ ] Estadísticas: qué barrios tienen más cortes y en qué horarios.
+
+## Fuentes y licencia
+
+- **Cortes:** notas públicas de [El Doce](https://eldoce.tv), que replican los anuncios de EPEC. Cada corte guarda el link a la nota de origen.
+- **Barrios:** capa pública de barrios de la [Municipalidad de Córdoba](https://cordoba.maps.arcgis.com/home/item.html?id=60f4e6cbb6ee47e88679a76a5b763326), complementada con datos © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL).
+- **Íconos:** estilo [Lucide](https://lucide.dev) (ISC).
+
+Código bajo licencia [MIT](LICENSE). Hecho por Nicolás González Sueyro en Córdoba.

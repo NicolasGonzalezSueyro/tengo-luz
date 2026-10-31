@@ -245,3 +245,20 @@ export function posicionCoincidencia(nombre, texto) {
   const desde = s.indexOf(buscado);
   return desde < 0 ? null : [desde, desde + buscado.length];
 }
+
+/**
+ * El texto para compartir un barrio (WhatsApp u otra app): si tiene cortes ese día, con sus horarios.
+ * @param {string} barrio @param {Corte[]} delDia los cortes del barrio ese día @param {string} dia @param {string} hoy
+ * @param {number} [vecinos] cuántos vecinos reportan que no tienen luz (solo cuenta si el día es hoy)
+ */
+export function textoParaCompartir(barrio, delDia, dia, hoy, vecinos = 0) {
+  const lineas = delDia.length > 0
+    ? [
+      `⚡ Corte de luz programado en ${barrio}`,
+      `📅 ${etiquetaDia(dia, hoy)}`,
+      ...delDia.map((c) => `🕗 De ${c.desde} a ${c.hasta}${c.afectacion ? ` (${c.afectacion})` : ''}`),
+    ]
+    : [`✅ Sin cortes de luz programados en ${barrio}`, `📅 ${etiquetaDia(dia, hoy)}`];
+  if (vecinos > 0 && dia === hoy) lineas.push(`🔴 ${vecinos === 1 ? '1 vecino reporta' : `${vecinos} vecinos reportan`} que no tiene${vecinos === 1 ? '' : 'n'} luz`);
+  return lineas.join('\n');
+}

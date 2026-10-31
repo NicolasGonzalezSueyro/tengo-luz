@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaCorta, etiquetaDia, hace, historialDelBarrio,
-  momentoEnCordoba, posicionCoincidencia, sugerencias, sumarDias,
+  momentoEnCordoba, posicionCoincidencia, sugerencias, sumarDias, textoParaCompartir,
 } from './estado.js';
 
 /**
@@ -127,4 +127,14 @@ test('sugerencias: sin tildes, ordenadas de mejor a peor y con máximo', () => {
 test('posicionCoincidencia marca lo buscado aunque tenga tildes', () => {
   assert.deepEqual(posicionCoincidencia('Alta Córdoba', 'cordo'), [5, 10]);
   assert.deepEqual(posicionCoincidencia('Alberdi', 'x'), null);
+});
+
+test('textoParaCompartir', () => {
+  const corte = { fecha: '2026-10-31', desde: '08:00', hasta: '13:00', zona: '', afectacion: /** @type {const} */ ('parcial'), fuente: '', barrios: [], sinUbicar: [] };
+  assert.equal(textoParaCompartir('Alberdi', [corte], '2026-10-31', '2026-10-30'),
+    '⚡ Corte de luz programado en Alberdi\n📅 Mañana · sábado 31 de octubre\n🕗 De 08:00 a 13:00 (parcial)');
+  assert.equal(textoParaCompartir('Centro', [], '2026-10-30', '2026-10-30', 2),
+    '✅ Sin cortes de luz programados en Centro\n📅 Hoy · viernes 30 de octubre\n🔴 2 vecinos reportan que no tienen luz');
+  // Los reportes son de 'ahora': mirando otro día no se mencionan.
+  assert.doesNotMatch(textoParaCompartir('Centro', [], '2026-10-31', '2026-10-30', 2), /vecino/);
 });
