@@ -37,6 +37,14 @@ Cada alias dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con ev
 
 Un alias en `null` marca un nombre que **no se debe ubicar** automáticamente: es ambiguo o queda fuera de la ciudad (ej.: "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
 
+## Cómo se mantiene al día
+
+Sin servidores ni ninguna compu prendida:
+
+1. **GitHub Actions** ([`actualizar.yml`](.github/workflows/actualizar.yml)) corre cada hora en una máquina Ubuntu: instala, corre los tests y ejecuta el lector. Si hay cortes nuevos, hace un commit con los datos.
+2. Ese commit dispara a **Cloudflare Pages**, que ejecuta `npm run build` y publica la carpeta `dist/`.
+3. Además, [`tests.yml`](.github/workflows/tests.yml) corre los tests y el chequeo de tipos en cada push.
+
 ## Usarlo
 
 Requiere Node.js 24 o más nuevo.
@@ -44,6 +52,7 @@ Requiere Node.js 24 o más nuevo.
 ```bash
 npm install
 npm run dev        # abre la página en http://localhost:4321
+npm run build      # arma la carpeta dist/ que se publica
 npm test           # corre los tests
 npm run lector     # actualiza data/mantenimientos.json
 npm run barrios    # vuelve a descargar los límites de barrios (casi nunca hace falta)

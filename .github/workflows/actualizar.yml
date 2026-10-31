@@ -1,0 +1,41 @@
+# Cada hora, una máquina Ubuntu de GitHub lee las notas nuevas de El Doce y actualiza data/mantenimientos.json.
+# Si cambió algo, lo guarda con un commit; ese commit hace que Cloudflare vuelva a publicar la página.
+# Así el sitio se mantiene al día sin que haya ninguna compu prendida.
+name: Actualizar cortes
+
+on:
+  schedule:
+    - cron: '17 * * * *' # cada hora, al minuto 17 (en UTC). Evitamos el minuto 0, que es cuando GitHub está más cargado.
+  workflow_dispatch: # permite correrlo a mano desde la pestaña Actions
+
+permissions:
+  contents: write # para poder hacer el commit con los datos nuevos
+
+concurrency:
+  group: actualizar-cortes # nunca dos actualizaciones a la vez
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm test # si los tests fallan, no tocamos los datos
+      - run: npm run lector
+      - name: Guardar los datos si cambiaron
+        run: |
+          if git diff --quiet -- data/; then
+            echo "Sin cambios en los cortes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Datos: actualización automática de cortes"
+          git push

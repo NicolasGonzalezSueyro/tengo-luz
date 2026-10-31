@@ -12,6 +12,7 @@
     "lector": "node src/lector.ts",
     "barrios": "node src/descargar-barrios.ts",
     "dev": "node src/servidor.ts",
+    "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/mantenimientos.json dist/data/",
     "test": "node --test \"src/**/*.test.ts\" \"web/**/*.test.js\"",
     "typecheck": "tsc"
   },

@@ -1,0 +1,21 @@
+# Cada vez que se sube código, GitHub corre los tests y el chequeo de tipos en una máquina Ubuntu.
+# Si algo falla, el commit aparece con una ❌ en GitHub y te llega un mail.
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
