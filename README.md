@@ -24,6 +24,7 @@ Un mapa de Córdoba con los barrios pintados según los cortes programados del d
 - 🗂️ Ficha de cada barrio: cortes del día, próximo y último corte.
 - 🌙 Modo claro y oscuro (sigue al sistema y recuerda tu elección).
 - 📱 En el celular, el mapa ocupa toda la pantalla y la lista es un panel que se desliza desde abajo.
+- 📲 **App instalable (PWA)** que **funciona sin conexión**: justo cuando se corta la luz suele caerse el wifi. [`web/sw.js`](web/sw.js) es un *service worker* que guarda una copia de la página y de los datos. Siempre intenta traer lo más nuevo, y si no hay red o tarda más de 4 segundos, usa la copia. El menú tiene "Instalar la app": en Android abre el instalador del navegador y en iPhone explica cómo hacerlo desde Safari.
 
 Está hecha con HTML, CSS y JavaScript sin frameworks, y [Leaflet](https://leafletjs.com) para el mapa. La lógica (estados, días, en qué barrio cae un punto) está en [`web/estado.js`](web/estado.js), con tests.
 

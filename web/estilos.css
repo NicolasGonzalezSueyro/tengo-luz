@@ -75,6 +75,7 @@
    Base y estructura
    ============================================================================================ */
 * { box-sizing: border-box; }
+[hidden] { display: none !important; } /* que ningún estilo (display: flex, etc.) le gane al atributo hidden */
 
 html, body { height: 100%; margin: 0; }
 
@@ -446,6 +447,23 @@ a { color: var(--acento); }
 .cargando, .error { color: var(--texto-suave); }
 
 /* ---------- Aviso flotante sobre el mapa ---------- */
+.sin-conexion {
+  position: absolute;
+  z-index: 1000;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 140px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--texto);
+  color: var(--fondo);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--sombra);
+}
+
 .aviso-flotante {
   position: absolute;
   z-index: 1000;

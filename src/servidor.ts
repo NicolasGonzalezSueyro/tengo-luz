@@ -25,6 +25,8 @@ const TIPOS: Record<string, string> = {
   '.json': 'application/json; charset=utf-8',
   '.geojson': 'application/geo+json; charset=utf-8',
   '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.webmanifest': 'application/manifest+json',
 };
 const entornoDePrueba = { DB: baseLocal(), CLAVE: 'solo-para-probar', SECRETO_BOT: 'solo-para-probar', TELEGRAM_ADMIN: '1' };
 

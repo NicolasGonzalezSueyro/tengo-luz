@@ -6,6 +6,9 @@
   <title>¿Tengo luz? · Cortes programados en Córdoba</title>
   <meta name="description" content="Mapa de los cortes de luz programados por barrio en Córdoba capital. Sitio no oficial.">
   <meta name="theme-color" content="#6d28d9">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icono-192.png">
+  <meta name="apple-mobile-web-app-title" content="¿Tengo luz?">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
   <script>
     // Aplicamos el tema guardado antes de dibujar la página, para que no "parpadee" de claro a oscuro.
@@ -41,6 +44,7 @@
       <button type="button" data-accion="inicio"><span data-icono="lista"></span>Todos los cortes</button>
       <button type="button" data-accion="reportar"><span data-icono="rayo"></span>Reportar que no tengo luz</button>
       <button type="button" data-accion="como-funciona"><span data-icono="ayuda"></span>¿Cómo funciona?</button>
+      <button id="instalar" type="button" data-accion="instalar" hidden><span data-icono="descargar"></span>Instalar la app</button>
       <button type="button" data-accion="tema"><span data-icono="luna"></span><span id="texto-tema">Modo oscuro</span></button>
       <hr>
       <button type="button" data-accion="reclamar"><span data-icono="mensaje"></span>Reclamar a EPEC</button>
@@ -67,6 +71,7 @@
   <main class="contenido">
     <div id="mapa" role="region" aria-label="Mapa de barrios de Córdoba"></div>
     <div id="aviso-flotante" class="aviso-flotante" role="status" aria-live="polite"></div>
+    <div id="sin-conexion" class="sin-conexion" role="status" hidden>Sin conexión: estás viendo los últimos datos guardados</div>
     <aside id="panel" class="panel">
       <button id="asa" class="asa" type="button" aria-label="Mostrar u ocultar la lista de cortes" aria-expanded="false">
         <span></span>

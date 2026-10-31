@@ -605,6 +605,10 @@ const ACCIONES_MENU = {
     avisar('Buscá tu barrio (o tocá "Mi ubicación") y después "No tengo luz".');
   },
   reclamar: () => mostrarReclamo(barrioElegido),
+  instalar: () => {
+    if (pedidoInstalacion) pedidoInstalacion.prompt(); // Android y Chrome: su propia ventanita de "Instalar"
+    else mostrarInstalarEnIphone();
+  },
   'como-funciona': () => {
     barrioElegido = null;
     pintarMapa();
@@ -767,6 +771,58 @@ botonUbicacion.addEventListener('click', () => {
     { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 },
   );
 });
+
+// ---------- App instalable y sin conexión ----------
+// sw.js guarda una copia de la página y de los datos para que abra aunque no haya internet.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch((error) => console.warn('No se pudo activar el modo sin conexión', error));
+}
+
+const botonInstalar = $('instalar');
+/** El pedido de instalación que da Chrome/Android. Se guarda para mostrarlo cuando la persona toque "Instalar". @type {(Event & { prompt(): Promise<void> }) | null} */
+let pedidoInstalacion = null;
+const yaInstalada = window.matchMedia('(display-mode: standalone)').matches || 'standalone' in navigator && Boolean(navigator.standalone);
+// En iPhone no hay botón automático: se instala desde "Compartir", así que mostramos cómo.
+const esIphone = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+botonInstalar.hidden = yaInstalada || !esIphone;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); // en vez del cartel automático de Chrome, usamos nuestro botón del menú
+  pedidoInstalacion = /** @type {Event & { prompt(): Promise<void> }} */ (e);
+  botonInstalar.hidden = false;
+});
+window.addEventListener('appinstalled', () => {
+  pedidoInstalacion = null;
+  botonInstalar.hidden = true;
+  avisar('¡Listo! Ya podés abrir ¿Tengo luz? desde la pantalla de inicio.');
+});
+
+function mostrarInstalarEnIphone() {
+  mostrar(
+    h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
+    h('h2', {}, icono('descargar'), 'Instalar la app'),
+    h('p', { class: 'bajada' }, 'En iPhone se instala desde Safari, en tres toques:'),
+    h('ol', { class: 'pasos' },
+      h('li', {}, 'Tocá el botón ', h('strong', {}, 'Compartir '), icono('compartir'), ' (abajo en el medio, o arriba en iPad).'),
+      h('li', {}, 'Bajá y elegí ', h('strong', {}, 'Agregar a inicio'), '.'),
+      h('li', {}, 'Tocá ', h('strong', {}, 'Agregar'), '. Va a aparecer el foco en tu pantalla de inicio.'),
+    ),
+    h('div', { class: 'aviso' }, icono('info'), h('p', {}, 'Instalada, abre a pantalla completa y muestra los últimos datos guardados aunque no tengas señal.')),
+  );
+  panelFijo = true;
+  if (ES_CELULAR.matches) abrirPanel(true);
+}
+
+const avisoSinConexion = $('sin-conexion');
+function revisarConexion() {
+  avisoSinConexion.hidden = navigator.onLine;
+}
+window.addEventListener('offline', revisarConexion);
+window.addEventListener('online', () => {
+  revisarConexion();
+  cargarReportes();
+});
+revisarConexion();
 
 /** Trae los reportes de vecinos y vuelve a pintar todo. */
 async function cargarReportes() {
