@@ -25,6 +25,41 @@ const DESCRIPCION = /\b(comprendid[oa]s?|entre|sobre|desde|hasta|calles?|area|se
 /** Si un texto sin ubicar es una descripción de calles ("entre calles X y Y") y no el nombre de un barrio. */
 export const esDescripcion = (texto: string) => DESCRIPCION.test(texto);
 
+export type Punto = [number, number]; // [longitud, latitud], como en GeoJSON
+
+/** Centro aproximado de un barrio o zona: el punto mismo, o el promedio de los vértices del contorno. */
+export function centro(geometria: { type: string; coordinates: unknown }): Punto {
+  if (geometria.type === 'Point') return geometria.coordinates as Punto;
+  const vertices = (geometria.coordinates as unknown[]).flat(geometria.type === 'MultiPolygon' ? 2 : 1) as Punto[];
+  const [lon, lat] = vertices.reduce(([x, y], [a, b]) => [x + a, y + b], [0, 0]);
+  return [lon / vertices.length, lat / vertices.length];
+}
+
+/** Distancia en km entre dos puntos sobre la Tierra (fórmula de haversine). */
+export function distanciaKm([lon1, lat1]: Punto, [lon2, lat2]: Punto): number {
+  const rad = Math.PI / 180;
+  const a = Math.sin(((lat2 - lat1) * rad) / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(((lon2 - lon1) * rad) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(a));
+}
+
+/**
+ * EPEC anuncia los cortes por línea eléctrica, así que los barrios de un mismo corte quedan cerca entre sí.
+ * Si dos están a más de `maximoKm`, seguramente un nombre repetido ("Los Manantiales") se ubicó en el lugar equivocado.
+ * Devuelve el par más alejado, o null si está todo bien.
+ */
+export function lugaresSeparados(lugares: string[], centros: Map<string, Punto>, maximoKm = 8) {
+  let peor: { a: string; b: string; km: number } | null = null;
+  for (const [i, a] of lugares.entries()) {
+    for (const b of lugares.slice(i + 1)) {
+      const [pa, pb] = [centros.get(a), centros.get(b)];
+      if (!pa || !pb) continue;
+      const km = distanciaKm(pa, pb);
+      if (km > maximoKm && km > (peor?.km ?? 0)) peor = { a, b, km };
+    }
+  }
+  return peor;
+}
+
 /** Minúsculas, sin tildes ni símbolos y con espacios simples. */
 function limpiar(texto: string): string {
   return texto

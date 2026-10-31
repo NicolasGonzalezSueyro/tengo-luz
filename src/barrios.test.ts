@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { crearUbicador, normalizar } from './barrios.ts';
+import { centro, crearUbicador, distanciaKm, lugaresSeparados, normalizar, type Punto } from './barrios.ts';
 
 // Un mapa chiquito con nombres reales de data/barrios.geojson.
 const NOMBRES = [
@@ -110,4 +110,27 @@ test('un alias en null marca un nombre ambiguo que no se ubica solo', () => {
 
 test('falla si un alias apunta a un barrio que no existe', () => {
   assert.throws(() => crearUbicador(NOMBRES, { 'X': 'Barrio Inventado' }), /no está en el mapa/);
+});
+
+test('centro y distanciaKm', () => {
+  assert.deepEqual(centro({ type: 'Point', coordinates: [-64.18, -31.42] }), [-64.18, -31.42]);
+  assert.deepEqual(centro({ type: 'Polygon', coordinates: [[[0, 0], [2, 0], [2, 2], [0, 2]]] }), [1, 1]);
+  // Del centro de Córdoba a Villa Allende son unos 17 km en línea recta.
+  const km = distanciaKm([-64.1833, -31.4167], [-64.2950, -31.2950]);
+  assert.ok(km > 16 && km < 18, String(km));
+});
+
+test('lugaresSeparados avisa cuando un nombre repetido cae lejos del resto del corte', () => {
+  const centros = new Map<string, Punto>([
+    ['SMATA', [-64.2242, -31.455]],
+    ['Manantiales', [-64.2314, -31.4538]],
+    ['Horizonte', [-64.2067, -31.4584]],
+    ['Los Manantiales (noroeste)', [-64.2424, -31.33975]],
+  ]);
+  assert.equal(lugaresSeparados(['SMATA', 'Manantiales', 'Horizonte'], centros), null);
+  const separados = lugaresSeparados(['SMATA', 'Los Manantiales (noroeste)', 'Horizonte'], centros);
+  assert.ok([separados?.a, separados?.b].includes('Los Manantiales (noroeste)'));
+  assert.ok((separados?.km ?? 0) > 12);
+  // Los lugares sin posición conocida no cuentan.
+  assert.equal(lugaresSeparados(['SMATA', 'Desconocido'], centros), null);
 });

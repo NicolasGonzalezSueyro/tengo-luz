@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { momentoEnCordoba } from '../web/estado.js';
 import { alertar } from './alertar.ts';
-import { crearUbicador, esDescripcion, normalizar, type Ubicacion, type ZonaAproximada } from './barrios.ts';
+import { centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
 import { unir, type Mantenimiento } from './mantenimiento.ts';
 
@@ -48,8 +48,9 @@ for (const url of urls) {
 }
 
 // Ubicamos todos los cortes (también los viejos), así una mejora en los alias corrige el historial.
-const mapa = await leerJson<{ features: { properties: { nombre: string | null } }[] }>('data/barrios.geojson');
-const zonas = await leerJson<{ features: { properties: ZonaAproximada }[] }>('data/zonas.geojson');
+type Geometria = { type: string; coordinates: unknown };
+const mapa = await leerJson<{ features: { properties: { nombre: string | null }; geometry: Geometria }[] }>('data/barrios.geojson');
+const zonas = await leerJson<{ features: { properties: ZonaAproximada; geometry: Geometria }[] }>('data/zonas.geojson');
 const alias = await leerJson<Record<string, string | null>>('data/alias-barrios.json');
 const ubicar = crearUbicador(
   mapa.features.flatMap((f) => f.properties.nombre ?? []),
@@ -70,14 +71,27 @@ if (sinUbicar.length) console.log(`❓ Sin ubicar (se pueden agregar a data/alia
 // Barrios de cortes que vienen y que no conocemos. No cuentan las descripciones de calles ni los alias en null
 // (los que decidimos no ubicar a propósito).
 const ignorados = new Set(Object.keys(alias).filter((nombre) => alias[nombre] === null).map(normalizar));
-const desconocidos = [
-  ...new Set(todos.filter((m) => m.fecha >= momentoEnCordoba().fecha).flatMap((m) => m.sinUbicar)),
-].filter((texto) => !esDescripcion(texto) && !ignorados.has(texto));
+const queVienen = todos.filter((m) => m.fecha >= momentoEnCordoba().fecha);
+const desconocidos = [...new Set(queVienen.flatMap((m) => m.sinUbicar))].filter((texto) => !esDescripcion(texto) && !ignorados.has(texto));
 if (desconocidos.length > 0) {
   alertas.push({
     texto: `Hay barrios de cortes que vienen que no pude ubicar en el mapa:\n${desconocidos.map((d) => `• ${d}`).join('\n')}`,
     detalle: 'Se agregan en data/alias-barrios.json',
   });
+}
+
+// Barrios de un mismo corte muy separados: seguramente un nombre repetido se ubicó en el lugar equivocado.
+const centros = new Map(
+  [...mapa.features, ...zonas.features].flatMap((f): [string, Punto][] => (f.properties.nombre ? [[f.properties.nombre, centro(f.geometry)]] : [])),
+);
+for (const m of queVienen) {
+  const separados = lugaresSeparados([...m.barrios, ...m.zonas], centros);
+  if (separados) {
+    alertas.push({
+      texto: `Revisá un corte del ${m.fecha} (${m.desde} a ${m.hasta}): ${separados.a} y ${separados.b} quedan a ${Math.round(separados.km)} km. ¿Algún barrio se ubicó en el lugar equivocado?`,
+      detalle: `${m.zona}\n${m.fuente}`,
+    });
+  }
 }
 
 for (const { texto, detalle } of alertas) await alertar(texto, detalle);
