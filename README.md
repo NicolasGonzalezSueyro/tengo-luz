@@ -2,11 +2,13 @@
 
 Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
 
+**🌐 [tengo-luz.pages.dev](https://tengo-luz.pages.dev)**
+
 > Proyecto personal, **no oficial**. No tiene relación con EPEC.
 
 ## Estado
 
-🚧 En desarrollo — Fase 3: el mapa interactivo (funciona en la compu; todavía no está publicado).
+✅ Publicado y actualizándose solo cada hora. Próximo: reportes de vecinos y alertas por Telegram.
 
 ## La página
 
