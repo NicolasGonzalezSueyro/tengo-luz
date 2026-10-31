@@ -5,6 +5,7 @@ import { responder } from './bot.ts';
 import { aBase64url, clavePublicaDe, generarClave } from './push.ts';
 import * as push from '../functions/api/push.ts';
 import { onRequestPost as avisar } from '../functions/api/avisar.ts';
+import { onRequestPost as reportar } from '../functions/api/reportes.ts';
 import type { Corte } from '../web/estado.js';
 
 /** Una suscripción como la que da un navegador de verdad (claves reales para poder cifrar). */
@@ -68,4 +69,36 @@ test('/api/avisar manda Telegram y notificaciones push cifradas, y olvida los na
   assert.deepEqual(await (await avisar({ request: pedido(), env })).json(), { enviados: 0, pendientes: 0 });
   const quedan = (await env.DB.prepare('SELECT endpoint FROM push_suscripciones').bind().all()).results.map((r) => r.endpoint);
   assert.deepEqual(quedan, [vigente.endpoint]);
+});
+
+test('cuando 3 vecinos reportan un barrio, se avisa a quienes lo siguen una sola vez', async (t) => {
+  const clave = await generarClave();
+  const env = { DB: baseLocal(), CLAVE: 'secreta', TELEGRAM_TOKEN: 'token', PUSH_CLAVE: JSON.stringify(clave) };
+  await responder(env.DB, 1, '/barrio Alberdi', { lugares: ['Alberdi'], esAdmin: false });
+  await responder(env.DB, 2, '/barrio Centro', { lugares: ['Centro'], esAdmin: false });
+  await push.onRequestPost({ request: post({ accion: 'agregar', barrio: 'Alberdi', suscripcion: await suscripcionDePrueba('https://fcm.googleapis.com/fcm/send/x') }), env });
+
+  const pedidos: { url: string; cuerpo: unknown }[] = [];
+  t.mock.method(globalThis, 'fetch', async (url: string, opciones: RequestInit) => {
+    pedidos.push({ url, cuerpo: opciones.body });
+    return new Response('{}', { status: url.includes('telegram') ? 200 : 201 });
+  });
+  const reporte = (ip: string) => reportar({
+    request: new Request('http://x/api/reportes', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify({ barrio: 'Alberdi' }),
+    }),
+    env,
+  });
+
+  await reporte('1.1.1.1');
+  await reporte('2.2.2.2');
+  assert.equal(pedidos.length, 0); // con 2 todavía no
+  await reporte('3.3.3.3');
+  assert.deepEqual(pedidos.map((p) => (p.url.includes('telegram') ? 'telegram' : 'push')), ['telegram', 'push']);
+  const mensaje = JSON.parse(String(pedidos[0].cuerpo));
+  assert.equal(mensaje.chat_id, 1); // solo quien sigue Alberdi
+  assert.match(mensaje.text, /3 vecinos de Alberdi reportaron que no tienen luz/);
+  assert.match(mensaje.text, /no es un anuncio de EPEC/);
+  await reporte('4.4.4.4');
+  assert.equal(pedidos.length, 2); // el cuarto no repite el aviso del día
 });

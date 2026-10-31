@@ -443,7 +443,8 @@ function mostrarBarrio(nombre) {
 }
 
 /**
- * "Avisarme": notificación en el celular cuando anuncian un corte en este barrio (como el bot, sin Telegram).
+ * "Avisarme": notificación en el celular cuando anuncian un corte en este barrio o varios vecinos reportan
+ * que no tienen luz (como el bot, sin Telegram).
  * En iPhone solo funciona con la app instalada, así que ahí el botón explica cómo instalarla.
  * @param {string} nombre
  */
@@ -468,7 +469,7 @@ function botonDeAvisos(nombre) {
           avisar(`Listo, ya no te avisamos de ${nombre}.`);
         } else {
           await activarAvisos(nombre);
-          avisar(`¡Listo! Te vamos a avisar cuando anuncien un corte en ${nombre}.`);
+          avisar(`¡Listo! Te vamos a avisar si anuncian un corte en ${nombre} o si varios vecinos se quedan sin luz.`);
         }
       } catch (error) {
         avisar(/** @type {Error} */ (error).message);

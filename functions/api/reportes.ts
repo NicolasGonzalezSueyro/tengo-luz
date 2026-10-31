@@ -1,12 +1,17 @@
 import lugares from '../../data/lugares.js';
+import { avisosDeVecinos, mandarAvisos } from '../../src/notificaciones.ts';
 import { barrioValido, contarReportes, guardarReporte, huellaDe, type BaseDeDatos } from '../../src/reportes.ts';
 
 // API de reportes de vecinos. Cloudflare Pages convierte este archivo en la dirección /api/reportes:
 //   GET  → cuántos vecinos reportaron cada barrio en las últimas 3 horas.
-//   POST → suma un reporte: { "barrio": "Alberdi" }.
+//   POST → suma un reporte: { "barrio": "Alberdi" }. Si con ese ya son varios vecinos, avisa a quienes siguen el barrio.
 // DB (la base D1) y CLAVE (un texto secreto) se configuran en el panel de Cloudflare, no en el código.
 
-type Contexto = { request: Request; env: { DB: BaseDeDatos; CLAVE?: string } };
+type Contexto = {
+  request: Request;
+  env: { DB: BaseDeDatos; CLAVE?: string; TELEGRAM_TOKEN?: string; PUSH_CLAVE?: string };
+  waitUntil?: (tarea: Promise<unknown>) => void;
+};
 
 const LUGARES = new Set(lugares);
 const SEGUNDOS_EN_CACHE = 20;
@@ -27,7 +32,7 @@ export async function onRequestGet({ request, env }: Contexto) {
   return Response.json(cuenta, { headers: { 'Cache-Control': 'no-store' } });
 }
 
-export async function onRequestPost({ request, env }: Contexto) {
+export async function onRequestPost({ request, env, waitUntil }: Contexto) {
   if (!env.CLAVE) throw new Error('Falta configurar la variable secreta CLAVE en Cloudflare');
   // Exigir JSON hace que el navegador bloquee los pedidos armados desde otras páginas.
   if (!request.headers.get('Content-Type')?.startsWith('application/json')) {
@@ -51,6 +56,14 @@ export async function onRequestPost({ request, env }: Contexto) {
   // Cloudflare pone la IP de quien pide en este encabezado. No se guarda: solo su huella.
   const huella = await huellaDe(request.headers.get('CF-Connecting-IP') ?? 'desconocida', env.CLAVE, ahora);
   const resultado = await guardarReporte(env.DB, barrio, huella, ahora);
-  if (resultado === 'guardado') await cache?.delete(claveDeCache(request)); // que el nuevo reporte se vea ya
+  if (resultado === 'guardado') {
+    await cache?.delete(claveDeCache(request)); // que el nuevo reporte se vea ya
+    // Los avisos salen después de responder (waitUntil): quien reporta no espera, y si fallan el reporte ya está guardado.
+    const avisar = avisosDeVecinos(env.DB, barrio, ahora)
+      .then(({ telegram, push }) => mandarAvisos(env.DB, env, telegram, push))
+      .catch((error) => console.error('No se pudo avisar a los vecinos', error));
+    if (waitUntil) waitUntil(avisar);
+    else await avisar; // en los tests no hay waitUntil
+  }
   return Response.json({ resultado }, { status: resultado === 'demasiados' ? 429 : 200 });
 }

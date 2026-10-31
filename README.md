@@ -22,7 +22,7 @@
 - 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟢 terminado hoy, 🟫 zona aproximada (cuando el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar).
 - 🏘️ **Gran Córdoba.** Además de capital: Villa Allende, Mendiolaza, Unquillo, Río Ceballos, Saldán, La Calera, Malagueño, Villa Carlos Paz, Alta Gracia, Estación Juárez Celman y Colonia Tirolesa.
 - 🔎 **Buscador con autocompletado** (no importan las tildes), **"Mi ubicación"** con GPS y una **ficha por barrio** con el próximo y el último corte.
-- 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas. Solo se puede reportar que **no** hay luz (nadie puede "apagar" un corte), y cada conexión puede reportar una sola vez cada 3 horas.
+- 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas. Solo se puede reportar que **no** hay luz (nadie puede "apagar" un corte), y cada conexión puede reportar una sola vez cada 3 horas. Cuando 3 vecinos reportan el mismo barrio, les llega un aviso a quienes lo siguen (aclarando que lo reportan vecinos, no EPEC; como mucho uno por día).
 - 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
 - 🤖 **Bot de Telegram.** `/barrio Alberdi` y te avisa cuando anuncian un corte ahí.
 - 🔔 **Notificaciones en el celular, sin Telegram.** "Avisarme" en la ficha de un barrio y llega una notificación cuando anuncian un corte (en iPhone, con la app instalada).
@@ -211,7 +211,7 @@ npm run simplificar   # vuelve a simplificar los contornos del mapa
 ## Próximos pasos
 
 - [ ] Acceso oficial a los datos de cortes de EPEC.
-- [ ] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
+- [x] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
 - [x] Estadísticas: qué barrios tienen más cortes y en qué horarios.
 
 ## Fuentes y licencia
