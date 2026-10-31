@@ -2,7 +2,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaDia, historialDelBarrio, momentoEnCordoba, sumarDias,
+  barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaCorta, etiquetaDia, historialDelBarrio,
+  momentoEnCordoba, sumarDias,
 } from './estado.js';
 
 /**
@@ -63,6 +64,34 @@ test('historialDelBarrio sin cortes devuelve null', () => {
 
 test('cortesDelDia ordena por horario', () => {
   assert.deepEqual(cortesDelDia(CORTES, '2026-10-31').map((c) => c.desde), ['07:30', '08:00', '14:30']);
+});
+
+test('etiquetaCorta para los botones de día', () => {
+  assert.equal(etiquetaCorta('2026-10-30', '2026-10-30'), 'Hoy');
+  assert.equal(etiquetaCorta('2026-10-31', '2026-10-30'), 'Mañana');
+  assert.equal(etiquetaCorta('2026-11-03', '2026-10-30'), 'Mar 3/11');
+});
+
+// Dos barrios cuadrados de 10x10, uno de ellos con un hueco en el medio (como una plaza que no es parte del barrio).
+const MAPA = [
+  { properties: { nombre: 'Cuadrado' }, geometry: { type: 'Polygon', coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]] } },
+  {
+    properties: { nombre: 'Con hueco' },
+    geometry: {
+      type: 'MultiPolygon',
+      coordinates: [[[[20, 0], [30, 0], [30, 10], [20, 10], [20, 0]], [[24, 4], [26, 4], [26, 6], [24, 6], [24, 4]]]],
+    },
+  },
+];
+
+test('barrioEnPunto encuentra el barrio que contiene el punto', () => {
+  assert.equal(barrioEnPunto(MAPA, [5, 5]), 'Cuadrado');
+  assert.equal(barrioEnPunto(MAPA, [21, 9]), 'Con hueco');
+});
+
+test('barrioEnPunto devuelve null fuera de los barrios o dentro de un hueco', () => {
+  assert.equal(barrioEnPunto(MAPA, [15, 5]), null);
+  assert.equal(barrioEnPunto(MAPA, [25, 5]), null);
 });
 
 test('etiquetaDia', () => {

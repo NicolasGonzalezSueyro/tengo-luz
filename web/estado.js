@@ -127,8 +127,52 @@ export function fechaLarga(fecha) {
   return `${DIAS[d.getUTCDay()]} ${d.getUTCDate()} de ${MESES[d.getUTCMonth()]}`;
 }
 
+const DIAS_CORTOS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+
 /**
- * Etiqueta para el selector de día: "Hoy · sábado 31 de octubre", "Mañana · …" o solo la fecha.
+ * Etiqueta corta para los botones de día: "Hoy", "Mañana" o "Mar 3/11".
+ * @param {string} fecha
+ * @param {string} hoy
+ */
+export function etiquetaCorta(fecha, hoy) {
+  if (fecha === hoy) return 'Hoy';
+  if (fecha === sumarDias(hoy, 1)) return 'Mañana';
+  const d = new Date(`${fecha}T12:00:00Z`);
+  const dia = DIAS_CORTOS[d.getUTCDay()];
+  return `${dia.charAt(0).toUpperCase()}${dia.slice(1)} ${d.getUTCDate()}/${d.getUTCMonth() + 1}`;
+}
+
+/**
+ * ¿En qué barrio cae un punto (por ejemplo, la ubicación del GPS)? Devuelve el nombre o null.
+ * Usa el método del "rayo": se traza una línea horizontal desde el punto y se cuentan los bordes que cruza;
+ * si son impares, el punto está adentro. Respeta los huecos de los polígonos.
+ * @param {{ properties: { nombre: string | null }, geometry: { type: string, coordinates?: any } }[]} barrios
+ * @param {[number, number]} punto [longitud, latitud], el orden que usa GeoJSON
+ */
+export function barrioEnPunto(barrios, punto) {
+  for (const barrio of barrios) {
+    const { type, coordinates } = barrio.geometry;
+    /** @type {number[][][][]} */
+    const poligonos = type === 'Polygon' ? [coordinates] : type === 'MultiPolygon' ? coordinates : [];
+    const adentro = poligonos.some(([borde, ...huecos]) => dentroDelAnillo(borde, punto) && !huecos.some((h) => dentroDelAnillo(h, punto)));
+    if (adentro && barrio.properties.nombre) return barrio.properties.nombre;
+  }
+  return null;
+}
+
+/** @param {number[][]} anillo @param {[number, number]} punto */
+function dentroDelAnillo(anillo, [x, y]) {
+  let adentro = false;
+  for (let i = 0, j = anillo.length - 1; i < anillo.length; j = i++) {
+    const [xi, yi] = anillo[i];
+    const [xj, yj] = anillo[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) adentro = !adentro;
+  }
+  return adentro;
+}
+
+/**
+ * Etiqueta larga del día: "Hoy · sábado 31 de octubre", "Mañana · …" o solo la fecha.
  * @param {string} fecha
  * @param {string} hoy
  */

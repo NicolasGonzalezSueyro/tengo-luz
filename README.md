@@ -14,11 +14,14 @@ Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
 
 Un mapa de Córdoba con los barrios pintados según los cortes programados del día elegido:
 
-- 🟡 corte programado · 🟠 corte total · borde marrón: en curso ahora.
-- Tocás un barrio y ves sus cortes del día, el próximo y el último.
-- Buscador de barrios (no importan las tildes) y lista de todos los cortes del día, incluidos los que no se pueden marcar en el mapa.
+- 🟡 Barrios con corte programado; los que tienen un corte **en curso ahora** laten y brillan.
+- 📍 **Mi ubicación:** con el GPS encuentra tu barrio. La ubicación se usa solo en tu navegador, no se envía a ningún lado.
+- 🔎 Buscador de barrios (no importan las tildes) y botones por día con la cantidad de cortes.
+- 🗂️ Ficha de cada barrio: cortes del día, próximo y último corte.
+- 🌙 Modo claro y oscuro (sigue al sistema y recuerda tu elección).
+- 📱 En el celular, el mapa ocupa toda la pantalla y la lista es un panel que se desliza desde abajo.
 
-Está hecha con HTML, CSS y JavaScript sin frameworks, y [Leaflet](https://leafletjs.com) para el mapa. La lógica de estados está en [`web/estado.js`](web/estado.js), con tests.
+Está hecha con HTML, CSS y JavaScript sin frameworks, y [Leaflet](https://leafletjs.com) para el mapa. La lógica (estados, días, en qué barrio cae un punto) está en [`web/estado.js`](web/estado.js), con tests.
 
 ## Cómo funcionan los datos
 

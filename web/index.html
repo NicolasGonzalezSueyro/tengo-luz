@@ -2,45 +2,60 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>¿Tengo luz? · Cortes programados en Córdoba</title>
   <meta name="description" content="Mapa de los cortes de luz programados por barrio en Córdoba capital. Sitio no oficial.">
+  <meta name="theme-color" content="#6d28d9">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <script>
+    // Aplicamos el tema guardado antes de dibujar la página, para que no "parpadee" de claro a oscuro.
+    try { const tema = localStorage.getItem('tema'); if (tema) document.documentElement.dataset.tema = tema; } catch {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
   <header class="cabecera">
-    <div class="marca">
-      <h1>¿Tengo luz?</h1>
-      <p>Cortes de luz programados en Córdoba capital</p>
-    </div>
-    <div class="controles">
-      <label class="campo">
-        <span>Día</span>
-        <select id="dia"></select>
-      </label>
-      <form class="campo buscador" id="form-buscar">
-        <label for="buscar">Barrio</label>
-        <input id="buscar" list="lista-barrios" placeholder="Buscá tu barrio" autocomplete="off">
+    <a class="marca" href="./">
+      <span class="logo"><span data-icono="bombita"></span></span>
+      <span>
+        <strong>¿Tengo luz?</strong>
+        <small>Cortes programados · Córdoba capital</small>
+      </span>
+    </a>
+    <button id="tema" class="boton-icono" type="button" aria-label="Cambiar tema"></button>
+  </header>
+
+  <nav class="barra" aria-label="Filtros">
+    <div id="dias" class="chips" role="group" aria-label="Elegí el día"></div>
+    <div class="acciones">
+      <form id="form-buscar" class="buscador" role="search">
+        <span data-icono="buscar"></span>
+        <input id="buscar" list="lista-barrios" placeholder="Buscá tu barrio" autocomplete="off" aria-label="Buscar barrio">
         <datalist id="lista-barrios"></datalist>
       </form>
+      <button id="ubicacion" class="boton boton-primario" type="button" aria-label="Usar mi ubicación">
+        <span data-icono="ubicacion"></span><span>Mi ubicación</span>
+      </button>
     </div>
-  </header>
+  </nav>
 
   <main class="contenido">
     <div id="mapa" role="region" aria-label="Mapa de barrios de Córdoba"></div>
-    <aside id="panel" class="panel" aria-live="polite">
-      <p class="cargando">Cargando cortes…</p>
+    <div id="aviso-flotante" class="aviso-flotante" role="status" aria-live="polite"></div>
+    <aside id="panel" class="panel">
+      <button id="asa" class="asa" type="button" aria-label="Mostrar u ocultar la lista de cortes" aria-expanded="false">
+        <span></span>
+      </button>
+      <div id="panel-contenido" class="panel-contenido" aria-live="polite">
+        <p class="cargando">Cargando cortes…</p>
+      </div>
     </aside>
   </main>
-
-  <footer class="pie">
-    Sitio <strong>no oficial</strong>, sin relación con EPEC. Cortes: anuncios publicados por El Doce.
-    Barrios: Municipalidad de Córdoba y © colaboradores de OpenStreetMap.
-    <a href="https://github.com/NicolasGonzalezSueyro/tengo-luz">Código en GitHub</a>
-  </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
