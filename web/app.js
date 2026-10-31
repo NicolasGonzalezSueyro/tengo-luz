@@ -7,8 +7,10 @@ import {
   hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba,
 } from './estado.js';
 import { completarIconos, icono } from './iconos.js';
+import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 
 /** @typedef {import('./estado.js').Corte} Corte */
+/** @typedef {import('./reclamo.js').DatosReclamo} DatosReclamo */
 /** @typedef {import('./estado.js').EstadoBarrio} EstadoBarrio */
 /** @typedef {{ id: string, nombre: string | null, tipo: 'poligono' | 'punto', fuente: string }} Barrio */
 /** @typedef {GeoJSON.Feature<GeoJSON.Geometry, Barrio>} FeatureBarrio */
@@ -110,6 +112,8 @@ let estados = new Map();
 let barrioElegido = null;
 /** Reportes de vecinos de las últimas 3 horas, por barrio (vienen de /api/reportes). @type {Record<string, { cantidad: number, ultimo: number }>} */
 let reportes = {};
+/** Si el panel muestra un formulario o una explicación, no se redibuja cada minuto (se perdería lo escrito). */
+let panelFijo = false;
 /** Barrios que reportaste desde esta pestaña, para no mostrarte el botón de nuevo. */
 const reportadosPorMi = new Set();
 
@@ -292,6 +296,7 @@ leyenda.addTo(mapa);
 
 /** Reemplaza el contenido del panel, salteando las partes opcionales vacías, y agrega el pie. @param {...Hijo} partes */
 function mostrar(...partes) {
+  panelFijo = false;
   contenido.replaceChildren(...partes.filter((p) => p !== false && p !== null && p !== undefined), pie());
   contenido.scrollTop = 0;
 }
@@ -381,7 +386,6 @@ function mostrarBarrio(nombre) {
 /** Lo que aparece en la ficha de cada barrio: el botón "No tengo luz" y cómo reclamar. @param {string} nombre */
 function cajaSinLuz(nombre) {
   const yaReporte = reportadosPorMi.has(nombre);
-  const texto = `Hola, quiero hacer un reclamo técnico: no tengo luz en el barrio ${nombre}, Córdoba capital. Mi número de contrato o dirección es: `;
   return h('section', { class: 'caja-sin-luz' },
     h('h3', {}, icono('alerta'), '¿No tenés luz?'),
     yaReporte
@@ -389,13 +393,106 @@ function cajaSinLuz(nombre) {
       : h('p', {}, 'Avisales a tus vecinos: el barrio se pinta de rojo en el mapa. Es anónimo y dura 3 horas. No es un reclamo a EPEC.'),
     !yaReporte && h('button', { class: 'boton boton-peligro', type: 'button', onclick: (e) => reportar(nombre, e) }, icono('rayo'), 'No tengo luz'),
     h('div', { class: 'reclamo' },
-      h('a', { class: 'boton boton-secundario', href: `https://wa.me/${WHATSAPP_EPEC}?text=${encodeURIComponent(texto)}`, target: '_blank', rel: 'noopener' },
-        icono('mensaje'), 'Reclamar por WhatsApp'),
-      h('a', { class: 'boton boton-secundario', href: RECLAMO_EPEC, target: '_blank', rel: 'noopener' }, icono('enlace'), 'Formulario de EPEC'),
-      h('button', { class: 'boton boton-secundario', type: 'button', onclick: () => copiar(texto) }, icono('copiar'), 'Copiar texto del reclamo'),
+      h('button', { class: 'boton boton-secundario', type: 'button', onclick: () => mostrarReclamo(nombre) }, icono('mensaje'), 'Armar el reclamo a EPEC'),
       h('a', { class: 'boton boton-secundario', href: 'tel:08007770000' }, icono('telefono'), '0800 777 0000'),
     ),
   );
+}
+
+// ---------- Formulario de reclamo ----------
+// Los datos no salen del navegador: con ellos se arma el texto, y la persona lo manda desde su WhatsApp.
+// Solo si marca "Recordar mis datos" se guardan, y únicamente en este navegador (localStorage).
+
+const DATOS_GUARDADOS = 'datos-reclamo';
+const CAMPOS_RECORDADOS = /** @type {const} */ (['contrato', 'direccion', 'nombre', 'telefono']);
+
+/** @returns {Partial<Record<typeof CAMPOS_RECORDADOS[number], string>>} */
+function leerDatosGuardados() {
+  try {
+    return JSON.parse(localStorage.getItem(DATOS_GUARDADOS) ?? '{}');
+  } catch {
+    return {};
+  }
+}
+
+/** @param {Partial<DatosReclamo> | null} datos null = borrar lo guardado */
+function guardarDatos(datos) {
+  try {
+    if (datos) localStorage.setItem(DATOS_GUARDADOS, JSON.stringify(Object.fromEntries(CAMPOS_RECORDADOS.map((c) => [c, datos[c] ?? '']))));
+    else localStorage.removeItem(DATOS_GUARDADOS);
+  } catch {
+    // Sin almacenamiento (modo privado): no se recuerda, no pasa nada.
+  }
+}
+
+/**
+ * Un campo del formulario con su etiqueta y, si hace falta, una ayuda abajo.
+ * @param {string} etiqueta @param {HTMLElement} control @param {string} [ayuda]
+ */
+const campo = (etiqueta, control, ayuda) => h('label', { class: 'campo' }, etiqueta, control, ayuda && h('small', {}, ayuda));
+
+/** @param {string | null} barrio el barrio elegido, si hay uno */
+function mostrarReclamo(barrio) {
+  const guardado = leerDatosGuardados();
+  /** @param {string} name @param {Record<string, string>} [extra] */
+  const entrada = (name, extra = {}) => h('input', { name, value: guardado[/** @type {typeof CAMPOS_RECORDADOS[number]} */ (name)] ?? '', ...extra });
+
+  const urgencia = h('div', { class: 'urgencia', hidden: '' },
+    icono('alerta'),
+    h('p', {}, h('strong', {}, 'Es una urgencia. '), 'No te acerques ni toques nada, y llamá ya al ',
+      h('a', { href: 'tel:08007770000' }, '0800 777 0000'), ' (las 24 horas).'),
+  );
+
+  const formulario = /** @type {HTMLFormElement} */ (h('form', { class: 'formulario', onsubmit: (e) => { e.preventDefault(); enviarReclamo(formulario, 'whatsapp'); } },
+    h('fieldset', { class: 'opciones', onchange: () => { urgencia.hidden = formulario.problema.value !== 'peligro'; } },
+      h('legend', {}, '¿Qué pasa?'),
+      ...Object.entries(PROBLEMAS).map(([valor, texto], i) =>
+        h('label', { class: 'opcion' }, h('input', { type: 'radio', name: 'problema', value: valor, required: '', ...(i === 0 ? { checked: '' } : {}) }), texto)),
+    ),
+    urgencia,
+    campo('¿Desde cuándo?', h('select', { name: 'desde' }, h('option', { value: '' }, 'Prefiero no decir'), ...DESDE.map((d) => h('option', { value: d }, d)))),
+    h('label', { class: 'casilla' }, h('input', { type: 'checkbox', name: 'vecinos' }), 'Mis vecinos tampoco tienen luz'),
+    campo('Número de contrato', entrada('contrato', { required: '', inputmode: 'numeric', autocomplete: 'off' }), 'Está en tu factura de EPEC.'),
+    campo('Dirección', entrada('direccion', { required: '', placeholder: 'Calle y número', autocomplete: 'street-address' })),
+    campo('Barrio', h('input', { name: 'barrio', value: barrio ?? '', required: '', list: 'lista-barrios', autocomplete: 'off' })),
+    campo('Nombre (opcional)', entrada('nombre', { autocomplete: 'name' })),
+    campo('Teléfono de contacto (opcional)', entrada('telefono', { type: 'tel', autocomplete: 'tel' })),
+    campo('Comentario (opcional)', h('textarea', { name: 'comentario', rows: '2', maxlength: '300', placeholder: 'Ej.: se escuchó una explosión en el transformador' })),
+    h('label', { class: 'casilla' },
+      h('input', { type: 'checkbox', name: 'recordar', ...(guardado.contrato ? { checked: '' } : {}) }),
+      h('span', {}, 'Recordar mis datos en este dispositivo', h('small', {}, 'Contrato, dirección, nombre y teléfono, solo en este navegador.'))),
+    h('div', { class: 'acciones-reclamo' },
+      h('button', { class: 'boton boton-whatsapp', type: 'submit' }, icono('mensaje'), 'Enviar por WhatsApp'),
+      h('button', { class: 'boton boton-secundario', type: 'button', onclick: () => enviarReclamo(formulario, 'copiar') }, icono('copiar'), 'Copiar el texto'),
+      h('a', { class: 'boton boton-secundario', href: RECLAMO_EPEC, target: '_blank', rel: 'noopener' }, icono('enlace'), 'Formulario de EPEC'),
+    ),
+    h('p', { class: 'nota' }, 'Tus datos no se envían a este sitio: solo se usan para armar el mensaje, que mandás vos desde tu WhatsApp a EPEC (351 200-4343).'),
+  ));
+
+  mostrar(
+    h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(barrio) }, icono('volver'), barrio ? `Volver a ${barrio}` : 'Todos los cortes'),
+    h('h2', {}, icono('mensaje'), 'Reclamo a EPEC'),
+    h('p', { class: 'bajada' }, 'Completá tus datos y se arma el mensaje para mandarle a EPEC por WhatsApp.'),
+    formulario,
+  );
+  panelFijo = true;
+  if (ES_CELULAR.matches) abrirPanel(true);
+}
+
+/** @param {HTMLFormElement} formulario @param {'whatsapp' | 'copiar'} como */
+function enviarReclamo(formulario, como) {
+  if (!formulario.reportValidity()) return;
+  const valores = Object.fromEntries(new FormData(formulario));
+  /** @type {DatosReclamo} */
+  const datos = {
+    problema: String(valores.problema ?? ''), desde: String(valores.desde ?? ''), vecinos: 'vecinos' in valores,
+    contrato: String(valores.contrato ?? ''), direccion: String(valores.direccion ?? ''), barrio: String(valores.barrio ?? ''),
+    nombre: String(valores.nombre ?? ''), telefono: String(valores.telefono ?? ''), comentario: String(valores.comentario ?? ''),
+  };
+  guardarDatos('recordar' in valores ? datos : null);
+  const texto = textoDelReclamo(datos);
+  if (como === 'copiar') copiar(texto);
+  else window.open(linkWhatsApp(WHATSAPP_EPEC, texto), '_blank', 'noopener');
 }
 
 /** En la portada: los barrios donde los vecinos reportan que no tienen luz. */
@@ -458,6 +555,7 @@ function mostrarComoFunciona() {
     h('div', { class: 'aviso' }, icono('info'),
       h('p', {}, 'Muestra solo cortes anunciados. Si te quedaste sin luz sin aviso, puede ser una falla: reclamá a EPEC.')),
   );
+  panelFijo = true;
 }
 
 function avisoReclamo() {
@@ -506,6 +604,7 @@ const ACCIONES_MENU = {
     buscador.focus();
     avisar('Buscá tu barrio (o tocá "Mi ubicación") y después "No tengo luz".');
   },
+  reclamar: () => mostrarReclamo(barrioElegido),
   'como-funciona': () => {
     barrioElegido = null;
     pintarMapa();
@@ -608,6 +707,7 @@ function actualizar() {
   estados = estadoPorBarrio(cortes, diaElegido, ahora);
   dibujarDias();
   pintarMapa();
+  if (panelFijo) return;
   if (barrioElegido) mostrarBarrio(barrioElegido);
   else mostrarResumen();
 }

@@ -16,7 +16,7 @@ Un mapa de Córdoba con los barrios pintados según los cortes programados del d
 
 - 🟡 Barrios con corte programado; 🟠 los que tienen un corte **en curso ahora** laten y brillan.
 - 🔴 **Vecinos sin luz:** cualquiera puede tocar "No tengo luz" en su barrio. Si no hay un corte anunciado en curso, el barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
-- 📣 **Ayuda para reclamar a EPEC:** WhatsApp con el mensaje ya escrito, el formulario oficial, el texto para copiar y el 0800. La página nunca manda reclamos por su cuenta.
+- 📣 **Formulario de reclamo a EPEC:** completás el problema, el contrato y la dirección, y se abre WhatsApp con el mensaje armado para mandarlo vos. Los datos **no pasan por ningún servidor**: se arman en el navegador ([`web/reclamo.js`](web/reclamo.js)) y viajan solo dentro del link de WhatsApp. Si marcás "Recordar mis datos", quedan guardados únicamente en ese navegador. Si elegís "cables caídos o chispas", aparece un aviso para llamar ya al 0800. La página nunca manda reclamos por su cuenta.
 - 🟫 **Zonas aproximadas** (contorno marrón punteado) para los cortes que EPEC describe por una ruta en vez de por barrios.
 - ☰ Menú con "¿Cómo funciona?", modo claro/oscuro y accesos para reclamar a EPEC.
 - 📍 **Mi ubicación:** con el GPS encuentra tu barrio. La ubicación se usa solo en tu navegador, no se envía a ningún lado.
