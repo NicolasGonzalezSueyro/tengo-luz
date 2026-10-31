@@ -270,9 +270,10 @@ function pintarMapa() {
 }
 
 const leyenda = new L.Control({ position: ES_CELULAR.matches ? 'topleft' : 'bottomleft' });
-leyenda.onAdd = () =>
-  h('div', { class: 'leyenda' },
-    h('strong', {}, 'Referencias'),
+// En el celu arranca cerrada para no tapar el mapa: se abre tocando "Referencias".
+leyenda.onAdd = () => {
+  const caja = h('details', ES_CELULAR.matches ? { class: 'leyenda' } : { class: 'leyenda', open: '' },
+    h('summary', {}, 'Referencias'),
     h('div', {}, h('i', { style: 'background:#facc15' }), 'Corte programado'),
     h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Programado total'),
     h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'En curso ahora'),
@@ -280,6 +281,9 @@ leyenda.onAdd = () =>
     h('div', {}, h('i', { style: 'background:#facc1555;outline:2px dashed #92400e;outline-offset:-2px' }), 'Zona aproximada'),
     h('div', {}, h('i', { style: 'background:#a5a1c255;outline:1px solid #8e8aa8;outline-offset:-1px' }), 'Sin cortes anunciados'),
   );
+  L.DomEvent.disableClickPropagation(caja); // que tocar la leyenda no cuente como tocar el mapa
+  return caja;
+};
 leyenda.addTo(mapa);
 
 // ---------------------------------------------------------------------------------------------

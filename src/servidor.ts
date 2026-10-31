@@ -2,13 +2,20 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 import { text } from 'node:stream/consumers';
-import { onRequestGet, onRequestPost } from '../functions/api/reportes.ts';
+import * as reportes from '../functions/api/reportes.ts';
+import * as telegram from '../functions/api/telegram.ts';
 import { baseLocal } from './base-local.ts';
 
 // Servidor solo para probar la página en la compu (`npm run dev`).
 // Sirve web/ en la raíz y data/ en /data, igual que lo va a hacer el hosting.
-// También responde /api/reportes con la misma API que Cloudflare, pero con una base en memoria
-// que se borra al cortar el servidor.
+// También responde /api/... con las mismas funciones que Cloudflare, pero con una base en memoria
+// que se borra al cortar el servidor. (/api/avisar no está: necesita el token real del bot.)
+
+/** Las funciones de functions/api, como las arma Cloudflare: por dirección y por método. */
+const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }> = {
+  '/api/reportes': reportes,
+  '/api/telegram': telegram,
+};
 
 const PUERTO = 4321;
 const TIPOS: Record<string, string> = {
@@ -19,15 +26,16 @@ const TIPOS: Record<string, string> = {
   '.geojson': 'application/geo+json; charset=utf-8',
   '.svg': 'image/svg+xml',
 };
-const entornoDePrueba = { DB: baseLocal(), CLAVE: 'solo-para-probar' };
+const entornoDePrueba = { DB: baseLocal(), CLAVE: 'solo-para-probar', SECRETO_BOT: 'solo-para-probar', TELEGRAM_ADMIN: '1' };
 
 createServer(async (req, res) => {
   const ruta = decodeURIComponent(new URL(req.url ?? '/', 'http://localhost').pathname);
 
-  if (ruta === '/api/reportes') {
-    const manejador = req.method === 'GET' ? onRequestGet : req.method === 'POST' ? onRequestPost : null;
+  if (ruta.startsWith('/api/')) {
+    const funciones = API[ruta];
+    const manejador = req.method === 'GET' ? funciones?.onRequestGet : req.method === 'POST' ? funciones?.onRequestPost : undefined;
     if (!manejador) {
-      res.writeHead(405).end('Método no permitido');
+      res.writeHead(funciones ? 405 : 404).end(funciones ? 'Método no permitido' : 'No encontrado');
       return;
     }
     const request = new Request(`http://localhost${req.url}`, {

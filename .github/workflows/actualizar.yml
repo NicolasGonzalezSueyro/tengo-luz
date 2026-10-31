@@ -39,3 +39,9 @@ jobs:
           git add data/
           git commit -m "Datos: actualización automática de cortes"
           git push
+      # Le pasa los cortes al bot de Telegram para que avise a quienes siguen esos barrios.
+      # Corre siempre (haya cambios o no): nunca repite un aviso, y así manda los que hayan quedado pendientes.
+      - name: Avisar por Telegram
+        env:
+          SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
+        run: npm run avisar

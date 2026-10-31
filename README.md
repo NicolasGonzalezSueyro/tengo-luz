@@ -8,7 +8,7 @@ Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
 
 ## Estado
 
-✅ Publicado y actualizándose solo cada hora, con reportes de vecinos. Próximo: alertas por Telegram.
+✅ Publicado y actualizándose solo cada hora, con reportes de vecinos y avisos por Telegram.
 
 ## La página
 
@@ -60,6 +60,18 @@ La única parte con servidor, y también gratis:
 
 **Privacidad y abuso.** No se guarda la IP. Se guarda una "huella": el hash SHA-256 de la IP junto con una clave secreta y la fecha, así que cambia todos los días. Con la huella se limita a un reporte por barrio cada 3 horas y a 5 barrios por hora por persona. Los reportes se borran al día siguiente.
 
+## Bot de Telegram
+
+Te avisa cuando EPEC anuncia un corte programado en los barrios que seguís: `/barrio Alberdi`, `/mis_barrios`, `/borrar Alberdi`.
+
+- [`functions/api/telegram.ts`](functions/api/telegram.ts) recibe los mensajes ("webhook") y contesta en la misma respuesta. Un encabezado secreto (`SECRETO_BOT`) prueba que el pedido viene de Telegram.
+- Cada hora, después del lector, GitHub Actions corre [`src/avisar.ts`](src/avisar.ts), que le pasa los cortes de hoy en adelante a [`functions/api/avisar.ts`](functions/api/avisar.ts). Esa función manda los avisos y anota cuáles mandó, así nunca repite uno.
+- La lógica (comandos, a quién avisar) está en [`src/bot.ts`](src/bot.ts), con tests.
+- El bot reconoce barrios con [`data/lugares.json`](data/lugares.json), una lista liviana de nombres que se arma con `npm run lugares`.
+- **Comandos de admin** (solo para el chat `TELEGRAM_ADMIN`): `/estado`, `/reportes`, `/limpiar` y `/limpiar Alberdi` para borrar reportes de vecinos.
+
+¿Por qué Telegram? Es el único canal de avisos gratis y sin límites prácticos. Los SMS se pagan por mensaje, y WhatsApp cobra por cada aviso que inicia una empresa.
+
 ## Cómo se mantiene al día
 
 Sin servidores ni ninguna compu prendida:
@@ -80,6 +92,7 @@ npm test           # corre los tests
 npm run lector     # actualiza data/mantenimientos.json
 npm run barrios    # vuelve a descargar los límites de barrios (casi nunca hace falta)
 npm run zonas      # vuelve a armar las zonas aproximadas sobre rutas
+npm run bot        # configura el bot de Telegram (lee el token de .env, ver .env.example)
 ```
 
 ## Fuente de los datos

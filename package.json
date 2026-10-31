@@ -10,8 +10,11 @@
   },
   "scripts": {
     "lector": "node src/lector.ts",
-    "barrios": "node src/descargar-barrios.ts",
-    "zonas": "node src/descargar-zonas.ts",
+    "avisar": "node src/avisar.ts",
+    "barrios": "node src/descargar-barrios.ts && node src/lugares.ts",
+    "zonas": "node src/descargar-zonas.ts && node src/lugares.ts",
+    "lugares": "node src/lugares.ts",
+    "bot": "node --env-file=.env src/configurar-bot.ts",
     "dev": "node src/servidor.ts",
     "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/zonas.geojson data/mantenimientos.json dist/data/",
     "test": "node --test \"src/**/*.test.ts\" \"web/**/*.test.js\"",
