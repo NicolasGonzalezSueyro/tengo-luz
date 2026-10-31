@@ -202,3 +202,46 @@ export function hace(momento, ahora = Date.now()) {
   if (minutos < 60) return `hace ${minutos} min`;
   return `hace ${Math.floor(minutos / 60)} h`;
 }
+
+/** Para comparar nombres sin importar tildes ni mayúsculas: 'Argüello' → 'arguello'. @param {string} texto */
+export const simplificar = (texto) => texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+/**
+ * Las sugerencias del buscador mientras se escribe, de mejor a peor: el nombre exacto, los que empiezan con lo
+ * escrito, los que tienen una palabra que empieza así ('alb' → 'Alto Alberdi') y los que lo contienen en el medio.
+ * @param {string[]} nombres @param {string} texto @param {number} [maximo]
+ */
+export function sugerencias(nombres, texto, maximo = 8) {
+  const buscado = simplificar(texto);
+  if (!buscado) return [];
+  /** @param {string} nombre */
+  const puntaje = (nombre) => {
+    const s = simplificar(nombre);
+    if (s === buscado) return 0;
+    if (s.startsWith(buscado)) return 1;
+    if (s.split(/[^a-z0-9]+/).some((palabra) => palabra.startsWith(buscado))) return 2;
+    return s.includes(buscado) ? 3 : null;
+  };
+  return nombres
+    .flatMap((nombre) => {
+      const p = puntaje(nombre);
+      return p === null ? [] : [{ nombre, p }];
+    })
+    .sort((a, b) => a.p - b.p || a.nombre.localeCompare(b.nombre, 'es'))
+    .slice(0, maximo)
+    .map((s) => s.nombre);
+}
+
+/**
+ * Dónde aparece lo buscado dentro del nombre, para resaltarlo: [desde, hasta], o null.
+ * @param {string} nombre @param {string} texto
+ * @returns {[number, number] | null}
+ */
+export function posicionCoincidencia(nombre, texto) {
+  const buscado = simplificar(texto);
+  const s = nombre.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  // Si quitar tildes cambió el largo, las posiciones no coinciden con el nombre original: no resaltamos.
+  if (!buscado || s.length !== nombre.length) return null;
+  const desde = s.indexOf(buscado);
+  return desde < 0 ? null : [desde, desde + buscado.length];
+}

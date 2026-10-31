@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, etiquetaCorta, etiquetaDia, hace, historialDelBarrio,
-  momentoEnCordoba, sumarDias,
+  momentoEnCordoba, posicionCoincidencia, sugerencias, sumarDias,
 } from './estado.js';
 
 /**
@@ -112,4 +112,19 @@ test('hace', () => {
   assert.equal(hace(t, t + 20_000), 'recién');
   assert.equal(hace(t, t + 5 * 60_000), 'hace 5 min');
   assert.equal(hace(t, t + 150 * 60_000), 'hace 2 h');
+});
+
+test('sugerencias: sin tildes, ordenadas de mejor a peor y con máximo', () => {
+  const nombres = ['Alto Alberdi', 'Alberdi', 'Villa Alberdi Sur', 'Argüello', 'Barrio Jardín', 'Alta Córdoba'];
+  assert.deepEqual(sugerencias(nombres, 'alberdi'), ['Alberdi', 'Alto Alberdi', 'Villa Alberdi Sur']);
+  assert.deepEqual(sugerencias(nombres, 'ARGUE'), ['Argüello']);
+  assert.deepEqual(sugerencias(nombres, 'al'), ['Alberdi', 'Alta Córdoba', 'Alto Alberdi', 'Villa Alberdi Sur']);
+  assert.deepEqual(sugerencias(nombres, 'rdi'), ['Alberdi', 'Alto Alberdi', 'Barrio Jardín', 'Villa Alberdi Sur']);
+  assert.deepEqual(sugerencias(nombres, 'al', 2), ['Alberdi', 'Alta Córdoba']);
+  assert.deepEqual(sugerencias(nombres, '  '), []);
+});
+
+test('posicionCoincidencia marca lo buscado aunque tenga tildes', () => {
+  assert.deepEqual(posicionCoincidencia('Alta Córdoba', 'cordo'), [5, 10]);
+  assert.deepEqual(posicionCoincidencia('Alberdi', 'x'), null);
 });

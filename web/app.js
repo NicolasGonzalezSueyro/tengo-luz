@@ -4,7 +4,7 @@
 
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaEnCurso, etiquetaCorta, etiquetaDia, fechaLarga,
-  hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba,
+  hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba, posicionCoincidencia, sugerencias,
 } from './estado.js';
 import { completarIconos, icono } from './iconos.js';
 import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
@@ -69,9 +69,6 @@ async function pedir(url) {
   if (!res.ok) throw new Error(`${url} respondió ${res.status}`);
   return res.json();
 }
-
-/** Para buscar sin importar tildes ni mayúsculas. @param {string} texto */
-const simplificar = (texto) => texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
 /** @param {Corte} corte */
 const horario = (corte) => `${corte.desde} a ${corte.hasta}`;
@@ -442,6 +439,7 @@ function mostrarReclamo(barrio) {
     h('p', {}, h('strong', {}, 'Es una urgencia. '), 'No te acerques ni toques nada, y llamá ya al ',
       h('a', { href: 'tel:08007770000' }, '0800 777 0000'), ' (las 24 horas).'),
   );
+  const campoBarrio = /** @type {HTMLInputElement} */ (h('input', { id: 'reclamo-barrio', name: 'barrio', value: barrio ?? '', required: '' }));
 
   const formulario = /** @type {HTMLFormElement} */ (h('form', { class: 'formulario', onsubmit: (e) => { e.preventDefault(); enviarReclamo(formulario, 'whatsapp'); } },
     h('fieldset', { class: 'opciones', onchange: () => { urgencia.hidden = formulario.problema.value !== 'peligro'; } },
@@ -454,7 +452,7 @@ function mostrarReclamo(barrio) {
     h('label', { class: 'casilla' }, h('input', { type: 'checkbox', name: 'vecinos' }), 'Mis vecinos tampoco tienen luz'),
     campo('Número de contrato', entrada('contrato', { required: '', inputmode: 'numeric', autocomplete: 'off' }), 'Está en tu factura de EPEC.'),
     campo('Dirección', entrada('direccion', { required: '', placeholder: 'Calle y número', autocomplete: 'street-address' })),
-    campo('Barrio', h('input', { name: 'barrio', value: barrio ?? '', required: '', list: 'lista-barrios', autocomplete: 'off' })),
+    campo('Barrio', campoBarrio),
     campo('Nombre (opcional)', entrada('nombre', { autocomplete: 'name' })),
     campo('Teléfono de contacto (opcional)', entrada('telefono', { type: 'tel', autocomplete: 'tel' })),
     campo('Comentario (opcional)', h('textarea', { name: 'comentario', rows: '2', maxlength: '300', placeholder: 'Ej.: se escuchó una explosión en el transformador' })),
@@ -475,6 +473,7 @@ function mostrarReclamo(barrio) {
     h('p', { class: 'bajada' }, 'Completá tus datos y se arma el mensaje para mandarle a EPEC por WhatsApp.'),
     formulario,
   );
+  autocompletar(campoBarrio, () => {});
   panelFijo = true;
   if (ES_CELULAR.matches) abrirPanel(true);
 }
@@ -720,26 +719,120 @@ function actualizar() {
   else mostrarResumen();
 }
 
-// ---------- Buscador ----------
-const nombres = [...new Set(mapaBarrios.features.flatMap((f) => f.properties.nombre ?? []))].sort((a, b) => a.localeCompare(b, 'es'));
-$('lista-barrios').replaceChildren(...nombres.map((n) => h('option', { value: n })));
+// ---------- Buscador con autocompletado ----------
+const nombres = [...lugaresDelMapa].sort((a, b) => a.localeCompare(b, 'es'));
 
-/** @param {Event} evento */
-function buscar(evento) {
-  evento.preventDefault();
-  const buscado = simplificar(buscador.value);
-  if (!buscado) return;
-  const encontrado = nombres.find((n) => simplificar(n) === buscado) ?? nombres.find((n) => simplificar(n).includes(buscado));
-  if (encontrado) {
-    buscador.value = encontrado;
-    buscador.blur(); // en el celu cierra el teclado
-    elegirBarrio(encontrado);
-  } else {
-    avisar(`No encontré "${buscador.value}". Probá con otro nombre.`);
-  }
+/** El nombre con la parte escrita resaltada. @param {string} nombre @param {string} buscado */
+function resaltar(nombre, buscado) {
+  const posicion = posicionCoincidencia(nombre, buscado);
+  if (!posicion) return [nombre];
+  const [desde, hasta] = posicion;
+  return [nombre.slice(0, desde), h('mark', {}, nombre.slice(desde, hasta)), nombre.slice(hasta)];
 }
-$('form-buscar').addEventListener('submit', buscar);
-buscador.addEventListener('change', buscar);
+
+/** Una opción de la lista, con una etiqueta si el barrio tiene algo ese día. @param {string} nombre @param {string} buscado @param {string} id */
+function opcionSugerida(nombre, buscado, id) {
+  const estado = estados.get(nombre);
+  const [clase, texto] = estado?.enCurso ? ['en-curso', 'En curso']
+    : vecinosSinLuz(nombre) > 0 ? ['sin-luz', 'Sin luz']
+      : estado ? ['programado', 'Corte'] : ['', ''];
+  return h('li', { id, class: 'sugerencia', role: 'option', 'aria-selected': 'false', 'data-nombre': nombre },
+    icono(zonasPorNombre.has(nombre) ? 'ruta' : 'pin'),
+    h('span', { class: 'sugerencia-nombre' }, ...resaltar(nombre, buscado)),
+    texto && h('span', { class: `etiqueta ${clase}` }, texto),
+  );
+}
+
+/**
+ * Convierte un campo de texto en un buscador de barrios: mientras se escribe aparece una lista de opciones
+ * (con flechas, Enter y Escape desde el teclado). Sigue el patrón "combobox" para que los lectores de pantalla
+ * anuncien las opciones.
+ * @param {HTMLInputElement} campo @param {(nombre: string) => void} alElegir
+ */
+function autocompletar(campo, alElegir) {
+  const lista = h('ul', { id: `${campo.id}-sugerencias`, class: 'sugerencias', role: 'listbox', hidden: '' });
+  // Si el campo está dentro de una etiqueta (formulario), la lista va afuera: tocarla no tiene que "tocar" el campo.
+  (campo.closest('label') ?? campo).after(lista);
+  Object.entries({ role: 'combobox', 'aria-autocomplete': 'list', 'aria-expanded': 'false', 'aria-controls': lista.id, autocomplete: 'off' })
+    .forEach(([clave, valor]) => campo.setAttribute(clave, valor));
+
+  /** @type {string[]} */
+  let opciones = [];
+  let activa = -1;
+
+  const cerrar = () => {
+    lista.hidden = true;
+    campo.setAttribute('aria-expanded', 'false');
+    campo.removeAttribute('aria-activedescendant');
+    activa = -1;
+  };
+  /** @param {number} indice */
+  const marcar = (indice) => {
+    activa = indice;
+    [...lista.children].forEach((li, i) => li.setAttribute('aria-selected', String(i === indice)));
+    campo.setAttribute('aria-activedescendant', `${lista.id}-${indice}`);
+    lista.children[indice]?.scrollIntoView({ block: 'nearest' });
+  };
+  /** @param {string} nombre */
+  const elegir = (nombre) => {
+    campo.value = nombre;
+    cerrar();
+    alElegir(nombre);
+  };
+  const mostrarOpciones = () => {
+    if (!campo.value.trim()) return cerrar();
+    opciones = sugerencias(nombres, campo.value);
+    lista.replaceChildren(...(opciones.length > 0
+      ? opciones.map((n, i) => opcionSugerida(n, campo.value, `${lista.id}-${i}`))
+      : [h('li', { class: 'sin-resultados' }, 'No hay barrios con ese nombre')]));
+    activa = -1;
+    lista.hidden = false;
+    campo.setAttribute('aria-expanded', 'true');
+  };
+
+  campo.addEventListener('input', mostrarOpciones);
+  campo.addEventListener('focus', mostrarOpciones);
+  campo.addEventListener('blur', cerrar);
+  // Sin esto, tocar una opción le saca el foco al campo y la lista se cierra antes de registrar el toque.
+  lista.addEventListener('mousedown', (e) => e.preventDefault());
+  lista.addEventListener('click', (e) => {
+    const nombre = /** @type {HTMLElement} */ (e.target).closest('[data-nombre]')?.getAttribute('data-nombre');
+    if (nombre) elegir(nombre);
+  });
+  campo.addEventListener('keydown', (e) => {
+    if (lista.hidden || opciones.length === 0) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const paso = e.key === 'ArrowDown' ? 1 : -1;
+      marcar((activa + paso + opciones.length) % opciones.length);
+    } else if (e.key === 'Enter' && activa >= 0) {
+      e.preventDefault();
+      elegir(opciones[activa]);
+    } else if (e.key === 'Escape') {
+      cerrar();
+    }
+  });
+}
+
+/** @param {string} nombre */
+function irAlBarrio(nombre) {
+  buscador.blur(); // en el celu cierra el teclado
+  elegirBarrio(nombre);
+}
+autocompletar(buscador, irAlBarrio);
+
+// Enter sin elegir una opción: va a la mejor coincidencia.
+$('form-buscar').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!buscador.value.trim()) return;
+  const [mejor] = sugerencias(nombres, buscador.value, 1);
+  if (!mejor) {
+    avisar(`No encontré "${buscador.value}". Probá con otro nombre.`);
+    return;
+  }
+  buscador.value = mejor;
+  irAlBarrio(mejor);
+});
 
 // ---------- Mi ubicación ----------
 // La ubicación se usa solo en el navegador para encontrar el barrio: no se guarda ni se envía a ningún lado.

@@ -148,6 +148,8 @@ a { color: var(--acento); }
 
 /* ---------- Barra: días, buscador y ubicación ---------- */
 .barra {
+  position: relative;
+  z-index: 1100; /* la lista de sugerencias tiene que quedar arriba del mapa */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -195,6 +197,7 @@ a { color: var(--acento); }
 .acciones { display: flex; gap: 8px; flex: 1 1 340px; justify-content: flex-end; }
 
 .buscador {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -396,6 +399,36 @@ a { color: var(--acento); }
 .nota { margin: 10px 0 0; font-size: 0.78rem; color: var(--texto-suave); }
 .vecinos-cuenta { display: flex; align-items: center; gap: 6px; margin: 0 0 12px; font-weight: 600; color: var(--sin-luz); font-size: 0.9rem; }
 .punto-vivo.rojo { background: var(--sin-luz); }
+
+/* ---------- Autocompletado del buscador ---------- */
+.sugerencias {
+  position: absolute;
+  z-index: 1200;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: min(340px, 55vh);
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  background: var(--superficie);
+  color: var(--texto);
+  box-shadow: var(--sombra);
+  animation: aparecer 0.15s both;
+}
+.sugerencia { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 10px; font-size: 0.92rem; cursor: pointer; }
+.sugerencia .icono { color: var(--acento); }
+.sugerencia:hover, .sugerencia[aria-selected="true"] { background: var(--acento-suave); }
+.sugerencia-nombre { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sugerencia mark { background: none; color: var(--acento); font-weight: 800; }
+.sin-resultados { padding: 9px 10px; color: var(--texto-suave); font-size: 0.88rem; }
+.etiqueta.programado { background: var(--luz-suave); color: var(--luz-texto); }
+.etiqueta.sin-luz { background: var(--sin-luz); color: #fff; }
+/* En el formulario la lista no flota: empuja lo de abajo, así no tapa otros campos. */
+.formulario .sugerencias { position: static; margin-top: -6px; animation: none; }
 
 /* ---------- Formulario de reclamo ---------- */
 .bajada { margin: 4px 0 12px; color: var(--texto-suave); font-size: 0.9rem; }
@@ -605,7 +638,8 @@ a { color: var(--acento); }
   .chip-cuenta { min-width: 18px; padding: 0 5px; font-size: 0.7rem; }
   .acciones { flex: 1 1 130px; min-width: 130px; gap: 6px; }
   .buscador { max-width: none; padding-left: 10px; padding-right: 10px; font-size: 0.88rem; gap: 6px; }
-  .buscador { min-width: 0; }
+  .buscador { position: static; min-width: 0; } /* en el celu la lista de sugerencias usa todo el ancho de la barra */
+  .sugerencias { left: 10px; right: 10px; top: calc(100% + 2px); }
   .buscador input { width: 0; padding: 5px 0; } /* el ancho lo da flex: así el buscador se achica sin desbordar */
   .boton-primario span:last-child { display: none; } /* en el celu el botón de ubicación queda solo con el ícono */
   .boton-primario { width: 34px; height: 34px; padding: 0; flex: none; }
