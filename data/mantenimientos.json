@@ -11,7 +11,8 @@
       "Villa General Urquiza"
     ],
     "sinUbicar": [],
-    "zonas": []
+    "zonas": [],
+    "localidad": "Córdoba"
   },
   {
     "fecha": "2026-10-29",
@@ -24,9 +25,11 @@
       "Los Olmos"
     ],
     "sinUbicar": [],
-    "zonas": []
+    "zonas": [],
+    "localidad": "Córdoba"
   },
   {
+    "localidad": "Córdoba",
     "fecha": "2026-10-30",
     "desde": "08:00",
     "hasta": "13:00",
@@ -40,6 +43,21 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-10-30",
+    "desde": "08:30",
+    "hasta": "12:30",
+    "zona": "Sector comprendido por Edificio Stefano IV, Teatro del Lago, Terminal de Ómnibus y calles Alvear, Belgrano, Maipú y Florida.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/29/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
     "fecha": "2026-10-30",
     "desde": "14:30",
     "hasta": "16:30",
@@ -53,6 +71,21 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Otras localidades",
+    "fecha": "2026-10-31",
+    "desde": "06:30",
+    "hasta": "06:45",
+    "zona": "Localidades de Alta Gracia, Los Aromos, Cooperativa Serranita y Cooperativa Rancherita: barrios Don Bosco, Villa Oviedo, Cantera Carnelutti, Cantera El Cerrito, Las Tres Marías, La Cautiva, La Paisanita, La Taimada, Loteo Dalvit, Colonia Evita, La Isla, Gómez, Estancia Los Nogales, Muscari y Jackson.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Alta Gracia"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
     "fecha": "2026-10-31",
     "desde": "07:30",
     "hasta": "10:30",
@@ -66,6 +99,7 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Córdoba",
     "fecha": "2026-10-31",
     "desde": "08:00",
     "hasta": "11:30",
@@ -81,6 +115,7 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Córdoba",
     "fecha": "2026-10-31",
     "desde": "08:00",
     "hasta": "13:00",
@@ -94,6 +129,7 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Córdoba",
     "fecha": "2026-10-31",
     "desde": "08:30",
     "hasta": "09:30",
@@ -109,6 +145,35 @@
     ]
   },
   {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-10-31",
+    "desde": "08:30",
+    "hasta": "12:30",
+    "zona": "Sector comprendido por calles Alberdi, Caseros, Alvear, Miguel Juárez, San Martín y Avenida General Paz.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Otras localidades",
+    "fecha": "2026-10-31",
+    "desde": "08:45",
+    "hasta": "09:00",
+    "zona": "Localidades de Alta Gracia, Los Aromos, Cooperativa Serranita y Cooperativa Rancherita: barrios Don Bosco, Villa Oviedo, Cantera Carnelutti, Cantera El Cerrito, Las Tres Marías, La Cautiva, La Paisanita, La Taimada, Loteo Dalvit, Colonia Evita, La Isla, Gómez, Estancia Los Nogales, Muscari y Jackson.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Alta Gracia"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
     "fecha": "2026-10-31",
     "desde": "13:30",
     "hasta": "17:30",
@@ -130,6 +195,7 @@
     ]
   },
   {
+    "localidad": "Córdoba",
     "fecha": "2026-10-31",
     "desde": "14:30",
     "hasta": "18:30",
