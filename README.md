@@ -22,7 +22,7 @@
 - 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟢 terminado hoy, 🟫 zona aproximada (cuando el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar).
 - 🏘️ **Gran Córdoba.** Además de capital: Villa Allende, Mendiolaza, Unquillo, Río Ceballos, Saldán, La Calera, Malagueño, Villa Carlos Paz, Alta Gracia, Estación Juárez Celman y Colonia Tirolesa.
 - 🔎 **Buscador con autocompletado** (no importan las tildes), **"Mi ubicación"** con GPS y una **ficha por barrio** con el próximo y el último corte.
-- 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas.
+- 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas. Solo se puede reportar que **no** hay luz (nadie puede "apagar" un corte), y cada conexión puede reportar una sola vez cada 3 horas.
 - 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
 - 🤖 **Bot de Telegram.** `/barrio Alberdi` y te avisa cuando anuncian un corte ahí.
 - 📤 **Compartir.** Cada barrio tiene su link (`?barrio=Alberdi`) y un botón para mandar el horario del corte por WhatsApp.
@@ -85,7 +85,7 @@ flowchart LR
 - **Seguridad en capas.**
   - **Sin inyección de código:** todo texto externo se muestra como texto, nunca como HTML; incluso los nombres de OpenStreetMap en los carteles del mapa.
   - **Lista blanca de código** ([`web/_headers`](web/_headers)): una *Content-Security-Policy* hace que el navegador solo ejecute código del propio sitio y de Leaflet (verificado con SRI), y ninguna otra página puede mostrar el sitio adentro de un marco.
-  - **API pública acotada:** solo acepta barrios que existen, limita por persona (con IPv6, por bloque de la casa) y rechaza pedidos grandes.
+  - **API pública acotada:** solo acepta barrios que existen, permite un reporte por conexión cada 3 horas (con IPv6, por bloque de la casa) y rechaza pedidos grandes.
   - **Robot con permisos mínimos:** las herramientas de GitHub Actions están fijadas por *commit* y Dependabot avisa de actualizaciones de seguridad.
   - **Sin terceros innecesarios:** la tipografía se sirve desde el propio sitio, así que Google no ve a los visitantes.
 
@@ -103,7 +103,7 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 **Zonas aproximadas.** [`data/zonas.geojson`](data/zonas.geojson) (`npm run zonas`) tiene dos tipos, armados con datos de OpenStreetMap. Son una referencia visual, no el límite real del corte, que EPEC no publica.
 
 - **Rutas:** algunos anuncios de capital no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte"). Para esos hay un corredor de unos 450 m a cada lado del tramo de la ruta.
-- **Sector exacto** ([`src/sectores.ts`](src/sectores.ts)): cuando el anuncio nombra calles ("sector comprendido por calles Alberdi, Caseros, Alvear…"), lugares ("Teatro del Lago, Terminal de Ómnibus") o barrios, se buscan en OpenStreetMap dentro de la zona, se calculan las esquinas donde se cruzan esas calles (también las "T") y se dibuja el área que encierran. Se descartan los puntos sueltos (calles con el mismo nombre en otra punta) y lo que cae fuera de la localidad. Si no se puede armar algo confiable (por ejemplo, el anuncio nombra 20 barrios y se encuentran 3), se marca la zona entera: mejor de más que un área chica engañosa. Cada sector se busca una sola vez y queda guardado en [`data/sectores.json`](data/sectores.json).
+- **Sector exacto** ([`src/sectores.ts`](src/sectores.ts)): cuando el anuncio nombra calles ("sector comprendido por calles Alberdi, Caseros, Alvear…"), lugares ("Teatro del Lago, Terminal de Ómnibus") o barrios, se buscan en OpenStreetMap dentro de la zona, se calculan las esquinas donde se cruzan esas calles (también las "T") y se dibuja el área que encierran. Se descartan los puntos sueltos (calles con el mismo nombre en otra punta) y lo que cae fuera de la localidad. Los nombres repetidos son comunes (en Gran Córdoba hay 42 cosas llamadas "Los Aromos": calles en 7 localidades, una comuna, una rotonda…), así que cada nombre se busca solo dentro de la localidad del corte, un "barrio X" nunca se confunde con la calle X, y la localidad se toma del título de la sección o de la lista "Localidades de …:", no de cualquier parte del texto (un "Camino a Alta Gracia" no es un corte en Alta Gracia). Si no se puede armar algo confiable (por ejemplo, el anuncio nombra 20 barrios y se encuentran 3), se marca la zona entera: mejor de más que un área chica engañosa. Cada sector se busca una sola vez y queda guardado en [`data/sectores.json`](data/sectores.json).
 - **Localidades de Gran Córdoba:** fuera de capital no hay un mapa oficial de barrios, y EPEC suele describir los cortes por calles ("sector comprendido por calles Alberdi, Caseros…"). Por eso se marca el límite municipal de la localidad entera, que se obtiene de Nominatim. Cada localidad se reconoce por su nombre en el título de la sección de la nota o en el texto del corte, y nunca se buscan barrios de capital en esos cortes: un "barrio Don Bosco" de Alta Gracia no pinta uno de capital.
 
 **Alias.** [`data/alias-barrios.json`](data/alias-barrios.json) dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono. Un alias en `null` marca un nombre que no se debe ubicar solo (por ejemplo, "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
@@ -115,7 +115,8 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 - [`functions/api/reportes.ts`](functions/api/reportes.ts) es una Cloudflare Pages Function: `GET /api/reportes` devuelve cuántos reportes tiene cada barrio en las últimas 3 horas y `POST` suma uno.
 - Se guardan en Cloudflare D1. Las tablas están en [`src/esquema.sql`](src/esquema.sql).
 - La lógica está en [`src/reportes.ts`](src/reportes.ts), con tests sobre un SQLite en memoria ([`src/base-local.ts`](src/base-local.ts)), el mismo que usa `npm run dev`.
-- Límites contra abuso: un reporte por barrio cada 3 horas y hasta 5 barrios por hora por persona. Los reportes se borran al día siguiente.
+- Límites contra abuso: cada conexión reporta una sola vez cada 3 horas, en cualquier barrio (una persona está en un solo lugar). No se pide nombre ni datos personales: no se podrían verificar y obligarían a guardar información sensible. Los reportes se borran al día siguiente.
+- Contra: con datos móviles, varias personas pueden salir a internet con la misma IP (CGNAT). Si dos vecinos de la misma compañía reportan a la vez, puede contar uno solo; el barrio igual se pinta de rojo.
 </details>
 
 <details>

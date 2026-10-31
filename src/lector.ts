@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { barrioEnPunto, momentoEnCordoba } from '../web/estado.js';
 import { alertar } from './alertar.ts';
 import {
-  centro, crearUbicador, esDescripcion, localidadesQueNombra, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada,
+  centro, crearUbicador, encabezadoDelCorte, esDescripcion, localidadesQueNombra, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
 import { sectorDelCorte, type Caja } from './sectores.ts';
@@ -78,7 +78,7 @@ const ubicar = crearUbicador(
 const ubicarCorte = (m: Mantenimiento): Ubicacion =>
   m.localidad === CAPITAL
     ? ubicar(m.zona)
-    : { barrios: [], zonas: localidadesQueNombra(`${m.localidad} ${m.zona}`, localidades), sinUbicar: [] };
+    : { barrios: [], zonas: localidadesQueNombra(encabezadoDelCorte(m.localidad, m.zona), localidades), sinUbicar: [] };
 
 const todos: (Mantenimiento & Ubicacion & { sector?: Punto[] })[] = unir(await leerGuardados(), nuevos)
   .map((m) => ({ ...m, ...ubicarCorte(m) }))

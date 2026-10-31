@@ -25,7 +25,7 @@ test('/api/admin: muestra los números y borra reportes', async () => {
   await responder(env.DB, 2, '/barrio Alberdi', opciones);
   await responder(env.DB, 2, '/barrio Centro', opciones);
   await guardarReporte(env.DB, 'Alberdi', 'ana', T);
-  await guardarReporte(env.DB, 'Centro', 'ana', T);
+  await guardarReporte(env.DB, 'Centro', 'beto', T);
   const pedir = (metodo: string, cuerpo?: object) => new Request('http://x/api/admin', {
     method: metodo, headers: { Authorization: 'Bearer secreta' }, body: cuerpo ? JSON.stringify(cuerpo) : undefined,
   });

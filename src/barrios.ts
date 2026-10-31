@@ -21,9 +21,16 @@ export type Ubicacion = {
 export type ZonaAproximada = { nombre: string; patron: string; tipo?: 'ruta' | 'localidad' };
 
 /**
- * Las localidades de Gran Córdoba que nombra un corte de fuera de capital: se busca en el título de la sección
- * ("Villa Carlos Paz") y en el texto ("Localidades de Alta Gracia, Los Aromos…: barrios…").
+ * Dónde se nombra la localidad de un corte: en el título de la sección ("Villa Carlos Paz") o en el encabezado
+ * antes de los dos puntos ("Localidades de Alta Gracia, Los Aromos…: barrios…"). El resto del texto no cuenta,
+ * porque ahí aparecen calles y caminos con nombres de pueblos: un "Camino a Alta Gracia" en un corte de
+ * Malagueño no es un corte en Alta Gracia.
  */
+export function encabezadoDelCorte(seccion: string, zona: string): string {
+  return `${seccion} ${zona.match(/^([^:]+):/)?.[1] ?? ''}`;
+}
+
+/** Las localidades de Gran Córdoba que nombra un texto (el encabezado de un corte de fuera de capital). */
 export function localidadesQueNombra(texto: string, localidades: ZonaAproximada[]): string[] {
   const normalizado = normalizar(texto);
   return localidades.filter((l) => new RegExp(l.patron).test(normalizado)).map((l) => l.nombre);

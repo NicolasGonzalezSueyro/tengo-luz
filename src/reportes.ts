@@ -18,7 +18,6 @@ export type Resultado = 'guardado' | 'repetido' | 'demasiados';
 
 const HORA = 60 * 60 * 1000;
 export const VIGENCIA = 3 * HORA; // un reporte cuenta durante 3 horas; después se supone que volvió la luz
-const MAXIMO_POR_HORA = 5; // una misma persona no puede reportar más de 5 barrios por hora
 
 export async function contarReportes(db: BaseDeDatos, ahora: number): Promise<Resumen> {
   const { results } = await db
@@ -29,15 +28,10 @@ export async function contarReportes(db: BaseDeDatos, ahora: number): Promise<Re
 }
 
 export async function guardarReporte(db: BaseDeDatos, barrio: string, huella: string, ahora: number): Promise<Resultado> {
-  const previos = await db
-    .prepare(
-      `SELECT COALESCE(SUM(barrio = ?), 0) AS mismo, COALESCE(SUM(creado > ?), 0) AS ultimaHora
-       FROM reportes WHERE huella = ? AND creado > ?`,
-    )
-    .bind(barrio, ahora - HORA, huella, ahora - VIGENCIA)
-    .first();
-  if (Number(previos?.mismo) > 0) return 'repetido';
-  if (Number(previos?.ultimaHora) >= MAXIMO_POR_HORA) return 'demasiados';
+  // Cada conexión reporta una sola vez cada 3 horas, en cualquier barrio: una persona está en un solo lugar,
+  // y así nadie puede pintar media ciudad de rojo para hacer una broma.
+  const previo = await db.prepare('SELECT barrio FROM reportes WHERE huella = ? AND creado > ? LIMIT 1').bind(huella, ahora - VIGENCIA).first();
+  if (previo) return previo.barrio === barrio ? 'repetido' : 'demasiados';
   await db.prepare('INSERT INTO reportes (barrio, creado, huella) VALUES (?, ?, ?)').bind(barrio, ahora, huella).run();
   // Lo vencido no se usa más: lo borramos para no guardar datos de más.
   await db.prepare('DELETE FROM reportes WHERE creado < ?').bind(ahora - 24 * HORA).run();

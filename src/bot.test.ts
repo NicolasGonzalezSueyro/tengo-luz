@@ -51,7 +51,7 @@ test('los comandos de admin solo funcionan para el admin', async () => {
   const db = baseLocal();
   await guardarReporte(db, 'Alberdi', 'ana', T);
   await guardarReporte(db, 'Alberdi', 'beto', T);
-  await guardarReporte(db, 'Villa Belgrano', 'ana', T);
+  await guardarReporte(db, 'Villa Belgrano', 'carla', T);
 
   assert.match(await responder(db, 1, '/limpiar', usuario), /No entendí/);
   assert.doesNotMatch(await responder(db, 1, '/ayuda', usuario), /admin/);

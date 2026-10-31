@@ -172,7 +172,7 @@ export function armarSector(esquinasEncontradas: Punto[], lugares: Punto[], barr
 
 /** Lo que devuelve Overpass: calles con su recorrido (geometry), y lugares con su centro o su posición. */
 type Elemento = {
-  tags?: { name?: string; highway?: string };
+  tags?: { name?: string; highway?: string; place?: string; landuse?: string };
   geometry?: { lat: number; lon: number }[];
   center?: { lat: number; lon: number };
   lat?: number;
@@ -227,13 +227,19 @@ export async function sectorDelCorte(
     if (tramos.length > 0) calles.set(nucleo, tramos);
   }
   const posicion = (e: Elemento): Punto | null => (e.center ? [e.center.lon, e.center.lat] : e.lat !== undefined ? [e.lon!, e.lat] : null);
-  const encontrados = (nombres: string[]) => nombres.flatMap((nombre) => {
-    const e = elementos.find((x) => !x.geometry && simple(x.tags?.name ?? '').includes(simple(nombre)));
-    const p = e && posicion(e);
-    return p ? [p] : [];
+  // Un mismo nombre puede ser una calle, un barrio y un pueblo ("Los Aromos" aparece 42 veces en Gran Córdoba).
+  // Para cada nombre se toma el primer resultado del tipo correcto que cae dentro de la zona.
+  const encontrados = (nombres: string[], esDelTipo: (tags: NonNullable<Elemento['tags']>) => boolean) => nombres.flatMap((nombre) => {
+    for (const x of elementos) {
+      if (x.geometry || !x.tags || !esDelTipo(x.tags) || !simple(x.tags.name ?? '').includes(simple(nombre))) continue;
+      const p = posicion(x);
+      if (p && dentro(p)) return [p];
+    }
+    return [];
   });
-  // Primero solo lo que cae dentro de la zona; después, sin los puntos sueltos (mirando todos juntos).
-  const [e, l, b] = [esquinas(calles), encontrados(piezas.lugares), encontrados(piezas.barrios)].map((ps) => ps.filter(dentro));
+  const esBarrio = (t: NonNullable<Elemento['tags']>) => Boolean(t.place) || t.landuse === 'residential'; // "barrio Los Aromos" ≠ calle Los Aromos
+  const esLugar = (t: NonNullable<Elemento['tags']>) => !t.highway; // "Teatro del Lago" nunca es una calle
+  const [e, l, b] = [esquinas(calles).filter(dentro), encontrados(piezas.lugares, esLugar), encontrados(piezas.barrios, esBarrio)];
   // Si el anuncio nombra barrios y encontramos menos de la mitad, un sector chico sería engañoso
   // (los vecinos de los barrios que faltan creerían que no les cortan): mejor marcar la localidad entera.
   if (piezas.barrios.length > 0 && b.length < piezas.barrios.length / 2) return null;

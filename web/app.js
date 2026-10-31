@@ -467,7 +467,7 @@ function cajaSinLuz(nombre) {
     h('h3', {}, icono('alerta'), '¿No tenés luz?'),
     yaReporte
       ? h('p', {}, '¡Gracias por avisar! Ahora hacé el reclamo a EPEC: es lo que pone en marcha la reparación.')
-      : h('p', {}, 'Avisales a tus vecinos: el barrio se pinta de rojo en el mapa. Es anónimo y dura 3 horas. No es un reclamo a EPEC.'),
+      : h('p', {}, 'Avisales a tus vecinos: el barrio se pinta de rojo en el mapa. Es anónimo, dura 3 horas y se puede reportar una sola vez cada 3 horas. No es un reclamo a EPEC.'),
     !yaReporte && h('button', { class: 'boton boton-peligro', type: 'button', onclick: (e) => reportar(nombre, e) }, icono('rayo'), 'No tengo luz'),
     h('div', { class: 'reclamo' },
       h('button', { class: 'boton boton-secundario', type: 'button', onclick: () => mostrarReclamo(nombre) }, icono('mensaje'), 'Armar el reclamo a EPEC'),
@@ -599,7 +599,7 @@ async function reportar(nombre, evento) {
     });
     const { resultado } = await res.json();
     if (resultado === 'demasiados') {
-      avisar('Mandaste muchos reportes seguidos. Probá de nuevo en un rato.');
+      avisar('Desde tu conexión ya se reportó un corte hace poco: se puede reportar una sola vez cada 3 horas.');
       boton.disabled = false;
       return;
     }

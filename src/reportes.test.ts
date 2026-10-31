@@ -12,7 +12,7 @@ test('cuenta los reportes por barrio, uno por persona', async () => {
   assert.equal(await guardarReporte(db, 'Alberdi', 'ana', T), 'guardado');
   assert.equal(await guardarReporte(db, 'Alberdi', 'ana', T + 1000), 'repetido');
   assert.equal(await guardarReporte(db, 'Alberdi', 'beto', T + 2000), 'guardado');
-  assert.equal(await guardarReporte(db, 'Centro', 'ana', T + 3000), 'guardado');
+  assert.equal(await guardarReporte(db, 'Centro', 'carla', T + 3000), 'guardado');
   assert.deepEqual(await contarReportes(db, T + 5000), {
     Alberdi: { cantidad: 2, ultimo: T + 2000 },
     Centro: { cantidad: 1, ultimo: T + 3000 },
@@ -26,11 +26,12 @@ test('los reportes vencen a las 3 horas y después se puede volver a reportar', 
   assert.equal(await guardarReporte(db, 'Alberdi', 'ana', T + VIGENCIA + 1), 'guardado');
 });
 
-test('una persona no puede reportar más de 5 barrios por hora', async () => {
+test('cada conexión reporta una sola vez cada 3 horas, en cualquier barrio', async () => {
   const db = baseLocal();
-  for (let i = 0; i < 5; i++) assert.equal(await guardarReporte(db, `Barrio ${i}`, 'ana', T + i), 'guardado');
-  assert.equal(await guardarReporte(db, 'Barrio 5', 'ana', T + 10), 'demasiados');
-  assert.equal(await guardarReporte(db, 'Barrio 5', 'ana', T + HORA + 10), 'guardado');
+  assert.equal(await guardarReporte(db, 'Alberdi', 'ana', T), 'guardado');
+  assert.equal(await guardarReporte(db, 'Centro', 'ana', T + HORA), 'demasiados'); // otro barrio: tampoco
+  assert.deepEqual(Object.keys(await contarReportes(db, T + HORA)), ['Alberdi']);
+  assert.equal(await guardarReporte(db, 'Centro', 'ana', T + VIGENCIA + 1), 'guardado'); // pasadas las 3 horas, sí
 });
 
 test('la huella no contiene la IP, es fija en el día y cambia al otro día', async () => {
