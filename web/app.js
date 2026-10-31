@@ -647,7 +647,11 @@ asa.addEventListener('pointerdown', (e) => {
 asa.addEventListener('pointermove', (e) => {
   if (inicioArrastre === null) return;
   arrastre = e.clientY - inicioArrastre;
-  panel.style.setProperty('--arrastre', `${arrastre}px`);
+  // Lo que se ve queda entre "abierto" y "cerrado": que no se pueda subir de más. Y en píxeles enteros,
+  // porque con decimales el iPhone dibuja el texto borroso.
+  const recorrido = panel.offsetHeight - parseFloat(getComputedStyle(panel).getPropertyValue('--asoma'));
+  const [minimo, maximo] = panel.classList.contains('abierto') ? [0, recorrido] : [-recorrido, 0];
+  panel.style.setProperty('--arrastre', `${Math.round(Math.min(Math.max(arrastre, minimo), maximo))}px`);
 });
 asa.addEventListener('pointerup', () => {
   if (inicioArrastre === null) return;
