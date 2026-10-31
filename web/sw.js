@@ -9,7 +9,7 @@
 // - Leaflet y la tipografía: primero la copia, porque esas direcciones nunca cambian de contenido.
 // - /api (reportes de vecinos) y el mapa de fondo: siempre en vivo, sin copia.
 
-const VERSION = 'v1'; // cambiarla solo si cambia la lista PRECARGA: así se descarga de nuevo y se borra la vieja
+const VERSION = 'v2'; // cambiarla solo si cambia la lista PRECARGA: así se descarga de nuevo y se borra la vieja
 const CACHE = `tengo-luz-${VERSION}`;
 const PLAZO_MS = 4000;
 const PRECARGA = [
@@ -19,6 +19,8 @@ const PRECARGA = [
   'estado.js',
   'iconos.js',
   'reclamo.js',
+  'calendario.js',
+  'dom.js',
   'manifest.webmanifest',
   'icono-192.png',
   'data/barrios.geojson',

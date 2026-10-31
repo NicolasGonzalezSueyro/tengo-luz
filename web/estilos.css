@@ -353,6 +353,26 @@ a { color: var(--acento); }
 .corte .sin-mapa { display: flex; gap: 6px; margin: 8px 0 0; font-size: 0.85rem; color: var(--luz-texto); }
 .corte .fuente { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 0.8rem; font-weight: 600; text-decoration: none; }
 .corte .fuente:hover { text-decoration: underline; }
+.pie-corte { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.pie-corte .fuente { margin-top: 8px; }
+.agendar { margin-top: 8px; font-size: 0.82rem; }
+.agendar summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  color: var(--acento);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.agendar summary::-webkit-details-marker { display: none; }
+.agendar[open] summary { background: var(--acento-suave); }
+.agendar[open] { flex-basis: 100%; } /* abierto, las opciones ocupan todo el ancho de la tarjeta */
+.agendar-opciones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.agendar-opciones .boton { padding: 6px 12px; font-size: 0.82rem; }
 
 .etiqueta { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; }
 .etiqueta.parcial { background: var(--luz-suave); color: var(--luz-texto); }
@@ -432,6 +452,35 @@ a { color: var(--acento); }
 .etiqueta.sin-luz { background: var(--sin-luz); color: #fff; }
 /* En el formulario la lista no flota: empuja lo de abajo, así no tapa otros campos. */
 .formulario .sugerencias { position: static; margin-top: -6px; animation: none; }
+
+/* ---------- Panel de admin (admin.html) ---------- */
+.pagina-admin { display: block; height: auto; min-height: 100dvh; }
+.admin { display: grid; gap: 16px; max-width: 760px; margin: 0 auto; padding: 20px 16px 40px; }
+.tarjeta-admin { display: grid; gap: 12px; padding: 18px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--superficie); box-shadow: var(--sombra); }
+.tarjeta-admin h1, .tarjeta-admin h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 1.15rem; }
+#entrar { width: 100%; max-width: 420px; margin: 40px auto 0; }
+.panel-admin { display: grid; gap: 16px; }
+.datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.dato { display: grid; gap: 4px; padding: 16px; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--superficie); }
+.dato strong {
+  font-family: "Outfit", system-ui, sans-serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  background: linear-gradient(120deg, var(--acento), #f97316); /* --acento se aclara en modo oscuro: se lee en los dos temas */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dato span { color: var(--texto-suave); font-size: 0.85rem; }
+.titulo-seccion { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.lista-admin { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.lista-admin li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--superficie-2); font-size: 0.9rem; }
+.lista-admin .boton { flex: none; padding: 5px 12px; font-size: 0.82rem; }
+.accesos { display: grid; gap: 6px; margin: 0; padding-left: 18px; }
+.error-admin { min-height: 1.2em; margin: 0; color: var(--sin-luz); font-weight: 700; }
+.mensaje-admin { margin: 0; font-weight: 600; }
+.mensaje-admin:empty { display: none; }
+.enlace-boton { padding: 0; border: 0; background: none; color: var(--acento); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 
 /* ---------- Formulario de reclamo ---------- */
 .bajada { margin: 4px 0 12px; color: var(--texto-suave); font-size: 0.9rem; }

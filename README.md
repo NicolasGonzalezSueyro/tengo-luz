@@ -25,6 +25,8 @@
 - 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
 - 🤖 **Bot de Telegram.** `/barrio Alberdi` y te avisa cuando anuncian un corte ahí.
 - 📤 **Compartir.** Cada barrio tiene su link (`?barrio=Alberdi`) y un botón para mandar el horario del corte por WhatsApp.
+- 📅 **Agendar el corte** en Google Calendar o en el calendario del celu (archivo `.ics` para iPhone, Android y Outlook), con recordatorios la noche anterior y una hora antes.
+- 🛠️ **Panel de admin** (`/admin`, protegido con clave): números del sitio y del bot, y borrar reportes de vecinos.
 - 📲 **App instalable que anda sin conexión,** justo cuando el corte se lleva también el wifi. Modo claro y oscuro.
 
 ## Cómo funciona
@@ -41,7 +43,7 @@ flowchart LR
   end
   subgraph cf[Cloudflare · plan gratis]
     pages[Pages<br/>sitio + app instalable]
-    api["Functions<br/>/api/reportes · telegram · avisar · alerta"]
+    api["Functions<br/>/api/reportes · telegram · avisar · alerta · calendario · admin"]
     db[(D1<br/>SQLite)]
   end
   doce --> lector
@@ -114,6 +116,13 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 - La lógica (comandos, a quién avisar) está en [`src/bot.ts`](src/bot.ts), con tests. Comandos de admin: `/estado`, `/reportes`, `/limpiar [barrio]`.
 
 **¿Y otra fuente de respaldo?** Se evaluó: La Voz dejó de publicar la lista diaria en marzo de 2026, Hoy Día la publica de forma irregular y Cba24n prohíbe los lectores automáticos. Hoy El Doce es el único medio que la publica todos los días.
+</details>
+
+<details>
+<summary><b>Calendario y panel de admin</b></summary>
+
+- [`web/calendario.js`](web/calendario.js) arma el evento de cada corte: un link de Google Calendar y un archivo `.ics` (con horarios en UTC, textos escapados, renglones de hasta 75 bytes y dos recordatorios), con tests. [`functions/api/calendario.ts`](functions/api/calendario.ts) entrega el `.ics` desde una dirección real, porque así el iPhone abre directo "Agregar al calendario", y solo para cortes que existen en los datos.
+- [`web/admin.html`](web/admin.html) es el panel de admin. Usa [`functions/api/admin.ts`](functions/api/admin.ts), que pide la clave `ADMIN_CLAVE` configurada en Cloudflare y la compara sin dar pistas por el tiempo de respuesta. El panel y los comandos del bot comparten la misma lógica ([`src/admin.ts`](src/admin.ts)).
 </details>
 
 <details>

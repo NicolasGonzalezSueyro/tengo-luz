@@ -2,6 +2,7 @@
 // Cloudflare: qué contestar a cada comando y a quién avisar de cada corte. Así se puede probar con tests.
 
 import { etiquetaDia, lugaresDelCorte, type Corte } from '../web/estado.js';
+import { estadisticas, limpiarReportes } from './admin.ts';
 import { contarReportes, type BaseDeDatos } from './reportes.ts';
 
 export const SITIO = 'https://tengo-luz.pages.dev';
@@ -101,16 +102,16 @@ export async function responder(
   }
 
   if (esAdmin) {
-    const numero = async (sql: string) => Number((await db.prepare(sql).bind().first())?.n ?? 0);
     switch (comando) {
       case '/estado': {
-        const reportes = await contarReportes(db, ahora);
+        const e = await estadisticas(db, ahora);
         return [
           '📊 Estado',
-          `Personas con avisos: ${await numero('SELECT COUNT(DISTINCT chat) AS n FROM suscripciones')}`,
-          `Barrios seguidos: ${await numero('SELECT COUNT(*) AS n FROM suscripciones')}`,
-          `Avisos mandados (últimos 30 días): ${await numero('SELECT COUNT(*) AS n FROM avisados')}`,
-          `Barrios con reportes ahora: ${Object.keys(reportes).length}`,
+          `Personas con avisos: ${e.personas}`,
+          `Barrios seguidos: ${e.barriosSeguidos}`,
+          `Avisos mandados (últimos 30 días): ${e.avisos}`,
+          `Barrios con reportes ahora: ${Object.keys(e.reportes).length}`,
+          `Panel completo: ${SITIO}/admin`,
         ].join('\n');
       }
 
@@ -123,13 +124,12 @@ export async function responder(
 
       case '/limpiar': {
         if (!argumento) {
-          const cuantos = await numero('SELECT COUNT(*) AS n FROM reportes');
-          await db.prepare('DELETE FROM reportes').bind().run();
+          const cuantos = await limpiarReportes(db);
           return `🧹 Borré ${cuantos} ${cuantos === 1 ? 'reporte' : 'reportes'}. En un minuto el mapa deja de mostrar barrios en rojo.`;
         }
         const [barrio] = buscarLugar(Object.keys(await contarReportes(db, ahora)), argumento);
         if (!barrio) return `No hay reportes de "${argumento}". Mirá cuáles hay con /reportes`;
-        await db.prepare('DELETE FROM reportes WHERE barrio = ?').bind(barrio).run();
+        await limpiarReportes(db, barrio);
         return `🧹 Borré los reportes de ${barrio}.`;
       }
     }

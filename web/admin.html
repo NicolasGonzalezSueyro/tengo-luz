@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin · ¿Tengo luz?</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <script>
+    try { const tema = localStorage.getItem('tema'); if (tema) document.documentElement.dataset.tema = tema; } catch {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&display=swap">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="pagina-admin">
+  <header class="cabecera">
+    <a class="marca" href="./">
+      <strong>¿Tengo luz? · Admin</strong>
+      <small>Panel de administración</small>
+    </a>
+    <button id="salir" class="boton-icono" type="button" aria-label="Salir del panel" hidden><span data-icono="cerrar"></span></button>
+  </header>
+
+  <main class="admin">
+    <form id="entrar" class="tarjeta-admin">
+      <h1><span data-icono="info"></span>Entrar al panel</h1>
+      <label class="campo">Clave de admin
+        <input id="clave" type="password" autocomplete="current-password" required>
+      </label>
+      <button class="boton boton-primario" type="submit">Entrar</button>
+      <p id="error" class="error-admin" role="alert"></p>
+      <p class="nota">Es la clave ADMIN_CLAVE que configuraste en Cloudflare. Se recuerda solo mientras esta pestaña esté abierta.</p>
+    </form>
+    <p id="mensaje" class="mensaje-admin" role="status" aria-live="polite"></p>
+    <div id="panel-admin" class="panel-admin" hidden></div>
+  </main>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

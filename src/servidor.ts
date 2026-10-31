@@ -2,6 +2,8 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 import { text } from 'node:stream/consumers';
+import * as admin from '../functions/api/admin.ts';
+import * as calendario from '../functions/api/calendario.ts';
 import * as reportes from '../functions/api/reportes.ts';
 import * as telegram from '../functions/api/telegram.ts';
 import { baseLocal } from './base-local.ts';
@@ -13,6 +15,8 @@ import { baseLocal } from './base-local.ts';
 
 /** Las funciones de functions/api, como las arma Cloudflare: por dirección y por método. */
 const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }> = {
+  '/api/admin': admin,
+  '/api/calendario': calendario,
   '/api/reportes': reportes,
   '/api/telegram': telegram,
 };
@@ -26,9 +30,19 @@ const TIPOS: Record<string, string> = {
   '.geojson': 'application/geo+json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.ics': 'text/calendar; charset=utf-8',
   '.webmanifest': 'application/manifest+json',
 };
-const entornoDePrueba = { DB: baseLocal(), CLAVE: 'solo-para-probar', SECRETO_BOT: 'solo-para-probar', TELEGRAM_ADMIN: '1' };
+const entornoDePrueba = {
+  DB: baseLocal(),
+  CLAVE: 'solo-para-probar',
+  SECRETO_BOT: 'solo-para-probar',
+  TELEGRAM_ADMIN: '1',
+  ADMIN_CLAVE: 'solo-para-probar',
+  // Como en Cloudflare: los archivos del sitio. Las funciones solo piden cosas de /data.
+  ASSETS: { fetch: async (url: URL) => new Response(await readFile(join(process.cwd(), url.pathname))) },
+};
 
 createServer(async (req, res) => {
   const ruta = decodeURIComponent(new URL(req.url ?? '/', 'http://localhost').pathname);

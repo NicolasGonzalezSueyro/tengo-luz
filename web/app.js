@@ -6,6 +6,8 @@ import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaEnCurso, etiquetaCorta, etiquetaDia, fechaLarga,
   hace, historialDelBarrio, lugaresDelCorte, momentoEnCordoba, posicionCoincidencia, sugerencias, textoParaCompartir,
 } from './estado.js';
+import { linkGoogleCalendar } from './calendario.js';
+import { h } from './dom.js';
 import { completarIconos, icono } from './iconos.js';
 import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 
@@ -15,7 +17,7 @@ import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 /** @typedef {{ id: string, nombre: string | null, tipo: 'poligono' | 'punto', fuente: string }} Barrio */
 /** @typedef {GeoJSON.Feature<GeoJSON.Geometry, Barrio>} FeatureBarrio */
 /** @typedef {{ nombre: string, descripcion: string }} Zona */
-/** @typedef {Node | string | null | false | undefined} Hijo */
+/** @typedef {import('./dom.js').Hijo} Hijo */
 
 const CORDOBA = /** @type {L.LatLngTuple} */ ([-31.4167, -64.1833]);
 const RECLAMO_EPEC = 'https://www.epec.com.ar/tramites/reclamo-tecnico';
@@ -45,23 +47,6 @@ const botonUbicacion = $('ubicacion');
 const avisoFlotante = $('aviso-flotante');
 
 completarIconos();
-
-/**
- * Crea un elemento del DOM. Todo el texto entra como texto (nunca como HTML), así nada que venga
- * de las notas puede inyectar código en la página.
- * @param {string} etiqueta
- * @param {Record<string, string | ((e: Event) => void)>} [atributos]
- * @param {...Hijo} hijos
- */
-function h(etiqueta, atributos = {}, ...hijos) {
-  const el = document.createElement(etiqueta);
-  for (const [clave, valor] of Object.entries(atributos)) {
-    if (typeof valor === 'function') el.addEventListener(clave.replace(/^on/, ''), valor);
-    else el.setAttribute(clave, valor);
-  }
-  for (const hijo of hijos) if (hijo) el.append(hijo);
-  return el;
-}
 
 /** @param {string} url */
 async function pedir(url) {
@@ -298,8 +283,24 @@ function mostrar(...partes) {
   contenido.scrollTop = 0;
 }
 
-/** @param {Corte} corte @param {number} indice @param {{ conBarrios?: boolean }} [opciones] */
-function tarjetaCorte(corte, indice, { conBarrios = true } = {}) {
+/**
+ * "Agendar": Google Calendar (Android y web) o el archivo .ics (iPhone, Android, Outlook). Solo para cortes que no pasaron.
+ * @param {Corte} corte @param {string | null} lugar el barrio de la ficha, o null en la lista general
+ */
+function agendar(corte, lugar) {
+  if (corte.fecha < ahora.fecha || (corte.fecha === ahora.fecha && corte.hasta <= ahora.hora)) return null;
+  const datos = new URLSearchParams({ fecha: corte.fecha, desde: corte.desde, hasta: corte.hasta, ...(lugar ? { lugar } : {}) });
+  return h('details', { class: 'agendar' },
+    h('summary', {}, icono('calendario'), 'Agendar'),
+    h('div', { class: 'agendar-opciones' },
+      h('a', { class: 'boton boton-secundario', href: linkGoogleCalendar(corte, lugar, location.origin), target: '_blank', rel: 'noopener' }, 'Google Calendar'),
+      h('a', { class: 'boton boton-secundario', href: `api/calendario?${datos}` }, 'iPhone, Android u Outlook'),
+    ),
+  );
+}
+
+/** @param {Corte} corte @param {number} indice @param {{ conBarrios?: boolean, lugar?: string | null }} [opciones] */
+function tarjetaCorte(corte, indice, { conBarrios = true, lugar = null } = {}) {
   const enCurso = estaEnCurso(corte, ahora);
   const clases = ['corte', corte.afectacion === 'total' && 'total', enCurso && 'en-curso'].filter(Boolean).join(' ');
   return h('li', { class: clases, style: `--i:${indice}` },
@@ -316,7 +317,10 @@ function tarjetaCorte(corte, indice, { conBarrios = true } = {}) {
     h('p', { class: 'zona' }, corte.zona),
     lugaresDelCorte(corte).length === 0 &&
       h('p', { class: 'sin-mapa' }, icono('info'), 'No se pudo marcar en el mapa: la zona está descripta por calles.'),
-    h('a', { class: 'fuente', href: corte.fuente, target: '_blank', rel: 'noopener' }, 'Ver anuncio original', icono('enlace')),
+    h('div', { class: 'pie-corte' },
+      h('a', { class: 'fuente', href: corte.fuente, target: '_blank', rel: 'noopener' }, 'Ver anuncio original', icono('enlace')),
+      agendar(corte, lugar),
+    ),
   );
 }
 
@@ -372,7 +376,7 @@ function mostrarBarrio(nombre) {
       `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
     zona && h('div', { class: 'aviso' }, icono('info'),
       h('p', {}, `${zona.properties.descripcion} EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.`)),
-    delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false }))),
+    delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false, lugar: nombre }))),
     cajaSinLuz(nombre),
     h('h3', {}, icono('historial'), 'Historial'),
     h('dl', { class: 'historial' },
