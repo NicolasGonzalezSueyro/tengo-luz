@@ -14,7 +14,9 @@ Mapa de cortes y mantenimientos de luz por barrio en Córdoba capital.
 
 Un mapa de Córdoba con los barrios pintados según los cortes programados del día elegido:
 
-- 🟡 Barrios con corte programado; los que tienen un corte **en curso ahora** laten y brillan.
+- 🟡 Barrios con corte programado; 🟠 los que tienen un corte **en curso ahora** laten y brillan.
+- 🟫 **Zonas aproximadas** (contorno marrón punteado) para los cortes que EPEC describe por una ruta en vez de por barrios.
+- ☰ Menú con "¿Cómo funciona?", modo claro/oscuro y accesos para reclamar a EPEC.
 - 📍 **Mi ubicación:** con el GPS encuentra tu barrio. La ubicación se usa solo en tu navegador, no se envía a ningún lado.
 - 🔎 Buscador de barrios (no importan las tildes) y botones por día con la cantidad de cortes.
 - 🗂️ Ficha de cada barrio: cortes del día, próximo y último corte.
@@ -35,6 +37,10 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 - **485 polígonos oficiales** de la capa de barrios de la Municipalidad de Córdoba.
 - **~320 puntos** de OpenStreetMap para lugares que la Municipalidad no tiene (asentamientos, loteos nuevos). Solo se sabe dónde quedan, no su forma.
 - Los nombres municipales vienen en mayúsculas y sin tildes; si OSM tiene el mismo barrio, se usa su nombre ("Argüello").
+
+### Zonas aproximadas
+
+Algunos anuncios no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte", "Camino 60 Cuadras desde el Km 13"). Para esos, [`data/zonas.geojson`](data/zonas.geojson) tiene un corredor de unos 450 m a cada lado del tramo de la ruta, armado con el trazado de OpenStreetMap (`npm run zonas`). Cada zona tiene una expresión regular que reconoce el texto del anuncio. No es el límite real del corte, que EPEC no publica: es una referencia visual.
 
 ### La tabla de alias
 
@@ -61,6 +67,7 @@ npm run build      # arma la carpeta dist/ que se publica
 npm test           # corre los tests
 npm run lector     # actualiza data/mantenimientos.json
 npm run barrios    # vuelve a descargar los límites de barrios (casi nunca hace falta)
+npm run zonas      # vuelve a armar las zonas aproximadas sobre rutas
 ```
 
 ## Fuente de los datos

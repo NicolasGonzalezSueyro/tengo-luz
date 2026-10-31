@@ -32,6 +32,7 @@ test('normalizar: la misma forma para cómo escriben la Municipalidad, OSM y las
 test('lista de barrios separada por comas e "y"', () => {
   assert.deepEqual(ubicar('Barrios Los Paraísos, San Martín Anexo y Alta Córdoba, en forma parcial.'), {
     barrios: ['Los Paraísos', 'Alta Córdoba'],
+    zonas: [],
     sinUbicar: ['san martin anexo'],
   });
 });
@@ -48,15 +49,39 @@ test('usa la tabla de alias y saca "Loteo"', () => {
 test('corta la descripción por calles y la guarda aparte', () => {
   assert.deepEqual(
     ubicar('Barrio Los Boulevares, comprendido por calle M. P. Cabrera, entre Bv. De Los Rusos y De Los Alemanes, en forma parcial.'),
-    { barrios: ['Los Boulevares'], sinUbicar: ['comprendido por calle m p cabrera entre bv de los rusos y de los alemanes'] },
+    { barrios: ['Los Boulevares'], zonas: [], sinUbicar: ['comprendido por calle m p cabrera entre bv de los rusos y de los alemanes'] },
   );
 });
 
 test('una zona descripta solo por calles queda sin ubicar, entera', () => {
-  assert.deepEqual(ubicar('Sector comprendido por Camino 60 Cuadras, desde el Km. 13 en adelante, en forma total.'), {
+  assert.deepEqual(ubicar('Sector comprendido por calles Belgrano y Achával Rodríguez.'), {
     barrios: [],
-    sinUbicar: ['sector comprendido por camino 60 cuadras desde el km 13 en adelante'],
+    zonas: [],
+    sinUbicar: ['sector comprendido por calles belgrano y achaval rodriguez'],
   });
+});
+
+const ZONAS = [
+  { nombre: 'Zona rural Ruta 9 Norte', patron: String.raw`\bruta (nacional )?9\b.*\bnorte\b|\bruta 9 norte\b` },
+  { nombre: 'Camino a 60 Cuadras (desde el Km 13)', patron: String.raw`\bcamino (a )?60 cuadras\b` },
+];
+const ubicarConZonas = crearUbicador(NOMBRES, {}, ZONAS);
+
+test('una ruta conocida se asocia a su zona aproximada y deja de figurar como sin ubicar', () => {
+  assert.deepEqual(ubicarConZonas('zona rural sobre Ruta Nacional 9 hacia el norte, en forma parcial.'), {
+    barrios: [],
+    zonas: ['Zona rural Ruta 9 Norte'],
+    sinUbicar: [],
+  });
+  assert.deepEqual(ubicarConZonas('Sector comprendido por Camino 60 Cuadras, desde el Km. 13 en adelante, en forma total.'), {
+    barrios: [],
+    zonas: ['Camino a 60 Cuadras (desde el Km 13)'],
+    sinUbicar: [],
+  });
+});
+
+test('una ruta mencionada al pasar no se confunde con la zona (Ruta 9 hacia el sur no es "Ruta 9 Norte")', () => {
+  assert.deepEqual(ubicarConZonas('Barrio Argüello, sobre Ruta 9 hacia el sur.').zonas, []);
 });
 
 test('"barrios:" con dos puntos', () => {
@@ -67,7 +92,7 @@ test('barrios cuyo nombre tiene " y " o "zona" no se parten', () => {
   assert.deepEqual(ubicar('Barrios Empalme Casas de Obreros y Empleados y Argüello.').barrios, [
     'Empalme Casas de Obreros y Empleados', 'Argüello',
   ]);
-  assert.deepEqual(ubicar('Barrio Villa Cornú Zona Este, en forma parcial.'), { barrios: ['Villa Cornú Zona Este'], sinUbicar: [] });
+  assert.deepEqual(ubicar('Barrio Villa Cornú Zona Este, en forma parcial.'), { barrios: ['Villa Cornú Zona Este'], zonas: [], sinUbicar: [] });
 });
 
 test('ordinales escritos distinto: "2° Sección" y "2ª Sección"', () => {
@@ -80,7 +105,7 @@ test('no repite un barrio nombrado dos veces', () => {
 
 test('un alias en null marca un nombre ambiguo que no se ubica solo', () => {
   const conAmbiguo = crearUbicador(NOMBRES, { 'Las Palmas': null });
-  assert.deepEqual(conAmbiguo('Barrios Las Palmas y Argüello.'), { barrios: ['Argüello'], sinUbicar: ['las palmas'] });
+  assert.deepEqual(conAmbiguo('Barrios Las Palmas y Argüello.'), { barrios: ['Argüello'], zonas: [], sinUbicar: ['las palmas'] });
 });
 
 test('falla si un alias apunta a un barrio que no existe', () => {

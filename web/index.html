@@ -20,15 +20,34 @@
 </head>
 <body>
   <header class="cabecera">
+    <button id="abrir-menu" class="boton-icono" type="button" aria-label="Abrir menú" aria-haspopup="dialog">
+      <span data-icono="menu"></span>
+    </button>
     <a class="marca" href="./">
-      <span class="logo"><span data-icono="bombita"></span></span>
-      <span>
-        <strong>¿Tengo luz?</strong>
-        <small>Cortes programados · Córdoba capital</small>
-      </span>
+      <strong>¿Tengo luz?</strong>
+      <small>Cortes programados · Córdoba capital</small>
     </a>
     <button id="tema" class="boton-icono" type="button" aria-label="Cambiar tema"></button>
   </header>
+
+  <!-- Menú lateral. <dialog> ya trae lo necesario: se cierra con Escape y mantiene el foco adentro. -->
+  <dialog id="menu" class="menu" aria-label="Menú">
+    <div class="menu-cabecera">
+      <span class="logo"><span data-icono="bombita"></span></span>
+      <strong>¿Tengo luz?</strong>
+      <button id="cerrar-menu" class="boton-icono" type="button" aria-label="Cerrar menú"><span data-icono="cerrar"></span></button>
+    </div>
+    <nav class="menu-opciones">
+      <button type="button" data-accion="inicio"><span data-icono="lista"></span>Todos los cortes</button>
+      <button type="button" data-accion="como-funciona"><span data-icono="ayuda"></span>¿Cómo funciona?</button>
+      <button type="button" data-accion="tema"><span data-icono="luna"></span><span id="texto-tema">Modo oscuro</span></button>
+      <hr>
+      <a href="https://www.epec.com.ar/tramites/reclamo-tecnico" target="_blank" rel="noopener"><span data-icono="alerta"></span>Reclamar a EPEC</a>
+      <a href="tel:08007770000"><span data-icono="telefono"></span>Llamar al 0800 777 0000</a>
+      <a href="https://github.com/NicolasGonzalezSueyro/tengo-luz" target="_blank" rel="noopener"><span data-icono="github"></span>Código en GitHub</a>
+    </nav>
+    <p class="menu-pie">Sitio no oficial, sin relación con EPEC.</p>
+  </dialog>
 
   <nav class="barra" aria-label="Filtros">
     <div id="dias" class="chips" role="group" aria-label="Elegí el día"></div>

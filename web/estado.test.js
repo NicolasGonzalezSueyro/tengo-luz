@@ -58,6 +58,13 @@ test('historialDelBarrio: último corte terminado y próximo pendiente', () => {
   assert.equal(proximo?.desde, '08:00'); // sigue en curso hasta las 13:00
 });
 
+test('las zonas aproximadas cuentan como lugares del corte', () => {
+  const conZona = { ...corte('2026-10-31', '08:00', '13:00', []), zonas: ['Zona rural Ruta 9 Norte'] };
+  const estados = estadoPorBarrio([conZona], '2026-10-31', { fecha: '2026-10-30', hora: '20:00' });
+  assert.deepEqual([...estados.keys()], ['Zona rural Ruta 9 Norte']);
+  assert.equal(historialDelBarrio([conZona], 'Zona rural Ruta 9 Norte', { fecha: '2026-10-30', hora: '20:00' }).proximo, conZona);
+});
+
 test('historialDelBarrio sin cortes devuelve null', () => {
   assert.deepEqual(historialDelBarrio(CORTES, 'Centro', { fecha: '2026-10-31', hora: '11:00' }), { ultimo: null, proximo: null });
 });

@@ -7,9 +7,18 @@
  * @typedef {{
  *   fecha: string, desde: string, hasta: string, zona: string,
  *   afectacion: 'parcial' | 'total' | null, fuente: string,
- *   barrios: string[], sinUbicar: string[]
+ *   barrios: string[], zonas?: string[], sinUbicar: string[]
  * }} Corte
  */
+
+/**
+ * Los lugares del mapa que toca un corte: sus barrios y sus zonas aproximadas (ej. "Zona rural Ruta 9 Norte").
+ * Para la página son lo mismo: algo que se pinta y se puede tocar.
+ * @param {Corte} corte
+ */
+export function lugaresDelCorte(corte) {
+  return [...corte.barrios, ...(corte.zonas ?? [])];
+}
 
 /** @typedef {{ fecha: string, hora: string }} Momento  fecha AAAA-MM-DD y hora HH:MM, en hora de Córdoba */
 
@@ -69,7 +78,7 @@ export function estadoPorBarrio(cortes, fecha, ahora) {
   const estados = new Map();
   for (const corte of cortes) {
     if (corte.fecha !== fecha) continue;
-    for (const barrio of corte.barrios) {
+    for (const barrio of lugaresDelCorte(corte)) {
       const estado = estados.get(barrio) ?? { cortes: [], enCurso: false, total: false };
       estado.cortes.push(corte);
       estado.enCurso ||= estaEnCurso(corte, ahora);
@@ -97,7 +106,7 @@ export function estaEnCurso(corte, ahora) {
  */
 export function historialDelBarrio(cortes, barrio, ahora) {
   const delBarrio = cortes
-    .filter((c) => c.barrios.includes(barrio))
+    .filter((c) => lugaresDelCorte(c).includes(barrio))
     .sort((a, b) => `${a.fecha} ${a.desde}`.localeCompare(`${b.fecha} ${b.desde}`));
   const termino = (/** @type {Corte} */ c) => `${c.fecha} ${c.hasta}` <= `${ahora.fecha} ${ahora.hora}`;
   return {

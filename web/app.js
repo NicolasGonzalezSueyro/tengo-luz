@@ -4,7 +4,7 @@
 
 import {
   barrioEnPunto, cortesDelDia, diasDisponibles, estadoPorBarrio, estaEnCurso, etiquetaCorta, etiquetaDia, fechaLarga,
-  historialDelBarrio, momentoEnCordoba,
+  historialDelBarrio, lugaresDelCorte, momentoEnCordoba,
 } from './estado.js';
 import { completarIconos, icono } from './iconos.js';
 
@@ -12,6 +12,7 @@ import { completarIconos, icono } from './iconos.js';
 /** @typedef {import('./estado.js').EstadoBarrio} EstadoBarrio */
 /** @typedef {{ id: string, nombre: string | null, tipo: 'poligono' | 'punto', fuente: string }} Barrio */
 /** @typedef {GeoJSON.Feature<GeoJSON.Geometry, Barrio>} FeatureBarrio */
+/** @typedef {{ nombre: string, descripcion: string }} Zona */
 /** @typedef {Node | string | null | false | undefined} Hijo */
 
 const CORDOBA = /** @type {L.LatLngTuple} */ ([-31.4167, -64.1833]);
@@ -20,8 +21,14 @@ const ES_CELULAR = window.matchMedia('(max-width: 860px)');
 
 // Colores de los barrios en el mapa, según el tema. El resto de los colores está en estilos.css.
 const PALETAS = {
-  claro: { borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12', elegido: '#6d28d9' },
-  oscuro: { borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fb923c', elegido: '#c4b5fd' },
+  claro: {
+    borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
+    enCurso: '#f97316', bordeEnCurso: '#c2410c', zona: '#92400e', elegido: '#6d28d9',
+  },
+  oscuro: {
+    borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
+    enCurso: '#fb923c', bordeEnCurso: '#fdba74', zona: '#d6a46b', elegido: '#c4b5fd',
+  },
 };
 
 const $ = (/** @type {string} */ id) => /** @type {HTMLElement} */ (document.getElementById(id));
@@ -79,15 +86,16 @@ function avisar(texto) {
 // Datos
 // ---------------------------------------------------------------------------------------------
 
-/** @type {[GeoJSON.FeatureCollection<GeoJSON.Geometry, Barrio>, Corte[]]} */
+/** @type {[GeoJSON.FeatureCollection<GeoJSON.Geometry, Barrio>, Corte[], GeoJSON.FeatureCollection<GeoJSON.Polygon, Zona>]} */
 let datos;
 try {
-  datos = await Promise.all([pedir('data/barrios.geojson'), pedir('data/mantenimientos.json')]);
+  datos = await Promise.all([pedir('data/barrios.geojson'), pedir('data/mantenimientos.json'), pedir('data/zonas.geojson')]);
 } catch (error) {
   contenido.replaceChildren(h('p', { class: 'error' }, 'No se pudieron cargar los datos. Probá recargar la página.'));
   throw error;
 }
-const [mapaBarrios, cortes] = datos;
+const [mapaBarrios, cortes, mapaZonas] = datos;
+const zonasPorNombre = new Map(mapaZonas.features.map((f) => [f.properties.nombre, f]));
 const poligonosBarrios = mapaBarrios.features.filter((f) => f.properties.tipo === 'poligono');
 const primerRegistro = cortes.map((c) => c.fecha).sort()[0];
 
@@ -115,10 +123,11 @@ function aplicarTema() {
   const oscuro = temaActual() === 'oscuro';
   botonTema.replaceChildren(icono(oscuro ? 'sol' : 'luna'));
   botonTema.setAttribute('aria-label', oscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+  $('texto-tema').textContent = oscuro ? 'Modo claro' : 'Modo oscuro';
   pintarMapa();
 }
 
-botonTema.addEventListener('click', () => {
+function cambiarTema() {
   const nuevo = temaActual() === 'oscuro' ? 'claro' : 'oscuro';
   document.documentElement.dataset.tema = nuevo;
   try {
@@ -127,7 +136,8 @@ botonTema.addEventListener('click', () => {
     // Sin almacenamiento (modo privado): el tema dura hasta recargar, no pasa nada.
   }
   aplicarTema();
-});
+}
+botonTema.addEventListener('click', cambiarTema);
 prefiereOscuro.addEventListener('change', aplicarTema);
 
 // ---------------------------------------------------------------------------------------------
@@ -153,14 +163,20 @@ function estilo(nombre) {
     return { color: elegido ? p.elegido : p.borde, weight: elegido ? 3.5 : 0.7, fillColor: p.relleno, fillOpacity: elegido ? 0.25 : p.rellenoOp };
   }
   return {
-    color: elegido ? p.elegido : estado.total ? p.bordeTotal : p.bordeLuz,
+    color: elegido ? p.elegido : estado.enCurso ? p.bordeEnCurso : estado.total ? p.bordeTotal : p.bordeLuz,
     weight: elegido ? 3.5 : estado.total ? 2.5 : 1.3,
-    fillColor: p.luz,
+    fillColor: estado.enCurso ? p.enCurso : p.luz,
     fillOpacity: 0.6,
   };
 }
 
-/** @type {Map<string, L.Path[]>} capas de cada barrio, para pintarlas o enfocarlas por nombre */
+/** Las zonas aproximadas: contorno marrón punteado, relleno según el estado del corte. @param {string} nombre */
+function estiloZona(nombre) {
+  const p = PALETAS[temaActual()];
+  return { ...estilo(nombre), color: nombre === barrioElegido ? p.elegido : p.zona, weight: 2.5, dashArray: '7 6', fillOpacity: 0.35 };
+}
+
+/** @type {Map<string, L.Layer[]>} capas de cada barrio o zona, para enfocarlas por nombre */
 const capasPorNombre = new Map();
 
 const capaPoligonos = L.geoJSON(
@@ -184,6 +200,8 @@ const puntos = new Map(
     .map((f) => [/** @type {string} */ (f.properties.nombre), /** @type {GeoJSON.Point} */ (f.geometry).coordinates]),
 );
 const capaPuntos = L.layerGroup().addTo(mapa);
+// Las zonas aproximadas (rutas rurales) también se dibujan solo el día que tienen un corte.
+const capaZonas = L.layerGroup().addTo(mapa);
 
 /** @type {L.CircleMarker | null} */
 let marcadorYo = null;
@@ -205,8 +223,19 @@ function pintarMapa() {
     if (nombre && nombre === barrioElegido) path.bringToFront();
   });
 
+  capaZonas.clearLayers();
   capaPuntos.clearLayers();
   for (const nombre of estados.keys()) {
+    const zona = zonasPorNombre.get(nombre);
+    if (zona) {
+      const capa = L.geoJSON(zona, { style: () => estiloZona(nombre) })
+        .bindTooltip(`${nombre} (zona aproximada)`, { sticky: true })
+        .on('click', () => elegirBarrio(nombre))
+        .addTo(capaZonas);
+      capa.eachLayer((c) => clasesDeBarrio(/** @type {L.Path} */ (c), nombre));
+      capasPorNombre.set(nombre, [capa]);
+      continue;
+    }
     const coordenadas = puntos.get(nombre);
     if (!coordenadas) continue;
     const circulo = L.circleMarker([coordenadas[1], coordenadas[0]], { radius: 11, ...estilo(nombre) })
@@ -224,8 +253,9 @@ leyenda.onAdd = () =>
   h('div', { class: 'leyenda' },
     h('strong', {}, 'Referencias'),
     h('div', {}, h('i', { style: 'background:#facc15' }), 'Corte programado'),
-    h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Corte total'),
-    h('div', {}, h('i', { style: 'background:#facc15;box-shadow:0 0 8px #facc15' }), 'En curso ahora (late)'),
+    h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Programado total'),
+    h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'En curso ahora'),
+    h('div', {}, h('i', { style: 'background:#facc1555;outline:2px dashed #92400e;outline-offset:-2px' }), 'Zona aproximada'),
     h('div', {}, h('i', { style: 'background:#a5a1c255;outline:1px solid #8e8aa8;outline-offset:-1px' }), 'Sin cortes anunciados'),
   );
 leyenda.addTo(mapa);
@@ -251,11 +281,12 @@ function tarjetaCorte(corte, indice, { conBarrios = true } = {}) {
       enCurso && h('span', { class: 'etiqueta en-curso' }, h('span', { class: 'punto-vivo' }), 'En curso'),
       corte.afectacion && h('span', { class: `etiqueta ${corte.afectacion}` }, corte.afectacion === 'total' ? 'Total' : 'Parcial'),
     ),
-    conBarrios && corte.barrios.length > 0 &&
+    conBarrios && lugaresDelCorte(corte).length > 0 &&
       h('div', { class: 'barrios' },
-        ...corte.barrios.map((b) => h('button', { class: 'barrio-link', type: 'button', onclick: () => elegirBarrio(b) }, icono('pin'), b))),
+        ...corte.barrios.map((b) => h('button', { class: 'barrio-link', type: 'button', onclick: () => elegirBarrio(b) }, icono('pin'), b)),
+        ...(corte.zonas ?? []).map((z) => h('button', { class: 'barrio-link zona', type: 'button', onclick: () => elegirBarrio(z) }, icono('ruta'), z))),
     h('p', { class: 'zona' }, corte.zona),
-    corte.barrios.length === 0 &&
+    lugaresDelCorte(corte).length === 0 &&
       h('p', { class: 'sin-mapa' }, icono('info'), 'No se pudo marcar en el mapa: la zona está descripta por calles.'),
     h('a', { class: 'fuente', href: corte.fuente, target: '_blank', rel: 'noopener' }, 'Ver anuncio original', icono('enlace')),
   );
@@ -297,10 +328,13 @@ function mostrarBarrio(nombre) {
     : estado
       ? ['programado', `Corte programado · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`]
       : ['sin-cortes', `Sin cortes · ${etiquetaCorta(diaElegido, ahora.fecha).toLowerCase()}`];
+  const zona = zonasPorNombre.get(nombre);
   mostrar(
     h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
-    h('h2', {}, icono('pin'), nombre),
+    h('h2', {}, icono(zona ? 'ruta' : 'pin'), nombre),
     h('span', { class: `estado ${claseEstado}` }, estado ? icono('rayo') : icono('ok'), textoEstado),
+    zona && h('div', { class: 'aviso' }, icono('info'),
+      h('p', {}, `${zona.properties.descripcion} EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.`)),
     delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false }))),
     h('h3', {}, icono('historial'), 'Historial'),
     h('dl', { class: 'historial' },
@@ -309,6 +343,21 @@ function mostrarBarrio(nombre) {
     ),
     h('div', { class: 'aviso' }, icono('info'), h('p', {}, `Registramos cortes desde el ${fechaLarga(primerRegistro)}.`)),
     avisoReclamo(),
+  );
+}
+
+function mostrarComoFunciona() {
+  mostrar(
+    h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
+    h('h2', {}, icono('ayuda'), '¿Cómo funciona?'),
+    h('ol', { class: 'pasos' },
+      h('li', {}, 'EPEC anuncia los cortes programados (mantenimientos, poda, obras) y los medios los publican, en general el día anterior.'),
+      h('li', {}, 'Cada hora, un programa lee esos anuncios, se queda con los de Córdoba capital y reconoce qué barrios nombran.'),
+      h('li', {}, 'Cada barrio se ubica en el mapa oficial de la Municipalidad. Si el anuncio habla de una ruta en vez de barrios, se marca una zona aproximada.'),
+      h('li', {}, 'El mapa se pinta según el día que elijas, y "en curso" se calcula con la hora actual de Córdoba.'),
+    ),
+    h('div', { class: 'aviso' }, icono('info'),
+      h('p', {}, 'Muestra solo cortes anunciados. Si te quedaste sin luz sin aviso, puede ser una falla: reclamá a EPEC.')),
   );
 }
 
@@ -331,6 +380,35 @@ function pie() {
     'Barrios: Municipalidad de Córdoba y © colaboradores de OpenStreetMap. ',
     h('a', { href: 'https://github.com/NicolasGonzalezSueyro/tengo-luz', target: '_blank', rel: 'noopener' }, icono('github'), 'Código'),
   );
+}
+
+// ---------------------------------------------------------------------------------------------
+// Menú lateral (☰)
+// ---------------------------------------------------------------------------------------------
+
+const menu = /** @type {HTMLDialogElement} */ ($('menu'));
+$('abrir-menu').addEventListener('click', () => menu.showModal());
+$('cerrar-menu').addEventListener('click', () => menu.close());
+// Tocar afuera del menú (sobre el fondo oscuro) también lo cierra.
+menu.addEventListener('click', (e) => {
+  if (e.target === menu) menu.close();
+});
+/** @type {Record<string, () => void>} */
+const ACCIONES_MENU = {
+  inicio: () => elegirBarrio(null),
+  'como-funciona': () => {
+    barrioElegido = null;
+    pintarMapa();
+    mostrarComoFunciona();
+    if (ES_CELULAR.matches) abrirPanel(true);
+  },
+  tema: cambiarTema,
+};
+for (const boton of menu.querySelectorAll('[data-accion]')) {
+  boton.addEventListener('click', () => {
+    ACCIONES_MENU[boton.getAttribute('data-accion') ?? '']?.();
+    menu.close();
+  });
 }
 
 // ---------------------------------------------------------------------------------------------

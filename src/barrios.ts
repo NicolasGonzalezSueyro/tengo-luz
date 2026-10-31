@@ -7,11 +7,17 @@
 // 2. Lo que queda se separa por comas y por " y ".
 // 3. Cada pedazo se normaliza (sin tildes, minúsculas, "Sud" = "Sur", sin "Barrio"/"Loteo") y se busca
 //    en los nombres del mapa o en la tabla de alias. Lo que no se encuentra queda en sinUbicar.
+// 4. Aparte, si el texto menciona una ruta conocida ("zona rural sobre Ruta Nacional 9 hacia el norte"),
+//    se asocia a una zona aproximada de data/zonas.geojson.
 
 export type Ubicacion = {
   barrios: string[]; // nombres tal cual figuran en data/barrios.geojson
-  sinUbicar: string[]; // pedazos de texto que no pudimos asociar a un barrio (normalizados)
+  zonas: string[]; // zonas aproximadas de data/zonas.geojson
+  sinUbicar: string[]; // pedazos de texto que no pudimos asociar a un barrio ni a una zona (normalizados)
 };
+
+/** Una zona aproximada: su nombre y la expresión regular que reconoce el texto del anuncio. */
+export type ZonaAproximada = { nombre: string; patron: string };
 
 // Palabras que marcan que empieza una descripción por calles o sectores, no un nombre de barrio.
 const DESCRIPCION = /\b(comprendid[oa]s?|entre|sobre|desde|hasta|calles?|area|sector|zona|frente|altura)\b/;
@@ -52,7 +58,8 @@ export function normalizar(nombre: string): string {
  * Prepara el buscador una sola vez: nombres del mapa y alias, indexados por su forma normalizada.
  * Un alias en null marca un nombre ambiguo: no se ubica solo aunque coincida con algo del mapa.
  */
-export function crearUbicador(nombres: string[], alias: Record<string, string | null>) {
+export function crearUbicador(nombres: string[], alias: Record<string, string | null>, zonasAproximadas: ZonaAproximada[] = []) {
+  const zonasConPatron = zonasAproximadas.map((z) => ({ nombre: z.nombre, patron: new RegExp(z.patron) }));
   const indice = new Map(nombres.map((n) => [normalizar(n), n]));
   for (const [otroNombre, nombreDelMapa] of Object.entries(alias)) {
     if (nombreDelMapa === null) {
@@ -96,6 +103,13 @@ export function crearUbicador(nombres: string[], alias: Record<string, string | 
       if (delMapa) barrios.add(delMapa);
       else sinUbicar.push(nombre);
     }
-    return { barrios: [...barrios], sinUbicar };
+
+    // Zonas aproximadas: se busca en todo el texto, y lo que reconocen deja de figurar como "sin ubicar".
+    const zonas = zonasConPatron.filter((z) => z.patron.test(normalizar(zona)));
+    return {
+      barrios: [...barrios],
+      zonas: zonas.map((z) => z.nombre),
+      sinUbicar: sinUbicar.filter((texto) => !zonas.some((z) => z.patron.test(normalizar(texto)))),
+    };
   };
 }
