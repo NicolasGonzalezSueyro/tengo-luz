@@ -183,7 +183,11 @@ export async function avisosPendientes(db: BaseDeDatos, cortes: Corte[], hoy: st
   return avisos;
 }
 
-export async function marcarAvisado(db: BaseDeDatos, aviso: Aviso, ahora: number) {
+export async function yaAvisado(db: BaseDeDatos, aviso: Pick<Aviso, 'chat' | 'clave'>): Promise<boolean> {
+  return (await db.prepare('SELECT 1 AS si FROM avisados WHERE chat = ? AND clave = ?').bind(aviso.chat, aviso.clave).first()) !== null;
+}
+
+export async function marcarAvisado(db: BaseDeDatos, aviso: Pick<Aviso, 'chat' | 'clave'>, ahora: number) {
   await db.prepare('INSERT OR IGNORE INTO avisados (chat, clave, creado) VALUES (?, ?, ?)').bind(aviso.chat, aviso.clave, ahora).run();
   // Los cortes viejos ya no se avisan: no hace falta recordarlos.
   await db.prepare('DELETE FROM avisados WHERE creado < ?').bind(ahora - 30 * 24 * 60 * 60 * 1000).run();

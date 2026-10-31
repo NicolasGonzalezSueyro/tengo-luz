@@ -27,7 +27,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test # si los tests fallan, no tocamos los datos
-      - run: npm run lector
+      - name: Leer los cortes
+        env:
+          SECRETO_BOT: ${{ secrets.SECRETO_BOT }} # para avisarte por Telegram si algo hay que revisar a mano
+        run: npm run lector
       - name: Guardar los datos si cambiaron
         run: |
           if git diff --quiet -- data/; then
@@ -45,3 +48,9 @@ jobs:
         env:
           SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
         run: npm run avisar
+      # Si cualquier paso de arriba falló, te llega un mensaje del bot (como mucho uno por día) con el link al detalle.
+      - name: Avisarte si algo falló
+        if: failure()
+        env:
+          SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
+        run: node src/alertar.ts "❌ Falló la actualización automática de cortes." "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

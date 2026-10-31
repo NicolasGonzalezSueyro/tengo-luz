@@ -7,6 +7,7 @@ import { leer, listarLugares } from './lugares.ts';
 import lugaresGuardados from '../data/lugares.js';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 import { onRequestPost as avisar } from '../functions/api/avisar.ts';
+import { onRequestPost as alerta } from '../functions/api/alerta.ts';
 import type { Corte } from '../web/estado.js';
 
 const LUGARES = ['Alberdi', 'Alto Alberdi', 'Villa Belgrano', 'Zona rural Ruta 9 Norte'];
@@ -118,4 +119,24 @@ test('/api/avisar manda los avisos por Telegram y los marca', async (t) => {
   assert.deepEqual(mandados, [1, 2]);
   // La segunda vez no hay nada: el 1 ya fue avisado y el 2 se borró por bloquear al bot.
   assert.deepEqual(await (await avisar({ request: pedido('secreto'), env })).json(), { enviados: 0, pendientes: 0 });
+});
+
+test('/api/alerta le escribe al admin, una sola vez por día por cada alerta', async (t) => {
+  const env = { DB: baseLocal(), SECRETO_BOT: 'secreto', TELEGRAM_TOKEN: 'token', TELEGRAM_ADMIN: '9' };
+  const mandados: { chat_id: number; text: string }[] = [];
+  t.mock.method(globalThis, 'fetch', async (_url: string, opciones: RequestInit) => {
+    mandados.push(JSON.parse(String(opciones.body)));
+    return new Response('{}');
+  });
+  const pedido = (clave: string, cuerpo: object) => new Request('http://x/api/alerta', {
+    method: 'POST', headers: { Authorization: `Bearer ${clave}` }, body: JSON.stringify(cuerpo),
+  });
+
+  assert.equal((await alerta({ request: pedido('otra', { texto: 'x' }), env })).status, 401);
+  assert.equal((await alerta({ request: pedido('secreto', {}), env })).status, 400);
+  assert.deepEqual(await (await alerta({ request: pedido('secreto', { texto: 'Falló', detalle: 'link 1' }), env })).json(), { enviada: true });
+  // La misma alerta con otro link (otra corrida del robot) no se repite el mismo día.
+  assert.deepEqual(await (await alerta({ request: pedido('secreto', { texto: 'Falló', detalle: 'link 2' }), env })).json(), { enviada: false });
+  assert.deepEqual(await (await alerta({ request: pedido('secreto', { texto: 'Otra cosa' }), env })).json(), { enviada: true });
+  assert.deepEqual(mandados.map((m) => [m.chat_id, m.text]), [[9, '🛠️ Falló\n\nlink 1'], [9, '🛠️ Otra cosa']]);
 });

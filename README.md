@@ -71,6 +71,19 @@ Te avisa cuando EPEC anuncia un corte programado en los barrios que seguís: `/b
 - El bot reconoce barrios con [`data/lugares.js`](data/lugares.js), una lista liviana de nombres que se arma con `npm run lugares`.
 - **Comandos de admin** (solo para el chat `TELEGRAM_ADMIN`): `/estado`, `/reportes`, `/limpiar` y `/limpiar Alberdi` para borrar reportes de vecinos.
 
+### Alertas para el admin
+
+El sistema no falla en silencio. El bot le escribe al admin por Telegram (como mucho una vez por día por cada problema, con [`functions/api/alerta.ts`](functions/api/alerta.ts)) cuando:
+
+- el robot de GitHub falla en cualquier paso (manda el link al detalle);
+- no hay notas de cortes de El Doce en los últimos 2 días;
+- una nota no se puede leer, o tiene renglones de cortes que el lector no entiende (una nota rara no frena a las demás);
+- un corte que viene nombra un barrio que no está en el mapa ni en la tabla de alias.
+
+Si el aviso por Telegram falla, igual se guardan los cortes.
+
+**¿Y otra fuente de respaldo?** Se evaluó. La Voz dejó de publicar la lista diaria en marzo de 2026, Hoy Día la publica de forma irregular y Cba24n prohíbe que la lean programas. Hoy El Doce es el único medio que la publica todos los días. Por eso la prioridad es enterarse enseguida si deja de funcionar y conseguir acceso oficial a los datos de EPEC.
+
 ¿Por qué Telegram? Es el único canal de avisos gratis y sin límites prácticos. Los SMS se pagan por mensaje, y WhatsApp cobra por cada aviso que inicia una empresa.
 
 ## Cómo se mantiene al día

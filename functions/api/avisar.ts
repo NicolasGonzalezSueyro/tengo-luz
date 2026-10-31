@@ -1,5 +1,6 @@
 import { avisosPendientes, marcarAvisado, olvidarChat } from '../../src/bot.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
+import { enviarMensaje } from '../../src/telegram.ts';
 import { momentoEnCordoba, type Corte } from '../../web/estado.js';
 
 // El robot de GitHub llama a /api/avisar cada hora con los cortes de hoy en adelante (src/avisar.ts).
@@ -22,11 +23,7 @@ export async function onRequestPost({ request, env }: Contexto) {
   const pendientes = await avisosPendientes(env.DB, cortes, momentoEnCordoba().fecha);
   let enviados = 0;
   for (const aviso of pendientes.slice(0, MAXIMO_POR_VEZ)) {
-    const respuesta = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: aviso.chat, text: aviso.texto, link_preview_options: { is_disabled: true } }),
-    });
+    const respuesta = await enviarMensaje(env.TELEGRAM_TOKEN, aviso.chat, aviso.texto);
     if (respuesta.ok) {
       await marcarAvisado(env.DB, aviso, Date.now());
       enviados++;

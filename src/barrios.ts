@@ -22,6 +22,9 @@ export type ZonaAproximada = { nombre: string; patron: string };
 // Palabras que marcan que empieza una descripción por calles o sectores, no un nombre de barrio.
 const DESCRIPCION = /\b(comprendid[oa]s?|entre|sobre|desde|hasta|calles?|area|sector|zona|frente|altura)\b/;
 
+/** Si un texto sin ubicar es una descripción de calles ("entre calles X y Y") y no el nombre de un barrio. */
+export const esDescripcion = (texto: string) => DESCRIPCION.test(texto);
+
 /** Minúsculas, sin tildes ni símbolos y con espacios simples. */
 function limpiar(texto: string): string {
   return texto
