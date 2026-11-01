@@ -30,12 +30,12 @@ const PALETAS = {
   claro: {
     borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
     enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', bordeSinLuz: '#7f1d1d', zona: '#92400e', elegido: '#6d28d9',
-    terminado: '#22c55e', bordeTerminado: '#166534',
+    terminado: '#22c55e', bordeTerminado: '#166534', falla: '#be123c', bordeFalla: '#4c0519',
   },
   oscuro: {
     borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
     enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', bordeSinLuz: '#fecaca', zona: '#d6a46b', elegido: '#c4b5fd',
-    terminado: '#4ade80', bordeTerminado: '#bbf7d0',
+    terminado: '#4ade80', bordeTerminado: '#bbf7d0', falla: '#fb7185', bordeFalla: '#ffe4e6',
   },
 };
 
@@ -99,6 +99,11 @@ let estados = new Map();
 let barrioElegido = null;
 /** Reportes de vecinos de las últimas 3 horas, por barrio (vienen de /api/reportes). @type {Record<string, { cantidad: number, ultimo: number }>} */
 let reportes = {};
+/**
+ * Fallas no programadas que EPEC confirmó en sus redes y el admin publicó desde el bot (vienen de /api/fallas).
+ * @type {{ lugares: string[], texto: string, fuente: string | null, creado: number, hasta: number }[]}
+ */
+let fallas = [];
 /** Si el panel muestra un formulario o una explicación, no se redibuja cada minuto (se perdería lo escrito). */
 let panelFijo = false;
 /** Barrios que reportaste desde esta pestaña, para no mostrarte el botón de nuevo. */
@@ -109,6 +114,9 @@ function vecinosSinLuz(nombre) {
   if (!nombre || diaElegido !== ahora.fecha || !lugaresDelMapa.has(nombre)) return 0;
   return reportes[nombre]?.cantidad ?? 0;
 }
+
+/** La falla confirmada que afecta a un lugar. Como los reportes, es de "ahora": solo mirando hoy. @param {string | null} nombre */
+const fallaDe = (nombre) => (nombre && diaElegido === ahora.fecha ? fallas.find((f) => f.lugares.includes(nombre)) : undefined);
 
 /** Los barrios con reportes, de más a menos. */
 const barriosReportados = () => Object.keys(reportes).filter((n) => vecinosSinLuz(n) > 0).sort((a, b) => vecinosSinLuz(b) - vecinosSinLuz(a));
@@ -179,6 +187,8 @@ function estilo(nombre) {
   const p = PALETAS[temaActual()];
   const estado = nombre ? estados.get(nombre) : undefined;
   const elegido = nombre !== null && nombre === barrioElegido;
+  // Bordó: EPEC confirmó una falla (sin luz, sin aviso previo).
+  if (fallaDe(nombre)) return { color: elegido ? p.elegido : p.bordeFalla, weight: elegido ? 3.5 : 2.5, fillColor: p.falla, fillOpacity: 0.65 };
   // Rojo: los vecinos dicen que no tienen luz y no hay un corte anunciado en curso que lo explique.
   if (vecinosSinLuz(nombre) > 0 && !estado?.enCurso) {
     return { color: elegido ? p.elegido : p.bordeSinLuz, weight: elegido ? 3.5 : 2, fillColor: p.sinLuz, fillOpacity: 0.6 };
@@ -244,7 +254,7 @@ function clasesDeBarrio(/** @type {L.Path} */ capa, /** @type {string | null} */
   const elemento = capa.getElement();
   elemento?.classList.toggle('barrio-con-corte', Boolean(estado));
   elemento?.classList.toggle('barrio-en-curso', Boolean(estado?.enCurso));
-  elemento?.classList.toggle('barrio-sin-luz', vecinosSinLuz(nombre) > 0 && !estado?.enCurso);
+  elemento?.classList.toggle('barrio-sin-luz', Boolean(fallaDe(nombre)) || (vecinosSinLuz(nombre) > 0 && !estado?.enCurso));
 }
 
 function pintarMapa() {
@@ -261,7 +271,8 @@ function pintarMapa() {
   capaSectores.clearLayers();
   sectoresPorNombre.clear();
   // La localidad elegida se dibuja aunque ese día no tenga cortes: así el mapa puede ir hasta ella.
-  for (const nombre of new Set([...estados.keys(), ...barriosReportados(), ...(barrioElegido ? [barrioElegido] : [])])) {
+  const conFalla = diaElegido === ahora.fecha ? fallas.flatMap((f) => f.lugares) : [];
+  for (const nombre of new Set([...estados.keys(), ...barriosReportados(), ...conFalla, ...(barrioElegido ? [barrioElegido] : [])])) {
     const zona = zonasPorNombre.get(nombre);
     if (zona) {
       // Si todos los cortes de la localidad ese día tienen su sector, la localidad queda solo como contorno.
@@ -309,6 +320,7 @@ leyenda.onAdd = () => {
     h('div', {}, h('i', { style: 'background:#facc15' }), 'Corte programado'),
     h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Programado total'),
     h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'En curso ahora'),
+    h('div', {}, h('i', { style: 'background:#be123c;outline:2px solid #4c0519;outline-offset:-2px' }), 'Falla confirmada (EPEC)'),
     h('div', {}, h('i', { style: 'background:#dc2626;box-shadow:0 0 8px #dc2626' }), 'Sin luz sin aviso (vecinos)'),
     h('div', {}, h('i', { style: 'background:#22c55e' }), 'Terminado hoy'),
     h('div', {}, h('i', { style: 'background:#facc1555;outline:2px dashed #92400e;outline-offset:-2px' }), 'Zona aproximada'),
@@ -390,6 +402,7 @@ function mostrarResumen() {
   const delDia = cortesDelDia(cortes, diaElegido);
   mostrar(
     tarjetaDelDia(delDia),
+    seccionFallas(),
     seccionVecinos(),
     delDia.length === 0 && diaElegido > ahora.fecha &&
       h('div', { class: 'aviso' }, icono('info'), h('p', {}, 'Los cortes se suelen anunciar el día anterior: volvé a mirar más tarde.')),
@@ -406,7 +419,10 @@ function mostrarBarrio(nombre) {
   /** @param {Corte | null} c */
   const describir = (c) => (c ? `${fechaLarga(c.fecha)}, de ${horario(c)}` : 'Sin registros');
   const vecinos = vecinosSinLuz(nombre);
-  const [claseEstado, textoEstado] = estado?.enCurso
+  const falla = fallaDe(nombre);
+  const [claseEstado, textoEstado] = falla
+    ? ['falla', 'Falla confirmada por EPEC']
+    : estado?.enCurso
     ? ['en-curso', 'Corte en curso ahora']
     : vecinos > 0
       ? ['sin-luz', 'Sin luz sin aviso']
@@ -420,12 +436,13 @@ function mostrarBarrio(nombre) {
     h('button', { class: 'volver', type: 'button', onclick: () => elegirBarrio(null) }, icono('volver'), 'Todos los cortes'),
     h('h2', {}, iconoDeLugar(nombre), nombre),
     h('div', { class: 'ficha-estado' },
-      h('span', { class: `estado ${claseEstado}` }, icono(vecinos > 0 && !estado?.enCurso ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
+      h('span', { class: `estado ${claseEstado}` }, icono(falla || (vecinos > 0 && !estado?.enCurso) ? 'alerta' : estado ? 'rayo' : 'ok'), textoEstado),
       h('div', { class: 'ficha-acciones' },
         botonDeAvisos(nombre),
         h('button', { class: 'boton boton-secundario boton-compartir', type: 'button', onclick: () => compartir(nombre) }, icono('compartir'), 'Compartir'),
       ),
     ),
+    falla && tarjetaFalla(falla, false),
     vecinos > 0 && h('p', { class: 'vecinos-cuenta' }, icono('vecinos'),
       `${vecinos} ${vecinos === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no ${vecinos === 1 ? 'tiene' : 'tienen'} luz · último ${hace(reportes[nombre].ultimo)}`),
     delDia.some((c) => c.sector) && h('div', { class: 'aviso' }, icono('info'),
@@ -616,6 +633,23 @@ function enviarReclamo(formulario, como) {
   else window.open(linkWhatsApp(WHATSAPP_EPEC, texto), '_blank', 'noopener');
 }
 
+/** Una falla confirmada por EPEC: los lugares, el texto de la publicación y el link. @param {typeof fallas[number]} falla @param {boolean} conLugares */
+function tarjetaFalla(falla, conLugares) {
+  return h('div', { class: 'falla-epec' },
+    h('h3', {}, icono('alerta'), 'Falla confirmada por EPEC', h('span', { class: 'falla-hace' }, hace(falla.creado))),
+    conLugares && h('div', { class: 'barrios' },
+      ...falla.lugares.map((b) => h('button', { class: 'barrio-link falla', type: 'button', onclick: () => elegirBarrio(b) }, iconoDeLugar(b), b))),
+    h('p', {}, falla.texto),
+    falla.fuente && h('a', { class: 'fuente', href: falla.fuente, target: '_blank', rel: 'noopener' }, 'Ver publicación de EPEC', icono('enlace')),
+  );
+}
+
+/** En la portada: las fallas que EPEC confirmó ahora. */
+function seccionFallas() {
+  if (diaElegido !== ahora.fecha || fallas.length === 0) return null;
+  return h('section', { class: 'fallas' }, ...fallas.map((f) => tarjetaFalla(f, true)));
+}
+
 /** En la portada: los barrios donde los vecinos reportan que no tienen luz. */
 function seccionVecinos() {
   const reportados = barriosReportados();
@@ -669,7 +703,7 @@ function mostrarComoFunciona() {
     h('h2', {}, icono('ayuda'), '¿Cómo funciona?'),
     h('ol', { class: 'pasos' },
       h('li', {}, 'EPEC anuncia los cortes programados (mantenimientos, poda, obras) y los medios los publican, en general el día anterior.'),
-      h('li', {}, 'Cada hora, un programa lee esos anuncios, y reconoce qué barrios de capital o localidades de la provincia nombran. Las localidades se ubican con OpenStreetMap.'),
+      h('li', {}, 'Cada media hora, un programa lee esos anuncios y reconoce qué barrios de capital o localidades de la provincia nombran. Las localidades se ubican con OpenStreetMap.'),
       h('li', {}, 'Cada barrio se ubica en el mapa oficial de la Municipalidad. Si el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar, se marca una zona aproximada.'),
       h('li', {}, 'El mapa se pinta según el día que elijas, y "en curso" se calcula con la hora actual de Córdoba.'),
     ),
@@ -857,7 +891,7 @@ function resaltar(nombre, buscado) {
 /** Una opción de la lista, con una etiqueta si el barrio tiene algo ese día. @param {string} nombre @param {string} buscado @param {string} id */
 function opcionSugerida(nombre, buscado, id) {
   const estado = estados.get(nombre);
-  const [clase, texto] = estado?.enCurso ? ['en-curso', 'En curso']
+  const [clase, texto] = fallaDe(nombre) ? ['falla', 'Falla'] : estado?.enCurso ? ['en-curso', 'En curso']
     : vecinosSinLuz(nombre) > 0 ? ['sin-luz', 'Sin luz']
       : estado ? ['programado', 'Corte'] : ['', ''];
   return h('li', { id, class: 'sugerencia', role: 'option', 'aria-selected': 'false', 'data-nombre': nombre },
@@ -1047,13 +1081,12 @@ window.addEventListener('online', () => {
 });
 revisarConexion();
 
-/** Trae los reportes de vecinos y vuelve a pintar todo. */
+/** Trae los reportes de vecinos y las fallas confirmadas, y vuelve a pintar todo. */
 async function cargarReportes() {
-  try {
-    reportes = await pedir('api/reportes');
-  } catch {
-    // Si la API no responde, el mapa sigue andando igual, solo que sin reportes nuevos.
-  }
+  // Si alguna API no responde, el mapa sigue andando igual, solo que sin datos nuevos de esa parte.
+  const [nuevosReportes, nuevasFallas] = await Promise.allSettled([pedir('api/reportes'), pedir('api/fallas')]);
+  if (nuevosReportes.status === 'fulfilled') reportes = nuevosReportes.value;
+  if (nuevasFallas.status === 'fulfilled') fallas = nuevasFallas.value;
   actualizar();
 }
 

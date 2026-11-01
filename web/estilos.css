@@ -31,6 +31,7 @@
   --terminado: #16a34a; /* verde: el corte de hoy ya terminó */
   --barra: #6d28d9; /* barras de los gráficos de estadísticas */
   --sin-luz: #dc2626; /* rojo: vecinos sin luz, sin aviso */
+  --falla: #be123c; /* bordó: falla confirmada por EPEC */
   --sombra: 0 10px 30px -12px rgba(46, 16, 101, 0.25);
   --degradado: linear-gradient(120deg, #6d28d9 0%, #c026d3 45%, #f97316 100%);
   --radio: 16px;
@@ -56,6 +57,7 @@
   --terminado: #16a34a;
   --barra: #8b5cf6;
   --sin-luz: #ef4444;
+  --falla: #fb7185;
   --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
   --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
   color-scheme: dark;
@@ -81,6 +83,7 @@
     --terminado: #16a34a;
     --barra: #8b5cf6;
     --sin-luz: #ef4444;
+    --falla: #fb7185;
     --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
     --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
     color-scheme: dark;
@@ -424,6 +427,18 @@ a { color: var(--acento); }
 .barrio-link.sin-luz { color: var(--sin-luz); border-color: var(--sin-luz); }
 .barrio-link.sin-luz:hover { background: var(--sin-luz); color: #fff; }
 .barrio-link .chip-cuenta { background: var(--sin-luz); color: #fff; }
+.barrio-link.falla { color: var(--falla); border-color: var(--falla); }
+.barrio-link.falla:hover { background: var(--falla); color: #fff; }
+.estado.falla, .etiqueta.falla { background: var(--falla); color: #fff; }
+/* Falla confirmada por EPEC: en la portada y en la ficha, con el texto de la publicación. */
+.fallas { display: grid; gap: 10px; }
+.falla-epec { padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--falla) 50%, transparent); border-radius: 14px;
+  background: color-mix(in srgb, var(--falla) 9%, var(--superficie)); }
+.falla-epec h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; color: var(--falla); font-size: 0.95rem; }
+.falla-hace { margin-left: auto; color: var(--texto-suave); font-size: 0.78rem; font-weight: 500; }
+.falla-epec .barrios { margin: 0 0 8px; }
+.falla-epec p { margin: 0 0 8px; font-size: 0.88rem; white-space: pre-line; overflow-wrap: anywhere; }
+
 
 /* ---------- Vecinos sin luz y reclamo ---------- */
 .vecinos, .caja-sin-luz {

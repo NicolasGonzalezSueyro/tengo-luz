@@ -3,6 +3,10 @@
 
 import { etiquetaDia, lugaresDelCorte, type Corte } from '../web/estado.js';
 import { estadisticas, limpiarReportes } from './admin.ts';
+import {
+  cancelarFalla, confirmarFalla, corregirLugares, DURACION, fallaPendiente, LINK_X, lugaresEnTexto, prepararFalla, terminarFallas,
+  textoDePublicacion, type Falla,
+} from './fallas.ts';
 import { contarReportes, type BaseDeDatos } from './reportes.ts';
 
 export const SITIO = 'https://tengo-luz.pages.dev';
@@ -25,7 +29,29 @@ const AYUDA_ADMIN = `
 /estado → números del sitio y del bot
 /reportes → barrios con reportes de vecinos
 /limpiar → borrar todos los reportes de vecinos
-/limpiar Alberdi → borrar los reportes de un barrio`;
+/limpiar Alberdi → borrar los reportes de un barrio
+
+⚠️ Fallas que confirma EPEC:
+Compartime el link de la publicación de EPEC en X, o mandá /falla con el texto (por ejemplo, copiado de Facebook). Te muestro qué lugares reconocí y la publicás con /confirmar.
+/fin_falla → sacar las fallas del mapa cuando vuelve la luz`;
+
+const HORAS_FALLA = DURACION / (60 * 60 * 1000);
+
+/** Lo que el bot muestra antes de publicar una falla, para que el admin lo revise. */
+function revisarFalla(f: Pick<Falla, 'lugares' | 'texto'>, autor = '') {
+  return [
+    `⚠️ Falla para publicar${autor ? ` (publicada por ${autor})` : ''}:`,
+    `“${f.texto.length > 500 ? `${f.texto.slice(0, 497)}…` : f.texto}”`,
+    '',
+    f.lugares.length > 0
+      ? `Lugares que reconocí:\n${lista(f.lugares)}`
+      : 'No reconocí barrios ni localidades del mapa en el texto.',
+    '',
+    ...(f.lugares.length > 0 ? [`/confirmar → publicarla en el mapa por ${HORAS_FALLA} horas y avisar a quienes siguen esos lugares`] : []),
+    '/corregir Alberdi, Centro → cambiar los lugares',
+    '/cancelar → descartarla',
+  ].join('\n');
+}
 
 /** Para comparar nombres sin importar tildes, mayúsculas ni espacios de más. */
 const simplificar = (texto: string) =>
@@ -46,8 +72,12 @@ export async function responder(
   db: BaseDeDatos,
   chat: number,
   texto: string,
-  { lugares, esAdmin, ahora = Date.now() }: { lugares: string[]; esAdmin: boolean; ahora?: number },
+  {
+    lugares, esAdmin, ahora = Date.now(), avisarFalla,
+  }: { lugares: string[]; esAdmin: boolean; ahora?: number; avisarFalla?: (falla: Falla) => Promise<void> },
 ): Promise<string> {
+  // El admin compartió el link de una publicación de X sin comando: es una falla para cargar.
+  if (esAdmin && !texto.trim().startsWith('/') && LINK_X.test(texto)) texto = `/falla ${texto}`;
   const [primera = '', ...resto] = texto.trim().split(/\s+/);
   // En grupos, Telegram manda los comandos como "/barrio@NombreDelBot".
   const comando = primera.toLowerCase().replace(/@\w+$/, '');
@@ -132,6 +162,52 @@ export async function responder(
         if (!barrio) return `No hay reportes de "${argumento}". Mirá cuáles hay con /reportes`;
         await limpiarReportes(db, barrio);
         return `🧹 Borré los reportes de ${barrio}.`;
+      }
+
+      case '/falla': {
+        if (!argumento) return 'Compartime el link de la publicación de EPEC en X, o mandá /falla con el texto (por ejemplo, copiado de Facebook).';
+        const link = argumento.match(LINK_X)?.[0];
+        const publicacion = link ? await textoDePublicacion(link) : null;
+        if (link && !publicacion) return 'No pude leer esa publicación de X. Copiá el texto y mandalo con /falla delante.';
+        const falla = { texto: publicacion?.texto ?? argumento, fuente: link ?? null };
+        const encontrados = lugaresEnTexto(lugares, falla.texto);
+        await prepararFalla(db, { ...falla, lugares: encontrados }, ahora);
+        return revisarFalla({ ...falla, lugares: encontrados }, publicacion?.autor);
+      }
+
+      case '/corregir': {
+        const pendiente = await fallaPendiente(db);
+        if (!pendiente) return 'No hay ninguna falla esperando. Empezá compartiendo el link o con /falla.';
+        if (!argumento) return 'Escribí los lugares separados por comas, por ejemplo /corregir Alberdi, Centro';
+        const pedidos = argumento.split(/,|\s+y\s+/).map((p) => p.trim()).filter(Boolean);
+        const elegidos = pedidos.map((p) => buscarLugar(lugares, p));
+        const dudosos = pedidos.filter((_, i) => elegidos[i].length !== 1);
+        if (dudosos.length > 0) return `No encontré un único lugar para: ${dudosos.join(', ')}. Probá con el nombre completo.`;
+        const corregidos = [...new Set(elegidos.map(([l]) => l))];
+        await corregirLugares(db, pendiente.id, corregidos);
+        return revisarFalla({ ...pendiente, lugares: corregidos });
+      }
+
+      case '/confirmar': {
+        const pendiente = await fallaPendiente(db);
+        if (!pendiente) return 'No hay ninguna falla esperando confirmación.';
+        if (pendiente.lugares.length === 0) return 'Primero decime los lugares con /corregir Alberdi, Centro';
+        const falla = (await confirmarFalla(db, ahora))!;
+        await avisarFalla?.(falla);
+        return `✅ Publicada: ${falla.lugares.join(', ')} se ven en el mapa como falla confirmada por ${HORAS_FALLA} horas. `
+          + 'Estoy avisando a quienes siguen esos lugares.\n\nCuando vuelva la luz: /fin_falla';
+      }
+
+      case '/cancelar': {
+        await cancelarFalla(db);
+        return 'Listo, descarté la falla que estaba esperando.';
+      }
+
+      case '/fin_falla': {
+        const cuantas = await terminarFallas(db, ahora);
+        return cuantas > 0
+          ? `✅ Saqué ${cuantas === 1 ? 'la falla' : `${cuantas} fallas`} del mapa. En un minuto deja de verse.`
+          : 'No hay fallas publicadas ahora.';
       }
     }
   }

@@ -41,6 +41,22 @@ test('un link compartido abre directo el barrio, aunque no tenga tildes', async 
   await expect(page).toHaveURL(/\?barrio=Arg%C3%BCello$/);
 });
 
+test('una falla confirmada por EPEC se ve en la portada, en el mapa y en la ficha', async ({ page }) => {
+  const errores = vigilarErrores(page);
+  await page.route('**/api/fallas', (ruta) => ruta.fulfill({
+    json: [{ lugares: ['Alberdi'], texto: 'Por una falla, sin suministro en barrio Alberdi.', fuente: 'https://x.com/EPEC/status/1', creado: Date.now(), hasta: Date.now() + 3_600_000 }],
+  }));
+  await page.goto('/');
+  const portada = page.locator('.fallas');
+  await expect(portada.getByText('Falla confirmada por EPEC')).toBeVisible();
+  await expect(portada.getByText('sin suministro en barrio Alberdi')).toBeVisible();
+  await portada.getByRole('button', { name: 'Alberdi' }).click();
+  await expect(barrioElegido(page)).toHaveText('Alberdi');
+  await expect(page.locator('.estado.falla')).toHaveText('Falla confirmada por EPEC');
+  await expect(page.getByRole('link', { name: 'Ver publicación de EPEC' })).toHaveAttribute('href', 'https://x.com/EPEC/status/1');
+  expect(errores).toEqual([]);
+});
+
 test('las localidades del interior también tienen su ficha y se dibujan aunque no tengan cortes', async ({ page }) => {
   await page.goto('/?barrio=villa maria');
   await expect(barrioElegido(page)).toHaveText('Villa María');

@@ -7,6 +7,7 @@ import { agruparAvisos, marcarAvisado, olvidarChat, SITIO, type Aviso } from './
 import { enviarPush, type ClavePush, type SuscripcionPush } from './push.ts';
 import { VIGENCIA, type BaseDeDatos } from './reportes.ts';
 import { enviarMensaje } from './telegram.ts';
+import type { Falla } from './fallas.ts';
 
 const MAXIMO_BARRIOS = 10; // por navegador, igual que en el bot
 
@@ -102,6 +103,52 @@ export async function avisosDeVecinos(db: BaseDeDatos, barrio: string, ahora: nu
         cuerpo: `${cantidad} vecinos reportaron que no tienen luz. No es un anuncio de EPEC.`,
         url: `./?barrio=${encodeURIComponent(barrio)}`,
       },
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Fallas confirmadas por EPEC
+// ---------------------------------------------------------------------------------------------
+
+/** Un aviso por chat o navegador que sigue alguno de los lugares de la falla (aunque siga varios). */
+export async function avisosDeFalla(db: BaseDeDatos, falla: Falla): Promise<{ telegram: Aviso[]; push: AvisoPush[] }> {
+  if (falla.lugares.length === 0) return { telegram: [], push: [] };
+  const clave = `falla ${falla.id}`;
+  const lugares = falla.lugares.map(() => '?').join(', ');
+  const chats = (await db
+    .prepare(`SELECT chat, barrio FROM suscripciones WHERE barrio IN (${lugares}) AND chat NOT IN (SELECT chat FROM avisados WHERE clave = ?)`)
+    .bind(...falla.lugares, clave).all()).results;
+  const navegadores = (await db
+    .prepare(`SELECT endpoint, barrio, p256dh, auth FROM push_suscripciones WHERE barrio IN (${lugares}) AND endpoint NOT IN (SELECT endpoint FROM push_avisados WHERE clave = ?)`)
+    .bind(...falla.lugares, clave).all()).results;
+  const agrupar = <F extends Record<string, unknown>>(filas: F[], destino: (f: F) => string | number) => {
+    const grupos = new Map<string | number, { fila: F; barrios: string[] }>();
+    for (const f of filas) {
+      const grupo = grupos.get(destino(f)) ?? { fila: f, barrios: [] };
+      grupo.barrios.push(String(f.barrio));
+      grupos.set(destino(f), grupo);
+    }
+    return [...grupos.values()];
+  };
+  const corto = falla.texto.length > 160 ? `${falla.texto.slice(0, 157)}…` : falla.texto;
+  return {
+    telegram: agrupar(chats, (c) => Number(c.chat)).map(({ fila, barrios }) => ({
+      chat: Number(fila.chat),
+      clave,
+      texto: [
+        `⚠️ EPEC confirmó una falla en ${barrios.join(', ')}`,
+        '',
+        `“${falla.texto}”`,
+        ...(falla.fuente ? ['', `Publicación: ${falla.fuente}`] : []),
+        '',
+        `Mapa: ${SITIO}/?barrio=${encodeURIComponent(barrios[0])}`,
+      ].join('\n'),
+    })),
+    push: agrupar(navegadores, (n) => String(n.endpoint)).map(({ fila, barrios }) => ({
+      suscripcion: { endpoint: String(fila.endpoint), keys: { p256dh: String(fila.p256dh), auth: String(fila.auth) } },
+      clave,
+      mensaje: { titulo: `⚠️ Falla en ${barrios.join(', ')}`, cuerpo: `EPEC: ${corto}`, url: `./?barrio=${encodeURIComponent(barrios[0])}` },
     })),
   };
 }

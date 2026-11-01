@@ -4,6 +4,7 @@ import { extname, join, normalize, sep } from 'node:path';
 import { text } from 'node:stream/consumers';
 import * as admin from '../functions/api/admin.ts';
 import * as calendario from '../functions/api/calendario.ts';
+import * as fallas from '../functions/api/fallas.ts';
 import * as push from '../functions/api/push.ts';
 import * as reportes from '../functions/api/reportes.ts';
 import * as telegram from '../functions/api/telegram.ts';
@@ -19,6 +20,7 @@ import { generarClave } from './push.ts';
 const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }> = {
   '/api/admin': admin,
   '/api/calendario': calendario,
+  '/api/fallas': fallas,
   '/api/push': push,
   '/api/reportes': reportes,
   '/api/telegram': telegram,
