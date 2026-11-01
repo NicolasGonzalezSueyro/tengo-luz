@@ -132,6 +132,46 @@ export async function geometriaDe(c: Candidato): Promise<Geometria> {
 const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
+ * Localidades cargadas a mano (data/localidades-manuales.json) para los pueblos que OpenStreetMap no tiene:
+ * { "Mula Muerta": "-30.0123, -64.4567" }, con las coordenadas tal como las copia Google Maps (latitud, longitud).
+ * Reemplazan lo que se haya buscado para ese nombre y se dibujan como un círculo alrededor del punto.
+ * Devuelve los nombres con coordenadas inválidas o fuera de la provincia, para avisar, y si cambió algún círculo.
+ */
+export function aplicarManuales(zonas: Localidad[], buscadas: Record<string, Candidato[]>, manuales: Record<string, string>) {
+  const invalidas: string[] = [];
+  let cambiaron = false;
+  for (const [nombre, texto] of Object.entries(manuales)) {
+    const [lat, lon] = String(texto).split(',').map((n) => Number(n.trim()));
+    // La provincia de Córdoba entra en esta caja: un número mal copiado no termina en otro lado del mapa.
+    if (!(lat >= -35.1 && lat <= -29.4 && lon >= -65.8 && lon <= -61.7)) {
+      invalidas.push(nombre);
+      continue;
+    }
+    const osm = `manual:${normalizar(nombre)}`;
+    const punto: Punto = [lon, lat];
+    buscadas[normalizar(nombre)] = [{ nombre, osm, tipo: 'village', rango: 19, punto, departamento: '' }];
+    const geometria = { type: 'Polygon', coordinates: [redondear(corredor([punto], RADIO_METROS.village))] };
+    const anterior = zonas.find((z) => z.properties.osm === osm);
+    if (anterior && JSON.stringify(anterior.geometry) === JSON.stringify(geometria)) continue;
+    const feature: Localidad = {
+      type: 'Feature',
+      properties: {
+        nombre: anterior?.properties.nombre ?? (zonas.some((z) => z.properties.nombre === nombre) ? `${nombre} (manual)` : nombre),
+        tipo: 'localidad',
+        patron: `^${escapar(normalizar(nombre))}$`,
+        osm,
+        descripcion: `${nombre} no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada.`,
+      },
+      geometry: geometria,
+    };
+    if (anterior) zonas[zonas.indexOf(anterior)] = feature;
+    else zonas.push(feature);
+    cambiaron = true;
+  }
+  return { invalidas, cambiaron };
+}
+
+/**
  * Ubica los nombres de localidades de un corte. Usa las que ya están en el mapa y, para las demás, lo guardado
  * en `buscadas` (nombre → candidatos) o una búsqueda nueva. Las localidades nuevas se agregan a `zonas`.
  * `red` se reemplaza en los tests para no salir a internet.

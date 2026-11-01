@@ -5,7 +5,7 @@ import {
   centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, type Punto, type Ubicacion,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
-import { crearUbicadorDeLocalidades, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
+import { aplicarManuales, crearUbicadorDeLocalidades, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
 import { escribirLugares } from './lugares.ts';
 import { sectorDelCorte, type Caja } from './sectores.ts';
 import { CAPITAL, unir, type Mantenimiento } from './mantenimiento.ts';
@@ -78,6 +78,16 @@ const ubicar = crearUbicador(
 const BUSCADAS = 'data/localidades-buscadas.json';
 const buscadas = await leerJson<Record<string, Candidato[]>>(BUSCADAS).catch(() => ({}) as Record<string, Candidato[]>);
 const localidadesAntes = zonas.features.length;
+// Los pueblos que OpenStreetMap no tiene, cargados a mano con sus coordenadas (ver aplicarManuales).
+const MANUALES = 'data/localidades-manuales.json';
+const manuales = await leerJson<Record<string, string>>(MANUALES).catch(() => ({}));
+const { invalidas, cambiaron: cambiaronManuales } = aplicarManuales(zonas.features, buscadas, manuales);
+if (invalidas.length > 0) {
+  alertas.push({
+    texto: `Hay localidades cargadas a mano con coordenadas que no entendí o que caen fuera de la provincia:\n${invalidas.map((n) => `• ${n}`).join('\n')}`,
+    detalle: `Revisá ${MANUALES}: van como "-31.4167, -64.1833" (latitud, longitud), tal como las copia Google Maps.`,
+  });
+}
 const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
 const guardadosYNuevos = unir(await leerGuardados(), nuevos);
 const localidadesDe = new Map<string, string[]>();
@@ -98,7 +108,7 @@ if (noEncontradas.size > 0) {
   // Se avisa una sola vez: la búsqueda queda guardada y no se repite.
   alertas.push({
     texto: `No encontré en OpenStreetMap estas localidades de cortes:\n${[...noEncontradas].map((n) => `• ${n}`).join('\n')}`,
-    detalle: `Si es un error de tipeo de la nota, no hace falta hacer nada. Si es un pueblo real, se puede corregir en ${BUSCADAS}.`,
+    detalle: `Si es un error de tipeo de la nota, no hace falta hacer nada. Si es un pueblo real, agregalo en ${MANUALES} con sus coordenadas de Google Maps, por ejemplo: "Mula Muerta": "-30.0123, -64.4567"`,
   });
 }
 
@@ -172,7 +182,7 @@ await mkdir('data', { recursive: true });
 await writeFile(SECTORES, JSON.stringify(sectores) + '\n');
 await writeFile(ARCHIVO, JSON.stringify(todos, null, 2) + '\n');
 await writeFile(BUSCADAS, JSON.stringify(buscadas, null, 1) + '\n');
-if (zonas.features.length > localidadesAntes) {
+if (zonas.features.length > localidadesAntes || cambiaronManuales) {
   await writeFile(ZONAS, JSON.stringify(zonas, null, 1) + '\n');
   escribirLugares(); // el bot y los reportes reconocen las localidades nuevas
   console.log(`🗺️  ${zonas.features.length - localidadesAntes} localidades nuevas en el mapa`);

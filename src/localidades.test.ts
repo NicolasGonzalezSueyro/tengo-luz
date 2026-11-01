@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { crearUbicadorDeLocalidades, elegir, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
+import { aplicarManuales, crearUbicadorDeLocalidades, elegir, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
 
 // Los textos son renglones reales de las notas de El Doce.
 
@@ -83,6 +83,23 @@ test('crearUbicadorDeLocalidades: usa las del mapa, busca las nuevas una sola ve
   assert.deepEqual(await ubicar(['San Antonio']), { localidades: [], noEncontradas: [] });
   assert.deepEqual(busquedas, []);
   assert.equal(zonas.length, 3);
+});
+
+test('aplicarManuales: un pueblo cargado a mano con coordenadas de Google Maps se ubica, y las malas se avisan', async () => {
+  const zonas: Localidad[] = [];
+  const buscadas: Record<string, Candidato[]> = { 'mula muerta': [] }; // OpenStreetMap no lo encontró
+  const manuales = { 'Mula Muerta': '-30.0123, -64.4567', 'La Tuna': '64.1, -31.2', 'Mal copiado': 'hola' };
+  const { invalidas, cambiaron } = aplicarManuales(zonas, buscadas, manuales);
+  assert.deepEqual(invalidas, ['La Tuna', 'Mal copiado']); // latitud y longitud al revés, y texto
+  assert.equal(cambiaron, true);
+  assert.equal(zonas[0].properties.nombre, 'Mula Muerta');
+  assert.match(zonas[0].properties.descripcion, /se ubicó a mano/);
+
+  const red = { buscar: async () => assert.fail('no tiene que buscar'), geometria: async () => assert.fail('ya tiene su círculo') };
+  assert.deepEqual(await crearUbicadorDeLocalidades(zonas, buscadas, red)(['Mula Muerta']), { localidades: ['Mula Muerta'], noEncontradas: [] });
+  // La corrida siguiente, con las mismas coordenadas, no cambia nada.
+  assert.equal(aplicarManuales(zonas, buscadas, { 'Mula Muerta': '-30.0123, -64.4567' }).cambiaron, false);
+  assert.equal(zonas.length, 1);
 });
 
 test('crearUbicadorDeLocalidades: una localidad a más de 80 km de las demás del corte no se marca', async () => {
