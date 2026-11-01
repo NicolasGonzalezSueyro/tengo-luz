@@ -180,7 +180,13 @@ for (const m of [...todos].sort((a, b) => b.fecha.localeCompare(a.fecha))) {
 await mkdir('data', { recursive: true });
 // Solo quedan los sectores de los cortes guardados: el archivo no crece para siempre.
 await writeFile(SECTORES, JSON.stringify(sectores) + '\n');
-await writeFile(ARCHIVO, JSON.stringify(todos, null, 2) + '\n');
+const nuevoTexto = JSON.stringify(todos, null, 2) + '\n';
+// Solo cuando cambian los cortes: así la página sabe que tiene que traerlos de nuevo y muestra desde cuándo están,
+// y el robot no hace un commit (y Cloudflare una publicación) en cada corrida.
+if ((await readFile(ARCHIVO, 'utf8').catch(() => '')) !== nuevoTexto) {
+  await writeFile('data/actualizado.json', JSON.stringify({ cortes: new Date().toISOString() }) + '\n');
+}
+await writeFile(ARCHIVO, nuevoTexto);
 await writeFile(BUSCADAS, JSON.stringify(buscadas, null, 1) + '\n');
 if (zonas.features.length > localidadesAntes || cambiaronManuales) {
   await writeFile(ZONAS, JSON.stringify(zonas, null, 1) + '\n');

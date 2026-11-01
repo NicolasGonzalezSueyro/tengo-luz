@@ -168,6 +168,16 @@ export function aplicarManuales(zonas: Localidad[], buscadas: Record<string, Can
     else zonas.push(feature);
     cambiaron = true;
   }
+  // Las que se borraron del archivo (por ejemplo, porque estaban mal ubicadas) salen del mapa
+  // y quedan como "no encontradas", así no se vuelven a buscar ni a avisar.
+  const vigentes = new Set(Object.keys(manuales).map((n) => `manual:${normalizar(n)}`));
+  for (let i = zonas.length - 1; i >= 0; i--) {
+    const osm = zonas[i].properties.osm ?? '';
+    if (!osm.startsWith('manual:') || vigentes.has(osm)) continue;
+    buscadas[osm.slice('manual:'.length)] = [];
+    zonas.splice(i, 1);
+    cambiaron = true;
+  }
   return { invalidas, cambiaron };
 }
 

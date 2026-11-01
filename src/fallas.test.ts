@@ -40,12 +40,12 @@ test('bot: el admin comparte el link, revisa los lugares, los corrige y publica 
   assert.match(await responder(db, 2, 'https://x.com/EPEC/status/1', { ...admin, esAdmin: false }), /No entendí/);
 
   const revision = await responder(db, 1, 'https://x.com/EPEC/status/1', admin);
-  assert.match(revision, /publicada por EPEC/);
-  assert.match(revision, /Lugares que reconocí:\n• Centro/);
+  assert.match(revision, /Falla para publicar/);
+  assert.match(revision, /📍 Centro/);
   assert.equal((await fallasActivas(db, T)).length, 0); // todavía no se publicó
 
   assert.match(await responder(db, 1, '/corregir Inventado', admin), /No encontré un único lugar para: Inventado/);
-  assert.match(await responder(db, 1, '/corregir Centro y villa maria', admin), /• Centro\n• Villa María/);
+  assert.match(await responder(db, 1, '/corregir Centro y villa maria', admin), /📍 Centro, Villa María/);
 
   const avisadas: number[] = [];
   const publicada = await responder(db, 1, '/confirmar', { ...admin, avisarFalla: async (f) => void avisadas.push(f.id) });
@@ -57,6 +57,36 @@ test('bot: el admin comparte el link, revisa los lugares, los corrige y publica 
   assert.match(await responder(db, 1, '/confirmar', admin), /No hay ninguna falla esperando/);
   assert.match(await responder(db, 1, '/fin_falla', admin), /Saqué la falla/);
   assert.equal((await fallasActivas(db, T + 1)).length, 0);
+});
+
+test('bot: varios links en un mismo mensaje quedan numerados, se corrigen por número y se publican juntos', async (t) => {
+  const db = baseLocal();
+  const textos: Record<string, string> = {
+    1: 'Falla: sin suministro en barrio Centro.',
+    2: 'Trabajamos en la red para normalizar el servicio.', // sin lugares
+    3: 'Sin luz en Villa Nueva por una falla.',
+  };
+  t.mock.method(globalThis, 'fetch', async (url: URL) => {
+    const id = decodeURIComponent(String(url)).match(/status\/(\d+)/)?.[1] ?? '';
+    return id === '4' ? new Response('', { status: 404 }) : oembed(textos[id]);
+  });
+  const mensaje = 'Mirá estas:\nhttps://x.com/EPEC/status/1\nhttps://x.com/EPEC/status/2 https://x.com/EPEC/status/3\nhttps://x.com/EPEC/status/4';
+  const revision = await responder(db, 1, mensaje, admin);
+  assert.match(revision, /No pude leer https:\/\/x\.com\/EPEC\/status\/4/);
+  assert.match(revision, /3 fallas para publicar/);
+  assert.match(revision, /1\. “Falla: sin suministro en barrio Centro\.”\n {3}📍 Centro/);
+  assert.match(revision, /2\. .*\n {3}❓ No reconocí/);
+  assert.match(revision, /publicar las 2 que tienen lugares/);
+
+  assert.match(await responder(db, 1, '/corregir Alberdi', admin), /decime el número/); // hay varias
+  assert.match(await responder(db, 1, '/corregir 7 Alberdi', admin), /No hay una falla número 7/);
+  assert.match(await responder(db, 1, '/corregir 2 Alberdi', admin), /2\. .*\n {3}📍 Alberdi/);
+  assert.match(await responder(db, 1, '/cancelar 3', admin), /la descarté[\s\S]*2 fallas para publicar/);
+
+  const avisadas: number[] = [];
+  assert.match(await responder(db, 1, '/confirmar', { ...admin, avisarFalla: async (f) => void avisadas.push(f.id) }), /Publiqué 2 fallas: Centro, Alberdi/);
+  assert.equal(avisadas.length, 2);
+  assert.equal((await fallasActivas(db, T)).length, 2);
 });
 
 test('bot: texto pegado sin lugares reconocibles no se puede publicar hasta corregirlo, y se puede cancelar', async () => {

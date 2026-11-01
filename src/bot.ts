@@ -4,8 +4,8 @@
 import { etiquetaDia, lugaresDelCorte, type Corte } from '../web/estado.js';
 import { estadisticas, limpiarReportes } from './admin.ts';
 import {
-  cancelarFalla, confirmarFalla, corregirLugares, DURACION, fallaPendiente, LINK_X, lugaresEnTexto, prepararFalla, terminarFallas,
-  textoDePublicacion, type Falla,
+  cancelarFalla, confirmarFallas, corregirLugares, DURACION, fallasPendientes, LINK_X, linksDeX, lugaresEnTexto, MAXIMO_LINKS,
+  prepararFalla, terminarFallas, textoDePublicacion, type Falla,
 } from './fallas.ts';
 import { contarReportes, type BaseDeDatos } from './reportes.ts';
 
@@ -32,25 +32,41 @@ const AYUDA_ADMIN = `
 /limpiar Alberdi → borrar los reportes de un barrio
 
 ⚠️ Fallas que confirma EPEC:
-Compartime el link de la publicación de EPEC en X, o mandá /falla con el texto (por ejemplo, copiado de Facebook). Te muestro qué lugares reconocí y la publicás con /confirmar.
+Compartime los links de las publicaciones de EPEC en X (hasta ${MAXIMO_LINKS} en un mismo mensaje), o mandá /falla con el texto (por ejemplo, copiado de Facebook). Te muestro qué lugares reconocí y las publicás todas con /confirmar.
 /fin_falla → sacar las fallas del mapa cuando vuelve la luz`;
 
 const HORAS_FALLA = DURACION / (60 * 60 * 1000);
+const recortar = (texto: string, largo: number) => (texto.length > largo ? `${texto.slice(0, largo - 1)}…` : texto);
 
-/** Lo que el bot muestra antes de publicar una falla, para que el admin lo revise. */
-function revisarFalla(f: Pick<Falla, 'lugares' | 'texto'>, autor = '') {
+/** Las fallas que esperan confirmación, numeradas, para que el admin las revise antes de publicarlas. */
+function revisarFallas(pendientes: Falla[], avisos: string[] = []) {
+  if (pendientes.length === 0) return [...avisos, 'No hay fallas esperando.'].join('\n');
+  const listas = pendientes.filter((f) => f.lugares.length > 0).length;
   return [
-    `⚠️ Falla para publicar${autor ? ` (publicada por ${autor})` : ''}:`,
-    `“${f.texto.length > 500 ? `${f.texto.slice(0, 497)}…` : f.texto}”`,
+    ...avisos,
+    ...(avisos.length > 0 ? [''] : []),
+    `⚠️ ${pendientes.length === 1 ? 'Falla para publicar' : `${pendientes.length} fallas para publicar`}:`,
+    ...pendientes.flatMap((f, i) => [
+      '',
+      `${i + 1}. “${recortar(f.texto, 300)}”`,
+      f.lugares.length > 0 ? `   📍 ${f.lugares.join(', ')}` : '   ❓ No reconocí barrios ni localidades del mapa',
+    ]),
     '',
-    f.lugares.length > 0
-      ? `Lugares que reconocí:\n${lista(f.lugares)}`
-      : 'No reconocí barrios ni localidades del mapa en el texto.',
-    '',
-    ...(f.lugares.length > 0 ? [`/confirmar → publicarla en el mapa por ${HORAS_FALLA} horas y avisar a quienes siguen esos lugares`] : []),
-    '/corregir Alberdi, Centro → cambiar los lugares',
-    '/cancelar → descartarla',
+    ...(listas > 0 ? [`/confirmar → publicar ${listas === pendientes.length ? (listas === 1 ? 'la falla' : 'todas') : `las ${listas} que tienen lugares`} por ${HORAS_FALLA} horas y avisar a quienes siguen esos lugares`] : []),
+    `/corregir ${pendientes.length > 1 ? '2 ' : ''}Alberdi, Centro → cambiar los lugares${pendientes.length > 1 ? ' de la 2' : ''}`,
+    pendientes.length > 1 ? '/cancelar 2 → descartar la 2 (/cancelar solo: todas)' : '/cancelar → descartarla',
   ].join('\n');
+}
+
+/** "2 Alberdi, Centro" → la falla número 2 y el resto del texto. Sin número, solo vale si hay una sola esperando. */
+function elegirPendiente(pendientes: Falla[], argumento: string): { falla?: Falla; resto: string; error?: string } {
+  const numero = argumento.match(/^(\d+)\b\s*(.*)$/s);
+  if (numero) {
+    const falla = pendientes[Number(numero[1]) - 1];
+    return falla ? { falla, resto: numero[2] } : { resto: '', error: `No hay una falla número ${numero[1]} esperando.` };
+  }
+  if (pendientes.length > 1) return { resto: argumento, error: 'Hay varias fallas esperando: decime el número, por ejemplo /corregir 2 Alberdi, Centro' };
+  return { falla: pendientes[0], resto: argumento };
 }
 
 /** Para comparar nombres sin importar tildes, mayúsculas ni espacios de más. */
@@ -165,42 +181,63 @@ export async function responder(
       }
 
       case '/falla': {
-        if (!argumento) return 'Compartime el link de la publicación de EPEC en X, o mandá /falla con el texto (por ejemplo, copiado de Facebook).';
-        const link = argumento.match(LINK_X)?.[0];
-        const publicacion = link ? await textoDePublicacion(link) : null;
-        if (link && !publicacion) return 'No pude leer esa publicación de X. Copiá el texto y mandalo con /falla delante.';
-        const falla = { texto: publicacion?.texto ?? argumento, fuente: link ?? null };
-        const encontrados = lugaresEnTexto(lugares, falla.texto);
-        await prepararFalla(db, { ...falla, lugares: encontrados }, ahora);
-        return revisarFalla({ ...falla, lugares: encontrados }, publicacion?.autor);
+        if (!argumento) return `Compartime los links de las publicaciones de EPEC en X (hasta ${MAXIMO_LINKS} juntos), o mandá /falla con el texto (por ejemplo, copiado de Facebook).`;
+        const links = linksDeX(argumento);
+        const avisos: string[] = [];
+        if (links.length > MAXIMO_LINKS) avisos.push(`Recibí ${links.length} links: leí los primeros ${MAXIMO_LINKS}. Mandame el resto en otro mensaje.`);
+        if (links.length === 0) {
+          await prepararFalla(db, { texto: argumento, fuente: null, lugares: lugaresEnTexto(lugares, argumento) }, ahora);
+        }
+        for (const link of links.slice(0, MAXIMO_LINKS)) {
+          const publicacion = await textoDePublicacion(link);
+          if (!publicacion) {
+            avisos.push(`No pude leer ${link}: copiá su texto y mandalo con /falla delante.`);
+            continue;
+          }
+          await prepararFalla(db, { texto: publicacion.texto, fuente: link, lugares: lugaresEnTexto(lugares, publicacion.texto) }, ahora);
+        }
+        return revisarFallas(await fallasPendientes(db), avisos);
       }
 
       case '/corregir': {
-        const pendiente = await fallaPendiente(db);
-        if (!pendiente) return 'No hay ninguna falla esperando. Empezá compartiendo el link o con /falla.';
-        if (!argumento) return 'Escribí los lugares separados por comas, por ejemplo /corregir Alberdi, Centro';
-        const pedidos = argumento.split(/,|\s+y\s+/).map((p) => p.trim()).filter(Boolean);
+        const pendientes = await fallasPendientes(db);
+        if (pendientes.length === 0) return 'No hay ninguna falla esperando. Empezá compartiendo el link o con /falla.';
+        const { falla, resto, error } = elegirPendiente(pendientes, argumento);
+        if (error || !falla) return error ?? 'No hay ninguna falla esperando.';
+        if (!resto) return 'Escribí los lugares separados por comas, por ejemplo /corregir Alberdi, Centro';
+        const pedidos = resto.split(/,|\s+y\s+/).map((p) => p.trim()).filter(Boolean);
         const elegidos = pedidos.map((p) => buscarLugar(lugares, p));
         const dudosos = pedidos.filter((_, i) => elegidos[i].length !== 1);
         if (dudosos.length > 0) return `No encontré un único lugar para: ${dudosos.join(', ')}. Probá con el nombre completo.`;
-        const corregidos = [...new Set(elegidos.map(([l]) => l))];
-        await corregirLugares(db, pendiente.id, corregidos);
-        return revisarFalla({ ...pendiente, lugares: corregidos });
+        await corregirLugares(db, falla.id, [...new Set(elegidos.map(([l]) => l))]);
+        return revisarFallas(await fallasPendientes(db));
       }
 
       case '/confirmar': {
-        const pendiente = await fallaPendiente(db);
-        if (!pendiente) return 'No hay ninguna falla esperando confirmación.';
-        if (pendiente.lugares.length === 0) return 'Primero decime los lugares con /corregir Alberdi, Centro';
-        const falla = (await confirmarFalla(db, ahora))!;
-        await avisarFalla?.(falla);
-        return `✅ Publicada: ${falla.lugares.join(', ')} se ven en el mapa como falla confirmada por ${HORAS_FALLA} horas. `
-          + 'Estoy avisando a quienes siguen esos lugares.\n\nCuando vuelva la luz: /fin_falla';
+        const pendientes = await fallasPendientes(db);
+        if (pendientes.length === 0) return 'No hay ninguna falla esperando confirmación.';
+        const publicadas = await confirmarFallas(db, ahora);
+        if (publicadas.length === 0) return 'Primero decime los lugares con /corregir Alberdi, Centro';
+        for (const falla of publicadas) await avisarFalla?.(falla);
+        const lugaresPublicados = [...new Set(publicadas.flatMap((f) => f.lugares))];
+        const quedan = pendientes.length - publicadas.length;
+        return [
+          `✅ ${publicadas.length === 1 ? 'Publicada' : `Publiqué ${publicadas.length} fallas`}: ${lugaresPublicados.join(', ')} ya se ven en el mapa como falla confirmada por ${HORAS_FALLA} horas. Estoy avisando a quienes siguen esos lugares.`,
+          ...(quedan > 0 ? ['', `Quedan ${quedan} sin lugares: corregilas con /corregir o descartalas con /cancelar.`] : []),
+          '',
+          'Cuando vuelva la luz: /fin_falla',
+        ].join('\n');
       }
 
       case '/cancelar': {
-        await cancelarFalla(db);
-        return 'Listo, descarté la falla que estaba esperando.';
+        if (!argumento) {
+          await cancelarFalla(db);
+          return 'Listo, descarté las fallas que estaban esperando.';
+        }
+        const { falla, error } = elegirPendiente(await fallasPendientes(db), argumento);
+        if (error || !falla) return error ?? 'No hay ninguna falla esperando.';
+        await cancelarFalla(db, falla.id);
+        return revisarFallas(await fallasPendientes(db), ['Listo, la descarté.']);
       }
 
       case '/fin_falla': {

@@ -7,7 +7,7 @@ type Contexto = { request: Request; env: { DB: BaseDeDatos } };
 
 // Como /api/reportes: unos segundos en la caché de Cloudflare para no gastar la cuota gratis de la base.
 // shortcut: en *.pages.dev Cloudflare puede ignorar esta caché (funciona seguro con un dominio propio); si no anda, no cambia nada.
-const SEGUNDOS_EN_CACHE = 20;
+const SEGUNDOS_EN_CACHE = 5; // corto: una falla recién publicada tiene que verse enseguida
 const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
 
 export async function onRequestGet({ request, env }: Contexto) {

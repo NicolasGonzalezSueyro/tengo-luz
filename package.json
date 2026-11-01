@@ -16,7 +16,7 @@
     "lugares": "node src/lugares.ts",
     "bot": "node --env-file=.env src/configurar-bot.ts",
     "dev": "node src/servidor.ts",
-    "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/zonas.geojson data/mantenimientos.json dist/data/",
+    "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/zonas.geojson data/mantenimientos.json data/actualizado.json dist/data/",
     "test": "node --test \"src/**/*.test.ts\" \"web/**/*.test.js\"",
     "typecheck": "tsc",
     "simplificar": "node src/simplificar.ts",

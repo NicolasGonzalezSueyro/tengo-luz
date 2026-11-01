@@ -12,6 +12,11 @@ export type Falla = { id: number; lugares: string[]; texto: string; fuente: stri
 
 // Un link a una publicación de X (o Twitter): https://x.com/usuario/status/123
 export const LINK_X = /https?:\/\/(?:www\.|mobile\.)?(?:x|twitter)\.com\/\w+\/status\/\d+/i;
+// Cuántos links se aceptan en un mismo mensaje: cada uno es un pedido a X, y Cloudflare gratis permite ~50 por vez.
+export const MAXIMO_LINKS = 10;
+
+/** Los links a publicaciones de X que tiene un mensaje, sin repetir. */
+export const linksDeX = (texto: string) => [...new Set(texto.match(new RegExp(LINK_X.source, 'gi')) ?? [])];
 
 /**
  * Los barrios y localidades del mapa que nombra un texto libre ("…sin suministro en B° Alto Alberdi y Alberdi…").
@@ -62,9 +67,8 @@ const comoFalla = (r: Record<string, unknown>): Falla => ({
   hasta: Number(r.hasta),
 });
 
-/** Deja una falla esperando /confirmar (reemplaza a la que hubiera esperando). */
+/** Deja una falla esperando /confirmar, junto a las que ya estuvieran esperando. */
 export async function prepararFalla(db: BaseDeDatos, f: Pick<Falla, 'lugares' | 'texto' | 'fuente'>, ahora: number) {
-  await cancelarFalla(db);
   await db
     .prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, 0)')
     .bind(JSON.stringify(f.lugares), f.texto, f.fuente ?? '', ahora, ahora)
@@ -73,25 +77,28 @@ export async function prepararFalla(db: BaseDeDatos, f: Pick<Falla, 'lugares' | 
   await db.prepare('DELETE FROM fallas WHERE hasta < ?').bind(ahora - 30 * 24 * HORA).run();
 }
 
-export async function fallaPendiente(db: BaseDeDatos): Promise<Falla | null> {
-  const fila = await db.prepare('SELECT * FROM fallas WHERE confirmada = 0 ORDER BY id DESC LIMIT 1').bind().first();
-  return fila ? comoFalla(fila) : null;
+/** Las fallas esperando /confirmar, en el orden en que llegaron (el bot las numera 1, 2, 3…). */
+export async function fallasPendientes(db: BaseDeDatos): Promise<Falla[]> {
+  return (await db.prepare('SELECT * FROM fallas WHERE confirmada = 0 ORDER BY id').bind().all()).results.map(comoFalla);
 }
 
 export async function corregirLugares(db: BaseDeDatos, id: number, lugares: string[]) {
-  await db.prepare('UPDATE fallas SET lugares = ? WHERE id = ?').bind(JSON.stringify(lugares), id).run();
+  await db.prepare('UPDATE fallas SET lugares = ? WHERE id = ? AND confirmada = 0').bind(JSON.stringify(lugares), id).run();
 }
 
-export async function cancelarFalla(db: BaseDeDatos) {
-  await db.prepare('DELETE FROM fallas WHERE confirmada = 0').bind().run();
+/** Descarta una falla que esperaba confirmación, o todas si no se dice cuál. */
+export async function cancelarFalla(db: BaseDeDatos, id?: number) {
+  if (id === undefined) await db.prepare('DELETE FROM fallas WHERE confirmada = 0').bind().run();
+  else await db.prepare('DELETE FROM fallas WHERE confirmada = 0 AND id = ?').bind(id).run();
 }
 
-/** Publica la falla que estaba esperando: desde ahora y por DURACION. */
-export async function confirmarFalla(db: BaseDeDatos, ahora: number): Promise<Falla | null> {
-  const falla = await fallaPendiente(db);
-  if (!falla) return null;
-  await db.prepare('UPDATE fallas SET confirmada = 1, creado = ?, hasta = ? WHERE id = ?').bind(ahora, ahora + DURACION, falla.id).run();
-  return { ...falla, creado: ahora, hasta: ahora + DURACION };
+/** Publica las fallas que esperaban y ya tienen lugares: desde ahora y por DURACION. Las demás siguen esperando. */
+export async function confirmarFallas(db: BaseDeDatos, ahora: number): Promise<Falla[]> {
+  const listas = (await fallasPendientes(db)).filter((f) => f.lugares.length > 0);
+  for (const f of listas) {
+    await db.prepare('UPDATE fallas SET confirmada = 1, creado = ?, hasta = ? WHERE id = ?').bind(ahora, ahora + DURACION, f.id).run();
+  }
+  return listas.map((f) => ({ ...f, creado: ahora, hasta: ahora + DURACION }));
 }
 
 /** Las fallas publicadas que todavía se muestran, la más nueva primero. */

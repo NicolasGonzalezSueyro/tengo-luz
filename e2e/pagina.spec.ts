@@ -57,6 +57,19 @@ test('una falla confirmada por EPEC se ve en la portada, en el mapa y en la fich
   expect(errores).toEqual([]);
 });
 
+test('una falla publicada con la página abierta aparece sola, sin recargar, y arriba dice la hora de actualización', async ({ page }) => {
+  let fallas: object[] = [];
+  await page.route('**/api/fallas', (ruta) => ruta.fulfill({ json: fallas }));
+  await page.goto('/');
+  await expect(page.locator('#actualizado')).toHaveText(/^Última actualización \d{2}:\d{2}$/);
+  await expect(page.locator('.fallas')).toHaveCount(0);
+
+  fallas = [{ lugares: ['Centro'], texto: 'Sin suministro en barrio Centro.', fuente: null, creado: Date.now(), hasta: Date.now() + 3_600_000 }];
+  // Lo mismo que pasa al volver a la app en el celu (o a los 30 segundos solo).
+  await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+  await expect(page.locator('.fallas').getByText('Sin suministro en barrio Centro.')).toBeVisible();
+});
+
 test('las localidades del interior también tienen su ficha y se dibujan aunque no tengan cortes', async ({ page }) => {
   await page.goto('/?barrio=villa maria');
   await expect(barrioElegido(page)).toHaveText('Villa María');

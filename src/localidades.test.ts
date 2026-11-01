@@ -100,6 +100,10 @@ test('aplicarManuales: un pueblo cargado a mano con coordenadas de Google Maps s
   // La corrida siguiente, con las mismas coordenadas, no cambia nada.
   assert.equal(aplicarManuales(zonas, buscadas, { 'Mula Muerta': '-30.0123, -64.4567' }).cambiaron, false);
   assert.equal(zonas.length, 1);
+  // Si se borra del archivo (estaba mal ubicada), sale del mapa y no se vuelve a buscar.
+  assert.equal(aplicarManuales(zonas, buscadas, {}).cambiaron, true);
+  assert.equal(zonas.length, 0);
+  assert.deepEqual(buscadas['mula muerta'], []);
 });
 
 test('crearUbicadorDeLocalidades: una localidad a más de 80 km de las demás del corte no se marca', async () => {

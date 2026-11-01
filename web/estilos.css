@@ -519,6 +519,13 @@ a { color: var(--acento); }
 .mensaje-admin:empty { display: none; }
 .enlace-boton { padding: 0; border: 0; background: none; color: var(--acento); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 
+/* Última actualización, en la cabecera. En el celu reemplaza al subtítulo, que no entra. */
+#actualizado:not(:empty)::before { content: ' · '; }
+@media (max-width: 860px) {
+  .marca .subtitulo { display: none; }
+  #actualizado:not(:empty)::before { content: none; }
+}
+
 /* ---------- Gráficos de barras (estadisticas.html) ---------- */
 .barras { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .barra-fila { display: grid; grid-template-columns: minmax(96px, 36%) 1fr auto; align-items: center; gap: 10px; font-size: 0.88rem; }

@@ -52,8 +52,9 @@ const avisoFlotante = $('aviso-flotante');
 completarIconos();
 
 /** @param {string} url */
-async function pedir(url) {
-  const res = await fetch(url);
+/** @param {string} url @param {RequestInit} [opciones] */
+async function pedir(url, opciones) {
+  const res = await fetch(url, opciones);
   if (!res.ok) throw new Error(`${url} respondió ${res.status}`);
   return res.json();
 }
@@ -82,7 +83,13 @@ try {
   contenido.replaceChildren(h('p', { class: 'error' }, 'No se pudieron cargar los datos. Probá recargar la página.'));
   throw error;
 }
-const [mapaBarrios, cortes, mapaZonas] = datos;
+const [mapaBarrios, cortesIniciales, mapaZonas] = datos;
+// Los cortes se vuelven a traer solos cuando el robot carga nuevos (ver cargarReportes).
+let cortes = cortesIniciales;
+/** Cuándo cambiaron los cortes por última vez (lo anota el robot en data/actualizado.json). @type {string | null} */
+let cortesActualizados = (await pedir('data/actualizado.json').catch(() => null))?.cortes ?? null;
+/** La última vez que la página revisó si había novedades. */
+let ultimaRevision = Date.now();
 const zonasPorNombre = new Map(mapaZonas.features.map((f) => [f.properties.nombre, f]));
 const poligonosBarrios = mapaBarrios.features.filter((f) => f.properties.tipo === 'poligono');
 // Las localidades de la provincia (Villa Allende, Carlos Paz, Villa María…): sirven también para ubicar el GPS fuera de capital.
@@ -394,6 +401,7 @@ function tarjetaDelDia(delDia) {
       h('div', { class: 'hero-titulo' }, delDia.length === 1 ? 'corte programado' : 'cortes programados'),
       h('div', { class: 'hero-fecha' }, icono('calendario'), etiquetaDia(diaElegido, ahora.fecha)),
       enCurso > 0 && h('div', { class: 'hero-en-curso' }, h('span', { class: 'punto-vivo' }), `${enCurso} en curso ahora`),
+      cortesActualizados && h('div', { class: 'hero-fecha' }, icono('reloj'), `Cortes de EPEC cargados ${cuandoFue(cortesActualizados)}`),
     ),
   );
 }
@@ -1081,12 +1089,41 @@ window.addEventListener('online', () => {
 });
 revisarConexion();
 
-/** Trae los reportes de vecinos y las fallas confirmadas, y vuelve a pintar todo. */
+const enCordoba = { timeZone: 'America/Argentina/Cordoba' };
+/** "22:41" @param {number} momento */
+const hora = (momento) => new Date(momento).toLocaleTimeString('es-AR', { ...enCordoba, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+/** "hoy a las 22:09" o "el 31/10 a las 22:09". @param {string} iso */
+function cuandoFue(iso) {
+  const momento = new Date(iso);
+  const dia = (/** @type {Date} */ d) => d.toLocaleDateString('es-AR', { ...enCordoba, day: '2-digit', month: '2-digit' });
+  return `${dia(momento) === dia(new Date()) ? 'hoy' : `el ${dia(momento)}`} a las ${hora(momento.getTime())}`;
+}
+
+function mostrarActualizado() {
+  const etiqueta = $('actualizado');
+  etiqueta.textContent = `Última actualización ${hora(ultimaRevision)}`;
+  etiqueta.title = `${cortesActualizados ? `Cortes de EPEC cargados ${cuandoFue(cortesActualizados)}. ` : ''}Las fallas y los reportes se revisan cada 30 segundos.`;
+}
+
+/** Trae los reportes de vecinos, las fallas confirmadas y, si el robot cargó cortes nuevos, también los cortes. */
 async function cargarReportes() {
-  // Si alguna API no responde, el mapa sigue andando igual, solo que sin datos nuevos de esa parte.
-  const [nuevosReportes, nuevasFallas] = await Promise.allSettled([pedir('api/reportes'), pedir('api/fallas')]);
+  // Si alguna parte no responde, el mapa sigue andando igual, solo que sin datos nuevos de esa parte.
+  const [nuevosReportes, nuevasFallas, estado] = await Promise.allSettled([
+    pedir('api/reportes'), pedir('api/fallas'), pedir('data/actualizado.json', { cache: 'no-store' }),
+  ]);
   if (nuevosReportes.status === 'fulfilled') reportes = nuevosReportes.value;
   if (nuevasFallas.status === 'fulfilled') fallas = nuevasFallas.value;
+  const cortesNuevos = estado.status === 'fulfilled' ? estado.value?.cortes : null;
+  if (cortesNuevos && cortesNuevos !== cortesActualizados) {
+    try {
+      cortes = await pedir('data/mantenimientos.json', { cache: 'no-store' });
+      cortesActualizados = cortesNuevos;
+    } catch {
+      // Se vuelve a intentar en la próxima revisión.
+    }
+  }
+  if ([nuevosReportes, nuevasFallas, estado].some((r) => r.status === 'fulfilled')) ultimaRevision = Date.now();
+  mostrarActualizado();
   actualizar();
 }
 
@@ -1098,6 +1135,11 @@ if (barrioDelLink) {
   const [encontrado] = lugaresDelMapa.has(barrioDelLink) ? [barrioDelLink] : sugerencias(nombres, barrioDelLink, 1);
   if (encontrado) elegirBarrio(encontrado);
 }
+mostrarActualizado();
 cargarReportes();
-// Cada minuto: trae reportes nuevos y hace que "En curso" se prenda y se apague a tiempo.
-setInterval(cargarReportes, 60_000);
+// Cada 30 segundos: trae fallas, reportes y cortes nuevos, y hace que "En curso" se prenda y se apague a tiempo.
+setInterval(cargarReportes, 30_000);
+// Al volver a la pestaña o a la app (el celu pausa los temporizadores), se revisa enseguida.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') cargarReportes();
+});
