@@ -1221,19 +1221,7 @@
    "departamento": "Ischilín"
   }
  ],
- "los manzanos": [
-  {
-   "nombre": "Los Manzanos",
-   "osm": "manual:los manzanos",
-   "tipo": "village",
-   "rango": 19,
-   "punto": [
-    -64.131042,
-    -31.306617
-   ],
-   "departamento": ""
-  }
- ],
+ "los manzanos": [],
  "villa albertina": [
   {
    "nombre": "Villa Albertina",
