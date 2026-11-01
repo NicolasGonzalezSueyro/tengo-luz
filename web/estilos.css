@@ -699,11 +699,17 @@ a.barra-nombre:hover { text-decoration: underline; }
     filter: drop-shadow(0 0 10px rgba(249, 115, 22, 1)) drop-shadow(0 0 22px rgba(251, 191, 36, 0.9));
   }
 }
-/* Barrios donde los vecinos reportan que no tienen luz (sin corte anunciado): rojo que late. */
+/* Barrios con una falla confirmada por EPEC: el relleno late. */
 .barrio-sin-luz { animation: latido-rojo 1.8s ease-in-out infinite; }
 @keyframes latido-rojo {
   0%, 100% { fill-opacity: 0.55; filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.4)); }
   50% { fill-opacity: 0.9; filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.95)); }
+}
+/* Reportes de vecinos: un punto rojo sólido; late solo el brillo, así no se confunde con el barrio de abajo. */
+.punto-vecinos { animation: brillo-rojo 1.8s ease-in-out infinite; }
+@keyframes brillo-rojo {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.6)); }
+  50% { filter: drop-shadow(0 0 9px rgba(220, 38, 38, 1)); }
 }
 :root[data-tema="oscuro"] .barrio-con-corte { filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.55)); }
 @media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .barrio-con-corte { filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.55)); } }
@@ -811,4 +817,5 @@ a.barra-nombre:hover { text-decoration: underline; }
   /* Sin animación, los cortes en curso y los reportes igual se destacan: con un brillo fijo. */
   :root .barrio-con-corte.barrio-en-curso { fill-opacity: 0.9; stroke-width: 4px; filter: drop-shadow(0 0 8px rgba(249, 115, 22, 1)) drop-shadow(0 0 18px rgba(251, 191, 36, 0.8)); }
   .barrio-sin-luz { fill-opacity: 0.9; filter: drop-shadow(0 0 8px rgba(220, 38, 38, 1)); }
+  .punto-vecinos { filter: drop-shadow(0 0 6px rgba(220, 38, 38, 1)); }
 }

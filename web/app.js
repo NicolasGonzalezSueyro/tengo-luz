@@ -29,13 +29,13 @@ const ES_CELULAR = window.matchMedia('(max-width: 860px)');
 const PALETAS = {
   claro: {
     borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
-    enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', bordeSinLuz: '#7f1d1d', zona: '#92400e', elegido: '#6d28d9',
-    terminado: '#22c55e', bordeTerminado: '#166534', falla: '#be123c', bordeFalla: '#4c0519',
+    enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', zona: '#92400e', elegido: '#6d28d9',
+    terminado: '#22c55e', bordeTerminado: '#166534', falla: '#be123c',
   },
   oscuro: {
     borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
-    enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', bordeSinLuz: '#fecaca', zona: '#d6a46b', elegido: '#c4b5fd',
-    terminado: '#4ade80', bordeTerminado: '#bbf7d0', falla: '#fb7185', bordeFalla: '#ffe4e6',
+    enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', zona: '#d6a46b', elegido: '#c4b5fd',
+    terminado: '#4ade80', bordeTerminado: '#bbf7d0', falla: '#fb7185',
   },
 };
 
@@ -194,11 +194,14 @@ function estilo(nombre) {
   const p = PALETAS[temaActual()];
   const estado = nombre ? estados.get(nombre) : undefined;
   const elegido = nombre !== null && nombre === barrioElegido;
-  // Bordó: EPEC confirmó una falla (sin luz, sin aviso previo).
-  if (fallaDe(nombre)) return { color: elegido ? p.elegido : p.bordeFalla, weight: elegido ? 3.5 : 2.5, fillColor: p.falla, fillOpacity: 0.65 };
-  // Rojo: los vecinos dicen que no tienen luz y no hay un corte anunciado en curso que lo explique.
-  if (vecinosSinLuz(nombre) > 0 && !estado?.enCurso) {
-    return { color: elegido ? p.elegido : p.bordeSinLuz, weight: elegido ? 3.5 : 2, fillColor: p.sinLuz, fillOpacity: 0.6 };
+  // Bordó en todo el barrio: EPEC confirmó una falla (sin luz, sin aviso previo). Si ese día además hay un corte
+  // programado, el borde lleva el color del corte (amarillo, o naranja si está en curso): así se ven las dos cosas.
+  // Los reportes de vecinos no pintan el barrio: son un punto rojo aparte (ver capaVecinos).
+  // Sin corte programado, el borde es blanco: con varios barrios con falla pegados, se ve dónde termina cada uno.
+  if (fallaDe(nombre)) {
+    const conCorte = estado && !estado.terminado;
+    const borde = conCorte ? (estado.enCurso ? p.enCurso : p.luz) : '#ffffff';
+    return { color: elegido ? p.elegido : borde, weight: elegido ? 3.5 : conCorte ? 3.5 : 2, fillColor: p.falla, fillOpacity: 0.65 };
   }
   if (!estado) {
     return { color: elegido ? p.elegido : p.borde, weight: elegido ? 3.5 : 0.7, fillColor: p.relleno, fillOpacity: elegido ? 0.25 : p.rellenoOp };
@@ -262,6 +265,9 @@ const capaPuntos = L.layerGroup().addTo(mapa);
 const capaZonas = L.layerGroup().addTo(mapa);
 // Los sectores exactos de los cortes descriptos por calles o lugares (arriba de todo).
 const capaSectores = L.layerGroup().addTo(mapa);
+// Los reportes de vecinos: un punto rojo con borde blanco en el centro del lugar, arriba de todo, así se distingue
+// aunque el barrio también tenga una falla o un corte programado.
+const capaVecinos = L.layerGroup().addTo(mapa);
 /** @type {Map<string, L.Layer[]>} los sectores de cada localidad, para hacer zoom a ellos y no a la localidad entera */
 const sectoresPorNombre = new Map();
 
@@ -274,7 +280,22 @@ function clasesDeBarrio(/** @type {L.Path} */ capa, /** @type {string | null} */
   const elemento = capa.getElement();
   elemento?.classList.toggle('barrio-con-corte', Boolean(estado));
   elemento?.classList.toggle('barrio-en-curso', Boolean(estado?.enCurso));
-  elemento?.classList.toggle('barrio-sin-luz', Boolean(fallaDe(nombre)) || (vecinosSinLuz(nombre) > 0 && !estado?.enCurso));
+  elemento?.classList.toggle('barrio-sin-luz', Boolean(fallaDe(nombre)));
+}
+
+/** Dónde va el punto de los reportes de vecinos: el centro del barrio o del pueblo, o el punto mismo. @param {string} nombre */
+function centroDelLugar(nombre) {
+  const punto = puntos.get(nombre);
+  if (punto) return L.latLng(punto[1], punto[0]);
+  const zona = zonasPorNombre.get(nombre);
+  if (zona) return L.geoJSON(zona).getBounds().getCenter();
+  /** @type {L.LatLng | null} */
+  let centro = null;
+  capaPoligonos.eachLayer((capa) => {
+    const poligono = /** @type {L.Polygon & { feature?: FeatureBarrio }} */ (capa);
+    if (!centro && poligono.feature?.properties.nombre === nombre) centro = poligono.getCenter();
+  });
+  return centro;
 }
 
 function pintarMapa() {
@@ -343,6 +364,18 @@ function pintarMapa() {
     clasesDeBarrio(capa, lugar);
     if (zonasPorNombre.has(lugar)) sectoresPorNombre.set(lugar, [...(sectoresPorNombre.get(lugar) ?? []), capa]);
   }
+
+  capaVecinos.clearLayers();
+  for (const nombre of barriosReportados()) {
+    const centro = centroDelLugar(nombre);
+    if (!centro) continue;
+    const cantidad = vecinosSinLuz(nombre);
+    const punto = L.circleMarker(centro, { radius: radioPunto() + 3, color: '#ffffff', weight: 2, fillColor: p.sinLuz, fillOpacity: 1 })
+      .bindTooltip(comoTexto(`${nombre}: ${cantidad} ${cantidad === 1 ? 'vecino reportó' : 'vecinos reportaron'} que no hay luz`))
+      .on('click', () => elegirBarrio(nombre))
+      .addTo(capaVecinos);
+    punto.getElement()?.classList.add('punto-vecinos');
+  }
   marcadorYo?.bringToFront();
 }
 
@@ -352,13 +385,12 @@ leyenda.onAdd = () => {
   const caja = h('details', ES_CELULAR.matches ? { class: 'leyenda' } : { class: 'leyenda', open: '' },
     h('summary', {}, 'Referencias'),
     h('div', {}, h('i', { style: 'background:#facc15' }), 'Corte programado'),
-    h('div', {}, h('i', { style: 'background:#facc15;outline:2px solid #7c2d12;outline-offset:-2px' }), 'Programado total'),
-    h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'En curso ahora'),
-    h('div', {}, h('i', { style: 'background:#be123c;outline:2px solid #4c0519;outline-offset:-2px' }), 'Falla confirmada (EPEC)'),
-    h('div', {}, h('i', { style: 'background:#dc2626;box-shadow:0 0 8px #dc2626' }), 'Sin luz sin aviso (vecinos)'),
-    h('div', {}, h('i', { style: 'background:#22c55e' }), 'Terminado hoy'),
+    h('div', {}, h('i', { style: 'background:#f97316;box-shadow:0 0 8px #f97316' }), 'Corte en curso ahora'),
+    h('div', {}, h('i', { style: 'background:#22c55e' }), 'Corte que ya terminó hoy'),
+    h('div', { title: 'Con borde amarillo o naranja: además tiene un corte programado ese día.' },
+      h('i', { style: 'background:#be123c;box-shadow:inset 0 0 0 2px #fff,0 0 0 1px #be123c' }), 'Falla confirmada por EPEC'),
+    h('div', {}, h('i', { style: 'background:#dc2626;border-radius:50%;box-shadow:inset 0 0 0 2px #fff,0 0 6px #dc2626' }), 'Vecinos sin luz'),
     h('div', {}, h('i', { style: 'background:#facc1555;outline:2px dashed #92400e;outline-offset:-2px' }), 'Zona aproximada'),
-    h('div', {}, h('i', { style: 'background:#a5a1c255;outline:1px solid #8e8aa8;outline-offset:-1px' }), 'Sin cortes anunciados'),
   );
   L.DomEvent.disableClickPropagation(caja); // que tocar la leyenda no cuente como tocar el mapa
   return caja;
@@ -369,6 +401,7 @@ leyenda.addTo(mapa);
 mapa.on('zoomend', () => {
   capaPuntos.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto()));
   capaZonas.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto() + 1));
+  capaVecinos.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto() + 3));
 });
 
 // ---------------------------------------------------------------------------------------------

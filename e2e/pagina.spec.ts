@@ -46,7 +46,10 @@ test('una falla confirmada por EPEC se ve en la portada, en el mapa y en la fich
   await page.route('**/api/fallas', (ruta) => ruta.fulfill({
     json: [{ lugares: ['Alberdi'], texto: 'Por una falla, sin suministro en barrio Alberdi.', fuente: 'https://x.com/EPEC/status/1', creado: Date.now(), hasta: Date.now() + 3_600_000 }],
   }));
+  await page.route('**/api/reportes', (ruta) => ruta.fulfill({ json: { Alberdi: { cantidad: 2, ultimo: Date.now() } } }));
   await page.goto('/');
+  // Los reportes de vecinos son un punto aparte, encima del barrio con la falla.
+  await expect(page.locator('path.punto-vecinos')).toHaveCount(1);
   const portada = page.locator('.fallas');
   await expect(portada.getByText('Falla confirmada por EPEC')).toBeVisible();
   await expect(portada.getByText('sin suministro en barrio Alberdi')).toBeVisible();
