@@ -1,6 +1,6 @@
 # ⚡ ¿Tengo luz?
 
-**Mapa de los cortes de luz programados por barrio en Córdoba capital y Gran Córdoba, con reportes de vecinos, avisos por Telegram y ayuda para reclamar.**
+**Mapa de los cortes de luz programados en Córdoba: por barrio en capital y por localidad en toda la provincia, con reportes de vecinos, avisos por Telegram y ayuda para reclamar.**
 
 [![Tests](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml)
 [![Actualizar cortes](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml)
@@ -11,6 +11,8 @@
 
 > Proyecto personal y **no oficial**: no tiene relación con EPEC.
 
+![Recorrido por la página: se busca Villa María con el autocompletado y se abre su ficha, después se busca el barrio Alberdi de capital](docs/recorrido.gif)
+
 ![La página en la compu: el mapa de Córdoba con los barrios que tienen corte pintados de amarillo y la lista de cortes del día](docs/escritorio.jpg)
 
 <p align="center">
@@ -20,7 +22,7 @@
 ## Qué hace
 
 - 🗺️ **Mapa por barrio.** Cada hora lee los cortes que anuncia EPEC y pinta los barrios afectados según el día elegido: 🟡 programado, 🟠 en curso ahora, 🟢 terminado hoy, 🟫 zona aproximada (cuando el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar).
-- 🏘️ **Gran Córdoba.** Además de capital: Villa Allende, Mendiolaza, Unquillo, Río Ceballos, Saldán, La Calera, Malagueño, Villa Carlos Paz, Alta Gracia, Estación Juárez Celman y Colonia Tirolesa.
+- 🏘️ **Toda la provincia.** Además de capital, cualquier localidad que nombre el anuncio: Villa María, Río Cuarto, San Francisco, Bell Ville, Cosquín, Deán Funes y más de 80 en total. Cuando aparece un pueblo nuevo, el robot lo ubica solo con OpenStreetMap.
 - 🔎 **Buscador con autocompletado** (no importan las tildes), **"Mi ubicación"** con GPS y una **ficha por barrio** con el próximo y el último corte.
 - 🔴 **Reportes de vecinos.** Tocás "No tengo luz" y, si no hay un corte anunciado que lo explique, tu barrio se pinta de rojo con la cantidad de reportes de las últimas 3 horas. Solo se puede reportar que **no** hay luz (nadie puede "apagar" un corte), y cada conexión puede reportar una sola vez cada 3 horas. Cuando 3 vecinos reportan el mismo barrio, les llega un aviso a quienes lo siguen (aclarando que lo reportan vecinos, no EPEC; como mucho uno por día).
 - 📣 **Reclamo a EPEC en un toque.** Un formulario arma el mensaje con tu contrato y dirección y lo abre en el WhatsApp oficial de EPEC para que lo mandes vos. Si elegís "cables caídos o chispas", te indica llamar ya al 0800.
@@ -60,7 +62,7 @@ flowchart LR
   api <--> telegram[Telegram]
 ```
 
-1. **Leer.** Cada hora, GitHub Actions busca en el sitemap de noticias de El Doce la nota diaria con los cortes de EPEC, se queda con la sección de Córdoba capital y con los cortes de las localidades de Gran Córdoba, y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
+1. **Leer.** Cada hora, GitHub Actions busca en el sitemap de noticias de El Doce la nota diaria con los cortes de EPEC, lee todas sus secciones (capital y localidades de la provincia) y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
 2. **Ubicar.** Cada barrio del anuncio se busca en el mapa oficial de la Municipalidad, normalizando nombres ("Sud" = "Sur", sin tildes) y con una tabla de alias revisada a mano.
 3. **Publicar.** Si hay cortes nuevos, el robot hace un commit con los datos y Cloudflare Pages publica el sitio actualizado. No hay ninguna compu prendida.
 4. **Avisar.** El mismo robot le pasa los cortes al bot, que avisa a quienes siguen esos barrios. Si algo falla, el bot le escribe al admin.
@@ -106,7 +108,7 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 
 - **Rutas:** algunos anuncios de capital no nombran barrios sino una ruta ("zona rural sobre Ruta Nacional 9 hacia el norte"). Para esos hay un corredor de unos 450 m a cada lado del tramo de la ruta.
 - **Sector exacto** ([`src/sectores.ts`](src/sectores.ts)): cuando el anuncio nombra calles ("sector comprendido por calles Alberdi, Caseros, Alvear…"), lugares ("Teatro del Lago, Terminal de Ómnibus") o barrios, se buscan en OpenStreetMap dentro de la zona, se calculan las esquinas donde se cruzan esas calles (también las "T") y se dibuja el área que encierran. Se descartan los puntos sueltos (calles con el mismo nombre en otra punta) y lo que cae fuera de la localidad. Los nombres repetidos son comunes (en Gran Córdoba hay 42 cosas llamadas "Los Aromos": calles en 7 localidades, una comuna, una rotonda…), así que cada nombre se busca solo dentro de la localidad del corte, un "barrio X" nunca se confunde con la calle X, y la localidad se toma del título de la sección o de la lista "Localidades de …:", no de cualquier parte del texto (un "Camino a Alta Gracia" no es un corte en Alta Gracia). Si no se puede armar algo confiable (por ejemplo, el anuncio nombra 20 barrios y se encuentran 3), se marca la zona entera: mejor de más que un área chica engañosa. Cada sector se busca una sola vez y queda guardado en [`data/sectores.json`](data/sectores.json).
-- **Localidades de Gran Córdoba:** fuera de capital no hay un mapa oficial de barrios, y EPEC suele describir los cortes por calles ("sector comprendido por calles Alberdi, Caseros…"). Por eso se marca el límite municipal de la localidad entera, que se obtiene de Nominatim. Cada localidad se reconoce por su nombre en el título de la sección de la nota o en el texto del corte, y nunca se buscan barrios de capital en esos cortes: un "barrio Don Bosco" de Alta Gracia no pinta uno de capital.
+- **Localidades de la provincia** ([`src/localidades.ts`](src/localidades.ts)): fuera de capital no hay un mapa oficial de barrios, y EPEC suele describir los cortes por calles ("sector comprendido por calles Alberdi, Caseros…"). Por eso se marca el límite de la localidad entera (o un círculo, si OpenStreetMap no tiene su límite). Las de Gran Córdoba están cargadas a mano; el resto se busca en Nominatim la primera vez que aparece y queda guardado ([`data/localidades-buscadas.json`](data/localidades-buscadas.json)). Los nombres salen del título de la sección o de la lista "Localidades de …:", y si la lista contradice al título (pasa: un renglón de Colazo bajo el título "Saldán"), manda la lista. Se descartan barrios y calles con el mismo nombre ("San Francisco" también es un barrio de capital), y los nombres repetidos se resuelven por cercanía (hay tres "San Antonio" en la provincia): se elige el que queda a menos de 40 km de las otras localidades del corte, y si ninguno está tan cerca, no se marca. Nunca se buscan barrios de capital en esos cortes: un "barrio Don Bosco" de Alta Gracia no pinta uno de capital. Las ubicaciones dudosas se compararon a mano con un mapa.
 
 **Alias.** [`data/alias-barrios.json`](data/alias-barrios.json) dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono. Un alias en `null` marca un nombre que no se debe ubicar solo (por ejemplo, "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
 </details>

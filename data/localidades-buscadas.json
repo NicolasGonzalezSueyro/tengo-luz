@@ -1,0 +1,990 @@
+{
+ "rio cuarto": [
+  {
+   "nombre": "Río Cuarto",
+   "osm": "R3921415",
+   "tipo": "city",
+   "rango": 16,
+   "punto": [
+    -64.3489782,
+    -33.1237585
+   ],
+   "departamento": "Río Cuarto"
+  }
+ ],
+ "ballestero sur": [
+  {
+   "nombre": "Ballesteros Sud",
+   "osm": "N198440064",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.0301248,
+    -32.5894984
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "cosquin": [
+  {
+   "nombre": "Cosquín",
+   "osm": "R2284272",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -64.4657395,
+    -31.2436548
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "cruz eje": [
+  {
+   "nombre": "Cruz del Eje",
+   "osm": "R6669405",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -64.8086332,
+    -30.7218737
+   ],
+   "departamento": "Cruz del Eje"
+  }
+ ],
+ "campillo": [
+  {
+   "nombre": "Del Campillo",
+   "osm": "R5229059",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.4970497,
+    -34.3788599
+   ],
+   "departamento": "General Roca"
+  }
+ ],
+ "villa valeria": [
+  {
+   "nombre": "Villa Valeria",
+   "osm": "R9477316",
+   "tipo": "village",
+   "rango": 14,
+   "punto": [
+    -64.9206789,
+    -34.3416235
+   ],
+   "departamento": "General Roca"
+  }
+ ],
+ "mattaldi": [
+  {
+   "nombre": "Mattaldi",
+   "osm": "R9453726",
+   "tipo": "village",
+   "rango": 14,
+   "punto": [
+    -64.1708953,
+    -34.4812116
+   ],
+   "departamento": "General Roca"
+  }
+ ],
+ "bruzone": [],
+ "ausonia": [
+  {
+   "nombre": "Ausonia",
+   "osm": "R7333186",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.2430667,
+    -32.6619386
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "bengolea": [
+  {
+   "nombre": "Bengolea",
+   "osm": "R5145126",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.6699329,
+    -33.0248869
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "chazon": [
+  {
+   "nombre": "Chazón",
+   "osm": "R9405820",
+   "tipo": "village",
+   "rango": 14,
+   "punto": [
+    -63.2754267,
+    -33.0779774
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "etruria": [
+  {
+   "nombre": "Etruria",
+   "osm": "R5129316",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.2447748,
+    -32.9392466
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "idiazabal": [
+  {
+   "nombre": "Idiazábal",
+   "osm": "R9432941",
+   "tipo": "village",
+   "rango": 14,
+   "punto": [
+    -63.0324333,
+    -32.8125067
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "la laguna": [
+  {
+   "nombre": "La Laguna",
+   "osm": "R5135415",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.2455141,
+    -32.802948
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "pascanas": [
+  {
+   "nombre": "Pascanas",
+   "osm": "N198409417",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.0401712,
+    -33.1246434
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "pasco": [
+  {
+   "nombre": "Pasco",
+   "osm": "R5135784",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.3416687,
+    -32.7463243
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "ucacha": [
+  {
+   "nombre": "Ucacha",
+   "osm": "R5145127",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.5061713,
+    -33.0313187
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "salsipuedes": [
+  {
+   "nombre": "Salsipuedes",
+   "osm": "R9381823",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -64.2965681,
+    -31.1364074
+   ],
+   "departamento": "Colón"
+  }
+ ],
+ "san francisco chanar": [
+  {
+   "nombre": "San Francisco del Chañar",
+   "osm": "R5986838",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.941706,
+    -29.786376
+   ],
+   "departamento": "Sobremonte"
+  }
+ ],
+ "arroyo algodon": [
+  {
+   "nombre": "Arroyo Algodón",
+   "osm": "R5335599",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.1628542,
+    -32.2023935
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "los zorros": [
+  {
+   "nombre": "Los Zorros",
+   "osm": "N198400478",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.2011211,
+    -32.0458314
+   ],
+   "departamento": "Tercero Arriba"
+  }
+ ],
+ "villa yacanto": [
+  {
+   "nombre": "Villa Yacanto de Calamuchita",
+   "osm": "R8298167",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.7541488,
+    -32.1057993
+   ],
+   "departamento": "Calamuchita"
+  }
+ ],
+ "villa ascasubi": [
+  {
+   "nombre": "Villa Ascasubi",
+   "osm": "N198433329",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.8925389,
+    -32.1626779
+   ],
+   "departamento": "Tercero Arriba"
+  }
+ ],
+ "tanti": [
+  {
+   "nombre": "Tanti",
+   "osm": "R5889834",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.592479,
+    -31.3547972
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "villa santa cruz lago": [
+  {
+   "nombre": "Villa Santa Cruz del Lago",
+   "osm": "N5576303452",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.5175231,
+    -31.3702739
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "cabalango": [
+  {
+   "nombre": "Cabalango",
+   "osm": "R5889833",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.5601665,
+    -31.3909242
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "villa maria": [
+  {
+   "nombre": "Villa María",
+   "osm": "R2262361",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.2435809,
+    -32.4106245
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "san francisco": [
+  {
+   "nombre": "San Francisco",
+   "osm": "R3918962",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -62.0840299,
+    -31.4249815
+   ],
+   "departamento": "San Justo"
+  }
+ ],
+ "bialet masse": [
+  {
+   "nombre": "Bialet Massé",
+   "osm": "R3919538",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.4638871,
+    -31.3139087
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "pampa alta": [
+  {
+   "nombre": "Pampa Alta",
+   "osm": "N8421819596",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.6346866,
+    -31.7818853
+   ],
+   "departamento": "Santa María"
+  }
+ ],
+ "san clemente": [
+  {
+   "nombre": "San Clemente",
+   "osm": "N198419753",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.6282789,
+    -31.7145967
+   ],
+   "departamento": "Santa María"
+  }
+ ],
+ "rio segundo": [
+  {
+   "nombre": "Río Segundo",
+   "osm": "R2330523",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.9116179,
+    -31.6501467
+   ],
+   "departamento": "Río Segundo"
+  }
+ ],
+ "villa nueva": [
+  {
+   "nombre": "Villa Nueva",
+   "osm": "R4585334",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.2478172,
+    -32.4355729
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "capilla monte": [
+  {
+   "nombre": "Capilla del Monte",
+   "osm": "R2284097",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -64.5263199,
+    -30.8572075
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "james craik": [
+  {
+   "nombre": "James Craik",
+   "osm": "R3087413",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.4678394,
+    -32.1615236
+   ],
+   "departamento": "Tercero Arriba"
+  }
+ ],
+ "ballesteros sur": [
+  {
+   "nombre": "Ballesteros Sud",
+   "osm": "N198440064",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.0301248,
+    -32.5894984
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "tancacha": [
+  {
+   "nombre": "Tancacha",
+   "osm": "R5145065",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.9798348,
+    -32.2374827
+   ],
+   "departamento": "Tercero Arriba"
+  }
+ ],
+ "parque siquiman": [
+  {
+   "nombre": "Villa Parque Siquiman",
+   "osm": "R3920833",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.4776441,
+    -31.3461791
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "santa cruz lago": [
+  {
+   "nombre": "Villa Santa Cruz del Lago",
+   "osm": "N5576303452",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.5175231,
+    -31.3702739
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "villa playas san roque": [],
+ "bell ville": [
+  {
+   "nombre": "Bell Ville",
+   "osm": "R9401489",
+   "tipo": "town",
+   "rango": 14,
+   "punto": [
+    -62.6888782,
+    -32.6300707
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "las palmas": [
+  {
+   "nombre": "Las Palmas",
+   "osm": "N198458526",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -65.2904402,
+    -31.3762711
+   ],
+   "departamento": "Pocho"
+  },
+  {
+   "nombre": "Las Palmas",
+   "osm": "N9894350005",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.8810013,
+    -30.3912031
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "estancia las palomas": [],
+ "dean funes": [
+  {
+   "nombre": "Deán Funes",
+   "osm": "N198446830",
+   "tipo": "town",
+   "rango": 18,
+   "punto": [
+    -64.3527199,
+    -30.4249487
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "quilino": [
+  {
+   "nombre": "Quilino",
+   "osm": "R5199728",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.4993771,
+    -30.2141962
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "villa quilino": [
+  {
+   "nombre": "Villa Quilino",
+   "osm": "R5199729",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.4684052,
+    -30.2091565
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "los cadillos": [
+  {
+   "nombre": "Los Cadillos",
+   "osm": "N7641142214",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.451766,
+    -30.1020455
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "san antonio": [
+  {
+   "nombre": "San Antonio",
+   "osm": "N198419135",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -62.8208218,
+    -31.50672
+   ],
+   "departamento": "San Justo"
+  },
+  {
+   "nombre": "San Antonio",
+   "osm": "N198419114",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -65.0849809,
+    -30.3916083
+   ],
+   "departamento": "Cruz del Eje"
+  },
+  {
+   "nombre": "San Antonio",
+   "osm": "N9894030962",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.5570421,
+    -30.616094
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "las chacras": [
+  {
+   "nombre": "Las Chacras",
+   "osm": "N198458034",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.3788054,
+    -30.2847783
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "el banado": [],
+ "la florida": [],
+ "la barranca": [],
+ "san jose las salinas": [
+  {
+   "nombre": "San José de las Salinas",
+   "osm": "R5199736",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.6248303,
+    -30.0066582
+   ],
+   "departamento": "Tulumba"
+  }
+ ],
+ "lucio v mansilla": [
+  {
+   "nombre": "Lucio V. Mansilla",
+   "osm": "R2289630",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.711337,
+    -29.8044312
+   ],
+   "departamento": "Tulumba"
+  }
+ ],
+ "agua hedionda": [
+  {
+   "nombre": "Agua Hedionda",
+   "osm": "N7641153531",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.4919562,
+    -29.9833008
+   ],
+   "departamento": "Tulumba"
+  }
+ ],
+ "el tuscal": [
+  {
+   "nombre": "El Tuscal",
+   "osm": "N198449373",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.5317451,
+    -29.7626124
+   ],
+   "departamento": "Tulumba"
+  }
+ ],
+ "agua oro": [
+  {
+   "nombre": "Agua de Oro",
+   "osm": "N198437883",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.2999884,
+    -31.0644352
+   ],
+   "departamento": "Colón"
+  }
+ ],
+ "la granja": [
+  {
+   "nombre": "La Granja",
+   "osm": "R9436134",
+   "tipo": "village",
+   "rango": 14,
+   "punto": [
+    -64.268354,
+    -31.0082156
+   ],
+   "departamento": "Colón"
+  }
+ ],
+ "general paz": [
+  {
+   "nombre": "Estación General Paz",
+   "osm": "N198451572",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.1400894,
+    -31.1344775
+   ],
+   "departamento": "Colón"
+  }
+ ],
+ "ascochinga": [
+  {
+   "nombre": "Ascochinga",
+   "osm": "N198439632",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.2725651,
+    -30.9590977
+   ],
+   "departamento": "Colón"
+  }
+ ],
+ "la paz": [
+  {
+   "nombre": "La Paz",
+   "osm": "N198457395",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -65.0482866,
+    -32.2174729
+   ],
+   "departamento": "San Javier"
+  },
+  {
+   "nombre": "La Paz",
+   "osm": "N198457368",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.2501905,
+    -30.9470183
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "general cabrera": [
+  {
+   "nombre": "General Cabrera",
+   "osm": "R5282315",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.8749511,
+    -32.8143925
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "colazo": [
+  {
+   "nombre": "Colazo",
+   "osm": "R7265735",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.3826688,
+    -31.9644838
+   ],
+   "departamento": "Río Segundo"
+  }
+ ],
+ "las junturas": [
+  {
+   "nombre": "Las Junturas",
+   "osm": "R3918725",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.4506231,
+    -31.8316466
+   ],
+   "departamento": "Río Segundo"
+  }
+ ],
+ "la cumbre": [
+  {
+   "nombre": "La Cumbre",
+   "osm": "N198455035",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.4938784,
+    -30.9825899
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "los cocos": [
+  {
+   "nombre": "Los Cocos",
+   "osm": "N198398920",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.5027028,
+    -30.9250882
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "san roque": [
+  {
+   "nombre": "San Roque",
+   "osm": "N497377641",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.4607809,
+    -31.3459447
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "villa totoral": [
+  {
+   "nombre": "Villa del Totoral",
+   "osm": "R9477393",
+   "tipo": "town",
+   "rango": 14,
+   "punto": [
+    -64.068164,
+    -30.7046103
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "villa ciudad america": [
+  {
+   "nombre": "Villa Ciudad de América",
+   "osm": "R9474625",
+   "tipo": "municipality",
+   "rango": 14,
+   "punto": [
+    -64.5030005,
+    -31.769288
+   ],
+   "departamento": "Santa María"
+  }
+ ],
+ "camilo aldao": [
+  {
+   "nombre": "Camilo Aldao",
+   "osm": "R3815445",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -62.0943082,
+    -33.1279702
+   ],
+   "departamento": "Marcos Juárez"
+  }
+ ],
+ "marcos juarez": [
+  {
+   "nombre": "Marcos Juárez",
+   "osm": "R9477660",
+   "tipo": "town",
+   "rango": 14,
+   "punto": [
+    -62.104385,
+    -32.6946933
+   ],
+   "departamento": "Marcos Juárez"
+  }
+ ],
+ "villa parque santa ana": [
+  {
+   "nombre": "Villa Parque Santa Ana",
+   "osm": "N3064117738",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.347105,
+    -31.5924939
+   ],
+   "departamento": "Santa María"
+  }
+ ],
+ "bosque alegre": [],
+ "villa rio icho cruz": [
+  {
+   "nombre": "Icho Cruz",
+   "osm": "N198434702",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.5636697,
+    -31.482304
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "bosque alegra": [],
+ "las perdices": [
+  {
+   "nombre": "Las Perdices",
+   "osm": "R4166757",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.7051586,
+    -32.6993173
+   ],
+   "departamento": "Tercero Arriba"
+  }
+ ],
+ "potrero garay": [
+  {
+   "nombre": "Potrero de Garay",
+   "osm": "R6132856",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.5464914,
+    -31.7909751
+   ],
+   "departamento": "Santa María"
+  }
+ ],
+ "dalmacio velez sarsfield": [
+  {
+   "nombre": "Dalmacio Vélez Sarsfield",
+   "osm": "N198446810",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.5813381,
+    -32.6106051
+   ],
+   "departamento": "Tercero Arriba"
+  }
+ ],
+ "ticino": [
+  {
+   "nombre": "Ticino",
+   "osm": "R5141579",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.4370528,
+    -32.693005
+   ],
+   "departamento": "General San Martín"
+  }
+ ],
+ "los aromos": [
+  {
+   "nombre": "Villa Los Aromos",
+   "osm": "R5317149",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.4390034,
+    -31.7354132
+   ],
+   "departamento": "Santa María"
+  }
+ ]
+}

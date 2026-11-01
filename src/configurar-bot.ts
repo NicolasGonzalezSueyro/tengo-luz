@@ -33,6 +33,6 @@ await telegram('setMyCommands', {
   ],
 });
 await telegram('setMyDescription', {
-  description: 'Te aviso cuando EPEC anuncia un corte de luz programado en tus barrios de Córdoba capital o en tu localidad de Gran Córdoba. Sitio no oficial.',
+  description: 'Te aviso cuando EPEC anuncia un corte de luz programado en tus barrios de Córdoba capital o en tu localidad de la provincia. Sitio no oficial.',
 });
 console.log(`Listo: el bot responde desde ${SITIO}/api/telegram`);

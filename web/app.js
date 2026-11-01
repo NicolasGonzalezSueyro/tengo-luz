@@ -85,7 +85,7 @@ try {
 const [mapaBarrios, cortes, mapaZonas] = datos;
 const zonasPorNombre = new Map(mapaZonas.features.map((f) => [f.properties.nombre, f]));
 const poligonosBarrios = mapaBarrios.features.filter((f) => f.properties.tipo === 'poligono');
-// Las localidades de Gran Córdoba (Villa Allende, Carlos Paz…): sirven también para ubicar el GPS fuera de capital.
+// Las localidades de la provincia (Villa Allende, Carlos Paz, Villa María…): sirven también para ubicar el GPS fuera de capital.
 const limitesLocalidades = mapaZonas.features.filter((f) => f.properties.tipo === 'localidad');
 const primerRegistro = cortes.map((c) => c.fecha).sort()[0];
 // Todo lo que se puede elegir en el mapa. Los reportes con otros nombres se ignoran.
@@ -260,7 +260,8 @@ function pintarMapa() {
   capaPuntos.clearLayers();
   capaSectores.clearLayers();
   sectoresPorNombre.clear();
-  for (const nombre of new Set([...estados.keys(), ...barriosReportados()])) {
+  // La localidad elegida se dibuja aunque ese día no tenga cortes: así el mapa puede ir hasta ella.
+  for (const nombre of new Set([...estados.keys(), ...barriosReportados(), ...(barrioElegido ? [barrioElegido] : [])])) {
     const zona = zonasPorNombre.get(nombre);
     if (zona) {
       // Si todos los cortes de la localidad ese día tienen su sector, la localidad queda solo como contorno.
@@ -668,7 +669,7 @@ function mostrarComoFunciona() {
     h('h2', {}, icono('ayuda'), '¿Cómo funciona?'),
     h('ol', { class: 'pasos' },
       h('li', {}, 'EPEC anuncia los cortes programados (mantenimientos, poda, obras) y los medios los publican, en general el día anterior.'),
-      h('li', {}, 'Cada hora, un programa lee esos anuncios, se queda con los de Córdoba capital y Gran Córdoba, y reconoce qué barrios o localidades nombran.'),
+      h('li', {}, 'Cada hora, un programa lee esos anuncios, y reconoce qué barrios de capital o localidades de la provincia nombran. Las localidades se ubican con OpenStreetMap.'),
       h('li', {}, 'Cada barrio se ubica en el mapa oficial de la Municipalidad. Si el anuncio habla de una ruta, o de una localidad sin barrios que se puedan ubicar, se marca una zona aproximada.'),
       h('li', {}, 'El mapa se pinta según el día que elijas, y "en curso" se calcula con la hora actual de Córdoba.'),
     ),
@@ -980,7 +981,7 @@ botonUbicacion.addEventListener('click', () => {
         elegirBarrio(barrio);
       } else {
         mapa.flyTo(punto, 14);
-        avisar('Tu ubicación queda fuera de Córdoba capital y de las localidades de Gran Córdoba.');
+        avisar('Tu ubicación no cae en un barrio de capital ni en una localidad del mapa.');
       }
     },
     (error) => {

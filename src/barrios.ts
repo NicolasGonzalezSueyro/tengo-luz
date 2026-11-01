@@ -17,24 +17,8 @@ export type Ubicacion = {
 };
 
 /** Una zona aproximada: su nombre y la expresión regular que reconoce el texto del anuncio. */
-// "ruta": corredor sobre una ruta de capital. "localidad": el límite de una localidad de Gran Córdoba.
+// "ruta": corredor sobre una ruta de capital. "localidad": el límite de una localidad (src/localidades.ts).
 export type ZonaAproximada = { nombre: string; patron: string; tipo?: 'ruta' | 'localidad' };
-
-/**
- * Dónde se nombra la localidad de un corte: en el título de la sección ("Villa Carlos Paz") o en el encabezado
- * antes de los dos puntos ("Localidades de Alta Gracia, Los Aromos…: barrios…"). El resto del texto no cuenta,
- * porque ahí aparecen calles y caminos con nombres de pueblos: un "Camino a Alta Gracia" en un corte de
- * Malagueño no es un corte en Alta Gracia.
- */
-export function encabezadoDelCorte(seccion: string, zona: string): string {
-  return `${seccion} ${zona.match(/^([^:]+):/)?.[1] ?? ''}`;
-}
-
-/** Las localidades de Gran Córdoba que nombra un texto (el encabezado de un corte de fuera de capital). */
-export function localidadesQueNombra(texto: string, localidades: ZonaAproximada[]): string[] {
-  const normalizado = normalizar(texto);
-  return localidades.filter((l) => new RegExp(l.patron).test(normalizado)).map((l) => l.nombre);
-}
 
 // Palabras que marcan que empieza una descripción por calles o sectores, no un nombre de barrio.
 const DESCRIPCION = /\b(comprendid[oa]s?|entre|sobre|desde|hasta|calles?|area|sector|zona|frente|altura)\b/;

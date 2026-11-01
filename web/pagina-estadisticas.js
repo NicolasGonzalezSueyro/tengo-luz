@@ -83,7 +83,7 @@ try {
       nombre: f.nombre, valor: f.cortes, texto: String(f.cortes), detalle: `${f.nombre}: ${cantidad(f.cortes, 'corte', 'cortes')}`,
     }))),
     h('p', { class: 'nota' },
-      `De todos los cortes, ${cantidad(e.totales, 'fue', 'fueron')} en forma total y ${e.granCordoba} en localidades de Gran Córdoba. `,
+      `De todos los cortes, ${cantidad(e.totales, 'fue', 'fueron')} en forma total y ${e.granCordoba} en el interior de la provincia. `,
       'Cada horario anunciado cuenta como un corte. Son los cortes programados que anunció EPEC (no incluye fallas). Sitio no oficial.'),
   );
 } catch (error) {

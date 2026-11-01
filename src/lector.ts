@@ -2,9 +2,11 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { barrioEnPunto, momentoEnCordoba } from '../web/estado.js';
 import { alertar } from './alertar.ts';
 import {
-  centro, crearUbicador, encabezadoDelCorte, esDescripcion, localidadesQueNombra, lugaresSeparados, normalizar, type Punto, type Ubicacion, type ZonaAproximada,
+  centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, type Punto, type Ubicacion,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
+import { crearUbicadorDeLocalidades, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
+import { escribirLugares } from './lugares.ts';
 import { sectorDelCorte, type Caja } from './sectores.ts';
 import { CAPITAL, unir, type Mantenimiento } from './mantenimiento.ts';
 
@@ -62,27 +64,54 @@ for (const url of urls) {
 // Ubicamos todos los cortes (también los viejos), así una mejora en los alias corrige el historial.
 type Geometria = { type: string; coordinates: unknown };
 const mapa = await leerJson<{ features: { properties: { nombre: string | null }; geometry: Geometria }[] }>('data/barrios.geojson');
-const zonas = await leerJson<{ features: { properties: ZonaAproximada; geometry: Geometria }[] }>('data/zonas.geojson');
+const ZONAS = 'data/zonas.geojson';
+const zonas = await leerJson<{ type: 'FeatureCollection'; features: Localidad[] }>(ZONAS);
 const alias = await leerJson<Record<string, string | null>>('data/alias-barrios.json');
-const localidades = zonas.features.map((f) => f.properties).filter((z) => z.tipo === 'localidad');
 const ubicar = crearUbicador(
   mapa.features.flatMap((f) => f.properties.nombre ?? []),
   alias,
   zonas.features.map((f) => f.properties).filter((z) => z.tipo !== 'localidad'),
 );
 
+// Localidades de toda la provincia (src/localidades.ts). Lo que ya se buscó en OpenStreetMap queda en
+// data/localidades-buscadas.json, y las localidades nuevas se agregan a data/zonas.geojson.
+const BUSCADAS = 'data/localidades-buscadas.json';
+const buscadas = await leerJson<Record<string, Candidato[]>>(BUSCADAS).catch(() => ({}) as Record<string, Candidato[]>);
+const localidadesAntes = zonas.features.length;
+const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
+const guardadosYNuevos = unir(await leerGuardados(), nuevos);
+const localidadesDe = new Map<string, string[]>();
+const noEncontradas = new Set<string>();
+for (const m of guardadosYNuevos.filter((c) => c.localidad !== CAPITAL)) {
+  const clave = `${m.localidad}|${m.zona}`;
+  if (localidadesDe.has(clave)) continue;
+  try {
+    const { localidades, noEncontradas: nuevasSinUbicar } = await ubicarLocalidades(nombresDeLocalidades(m.localidad, m.zona));
+    localidadesDe.set(clave, localidades);
+    nuevasSinUbicar.forEach((n) => noEncontradas.add(n));
+  } catch (error) {
+    // Sin conexión con OpenStreetMap: ese corte queda afuera esta vez y se vuelve a intentar en la próxima corrida.
+    console.warn(`⚠️  No pude ubicar las localidades de "${clave.slice(0, 80)}…": ${(error as Error).message}`);
+  }
+}
+if (noEncontradas.size > 0) {
+  // Se avisa una sola vez: la búsqueda queda guardada y no se repite.
+  alertas.push({
+    texto: `No encontré en OpenStreetMap estas localidades de cortes:\n${[...noEncontradas].map((n) => `• ${n}`).join('\n')}`,
+    detalle: `Si es un error de tipeo de la nota, no hace falta hacer nada. Si es un pueblo real, se puede corregir en ${BUSCADAS}.`,
+  });
+}
+
 /**
- * Capital se ubica por barrios (y rutas). Fuera de capital solo se buscan las localidades de Gran Córdoba,
+ * Capital se ubica por barrios (y rutas). Fuera de capital se marcan las localidades,
  * y nunca barrios de capital: un "barrio Don Bosco" de Alta Gracia no tiene que pintar uno de capital.
  */
 const ubicarCorte = (m: Mantenimiento): Ubicacion =>
-  m.localidad === CAPITAL
-    ? ubicar(m.zona)
-    : { barrios: [], zonas: localidadesQueNombra(encabezadoDelCorte(m.localidad, m.zona), localidades), sinUbicar: [] };
+  m.localidad === CAPITAL ? ubicar(m.zona) : { barrios: [], zonas: localidadesDe.get(`${m.localidad}|${m.zona}`) ?? [], sinUbicar: [] };
 
-const todos: (Mantenimiento & Ubicacion & { sector?: Punto[] })[] = unir(await leerGuardados(), nuevos)
+const todos: (Mantenimiento & Ubicacion & { sector?: Punto[] })[] = guardadosYNuevos
   .map((m) => ({ ...m, ...ubicarCorte(m) }))
-  // De fuera de capital, solo los cortes de Gran Córdoba (el resto de la provincia no está en el mapa).
+  // De fuera de capital, solo los cortes que se pudieron ubicar en alguna localidad.
   .filter((m) => m.localidad === CAPITAL || m.zonas.length > 0);
 
 // Sectores exactos (src/sectores.ts) para los cortes descriptos por calles o lugares. Cada uno se busca en
@@ -99,7 +128,12 @@ function zonaDeBusqueda(m: Mantenimiento & Ubicacion) {
   return m.barrios.length > 0 && m.sinUbicar.some(esDescripcion) ? porNombre(mapa.features, m.barrios) : [];
 }
 
-for (const m of todos) {
+// Overpass puede tardar ~30 s por sector: como mucho 8 nuevos por corrida, así el robot no pasa su límite de tiempo.
+// Los que no entran se buscan en la corrida siguiente; mientras tanto el corte marca la zona entera.
+const SECTORES_POR_CORRIDA = 8;
+let sectoresNuevos = 0;
+// Primero los cortes más nuevos (los que vienen), que son los que la gente mira.
+for (const m of [...todos].sort((a, b) => b.fecha.localeCompare(a.fecha))) {
   const zona = zonaDeBusqueda(m);
   if (zona.length === 0) continue;
   const clave = `${m.localidad}|${m.zona}`;
@@ -107,6 +141,8 @@ for (const m of todos) {
     if (clave in sectoresGuardados) {
       sectores[clave] = sectoresGuardados[clave];
     } else {
+      if (sectoresNuevos === SECTORES_POR_CORRIDA) continue;
+      sectoresNuevos++;
       try {
         // En capital las calles nombradas suelen ser el borde del barrio, así que sus esquinas caen justo en el límite:
         // se busca en la caja del barrio agrandada (~400 m). En las localidades sí se exige estar dentro del municipio,
@@ -135,6 +171,12 @@ await mkdir('data', { recursive: true });
 // Solo quedan los sectores de los cortes guardados: el archivo no crece para siempre.
 await writeFile(SECTORES, JSON.stringify(sectores) + '\n');
 await writeFile(ARCHIVO, JSON.stringify(todos, null, 2) + '\n');
+await writeFile(BUSCADAS, JSON.stringify(buscadas, null, 1) + '\n');
+if (zonas.features.length > localidadesAntes) {
+  await writeFile(ZONAS, JSON.stringify(zonas, null, 1) + '\n');
+  escribirLugares(); // el bot y los reportes reconocen las localidades nuevas
+  console.log(`🗺️  ${zonas.features.length - localidadesAntes} localidades nuevas en el mapa`);
+}
 console.log(`Guardados ${todos.length} cortes en ${ARCHIVO}`);
 
 const sinUbicar = [...new Set(todos.flatMap((m) => m.sinUbicar))];

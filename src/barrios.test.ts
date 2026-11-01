@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { centro, crearUbicador, distanciaKm, encabezadoDelCorte, localidadesQueNombra, lugaresSeparados, normalizar, type Punto } from './barrios.ts';
+import { centro, crearUbicador, distanciaKm, lugaresSeparados, normalizar, type Punto } from './barrios.ts';
 
 // Un mapa chiquito con nombres reales de data/barrios.geojson.
 const NOMBRES = [
@@ -133,29 +133,4 @@ test('lugaresSeparados avisa cuando un nombre repetido cae lejos del resto del c
   assert.ok((separados?.km ?? 0) > 12);
   // Los lugares sin posición conocida no cuentan.
   assert.equal(lugaresSeparados(['SMATA', 'Desconocido'], centros), null);
-});
-
-test('localidadesQueNombra encuentra las de Gran Córdoba en el título o en el texto', () => {
-  const localidades = [
-    { nombre: 'Villa Carlos Paz', patron: String.raw`\bcarlos paz\b`, tipo: 'localidad' as const },
-    { nombre: 'Alta Gracia', patron: String.raw`\balta gracia\b`, tipo: 'localidad' as const },
-    { nombre: 'Malagueño', patron: String.raw`\bmalagueno\b`, tipo: 'localidad' as const },
-  ];
-  assert.deepEqual(localidadesQueNombra('Villa Carlos Paz Sector comprendido por calles Alberdi y Caseros.', localidades), ['Villa Carlos Paz']);
-  assert.deepEqual(
-    localidadesQueNombra('Otras localidades Localidades de Alta Gracia, Los Aromos y Malagueño: barrios Don Bosco.', localidades),
-    ['Alta Gracia', 'Malagueño'],
-  );
-  assert.deepEqual(localidadesQueNombra('Río Cuarto Barrios Las Ferias y Pizarro.', localidades), []);
-});
-
-test('encabezadoDelCorte: la localidad sale del título o de lo que está antes de los dos puntos', () => {
-  const localidades = [
-    { nombre: 'Alta Gracia', patron: String.raw`\balta gracia\b`, tipo: 'localidad' as const },
-    { nombre: 'Malagueño', patron: String.raw`\bmalagueno\b`, tipo: 'localidad' as const },
-  ];
-  const en = (seccion: string, zona: string) => localidadesQueNombra(encabezadoDelCorte(seccion, zona), localidades);
-  assert.deepEqual(en('Otras localidades', 'Localidades de Alta Gracia y Los Aromos: barrios Don Bosco.'), ['Alta Gracia']);
-  assert.deepEqual(en('Malagueño', 'Sector sobre Camino a Alta Gracia, desde el puente.'), ['Malagueño']); // el camino no cuenta
-  assert.deepEqual(en('Otras localidades', 'Sector sobre calle Los Aromos.'), []);
 });

@@ -41,6 +41,12 @@ test('un link compartido abre directo el barrio, aunque no tenga tildes', async 
   await expect(page).toHaveURL(/\?barrio=Arg%C3%BCello$/);
 });
 
+test('las localidades del interior también tienen su ficha y se dibujan aunque no tengan cortes', async ({ page }) => {
+  await page.goto('/?barrio=villa maria');
+  await expect(barrioElegido(page)).toHaveText('Villa María');
+  await expect(page.locator('path.barrio-elegido, path.leaflet-interactive').first()).toBeVisible();
+});
+
 test('reportar "No tengo luz": se acepta una vez y la misma conexión no puede repetir en otro barrio', async ({ page }, info) => {
   test.skip(info.project.name !== 'compu', 'El servidor de prueba es uno solo: el límite por conexión se prueba una vez.');
   await page.goto('/?barrio=Alberdi');

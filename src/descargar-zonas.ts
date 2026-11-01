@@ -1,4 +1,5 @@
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
+import type { Localidad } from './localidades.ts';
 
 // Arma data/zonas.geojson: zonas APROXIMADAS que se marcan en el mapa cuando un corte no se puede ubicar por barrios.
 // Se corre a mano (`npm run zonas`). Hay dos tipos:
@@ -6,7 +7,8 @@ import { writeFile } from 'node:fs/promises';
 // - "ruta": cortes de capital que EPEC describe por una ruta o camino ("zona rural sobre Ruta Nacional 9 hacia el
 //   norte"). Tomamos el tramo de la ruta de OpenStreetMap y dibujamos un "corredor" de unos cientos de metros a cada
 //   lado. Los tramos se eligieron ubicando las referencias del anuncio en un mapa (ej. el Km 13 del Camino a 60 Cuadras).
-// - "localidad": las localidades de Gran Córdoba. EPEC las describe por calles o "en la localidad", sin barrios que
+// - "localidad": las localidades de Gran Córdoba (las del resto de la provincia las agrega solo el lector, con
+//   src/localidades.ts). EPEC las describe por calles o "en la localidad", sin barrios que
 //   se puedan ubicar, así que se marca el límite del municipio entero, que da OpenStreetMap a través de Nominatim.
 //
 // Ninguna es el límite real del corte (EPEC no lo publica): son una referencia visual de dónde queda.
@@ -72,7 +74,7 @@ async function limitesDeLocalidades(): Promise<Map<number, Geometria>> {
 }
 
 /** Redondea las coordenadas a 5 decimales (~1 m), en cualquier nivel de anidado. */
-const redondear = (valor: unknown): unknown =>
+export const redondear = (valor: unknown): unknown =>
   typeof valor === 'number' ? Math.round(valor * 1e5) / 1e5 : Array.isArray(valor) ? valor.map(redondear) : valor;
 
 // Overpass es un servicio gratuito y compartido: a veces responde "ocupado" o limita consultas. Reintentamos con calma.
@@ -145,12 +147,17 @@ if (import.meta.main) {
         nombre: localidad.nombre,
         tipo: 'localidad',
         patron: localidad.patron,
+        osm: `R${localidad.relacion}`,
         descripcion: `El anuncio de EPEC no nombra barrios de ${localidad.nombre} que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada.`,
       },
       geometry: { type: limite.type, coordinates: redondear(limite.coordinates) },
     });
     console.log(`${localidad.nombre}: límite municipal (${limite.type})`);
   }
+  // Las localidades del resto de la provincia las agrega el lector solo (src/localidades.ts): se conservan.
+  const cargadas = new Set(LOCALIDADES.map((l) => `R${l.relacion}`));
+  const anteriores = JSON.parse(await readFile(ARCHIVO, 'utf8').catch(() => '{"features":[]}')) as { features: Localidad[] };
+  features.push(...anteriores.features.filter((f) => f.properties.tipo === 'localidad' && f.properties.osm && !cargadas.has(f.properties.osm)));
   await writeFile(ARCHIVO, JSON.stringify({ type: 'FeatureCollection', features }, null, 1) + '\n');
   console.log(`Guardadas ${features.length} zonas aproximadas en ${ARCHIVO}`);
 }
