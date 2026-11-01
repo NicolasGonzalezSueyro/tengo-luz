@@ -12749,5 +12749,455 @@
     ],
     "zonas": [],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "06:00",
+    "hasta": "06:15",
+    "zona": "Localidades de Carnerillo, Charras, Chucul y Olaeta.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Carnerillo",
+      "Charras",
+      "Chucul",
+      "Olaeta"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "06:20",
+    "hasta": "07:40",
+    "zona": "Localidad de General Cabrera.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "General Cabrera"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "06:30",
+    "hasta": "07:30",
+    "zona": "barrio Sur.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Leones"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "06:30",
+    "hasta": "10:30",
+    "zona": "Localidades de Ballesteros Sur y Ramón J. Cárcano.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros Sud",
+      "Ramón J. Carcano"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "Zona este, entre las calles Italia, Bv. Colon, Av. Del Libertador, R. Infante; B. Peiretti, D. Hernández, hasta Juan Costa y Rura Nº 9.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Leones"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Río Segundo",
+    "fecha": "2026-11-01",
+    "desde": "06:30",
+    "hasta": "07:30",
+    "zona": "zona fabril Camino San José.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Río Segundo"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Pilar",
+    "fecha": "2026-11-01",
+    "desde": "06:30",
+    "hasta": "07:30",
+    "zona": "zona fabril ruta 13 y barrios Quintas de Pilar y Balcones del Xanaes.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Pilar"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "07:20",
+    "hasta": "07:40",
+    "zona": "Localidades de Carnerillo, Charras, Chucul y Olaeta.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Carnerillo",
+      "Charras",
+      "Chucul",
+      "Olaeta"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-01",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "barrio Los Boulevares.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Los Boulevares"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-01",
+    "desde": "07:30",
+    "hasta": "13:30",
+    "zona": "en Ruta 9 Norte entre Km 12 y Km 13.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Zona rural Ruta 9 Norte"
+    ],
+    "sinUbicar": [
+      "entre km 12 y km 13"
+    ]
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "07:30",
+    "hasta": "09:30",
+    "zona": "Villa del Totoral y Cooperativas de Sarmiento, Cañada de Luque, Las Peñas con sus respectivas zonas de influencia. Localidades Villa del Totoral, Cañada de Luque, Atahona, Las Peñas, Los Mistoles, Capilla de Sitón, La Posta, Sarmiento, Mula Muerta, Cañada de Río Pinto, Agua de Las Piedras, Villa Gutiérrez, Los Manzanos, Villa Albertina, Villa Cerro Negro, La Tuna, Avellaneda y Macha.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Villa del Totoral",
+      "Cañada de Luque",
+      "Atahona",
+      "Las Peñas",
+      "Los Mistoles",
+      "Capilla de Sitón",
+      "La Posta",
+      "Sarmiento",
+      "Cañada de Río Pinto",
+      "Agua de las Piedras",
+      "Villa Gutiérrez",
+      "Villa Albertina",
+      "Avellaneda",
+      "Macha"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Río Cuarto",
+    "fecha": "2026-11-01",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "barrios Buena Vista, Lomitas de Oro e Intendente Mojica.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.37018,
+        -33.11566
+      ],
+      [
+        -64.36911,
+        -33.1219
+      ],
+      [
+        -64.36868,
+        -33.12325
+      ],
+      [
+        -64.3675,
+        -33.12424
+      ],
+      [
+        -64.36589,
+        -33.1246
+      ],
+      [
+        -64.36428,
+        -33.12424
+      ],
+      [
+        -64.35619,
+        -33.11946
+      ],
+      [
+        -64.35501,
+        -33.11847
+      ],
+      [
+        -64.35458,
+        -33.11712
+      ],
+      [
+        -64.35501,
+        -33.11577
+      ],
+      [
+        -64.35619,
+        -33.11479
+      ],
+      [
+        -64.3578,
+        -33.11443
+      ],
+      [
+        -64.36697,
+        -33.11297
+      ],
+      [
+        -64.36858,
+        -33.11333
+      ],
+      [
+        -64.36975,
+        -33.11432
+      ],
+      [
+        -64.37018,
+        -33.11566
+      ]
+    ]
+  },
+  {
+    "localidad": "Río Cuarto",
+    "fecha": "2026-11-01",
+    "desde": "08:00",
+    "hasta": "08:10",
+    "zona": "barrios Centro y Macrocentro.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.35565,
+        -33.12764
+      ],
+      [
+        -64.35522,
+        -33.12898
+      ],
+      [
+        -64.35404,
+        -33.12997
+      ],
+      [
+        -64.35243,
+        -33.13033
+      ],
+      [
+        -64.35082,
+        -33.12997
+      ],
+      [
+        -64.34965,
+        -33.12898
+      ],
+      [
+        -64.34921,
+        -33.12764
+      ],
+      [
+        -64.34965,
+        -33.12629
+      ],
+      [
+        -64.35082,
+        -33.1253
+      ],
+      [
+        -64.35243,
+        -33.12494
+      ],
+      [
+        -64.35404,
+        -33.1253
+      ],
+      [
+        -64.35522,
+        -33.12629
+      ],
+      [
+        -64.35565,
+        -33.12764
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-01",
+    "desde": "08:30",
+    "hasta": "11:30",
+    "zona": "barrio Nueva Córdoba, entre calles Chacabuco y San Lorenzo.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Nueva Córdoba"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "entre calles chacabuco y san lorenzo"
+    ],
+    "sector": [
+      [
+        -64.18426,
+        -31.42445
+      ],
+      [
+        -64.18409,
+        -31.42499
+      ],
+      [
+        -64.18363,
+        -31.42539
+      ],
+      [
+        -64.183,
+        -31.42553
+      ],
+      [
+        -64.18237,
+        -31.42539
+      ],
+      [
+        -64.1819,
+        -31.42499
+      ],
+      [
+        -64.18174,
+        -31.42445
+      ],
+      [
+        -64.1819,
+        -31.42392
+      ],
+      [
+        -64.18237,
+        -31.42352
+      ],
+      [
+        -64.183,
+        -31.42338
+      ],
+      [
+        -64.18363,
+        -31.42352
+      ],
+      [
+        -64.18409,
+        -31.42392
+      ],
+      [
+        -64.18426,
+        -31.42445
+      ]
+    ]
+  },
+  {
+    "localidad": "Río Cuarto",
+    "fecha": "2026-11-01",
+    "desde": "08:30",
+    "hasta": "09:30",
+    "zona": "barrios Roque Sáenz Peña y Tiro Federal.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-01",
+    "desde": "08:30",
+    "hasta": "11:30",
+    "zona": "entre calles Belgrano y Achával Rodríguez.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "entre calles belgrano y achaval rodriguez"
+    ]
+  },
+  {
+    "localidad": "Leones",
+    "fecha": "2026-11-01",
+    "desde": "09:10",
+    "hasta": "09:30",
+    "zona": "barrio Sur.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Leones"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Río Cuarto",
+    "fecha": "2026-11-01",
+    "desde": "10:30",
+    "hasta": "11:30",
+    "zona": "sectores de camino a Tres Acequias y toma de agua de EMOS.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": []
   }
 ]

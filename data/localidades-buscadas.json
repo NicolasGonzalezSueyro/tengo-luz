@@ -986,5 +986,269 @@
    ],
    "departamento": "Santa María"
   }
+ ],
+ "carnerillo": [
+  {
+   "nombre": "Carnerillo",
+   "osm": "R5633345",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.0228435,
+    -32.9141862
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "charras": [
+  {
+   "nombre": "Charras",
+   "osm": "R3914774",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.0449781,
+    -33.0231404
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "chucul": [
+  {
+   "nombre": "Chucul",
+   "osm": "N198444076",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.1701565,
+    -33.0115108
+   ],
+   "departamento": "Río Cuarto"
+  }
+ ],
+ "olaeta": [
+  {
+   "nombre": "Olaeta",
+   "osm": "R5633346",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.9062102,
+    -33.0445136
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "leones": [
+  {
+   "nombre": "Leones",
+   "osm": "R9447024",
+   "tipo": "town",
+   "rango": 14,
+   "punto": [
+    -62.297024,
+    -32.6595751
+   ],
+   "departamento": "Marcos Juárez"
+  }
+ ],
+ "ramon j carcano": [
+  {
+   "nombre": "Ramón J. Carcano",
+   "osm": "R8840782",
+   "tipo": "city",
+   "rango": 16,
+   "punto": [
+    -63.103193,
+    -32.4873257
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "pilar": [
+  {
+   "nombre": "Pilar",
+   "osm": "R2330522",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.8823844,
+    -31.6814428
+   ],
+   "departamento": "Río Segundo"
+  }
+ ],
+ "canada luque": [
+  {
+   "nombre": "Cañada de Luque",
+   "osm": "R6004441",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.7240686,
+    -30.7352678
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "atahona": [
+  {
+   "nombre": "Atahona",
+   "osm": "R9399955",
+   "tipo": "municipality",
+   "rango": 14,
+   "punto": [
+    -63.7061147,
+    -30.9050554
+   ],
+   "departamento": "Río Primero"
+  }
+ ],
+ "las penas": [
+  {
+   "nombre": "Las Peñas",
+   "osm": "R6002324",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.0004993,
+    -30.5639301
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "los mistoles": [
+  {
+   "nombre": "Los Mistoles",
+   "osm": "R6002327",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.8863043,
+    -30.626166
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "capilla siton": [
+  {
+   "nombre": "Capilla de Sitón",
+   "osm": "N198442005",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.6521477,
+    -30.5720747
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "la posta": [
+  {
+   "nombre": "La Posta",
+   "osm": "N198457496",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.5161036,
+    -30.5643627
+   ],
+   "departamento": "Río Primero"
+  }
+ ],
+ "sarmiento": [
+  {
+   "nombre": "Sarmiento",
+   "osm": "R5998601",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.1096862,
+    -30.7743618
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "mula muerta": [],
+ "canada rio pinto": [
+  {
+   "nombre": "Cañada de Río Pinto",
+   "osm": "N198441731",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.2180489,
+    -30.7751
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "agua las piedras": [
+  {
+   "nombre": "Agua de las Piedras",
+   "osm": "N198437828",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.2129164,
+    -30.8172364
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "villa gutierrez": [
+  {
+   "nombre": "Villa Gutiérrez",
+   "osm": "R6002280",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.1615314,
+    -30.6797053
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "los manzanos": [],
+ "villa albertina": [
+  {
+   "nombre": "Villa Albertina",
+   "osm": "N198433126",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.3000919,
+    -30.6935871
+   ],
+   "departamento": "Ischilín"
+  }
+ ],
+ "villa cerro negro": [],
+ "la tuna": [],
+ "avellaneda": [
+  {
+   "nombre": "Avellaneda",
+   "osm": "R5198109",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.205589,
+    -30.5941882
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "macha": [
+  {
+   "nombre": "Macha",
+   "osm": "N198400957",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -64.1405158,
+    -30.5666996
+   ],
+   "departamento": "Totoral"
+  }
  ]
 }

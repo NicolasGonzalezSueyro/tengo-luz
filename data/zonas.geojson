@@ -12653,6 +12653,1404 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Carnerillo",
+    "tipo": "localidad",
+    "patron": "^carnerillo$",
+    "osm": "R5633345",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Carnerillo que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.03982,
+       -32.92085
+      ],
+      [
+       -64.02782,
+       -32.92309
+      ],
+      [
+       -64.02889,
+       -32.9271
+      ],
+      [
+       -64.01441,
+       -32.92985
+      ],
+      [
+       -64.01126,
+       -32.91795
+      ],
+      [
+       -64.01615,
+       -32.91702
+      ],
+      [
+       -64.0142,
+       -32.90942
+      ],
+      [
+       -64.02967,
+       -32.90827
+      ],
+      [
+       -64.0307,
+       -32.90952
+      ],
+      [
+       -64.02784,
+       -32.91281
+      ],
+      [
+       -64.03982,
+       -32.92085
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Charras",
+    "tipo": "localidad",
+    "patron": "^charras$",
+    "osm": "R3914774",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Charras que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.05312,
+       -33.02587
+      ],
+      [
+       -64.04343,
+       -33.03007
+      ],
+      [
+       -64.04035,
+       -33.02495
+      ],
+      [
+       -64.03913,
+       -33.02097
+      ],
+      [
+       -64.04797,
+       -33.01719
+      ],
+      [
+       -64.05312,
+       -33.02587
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Chucul",
+    "tipo": "localidad",
+    "patron": "^chucul$",
+    "osm": "N198444076",
+    "descripcion": "OpenStreetMap no tiene el límite de Chucul: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.17873,
+       -33.01151
+      ],
+      [
+       -64.17758,
+       -33.0151
+      ],
+      [
+       -64.17444,
+       -33.01773
+      ],
+      [
+       -64.17016,
+       -33.0187
+      ],
+      [
+       -64.16587,
+       -33.01773
+      ],
+      [
+       -64.16273,
+       -33.0151
+      ],
+      [
+       -64.16159,
+       -33.01151
+      ],
+      [
+       -64.16273,
+       -33.00792
+      ],
+      [
+       -64.16587,
+       -33.00529
+      ],
+      [
+       -64.17016,
+       -33.00432
+      ],
+      [
+       -64.17444,
+       -33.00529
+      ],
+      [
+       -64.17758,
+       -33.00792
+      ],
+      [
+       -64.17873,
+       -33.01151
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Olaeta",
+    "tipo": "localidad",
+    "patron": "^olaeta$",
+    "osm": "R5633346",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Olaeta que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.91768,
+       -33.04939
+      ],
+      [
+       -63.90295,
+       -33.04788
+      ],
+      [
+       -63.90423,
+       -33.03849
+      ],
+      [
+       -63.91495,
+       -33.03949
+      ],
+      [
+       -63.91768,
+       -33.04939
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Leones",
+    "tipo": "localidad",
+    "patron": "^leones$",
+    "osm": "R9447024",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Leones que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        -62.32293,
+        -32.66202
+       ],
+       [
+        -62.30477,
+        -32.66545
+       ],
+       [
+        -62.30587,
+        -32.66988
+       ],
+       [
+        -62.29046,
+        -32.67244
+       ],
+       [
+        -62.28955,
+        -32.66874
+       ],
+       [
+        -62.28133,
+        -32.67026
+       ],
+       [
+        -62.27683,
+        -32.65159
+       ],
+       [
+        -62.29036,
+        -32.64924
+       ],
+       [
+        -62.28597,
+        -32.6327
+       ],
+       [
+        -62.27255,
+        -32.63507
+       ],
+       [
+        -62.27174,
+        -32.63159
+       ],
+       [
+        -62.30371,
+        -32.62593
+       ],
+       [
+        -62.30444,
+        -32.62943
+       ],
+       [
+        -62.28943,
+        -32.6322
+       ],
+       [
+        -62.29397,
+        -32.6487
+       ],
+       [
+        -62.29869,
+        -32.64787
+       ],
+       [
+        -62.29693,
+        -32.64091
+       ],
+       [
+        -62.3053,
+        -32.63944
+       ],
+       [
+        -62.30788,
+        -32.64961
+       ],
+       [
+        -62.31919,
+        -32.64757
+       ],
+       [
+        -62.32293,
+        -32.66202
+       ]
+      ]
+     ],
+     [
+      [
+       [
+        -62.31643,
+        -32.67381
+       ],
+       [
+        -62.31344,
+        -32.67432
+       ],
+       [
+        -62.31262,
+        -32.67055
+       ],
+       [
+        -62.31546,
+        -32.67005
+       ],
+       [
+        -62.31643,
+        -32.67381
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Ramón J. Carcano",
+    "tipo": "localidad",
+    "patron": "^ramon j carcano$",
+    "osm": "R8840782",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Ramón J. Carcano que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.10994,
+       -32.48717
+      ],
+      [
+       -63.10527,
+       -32.49026
+      ],
+      [
+       -63.10582,
+       -32.49224
+      ],
+      [
+       -63.10531,
+       -32.49255
+      ],
+      [
+       -63.10616,
+       -32.49368
+      ],
+      [
+       -63.10119,
+       -32.49635
+      ],
+      [
+       -63.10015,
+       -32.49492
+      ],
+      [
+       -63.09884,
+       -32.49562
+      ],
+      [
+       -63.09442,
+       -32.48927
+      ],
+      [
+       -63.09299,
+       -32.48956
+      ],
+      [
+       -63.09158,
+       -32.4876
+      ],
+      [
+       -63.09393,
+       -32.48642
+      ],
+      [
+       -63.09525,
+       -32.48808
+      ],
+      [
+       -63.10707,
+       -32.48191
+      ],
+      [
+       -63.10795,
+       -32.47887
+      ],
+      [
+       -63.10947,
+       -32.47849
+      ],
+      [
+       -63.10858,
+       -32.48199
+      ],
+      [
+       -63.10994,
+       -32.48384
+      ],
+      [
+       -63.10944,
+       -32.48415
+      ],
+      [
+       -63.10994,
+       -32.48717
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Pilar",
+    "tipo": "localidad",
+    "patron": "^pilar$",
+    "osm": "R2330522",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Pilar que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.9017,
+       -31.66325
+      ],
+      [
+       -63.90152,
+       -31.66488
+      ],
+      [
+       -63.89345,
+       -31.67411
+      ],
+      [
+       -63.89665,
+       -31.679
+      ],
+      [
+       -63.89684,
+       -31.68667
+      ],
+      [
+       -63.88777,
+       -31.69701
+      ],
+      [
+       -63.87824,
+       -31.6909
+      ],
+      [
+       -63.87482,
+       -31.69476
+      ],
+      [
+       -63.86182,
+       -31.68663
+      ],
+      [
+       -63.88017,
+       -31.66561
+      ],
+      [
+       -63.88826,
+       -31.66754
+      ],
+      [
+       -63.90013,
+       -31.66291
+      ],
+      [
+       -63.9017,
+       -31.66325
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Cañada de Luque",
+    "tipo": "localidad",
+    "patron": "^canada luque$",
+    "osm": "R6004441",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Cañada de Luque que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.73126,
+       -30.73828
+      ],
+      [
+       -63.7276,
+       -30.73893
+      ],
+      [
+       -63.72836,
+       -30.74187
+      ],
+      [
+       -63.71875,
+       -30.74336
+      ],
+      [
+       -63.71688,
+       -30.73514
+      ],
+      [
+       -63.72092,
+       -30.73392
+      ],
+      [
+       -63.71979,
+       -30.73149
+      ],
+      [
+       -63.72668,
+       -30.73111
+      ],
+      [
+       -63.72696,
+       -30.73631
+      ],
+      [
+       -63.73075,
+       -30.7358
+      ],
+      [
+       -63.73126,
+       -30.73828
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Atahona",
+    "tipo": "localidad",
+    "patron": "^atahona$",
+    "osm": "R9399955",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Atahona que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.70959,
+       -30.90477
+      ],
+      [
+       -63.70865,
+       -30.90437
+      ],
+      [
+       -63.70638,
+       -30.90533
+      ],
+      [
+       -63.70609,
+       -30.90886
+      ],
+      [
+       -63.70503,
+       -30.90871
+      ],
+      [
+       -63.70533,
+       -30.90547
+      ],
+      [
+       -63.70467,
+       -30.90327
+      ],
+      [
+       -63.70097,
+       -30.90373
+      ],
+      [
+       -63.70098,
+       -30.90237
+      ],
+      [
+       -63.70449,
+       -30.90234
+      ],
+      [
+       -63.70736,
+       -30.9014
+      ],
+      [
+       -63.7079,
+       -30.90354
+      ],
+      [
+       -63.70936,
+       -30.90343
+      ],
+      [
+       -63.70959,
+       -30.90477
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Las Peñas",
+    "tipo": "localidad",
+    "patron": "^las penas$",
+    "osm": "R6002324",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Las Peñas que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.00653,
+       -30.54263
+      ],
+      [
+       -64.00504,
+       -30.54678
+      ],
+      [
+       -64.00375,
+       -30.54685
+      ],
+      [
+       -64.00337,
+       -30.57043
+      ],
+      [
+       -63.99413,
+       -30.57041
+      ],
+      [
+       -63.99332,
+       -30.56562
+      ],
+      [
+       -63.99441,
+       -30.56495
+      ],
+      [
+       -63.99443,
+       -30.56299
+      ],
+      [
+       -63.98378,
+       -30.56464
+      ],
+      [
+       -63.98334,
+       -30.56287
+      ],
+      [
+       -63.99942,
+       -30.56009
+      ],
+      [
+       -63.99876,
+       -30.55702
+      ],
+      [
+       -64.00151,
+       -30.55685
+      ],
+      [
+       -64.00149,
+       -30.55478
+      ],
+      [
+       -63.99733,
+       -30.55476
+      ],
+      [
+       -63.99675,
+       -30.55187
+      ],
+      [
+       -64.00162,
+       -30.55195
+      ],
+      [
+       -64.00163,
+       -30.54985
+      ],
+      [
+       -64.0008,
+       -30.54982
+      ],
+      [
+       -64.00064,
+       -30.54855
+      ],
+      [
+       -64.0016,
+       -30.54853
+      ],
+      [
+       -64.00215,
+       -30.54644
+      ],
+      [
+       -64.00126,
+       -30.54635
+      ],
+      [
+       -64.00188,
+       -30.54438
+      ],
+      [
+       -64.00067,
+       -30.5424
+      ],
+      [
+       -64.00653,
+       -30.54263
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Los Mistoles",
+    "tipo": "localidad",
+    "patron": "^los mistoles$",
+    "osm": "R6002327",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Los Mistoles que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.88947,
+       -30.62687
+      ],
+      [
+       -63.88851,
+       -30.62758
+      ],
+      [
+       -63.88755,
+       -30.62726
+      ],
+      [
+       -63.88602,
+       -30.62864
+      ],
+      [
+       -63.88371,
+       -30.62612
+      ],
+      [
+       -63.88727,
+       -30.62416
+      ],
+      [
+       -63.88887,
+       -30.62474
+      ],
+      [
+       -63.88748,
+       -30.62609
+      ],
+      [
+       -63.88947,
+       -30.62687
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Capilla de Sitón",
+    "tipo": "localidad",
+    "patron": "^capilla siton$",
+    "osm": "N198442005",
+    "descripcion": "OpenStreetMap no tiene el límite de Capilla de Sitón: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.66049,
+       -30.57207
+      ],
+      [
+       -63.65938,
+       -30.57567
+      ],
+      [
+       -63.65632,
+       -30.5783
+      ],
+      [
+       -63.65215,
+       -30.57926
+      ],
+      [
+       -63.64797,
+       -30.5783
+      ],
+      [
+       -63.64492,
+       -30.57567
+      ],
+      [
+       -63.6438,
+       -30.57207
+      ],
+      [
+       -63.64492,
+       -30.56848
+      ],
+      [
+       -63.64797,
+       -30.56585
+      ],
+      [
+       -63.65215,
+       -30.56489
+      ],
+      [
+       -63.65632,
+       -30.56585
+      ],
+      [
+       -63.65938,
+       -30.56848
+      ],
+      [
+       -63.66049,
+       -30.57207
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "La Posta",
+    "tipo": "localidad",
+    "patron": "^la posta$",
+    "osm": "N198457496",
+    "descripcion": "OpenStreetMap no tiene el límite de La Posta: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.52445,
+       -30.56436
+      ],
+      [
+       -63.52333,
+       -30.56796
+      ],
+      [
+       -63.52028,
+       -30.57059
+      ],
+      [
+       -63.5161,
+       -30.57155
+      ],
+      [
+       -63.51193,
+       -30.57059
+      ],
+      [
+       -63.50888,
+       -30.56796
+      ],
+      [
+       -63.50776,
+       -30.56436
+      ],
+      [
+       -63.50888,
+       -30.56077
+      ],
+      [
+       -63.51193,
+       -30.55814
+      ],
+      [
+       -63.5161,
+       -30.55718
+      ],
+      [
+       -63.52028,
+       -30.55814
+      ],
+      [
+       -63.52333,
+       -30.56077
+      ],
+      [
+       -63.52445,
+       -30.56436
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Sarmiento",
+    "tipo": "localidad",
+    "patron": "^sarmiento$",
+    "osm": "R5998601",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Sarmiento que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.11494,
+       -30.76776
+      ],
+      [
+       -64.11342,
+       -30.77725
+      ],
+      [
+       -64.10985,
+       -30.77684
+      ],
+      [
+       -64.10855,
+       -30.77795
+      ],
+      [
+       -64.10769,
+       -30.77771
+      ],
+      [
+       -64.10603,
+       -30.78015
+      ],
+      [
+       -64.10474,
+       -30.77977
+      ],
+      [
+       -64.10617,
+       -30.77654
+      ],
+      [
+       -64.10487,
+       -30.77542
+      ],
+      [
+       -64.10527,
+       -30.76696
+      ],
+      [
+       -64.11494,
+       -30.76776
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Cañada de Río Pinto",
+    "tipo": "localidad",
+    "patron": "^canada rio pinto$",
+    "osm": "N198441731",
+    "descripcion": "OpenStreetMap no tiene el límite de Cañada de Río Pinto: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.22328,
+       -30.7751
+      ],
+      [
+       -64.22258,
+       -30.77735
+      ],
+      [
+       -64.22066,
+       -30.77899
+      ],
+      [
+       -64.21805,
+       -30.77959
+      ],
+      [
+       -64.21544,
+       -30.77899
+      ],
+      [
+       -64.21352,
+       -30.77735
+      ],
+      [
+       -64.21282,
+       -30.7751
+      ],
+      [
+       -64.21352,
+       -30.77285
+      ],
+      [
+       -64.21544,
+       -30.77121
+      ],
+      [
+       -64.21805,
+       -30.77061
+      ],
+      [
+       -64.22066,
+       -30.77121
+      ],
+      [
+       -64.22258,
+       -30.77285
+      ],
+      [
+       -64.22328,
+       -30.7751
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Agua de las Piedras",
+    "tipo": "localidad",
+    "patron": "^agua las piedras$",
+    "osm": "N198437828",
+    "descripcion": "OpenStreetMap no tiene el límite de Agua de las Piedras: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.21815,
+       -30.81724
+      ],
+      [
+       -64.21745,
+       -30.81948
+      ],
+      [
+       -64.21553,
+       -30.82113
+      ],
+      [
+       -64.21292,
+       -30.82173
+      ],
+      [
+       -64.2103,
+       -30.82113
+      ],
+      [
+       -64.20839,
+       -30.81948
+      ],
+      [
+       -64.20769,
+       -30.81724
+      ],
+      [
+       -64.20839,
+       -30.81499
+      ],
+      [
+       -64.2103,
+       -30.81335
+      ],
+      [
+       -64.21292,
+       -30.81274
+      ],
+      [
+       -64.21553,
+       -30.81335
+      ],
+      [
+       -64.21745,
+       -30.81499
+      ],
+      [
+       -64.21815,
+       -30.81724
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Villa Gutiérrez",
+    "tipo": "localidad",
+    "patron": "^villa gutierrez$",
+    "osm": "R6002280",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Villa Gutiérrez que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.16373,
+       -30.67594
+      ],
+      [
+       -64.16211,
+       -30.67763
+      ],
+      [
+       -64.1634,
+       -30.67988
+      ],
+      [
+       -64.16192,
+       -30.6815
+      ],
+      [
+       -64.16037,
+       -30.6809
+      ],
+      [
+       -64.16017,
+       -30.68202
+      ],
+      [
+       -64.15817,
+       -30.68173
+      ],
+      [
+       -64.15657,
+       -30.68068
+      ],
+      [
+       -64.15961,
+       -30.67589
+      ],
+      [
+       -64.16373,
+       -30.67594
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Villa Albertina",
+    "tipo": "localidad",
+    "patron": "^villa albertina$",
+    "osm": "N198433126",
+    "descripcion": "OpenStreetMap no tiene el límite de Villa Albertina: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.30532,
+       -30.69359
+      ],
+      [
+       -64.30462,
+       -30.69583
+      ],
+      [
+       -64.3027,
+       -30.69748
+      ],
+      [
+       -64.30009,
+       -30.69808
+      ],
+      [
+       -64.29748,
+       -30.69748
+      ],
+      [
+       -64.29557,
+       -30.69583
+      ],
+      [
+       -64.29487,
+       -30.69359
+      ],
+      [
+       -64.29557,
+       -30.69134
+      ],
+      [
+       -64.29748,
+       -30.6897
+      ],
+      [
+       -64.30009,
+       -30.6891
+      ],
+      [
+       -64.3027,
+       -30.6897
+      ],
+      [
+       -64.30462,
+       -30.69134
+      ],
+      [
+       -64.30532,
+       -30.69359
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Avellaneda",
+    "tipo": "localidad",
+    "patron": "^avellaneda$",
+    "osm": "R5198109",
+    "descripcion": "El anuncio de EPEC no nombra barrios de Avellaneda que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.21344,
+       -30.59258
+      ],
+      [
+       -64.21056,
+       -30.59913
+      ],
+      [
+       -64.20119,
+       -30.59643
+      ],
+      [
+       -64.20388,
+       -30.59031
+      ],
+      [
+       -64.20816,
+       -30.59172
+      ],
+      [
+       -64.20925,
+       -30.59014
+      ],
+      [
+       -64.20928,
+       -30.59214
+      ],
+      [
+       -64.2103,
+       -30.59239
+      ],
+      [
+       -64.21064,
+       -30.59166
+      ],
+      [
+       -64.21344,
+       -30.59258
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Macha",
+    "tipo": "localidad",
+    "patron": "^macha$",
+    "osm": "N198400957",
+    "descripcion": "OpenStreetMap no tiene el límite de Macha: el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.14573,
+       -30.5667
+      ],
+      [
+       -64.14503,
+       -30.56895
+      ],
+      [
+       -64.14312,
+       -30.57059
+      ],
+      [
+       -64.14052,
+       -30.57119
+      ],
+      [
+       -64.13791,
+       -30.57059
+      ],
+      [
+       -64.136,
+       -30.56895
+      ],
+      [
+       -64.1353,
+       -30.5667
+      ],
+      [
+       -64.136,
+       -30.56445
+      ],
+      [
+       -64.13791,
+       -30.56281
+      ],
+      [
+       -64.14052,
+       -30.56221
+      ],
+      [
+       -64.14312,
+       -30.56281
+      ],
+      [
+       -64.14503,
+       -30.56445
+      ],
+      [
+       -64.14573,
+       -30.5667
+      ]
+     ]
+    ]
+   }
   }
  ]
 }
