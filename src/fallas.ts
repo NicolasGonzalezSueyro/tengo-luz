@@ -113,7 +113,28 @@ export async function fallasActivas(db: BaseDeDatos, ahora: number): Promise<Fal
 
 /** Lo que manda el extractor por cada publicación de EPEC. */
 export type Publicacion = { id: string; url: string; texto: string; publicado?: string };
-export type Resultado = { id: string; estado: 'pendiente' | 'sin_lugares' | 'repetida' | 'restablecida' | 'ignorada'; lugares: string[] };
+export type Resultado = {
+  id: string;
+  estado: 'publicada' | 'pendiente' | 'sin_lugares' | 'repetida' | 'restablecida' | 'ignorada';
+  lugares: string[];
+};
+
+/**
+ * Una falla se publica sola si se reconoció al menos un lugar y no mezcla barrios de capital con localidades del
+ * interior: "Villa María: barrio Centro" encontraría también el Centro de capital. Las demás las revisa el admin.
+ */
+export const esConfiable = (encontrados: string[], localidades: Set<string>) =>
+  encontrados.length > 0 && (encontrados.every((l) => localidades.has(l)) || encontrados.every((l) => !localidades.has(l)));
+
+/** Publica una falla directamente (sin esperar /confirmar), desde ahora y por DURACION. */
+async function publicarFalla(db: BaseDeDatos, f: Pick<Falla, 'lugares' | 'texto' | 'fuente'>, ahora: number): Promise<Falla> {
+  await db
+    .prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, 1)')
+    .bind(JSON.stringify(f.lugares), f.texto, f.fuente ?? '', ahora, ahora + DURACION)
+    .run();
+  const fila = await db.prepare('SELECT * FROM fallas WHERE confirmada = 1 AND fuente = ? ORDER BY id DESC LIMIT 1').bind(f.fuente ?? '').first();
+  return comoFalla(fila!);
+}
 
 // Cómo habla EPEC de un corte que no estaba programado, y de cuando vuelve la luz.
 const HABLA_DE_FALLA = /\b(falla|averia|sin (suministro|servicio|energia|luz)|interrup|inconveniente|afectad|contingencia|imprevist|no programad|desperfecto|cable cortado|tormenta|restriccion del servicio)/;
@@ -139,11 +160,19 @@ export function publicacionValida(valor: unknown): Publicacion | string {
 }
 
 /**
- * Procesa las publicaciones que manda el extractor (modo con revisión): las fallas quedan esperando /confirmar
- * en el bot, igual que si el admin hubiera compartido el link. Una publicación ya recibida (mismo link) no se repite.
+ * Procesa las publicaciones que manda el extractor. Las fallas confiables (ver esConfiable) se publican solas;
+ * las raras quedan esperando /confirmar en el bot, igual que si el admin hubiera compartido el link.
+ * Una publicación ya recibida (mismo link) no se repite. Devuelve el resultado de cada una y las fallas publicadas.
  */
-export async function recibirPublicaciones(db: BaseDeDatos, lugares: string[], publicaciones: Publicacion[], ahora: number): Promise<Resultado[]> {
+export async function recibirPublicaciones(
+  db: BaseDeDatos,
+  lugares: string[],
+  localidades: Set<string>,
+  publicaciones: Publicacion[],
+  ahora: number,
+): Promise<{ resultados: Resultado[]; publicadas: Falla[] }> {
   const resultados: Resultado[] = [];
+  const publicadas: Falla[] = [];
   for (const p of publicaciones) {
     const tipo = clasificar(p.texto);
     const encontrados = lugaresEnTexto(lugares, p.texto);
@@ -165,15 +194,29 @@ export async function recibirPublicaciones(db: BaseDeDatos, lugares: string[], p
       resultados.push({ id: p.id, estado: 'restablecida', lugares: encontrados });
       continue;
     }
+    if (esConfiable(encontrados, localidades)) {
+      publicadas.push(await publicarFalla(db, { texto: p.texto, fuente: p.url, lugares: encontrados }, ahora));
+      resultados.push({ id: p.id, estado: 'publicada', lugares: encontrados });
+      continue;
+    }
     await prepararFalla(db, { texto: p.texto, fuente: p.url, lugares: encontrados }, ahora);
     resultados.push({ id: p.id, estado: encontrados.length > 0 ? 'pendiente' : 'sin_lugares', lugares: encontrados });
   }
-  return resultados;
+  return { resultados, publicadas };
 }
 
-/** "Volvió la luz": saca del mapa todas las fallas publicadas. Devuelve cuántas eran. */
-export async function terminarFallas(db: BaseDeDatos, ahora: number): Promise<number> {
-  const activas = await fallasActivas(db, ahora);
-  await db.prepare('UPDATE fallas SET hasta = ? WHERE confirmada = 1 AND hasta > ?').bind(ahora, ahora).run();
+/** Suma lugares a una falla publicada (los que el texto nombraba y no se reconocieron). Devuelve la falla actualizada. */
+export async function agregarLugares(db: BaseDeDatos, id: number, nuevos: string[], ahora: number): Promise<Falla | null> {
+  const falla = (await fallasActivas(db, ahora)).find((f) => f.id === id);
+  if (!falla) return null;
+  const lugares = [...new Set([...falla.lugares, ...nuevos])];
+  await db.prepare('UPDATE fallas SET lugares = ? WHERE id = ?').bind(JSON.stringify(lugares), id).run();
+  return { ...falla, lugares };
+}
+
+/** "Volvió la luz": saca del mapa una falla (por su número) o todas. Devuelve cuántas sacó. */
+export async function terminarFallas(db: BaseDeDatos, ahora: number, id?: number): Promise<number> {
+  const activas = (await fallasActivas(db, ahora)).filter((f) => id === undefined || f.id === id);
+  for (const f of activas) await db.prepare('UPDATE fallas SET hasta = ? WHERE id = ?').bind(ahora, f.id).run();
   return activas.length;
 }

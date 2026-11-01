@@ -1,19 +1,21 @@
-import lugares from '../../data/lugares.js';
-import { revisarFallas } from '../../src/bot.ts';
+import lugares, { localidades } from '../../data/lugares.js';
+import { resumenPublicadas, revisarFallas } from '../../src/bot.ts';
 import { fallasActivas, fallasPendientes, publicacionValida, recibirPublicaciones, type Publicacion } from '../../src/fallas.ts';
+import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
 import { claveCorrecta } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
 
 // /api/fallas: las fallas no programadas que confirma EPEC (src/fallas.ts).
 //   GET  → las publicadas, para el mapa (público).
-//   POST → un extractor externo manda publicaciones de EPEC; las fallas quedan esperando /confirmar en el bot.
+//   POST → un extractor externo manda publicaciones de EPEC; las fallas confiables se publican solas y las raras
+//          quedan esperando /confirmar en el bot (ver esConfiable).
 //          Pide "Authorization: Bearer <FALLAS_CLAVE>". Body: { "id", "url", "texto", "publicado"? }
 //          o { "publicaciones": [ … ] } con hasta 20.
 
 type Contexto = {
   request: Request;
-  env: { DB: BaseDeDatos; FALLAS_CLAVE?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string };
+  env: { DB: BaseDeDatos; FALLAS_CLAVE?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string; PUSH_CLAVE?: string };
   waitUntil?: (tarea: Promise<unknown>) => void;
 };
 
@@ -22,6 +24,7 @@ type Contexto = {
 const SEGUNDOS_EN_CACHE = 5; // corto: una falla recién publicada tiene que verse enseguida
 const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
 const MAXIMO_POR_PEDIDO = 20;
+const LOCALIDADES = new Set(localidades);
 
 export async function onRequestGet({ request, env }: Contexto) {
   const clave = new Request(new URL('/api/fallas', request.url));
@@ -57,20 +60,33 @@ export async function onRequestPost({ request, env, waitUntil }: Contexto) {
     publicaciones.push(p);
   }
 
-  const resultados = await recibirPublicaciones(env.DB, lugares, publicaciones, Date.now());
+  const { resultados, publicadas } = await recibirPublicaciones(env.DB, lugares, LOCALIDADES, publicaciones, Date.now());
 
-  // Le avisa al admin por Telegram, después de contestar: las fallas para confirmar y las que dicen que volvió la luz.
+  // Después de contestar: avisar a quienes siguen esos lugares, y al admin lo que se publicó solo, lo que tiene
+  // que confirmar y lo que dice que volvió la luz.
   const nuevas = resultados.filter((r) => r.estado === 'pendiente' || r.estado === 'sin_lugares').length;
   const restablecidas = resultados.filter((r) => r.estado === 'restablecida');
-  if (env.TELEGRAM_TOKEN && env.TELEGRAM_ADMIN && (nuevas > 0 || restablecidas.length > 0)) {
-    const avisos = [
-      ...(nuevas > 0 ? [`📥 Llegaron ${nuevas === 1 ? 'una falla nueva' : `${nuevas} fallas nuevas`} de EPEC.`] : []),
-      ...restablecidas.map((r) => `✅ EPEC dice que volvió el servicio${r.lugares.length ? ` en ${r.lugares.join(', ')}` : ''}. Si corresponde, mandá /fin_falla.`),
-    ];
-    const texto = nuevas > 0 ? revisarFallas(await fallasPendientes(env.DB), avisos) : avisos.join('\n');
-    const tarea = enviarMensaje(env.TELEGRAM_TOKEN, Number(env.TELEGRAM_ADMIN), texto).catch((e) => console.error('No se pudo avisar al admin', e));
-    if (waitUntil) waitUntil(tarea);
-    else await tarea; // en los tests no hay waitUntil
+  const tareas: Promise<unknown>[] = [];
+  if (publicadas.length > 0) {
+    tareas.push((async () => {
+      for (const falla of publicadas) {
+        const { telegram, push } = await avisosDeFalla(env.DB, falla);
+        await mandarAvisos(env.DB, env, telegram, push);
+      }
+    })().catch((e) => console.error('No se pudo avisar de las fallas', e)));
   }
+  if (env.TELEGRAM_TOKEN && env.TELEGRAM_ADMIN && (publicadas.length > 0 || nuevas > 0 || restablecidas.length > 0)) {
+    const partes = [
+      ...(publicadas.length > 0 ? [resumenPublicadas(publicadas)] : []),
+      ...restablecidas.map((r) => `✅ EPEC dice que volvió el servicio${r.lugares.length ? ` en ${r.lugares.join(', ')}` : ''}. Si corresponde, sacala con /fin_falla y su número.`),
+      ...(nuevas > 0 ? [revisarFallas(await fallasPendientes(env.DB), [`📥 ${nuevas === 1 ? 'Esta necesita' : `Estas ${nuevas} necesitan`} que la revises:`])] : []),
+    ];
+    // Telegram no manda mensajes de más de 4096 caracteres.
+    const texto = partes.join('\n\n').slice(0, 4000);
+    tareas.push(enviarMensaje(env.TELEGRAM_TOKEN, Number(env.TELEGRAM_ADMIN), texto).catch((e) => console.error('No se pudo avisar al admin', e)));
+  }
+  const todas = Promise.all(tareas);
+  if (waitUntil) waitUntil(todas);
+  else await todas; // en los tests no hay waitUntil
   return Response.json({ resultados });
 }

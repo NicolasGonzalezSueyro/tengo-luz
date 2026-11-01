@@ -4,8 +4,8 @@
 import { etiquetaDia, lugaresDelCorte, type Corte } from '../web/estado.js';
 import { estadisticas, limpiarReportes } from './admin.ts';
 import {
-  cancelarFalla, confirmarFallas, corregirLugares, DURACION, fallasPendientes, LINK_X, linksDeX, lugaresEnTexto, MAXIMO_LINKS,
-  prepararFalla, terminarFallas, textoDePublicacion, type Falla,
+  agregarLugares, cancelarFalla, confirmarFallas, corregirLugares, DURACION, fallasActivas, fallasPendientes, LINK_X, linksDeX,
+  lugaresEnTexto, MAXIMO_LINKS, prepararFalla, terminarFallas, textoDePublicacion, type Falla,
 } from './fallas.ts';
 import { contarReportes, type BaseDeDatos } from './reportes.ts';
 
@@ -32,11 +32,41 @@ const AYUDA_ADMIN = `
 /limpiar Alberdi → borrar los reportes de un barrio
 
 ⚠️ Fallas que confirma EPEC:
-Compartime los links de las publicaciones de EPEC en X (hasta ${MAXIMO_LINKS} en un mismo mensaje), o mandá /falla con el texto (por ejemplo, copiado de Facebook). Te muestro qué lugares reconocí y las publicás todas con /confirmar.
-/fin_falla → sacar las fallas del mapa cuando vuelve la luz`;
+Las que lee el extractor de X se publican solas si son claras; las raras te las mando para revisar.
+También podés compartirme los links de las publicaciones (hasta ${MAXIMO_LINKS} en un mismo mensaje), o mandar /falla con el texto (por ejemplo, copiado de Facebook), y las publicás con /confirmar.
+/fallas → ver las publicadas, con su número
+/agregar 37 Alberdi, Centro → sumarle lugares a la falla 37
+/fin_falla 37 → sacar la falla 37 del mapa (/fin_falla solo: todas)`;
 
 const HORAS_FALLA = DURACION / (60 * 60 * 1000);
 const recortar = (texto: string, largo: number) => (texto.length > largo ? `${texto.slice(0, largo - 1)}…` : texto);
+
+/** Las fallas publicadas, con su número para /agregar y /fin_falla. */
+function listarPublicadas(fallas: Falla[], titulo: string) {
+  return [
+    titulo,
+    ...fallas.flatMap((f) => [
+      '',
+      `#${f.id} 📍 ${f.lugares.join(', ')}`,
+      `“${recortar(f.texto, Math.max(80, Math.min(240, Math.floor(2000 / fallas.length))))}”`,
+      `Sumar lugares: /agregar ${f.id} … · Sacarla: /fin_falla ${f.id}`,
+    ]),
+  ].join('\n');
+}
+
+/** El aviso al admin de lo que el extractor publicó solo. */
+export const resumenPublicadas = (fallas: Falla[]) =>
+  listarPublicadas(fallas, `⚡ Publiqué solo ${fallas.length === 1 ? 'una falla' : `${fallas.length} fallas`} de EPEC (avisé a quienes siguen esos lugares):`);
+
+/** "Alberdi, Centro y alta cordoba" → los lugares del mapa, o los textos que no se encontraron como un único lugar. */
+function lugaresPedidos(lugares: string[], texto: string): { elegidos: string[]; dudosos: string[] } {
+  const pedidos = texto.split(/,|\s+y\s+/).map((p) => p.trim()).filter(Boolean);
+  const encontrados = pedidos.map((p) => buscarLugar(lugares, p));
+  return {
+    elegidos: [...new Set(encontrados.filter((e) => e.length === 1).map(([l]) => l))],
+    dudosos: pedidos.filter((_, i) => encontrados[i].length !== 1),
+  };
+}
 
 /** Las fallas que esperan confirmación, numeradas, para que el admin las revise antes de publicarlas. */
 export function revisarFallas(pendientes: Falla[], avisos: string[] = []) {
@@ -207,11 +237,9 @@ export async function responder(
         const { falla, resto, error } = elegirPendiente(pendientes, argumento);
         if (error || !falla) return error ?? 'No hay ninguna falla esperando.';
         if (!resto) return 'Escribí los lugares separados por comas, por ejemplo /corregir Alberdi, Centro';
-        const pedidos = resto.split(/,|\s+y\s+/).map((p) => p.trim()).filter(Boolean);
-        const elegidos = pedidos.map((p) => buscarLugar(lugares, p));
-        const dudosos = pedidos.filter((_, i) => elegidos[i].length !== 1);
+        const { elegidos, dudosos } = lugaresPedidos(lugares, resto);
         if (dudosos.length > 0) return `No encontré un único lugar para: ${dudosos.join(', ')}. Probá con el nombre completo.`;
-        await corregirLugares(db, falla.id, [...new Set(elegidos.map(([l]) => l))]);
+        await corregirLugares(db, falla.id, elegidos);
         return revisarFallas(await fallasPendientes(db));
       }
 
@@ -243,10 +271,27 @@ export async function responder(
       }
 
       case '/fin_falla': {
-        const cuantas = await terminarFallas(db, ahora);
-        return cuantas > 0
-          ? `✅ Saqué ${cuantas === 1 ? 'la falla' : `${cuantas} fallas`} del mapa. En un minuto deja de verse.`
-          : 'No hay fallas publicadas ahora.';
+        const numero = argumento.match(/^#?(\d+)$/)?.[1];
+        if (argumento && !numero) return 'Mandá /fin_falla y el número de la falla (por ejemplo /fin_falla 37), o /fin_falla solo para sacar todas.';
+        const cuantas = await terminarFallas(db, ahora, numero ? Number(numero) : undefined);
+        if (cuantas === 0) return numero ? `No hay una falla publicada con el número ${numero}. Mirá cuáles hay con /fallas` : 'No hay fallas publicadas ahora.';
+        return `✅ Saqué ${cuantas === 1 ? 'la falla' : `${cuantas} fallas`} del mapa. En unos segundos deja de verse.`;
+      }
+
+      case '/fallas': {
+        const activas = await fallasActivas(db, ahora);
+        return activas.length > 0 ? listarPublicadas(activas, '⚠️ Fallas publicadas ahora:') : 'No hay fallas publicadas ahora.';
+      }
+
+      case '/agregar': {
+        const partes = argumento.match(/^#?(\d+)\s+(.+)$/s);
+        if (!partes) return 'Mandá /agregar, el número de la falla y los lugares. Por ejemplo: /agregar 37 Alberdi, Centro';
+        const { elegidos, dudosos } = lugaresPedidos(lugares, partes[2]);
+        if (dudosos.length > 0) return `No encontré un único lugar para: ${dudosos.join(', ')}. Probá con el nombre completo.`;
+        const falla = await agregarLugares(db, Number(partes[1]), elegidos, ahora);
+        if (!falla) return `No hay una falla publicada con el número ${partes[1]}. Mirá cuáles hay con /fallas`;
+        await avisarFalla?.(falla); // solo les llega a quienes siguen los lugares nuevos: los demás ya fueron avisados
+        return `✅ Listo: la falla #${falla.id} ahora marca ${falla.lugares.join(', ')}.`;
       }
     }
   }

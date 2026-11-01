@@ -221,6 +221,13 @@ function estiloZona(nombre) {
   return { ...estilo(nombre), color: nombre === barrioElegido ? p.elegido : p.zona, weight: 2.5, dashArray: '7 6', fillOpacity: 0.35 };
 }
 
+/**
+ * Radio en píxeles de los lugares que son un punto (barrios sin contorno, pueblos sin límite). Un tamaño fijo en
+ * pantalla tapaba media ciudad con el mapa lejos: así es chico al alejar y tiene un tope al acercar.
+ * Zoom 10 → 3 px, 12 → 7 px, 14 o más → 10 px.
+ */
+const radioPunto = () => Math.min(10, Math.max(3, 3 + (mapa.getZoom() - 10) * 2));
+
 /** El centro de un círculo (el promedio de sus vértices). @param {GeoJSON.Polygon} geometria @returns {[number, number]} */
 function centroDeZona(geometria) {
   const vertices = geometria.coordinates[0].slice(0, -1); // el último repite el primero
@@ -297,7 +304,7 @@ function pintarMapa() {
       const sinLimite = zona.properties.tipo === 'localidad' && !(zona.properties.osm ?? 'R').startsWith('R');
       if (sinLimite) {
         const [lon, lat] = centroDeZona(zona.geometry);
-        const punto = L.circleMarker([lat, lon], { radius: 12, ...estiloDeLaZona })
+        const punto = L.circleMarker([lat, lon], { radius: radioPunto() + 1, ...estiloDeLaZona })
           .bindTooltip(comoTexto(`${nombre} (ubicación aproximada)`))
           .on('click', () => elegirBarrio(nombre))
           .addTo(capaZonas);
@@ -315,7 +322,7 @@ function pintarMapa() {
     }
     const coordenadas = puntos.get(nombre);
     if (!coordenadas) continue;
-    const circulo = L.circleMarker([coordenadas[1], coordenadas[0]], { radius: 11, ...estilo(nombre) })
+    const circulo = L.circleMarker([coordenadas[1], coordenadas[0]], { radius: radioPunto(), ...estilo(nombre) })
       .bindTooltip(comoTexto(nombre))
       .on('click', () => elegirBarrio(nombre))
       .addTo(capaPuntos);
@@ -357,6 +364,12 @@ leyenda.onAdd = () => {
   return caja;
 };
 leyenda.addTo(mapa);
+
+// Al acercar o alejar, los puntos cambian de tamaño (ver radioPunto); los pueblos, un poco más grandes que los barrios.
+mapa.on('zoomend', () => {
+  capaPuntos.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto()));
+  capaZonas.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto() + 1));
+});
 
 // ---------------------------------------------------------------------------------------------
 // Panel

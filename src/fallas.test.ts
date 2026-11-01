@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { baseLocal } from './base-local.ts';
 import { responder } from './bot.ts';
-import { clasificar, fallasActivas, fallasPendientes, lugaresEnTexto, textoDePublicacion } from './fallas.ts';
+import { clasificar, esConfiable, fallasActivas, fallasPendientes, lugaresEnTexto, textoDePublicacion } from './fallas.ts';
 import { onRequestGet as verFallas, onRequestPost as recibir } from '../functions/api/fallas.ts';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 
@@ -129,23 +129,30 @@ test('POST /api/fallas: pide la clave, valida, no repite y deja las fallas esper
   assert.match((await (await enviar({ ...falla, url: 'javascript:alert(1)' })).json()).error, /"url" tiene que ser un link https/);
   assert.equal((await enviar({ publicaciones: Array(21).fill(falla) })).status, 400);
 
-  // Una sola publicación, con las keys que manda el extractor.
-  assert.deepEqual(await (await enviar(falla)).json(), { resultados: [{ id: '1985', estado: 'pendiente', lugares: ['Centro'] }] });
-  assert.equal(alAdmin.length, 1);
-  assert.equal(alAdmin[0].chat_id, 1);
-  assert.match(alAdmin[0].text, /Llegaron una falla nueva de EPEC[\s\S]*📍 Centro[\s\S]*\/confirmar/);
-  assert.equal((await fallasActivas(env.DB, Date.now())).length, 0); // nada se publica sin confirmar
+  // Una falla clara se publica sola: le avisa a quien sigue el barrio y al admin, con los comandos para corregirla.
+  await responder(env.DB, 7, '/barrio Centro', { lugares: ['Centro'], esAdmin: false });
+  assert.deepEqual(await (await enviar(falla)).json(), { resultados: [{ id: '1985', estado: 'publicada', lugares: ['Centro'] }] });
+  const [publicada] = await fallasActivas(env.DB, Date.now());
+  assert.deepEqual(publicada.lugares, ['Centro']);
+  assert.deepEqual(alAdmin.map((m) => m.chat_id).sort(), [1, 7]);
+  const alAdminPrimero = alAdmin.find((m) => m.chat_id === 1)!;
+  assert.match(alAdminPrimero.text, new RegExp(`Publiqué solo una falla[\\s\\S]*#${publicada.id} 📍 Centro[\\s\\S]*/fin_falla ${publicada.id}`));
+  assert.match(alAdmin.find((m) => m.chat_id === 7)!.text, /EPEC confirmó una falla en Centro/);
 
-  // Varias juntas: la repetida no se duplica, lo que no es falla se ignora y la de "volvió la luz" se avisa.
+  // Varias juntas: la repetida no se duplica, lo que no es falla se ignora, la de "volvió la luz" se avisa,
+  // y la rara (mezcla una localidad del interior con un barrio de capital) espera que el admin la revise.
+  alAdmin.length = 0;
   const { resultados } = await (await enviar({
     publicaciones: [
       falla,
       { id: '1986', url: 'https://x.com/EpecOficial/status/1986', texto: 'Cortes programados para mañana.' },
       { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Centro.' },
+      { id: '1988', url: 'https://x.com/EpecOficial/status/1988', texto: 'Villa María: falla en barrio Centro, sin suministro.' },
     ],
   })).json();
-  assert.deepEqual(resultados.map((r: { estado: string }) => r.estado), ['repetida', 'ignorada', 'restablecida']);
-  assert.match(alAdmin[1].text, /volvió el servicio en Centro.*\/fin_falla/);
+  assert.deepEqual(resultados.map((r: { estado: string }) => r.estado), ['repetida', 'ignorada', 'restablecida', 'pendiente']);
+  assert.equal(alAdmin.length, 1);
+  assert.match(alAdmin[0].text, /volvió el servicio en Centro[\s\S]*Esta necesita que la revises[\s\S]*📍 Villa María, Centro[\s\S]*\/confirmar/);
   assert.equal((await fallasPendientes(env.DB)).length, 1);
 
   // Si el extractor reenvía el mismo lote (por ejemplo, porque no pudo guardar el último id), se absorbe en silencio.
@@ -153,8 +160,24 @@ test('POST /api/fallas: pide la clave, valida, no repite y deja las fallas esper
     publicaciones: [falla, { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Centro.' }],
   })).json();
   assert.deepEqual(reenvio.resultados.map((r: { estado: string }) => r.estado), ['repetida', 'repetida']);
-  assert.equal(alAdmin.length, 2); // ningún aviso nuevo al admin
-  assert.equal((await fallasActivas(env.DB, Date.now())).length, 0); // el "volvió el servicio" nunca se muestra
+  assert.equal(alAdmin.length, 1); // ningún aviso nuevo
+  assert.equal((await fallasActivas(env.DB, Date.now())).length, 1); // el "volvió el servicio" nunca se muestra
+
+  // Desde el bot: verla, sumarle un lugar y sacar solo esa.
+  const admin = { lugares: ['Centro', 'Alberdi', 'Alto Alberdi'], esAdmin: true };
+  assert.match(await responder(env.DB, 1, '/fallas', admin), new RegExp(`#${publicada.id} 📍 Centro`));
+  assert.match(await responder(env.DB, 1, `/agregar ${publicada.id} alberdi`, admin), /Centro, Alberdi/);
+  assert.match(await responder(env.DB, 1, '/agregar 999 Alberdi', admin), /No hay una falla publicada con el número 999/);
+  assert.match(await responder(env.DB, 1, `/fin_falla ${publicada.id}`, admin), /Saqué la falla/);
+  assert.equal((await fallasActivas(env.DB, Date.now() + 1)).length, 0);
+});
+
+test('esConfiable: con lugares, y sin mezclar localidades del interior con barrios de capital', () => {
+  const localidades = new Set(['Villa María', 'Alta Gracia']);
+  assert.equal(esConfiable(['Centro', 'Alberdi'], localidades), true);
+  assert.equal(esConfiable(['Villa María', 'Alta Gracia'], localidades), true);
+  assert.equal(esConfiable(['Villa María', 'Centro'], localidades), false);
+  assert.equal(esConfiable([], localidades), false);
 });
 
 test('webhook: al confirmar avisa por Telegram a quienes siguen esos lugares, una sola vez, y /api/fallas la muestra', async (t) => {
