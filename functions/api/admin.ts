@@ -3,6 +3,7 @@ import { SITIO } from '../../src/bot.ts';
 import { olvidarNavegador } from '../../src/notificaciones.ts';
 import { enviarPush, type ClavePush } from '../../src/push.ts';
 import { barrioValido, type BaseDeDatos } from '../../src/reportes.ts';
+import { claveCorrecta } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
 
 // La API del panel de admin (web/admin.html). Pide la clave ADMIN_CLAVE, que se configura en Cloudflare.
@@ -15,19 +16,6 @@ type Contexto = {
   request: Request;
   env: { DB: BaseDeDatos; ADMIN_CLAVE?: string; PUSH_CLAVE?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string };
 };
-
-const sha256 = async (texto: string) => new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto)));
-
-/**
- * Compara la clave recibida con la verdadera. Se comparan los hash byte por byte sin cortar antes:
- * así el tiempo de respuesta no da pistas de cuántas letras se acertaron.
- */
-async function claveCorrecta(request: Request, clave: string) {
-  const [dada, real] = await Promise.all([sha256(request.headers.get('Authorization') ?? ''), sha256(`Bearer ${clave}`)]);
-  let diferencias = 0;
-  for (let i = 0; i < real.length; i++) diferencias |= dada[i] ^ real[i];
-  return diferencias === 0;
-}
 
 /** Revisa la clave antes de cualquier cosa. Devuelve la respuesta de error, o null si está todo bien. */
 async function rechazar({ request, env }: Contexto) {

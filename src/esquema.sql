@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS push_avisados (
 );
 
 -- Fallas no programadas que EPEC confirmó en sus redes y el admin cargó desde el bot (src/fallas.ts).
--- confirmada = 0: esperando /confirmar. "hasta": cuándo deja de mostrarse en el mapa.
+-- confirmada = 0: esperando /confirmar; 1: publicada; -1: aviso de "volvió el servicio" ya recibido (solo para no repetirlo).
+-- "hasta": cuándo deja de mostrarse en el mapa.
 CREATE TABLE IF NOT EXISTS fallas (
   id INTEGER PRIMARY KEY,
   lugares TEXT NOT NULL, -- lista JSON de barrios y localidades del mapa

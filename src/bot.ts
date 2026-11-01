@@ -39,16 +39,18 @@ const HORAS_FALLA = DURACION / (60 * 60 * 1000);
 const recortar = (texto: string, largo: number) => (texto.length > largo ? `${texto.slice(0, largo - 1)}…` : texto);
 
 /** Las fallas que esperan confirmación, numeradas, para que el admin las revise antes de publicarlas. */
-function revisarFallas(pendientes: Falla[], avisos: string[] = []) {
+export function revisarFallas(pendientes: Falla[], avisos: string[] = []) {
   if (pendientes.length === 0) return [...avisos, 'No hay fallas esperando.'].join('\n');
   const listas = pendientes.filter((f) => f.lugares.length > 0).length;
+  // Telegram no manda mensajes de más de 4096 caracteres: con muchas fallas, cada texto se acorta más.
+  const largo = Math.max(80, Math.min(300, Math.floor(2500 / pendientes.length)));
   return [
     ...avisos,
     ...(avisos.length > 0 ? [''] : []),
     `⚠️ ${pendientes.length === 1 ? 'Falla para publicar' : `${pendientes.length} fallas para publicar`}:`,
     ...pendientes.flatMap((f, i) => [
       '',
-      `${i + 1}. “${recortar(f.texto, 300)}”`,
+      `${i + 1}. “${recortar(f.texto, largo)}”`,
       f.lugares.length > 0 ? `   📍 ${f.lugares.join(', ')}` : '   ❓ No reconocí barrios ni localidades del mapa',
     ]),
     '',

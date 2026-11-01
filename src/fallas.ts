@@ -107,6 +107,70 @@ export async function fallasActivas(db: BaseDeDatos, ahora: number): Promise<Fal
   return results.map(comoFalla);
 }
 
+// ---------------------------------------------------------------------------------------------
+// Publicaciones que manda un extractor externo (POST /api/fallas)
+// ---------------------------------------------------------------------------------------------
+
+/** Lo que manda el extractor por cada publicación de EPEC. */
+export type Publicacion = { id: string; url: string; texto: string; publicado?: string };
+export type Resultado = { id: string; estado: 'pendiente' | 'sin_lugares' | 'repetida' | 'restablecida' | 'ignorada'; lugares: string[] };
+
+// Cómo habla EPEC de un corte que no estaba programado, y de cuando vuelve la luz.
+const HABLA_DE_FALLA = /\b(falla|averia|sin (suministro|servicio|energia|luz)|interrup|inconveniente|afectad|contingencia|imprevist|no programad|desperfecto|cable cortado|tormenta)/;
+const HABLA_DE_REGRESO = /\b(restablec|normalizad|normalizo|volvio (el servicio|la luz|la energia)|repuesto el servicio)/;
+
+/** Qué es una publicación: una falla, el aviso de que volvió la luz, u otra cosa (cortes programados, campañas…). */
+export function clasificar(texto: string): 'falla' | 'restablecida' | 'otra' {
+  const t = texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  if (HABLA_DE_REGRESO.test(t) && !/\bsin (suministro|servicio|energia|luz)\b/.test(t)) return 'restablecida';
+  return HABLA_DE_FALLA.test(t) ? 'falla' : 'otra';
+}
+
+/** Valida lo que llega de afuera. Devuelve la publicación limpia o el motivo del rechazo. */
+export function publicacionValida(valor: unknown): Publicacion | string {
+  const p = valor as Record<string, unknown> | null;
+  if (!p || typeof p !== 'object') return 'cada publicación tiene que ser un objeto';
+  const id = typeof p.id === 'number' ? String(p.id) : p.id;
+  if (typeof id !== 'string' || !/^[\w-]{1,64}$/.test(id)) return '"id" tiene que ser un texto de hasta 64 letras, números o guiones';
+  if (typeof p.url !== 'string' || p.url.length > 300 || !/^https:\/\/[^\s]+$/.test(p.url)) return '"url" tiene que ser un link https';
+  if (typeof p.texto !== 'string' || !p.texto.trim() || p.texto.length > 2000) return '"texto" tiene que tener entre 1 y 2000 caracteres';
+  if (p.publicado !== undefined && (typeof p.publicado !== 'string' || Number.isNaN(Date.parse(p.publicado)))) return '"publicado" tiene que ser una fecha ISO 8601';
+  return { id, url: p.url, texto: p.texto.trim(), ...(p.publicado ? { publicado: String(p.publicado) } : {}) };
+}
+
+/**
+ * Procesa las publicaciones que manda el extractor (modo con revisión): las fallas quedan esperando /confirmar
+ * en el bot, igual que si el admin hubiera compartido el link. Una publicación ya recibida (mismo link) no se repite.
+ */
+export async function recibirPublicaciones(db: BaseDeDatos, lugares: string[], publicaciones: Publicacion[], ahora: number): Promise<Resultado[]> {
+  const resultados: Resultado[] = [];
+  for (const p of publicaciones) {
+    const tipo = clasificar(p.texto);
+    const encontrados = lugaresEnTexto(lugares, p.texto);
+    if (tipo === 'otra') {
+      resultados.push({ id: p.id, estado: 'ignorada', lugares: encontrados });
+      continue;
+    }
+    // Una publicación ya recibida (falla o "volvió el servicio") no se procesa ni se avisa de nuevo.
+    if (await db.prepare('SELECT 1 AS si FROM fallas WHERE fuente = ?').bind(p.url).first()) {
+      resultados.push({ id: p.id, estado: 'repetida', lugares: encontrados });
+      continue;
+    }
+    if (tipo === 'restablecida') {
+      // Se anota solo para reconocerla si vuelve a llegar (confirmada = -1: nunca se muestra en el mapa).
+      await db
+        .prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, -1)')
+        .bind(JSON.stringify(encontrados), p.texto, p.url, ahora, ahora)
+        .run();
+      resultados.push({ id: p.id, estado: 'restablecida', lugares: encontrados });
+      continue;
+    }
+    await prepararFalla(db, { texto: p.texto, fuente: p.url, lugares: encontrados }, ahora);
+    resultados.push({ id: p.id, estado: encontrados.length > 0 ? 'pendiente' : 'sin_lugares', lugares: encontrados });
+  }
+  return resultados;
+}
+
 /** "Volvió la luz": saca del mapa todas las fallas publicadas. Devuelve cuántas eran. */
 export async function terminarFallas(db: BaseDeDatos, ahora: number): Promise<number> {
   const activas = await fallasActivas(db, ahora);

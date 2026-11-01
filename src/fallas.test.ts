@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { baseLocal } from './base-local.ts';
 import { responder } from './bot.ts';
-import { fallasActivas, lugaresEnTexto, textoDePublicacion } from './fallas.ts';
-import { onRequestGet as verFallas } from '../functions/api/fallas.ts';
+import { clasificar, fallasActivas, fallasPendientes, lugaresEnTexto, textoDePublicacion } from './fallas.ts';
+import { onRequestGet as verFallas, onRequestPost as recibir } from '../functions/api/fallas.ts';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 
 const LUGARES = ['Alberdi', 'Alto Alberdi', 'Centro', 'Villa María', 'Villa Nueva'];
@@ -97,6 +97,62 @@ test('bot: texto pegado sin lugares reconocibles no se puede publicar hasta corr
   assert.match(await responder(db, 1, '/confirmar', admin), /Primero decime los lugares/);
   assert.match(await responder(db, 1, '/cancelar', admin), /descarté/);
   assert.match(await responder(db, 1, '/corregir Centro', admin), /No hay ninguna falla esperando/);
+});
+
+test('clasificar: falla, servicio restablecido u otra cosa', () => {
+  assert.equal(clasificar('Por una falla en la red, usuarios de B° Alberdi se encuentran sin suministro.'), 'falla');
+  assert.equal(clasificar('Se restableció el servicio en barrio Alberdi.'), 'restablecida');
+  assert.equal(clasificar('Quedó normalizado el suministro en Centro.'), 'restablecida');
+  assert.equal(clasificar('Cortes programados para mañana por mantenimiento.'), 'otra');
+  assert.equal(clasificar('Pagá tu factura online.'), 'otra');
+});
+
+test('POST /api/fallas: pide la clave, valida, no repite y deja las fallas esperando /confirmar en el bot', async (t) => {
+  const env = { DB: baseLocal(), FALLAS_CLAVE: 'clave-del-extractor', TELEGRAM_TOKEN: 'token', TELEGRAM_ADMIN: '1' };
+  const enviar = (cuerpo: unknown, clave = 'clave-del-extractor') => recibir({
+    request: new Request('http://x/api/fallas', {
+      method: 'POST', headers: { Authorization: `Bearer ${clave}`, 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo),
+    }),
+    env,
+  });
+  const alAdmin: { chat_id: number; text: string }[] = [];
+  t.mock.method(globalThis, 'fetch', async (_url: string, opciones: RequestInit) => {
+    alAdmin.push(JSON.parse(String(opciones.body)));
+    return new Response('{}');
+  });
+  const falla = { id: '1985', url: 'https://x.com/EpecOficial/status/1985', texto: 'Por una falla, sin suministro en barrio Centro.' };
+
+  assert.equal((await enviar(falla, 'otra')).status, 401);
+  assert.equal((await recibir({ request: new Request('http://x/api/fallas', { method: 'POST', body: '{}' }), env: { DB: env.DB } })).status, 503);
+  assert.match((await (await enviar({ ...falla, url: 'javascript:alert(1)' })).json()).error, /"url" tiene que ser un link https/);
+  assert.equal((await enviar({ publicaciones: Array(21).fill(falla) })).status, 400);
+
+  // Una sola publicación, con las keys que manda el extractor.
+  assert.deepEqual(await (await enviar(falla)).json(), { resultados: [{ id: '1985', estado: 'pendiente', lugares: ['Centro'] }] });
+  assert.equal(alAdmin.length, 1);
+  assert.equal(alAdmin[0].chat_id, 1);
+  assert.match(alAdmin[0].text, /Llegaron una falla nueva de EPEC[\s\S]*📍 Centro[\s\S]*\/confirmar/);
+  assert.equal((await fallasActivas(env.DB, Date.now())).length, 0); // nada se publica sin confirmar
+
+  // Varias juntas: la repetida no se duplica, lo que no es falla se ignora y la de "volvió la luz" se avisa.
+  const { resultados } = await (await enviar({
+    publicaciones: [
+      falla,
+      { id: '1986', url: 'https://x.com/EpecOficial/status/1986', texto: 'Cortes programados para mañana.' },
+      { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Centro.' },
+    ],
+  })).json();
+  assert.deepEqual(resultados.map((r: { estado: string }) => r.estado), ['repetida', 'ignorada', 'restablecida']);
+  assert.match(alAdmin[1].text, /volvió el servicio en Centro.*\/fin_falla/);
+  assert.equal((await fallasPendientes(env.DB)).length, 1);
+
+  // Si el extractor reenvía el mismo lote (por ejemplo, porque no pudo guardar el último id), se absorbe en silencio.
+  const reenvio = await (await enviar({
+    publicaciones: [falla, { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Centro.' }],
+  })).json();
+  assert.deepEqual(reenvio.resultados.map((r: { estado: string }) => r.estado), ['repetida', 'repetida']);
+  assert.equal(alAdmin.length, 2); // ningún aviso nuevo al admin
+  assert.equal((await fallasActivas(env.DB, Date.now())).length, 0); // el "volvió el servicio" nunca se muestra
 });
 
 test('webhook: al confirmar avisa por Telegram a quienes siguen esos lugares, una sola vez, y /api/fallas la muestra', async (t) => {
