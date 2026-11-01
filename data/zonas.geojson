@@ -14051,6 +14051,213 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Mula Muerta",
+    "tipo": "localidad",
+    "patron": "^mula muerta$",
+    "osm": "manual:mula muerta",
+    "descripcion": "Mula Muerta no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.02676,
+       -30.89617
+      ],
+      [
+       -64.02564,
+       -30.89977
+      ],
+      [
+       -64.02257,
+       -30.9024
+      ],
+      [
+       -64.01839,
+       -30.90336
+      ],
+      [
+       -64.0142,
+       -30.9024
+      ],
+      [
+       -64.01113,
+       -30.89977
+      ],
+      [
+       -64.01001,
+       -30.89617
+      ],
+      [
+       -64.01113,
+       -30.89258
+      ],
+      [
+       -64.0142,
+       -30.88995
+      ],
+      [
+       -64.01839,
+       -30.88899
+      ],
+      [
+       -64.02257,
+       -30.88995
+      ],
+      [
+       -64.02564,
+       -30.89258
+      ],
+      [
+       -64.02676,
+       -30.89617
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Los Manzanos",
+    "tipo": "localidad",
+    "patron": "^los manzanos$",
+    "osm": "manual:los manzanos",
+    "descripcion": "Los Manzanos no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.13945,
+       -31.30662
+      ],
+      [
+       -64.13833,
+       -31.31021
+      ],
+      [
+       -64.13525,
+       -31.31284
+      ],
+      [
+       -64.13104,
+       -31.3138
+      ],
+      [
+       -64.12684,
+       -31.31284
+      ],
+      [
+       -64.12376,
+       -31.31021
+      ],
+      [
+       -64.12263,
+       -31.30662
+      ],
+      [
+       -64.12376,
+       -31.30302
+      ],
+      [
+       -64.12684,
+       -31.30039
+      ],
+      [
+       -64.13104,
+       -31.29943
+      ],
+      [
+       -64.13525,
+       -31.30039
+      ],
+      [
+       -64.13833,
+       -31.30302
+      ],
+      [
+       -64.13945,
+       -31.30662
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "La Tuna",
+    "tipo": "localidad",
+    "patron": "^la tuna$",
+    "osm": "manual:la tuna",
+    "descripcion": "La Tuna no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.24338,
+       -30.65138
+      ],
+      [
+       -64.24226,
+       -30.65498
+      ],
+      [
+       -64.23921,
+       -30.65761
+      ],
+      [
+       -64.23503,
+       -30.65857
+      ],
+      [
+       -64.23085,
+       -30.65761
+      ],
+      [
+       -64.2278,
+       -30.65498
+      ],
+      [
+       -64.22668,
+       -30.65138
+      ],
+      [
+       -64.2278,
+       -30.64779
+      ],
+      [
+       -64.23085,
+       -30.64516
+      ],
+      [
+       -64.23503,
+       -30.6442
+      ],
+      [
+       -64.23921,
+       -30.64516
+      ],
+      [
+       -64.24226,
+       -30.64779
+      ],
+      [
+       -64.24338,
+       -30.65138
+      ]
+     ]
+    ]
+   }
   }
  ]
 }

@@ -1169,7 +1169,19 @@
    "departamento": "Totoral"
   }
  ],
- "mula muerta": [],
+ "mula muerta": [
+  {
+   "nombre": "Mula Muerta",
+   "osm": "manual:mula muerta",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.018387,
+    -30.896175
+   ],
+   "departamento": ""
+  }
+ ],
  "canada rio pinto": [
   {
    "nombre": "Cañada de Río Pinto",
@@ -1209,7 +1221,19 @@
    "departamento": "Ischilín"
   }
  ],
- "los manzanos": [],
+ "los manzanos": [
+  {
+   "nombre": "Los Manzanos",
+   "osm": "manual:los manzanos",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.131042,
+    -31.306617
+   ],
+   "departamento": ""
+  }
+ ],
  "villa albertina": [
   {
    "nombre": "Villa Albertina",
@@ -1224,7 +1248,19 @@
   }
  ],
  "villa cerro negro": [],
- "la tuna": [],
+ "la tuna": [
+  {
+   "nombre": "La Tuna",
+   "osm": "manual:la tuna",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.23503,
+    -30.651383
+   ],
+   "departamento": ""
+  }
+ ],
  "avellaneda": [
   {
    "nombre": "Avellaneda",
