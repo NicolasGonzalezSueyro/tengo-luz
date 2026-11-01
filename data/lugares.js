@@ -456,7 +456,6 @@ export default [
  "Los Josefinos",
  "Los Juegos",
  "Los Manantiales",
- "Los Manzanos",
  "Los Mistoles",
  "Los Naranjos",
  "Los Nogales",
