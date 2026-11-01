@@ -77,6 +77,25 @@ async function probarNotificaciones() {
   }
 }
 
+/** Revisa que el bot de Telegram esté conectado al sitio y te manda un mensaje de prueba. */
+async function probarTelegram() {
+  try {
+    /** @type {{ enviado: boolean, conectado: boolean, pendientes: number, ultimoError: { mensaje: string, fecha: number } | null }} */
+    const r = await api('POST', { accion: 'probar-telegram' });
+    const recientes = r.ultimoError && Date.now() - r.ultimoError.fecha < 24 * 60 * 60 * 1000;
+    $('mensaje').textContent = [
+      r.enviado ? '🤖 Bot: te mandé un mensaje de prueba por Telegram.' : '🤖 Bot: no pude mandarte el mensaje de prueba (¿TELEGRAM_ADMIN es tu número de chat?).',
+      r.conectado
+        ? 'Está conectado al sitio y recibe los mensajes.'
+        : 'No está conectado al sitio: no recibe los mensajes que le escriben. Hay que volver a configurar el webhook.',
+      r.pendientes > 0 ? `Tiene ${r.pendientes} ${r.pendientes === 1 ? 'mensaje' : 'mensajes'} sin entregar.` : '',
+      recientes && r.ultimoError ? `Último error de Telegram (${new Date(r.ultimoError.fecha).toLocaleString('es-AR')}): ${r.ultimoError.mensaje}.` : '',
+    ].filter(Boolean).join(' ');
+  } catch (error) {
+    $('mensaje').textContent = `No se pudo probar el bot: ${/** @type {Error} */ (error).message}`;
+  }
+}
+
 /** @param {string | undefined} [barrio] sin barrio: todos */
 async function limpiar(barrio) {
   if (!confirm(barrio ? `¿Borrar los reportes de ${barrio}?` : '¿Borrar todos los reportes de vecinos?')) return;
@@ -128,6 +147,13 @@ function mostrarPanel(e) {
         h('button', { class: 'boton boton-secundario', type: 'button', onclick: probarNotificaciones }, 'Mandar una de prueba'),
       ),
       h('p', { class: 'nota' }, cantidad(e.notificaciones, 'celular suscripto', 'celulares suscriptos'), '. La prueba les llega a todos: suscribite vos primero desde la ficha de un barrio.'),
+    ),
+    h('section', { class: 'tarjeta-admin' },
+      h('div', { class: 'titulo-seccion' },
+        h('h2', {}, icono('mensaje'), 'Bot de Telegram'),
+        h('button', { class: 'boton boton-secundario', type: 'button', onclick: probarTelegram }, 'Probar el bot'),
+      ),
+      h('p', { class: 'nota' }, 'Revisa que el bot reciba los mensajes y te manda uno de prueba a tu chat.'),
     ),
     h('section', { class: 'tarjeta-admin' },
       h('h2', {}, icono('vecinos'), 'Barrios más seguidos en Telegram'),

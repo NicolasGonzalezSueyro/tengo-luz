@@ -100,7 +100,8 @@ function fechaDeLosCortes(html: string, url: string): string {
   if (inicio < 0) throw new Error(`No encontré el título de la nota ${url}`);
 
   const cuerpo = html.slice(inicio).replace(/<time[\s\S]*?<\/time>/g, '');
-  const m = cuerpo.match(new RegExp(`(\\d{1,2}) de (${MESES.join('|')})`, 'i'));
+  // A veces el primer día del mes viene con ordinal: "1° de noviembre", "1º de noviembre".
+  const m = cuerpo.match(new RegExp(`(\\d{1,2})\\s*[°º]?\\s+de (${MESES.join('|')})`, 'i'));
   if (!m) throw new Error(`No encontré la fecha de los cortes en ${url}`);
 
   const [anioPub, mesPub, diaPub] = publicada.slice(1).map(Number);

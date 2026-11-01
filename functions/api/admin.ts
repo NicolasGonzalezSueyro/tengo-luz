@@ -3,13 +3,18 @@ import { SITIO } from '../../src/bot.ts';
 import { olvidarNavegador } from '../../src/notificaciones.ts';
 import { enviarPush, type ClavePush } from '../../src/push.ts';
 import { barrioValido, type BaseDeDatos } from '../../src/reportes.ts';
+import { enviarMensaje } from '../../src/telegram.ts';
 
 // La API del panel de admin (web/admin.html). Pide la clave ADMIN_CLAVE, que se configura en Cloudflare.
 //   GET  /api/admin → números del sitio, reportes vigentes y barrios más seguidos.
 //   POST /api/admin { "accion": "limpiar", "barrio": "Alberdi" } → borra reportes (de un barrio, o todos sin "barrio").
 //   POST /api/admin { "accion": "probar-notificaciones" } → manda una notificación de prueba a los celulares suscriptos.
+//   POST /api/admin { "accion": "probar-telegram" } → revisa que el bot esté conectado y te manda un mensaje de prueba.
 
-type Contexto = { request: Request; env: { DB: BaseDeDatos; ADMIN_CLAVE?: string; PUSH_CLAVE?: string } };
+type Contexto = {
+  request: Request;
+  env: { DB: BaseDeDatos; ADMIN_CLAVE?: string; PUSH_CLAVE?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string };
+};
 
 const sha256 = async (texto: string) => new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto)));
 
@@ -50,11 +55,33 @@ async function probarNotificaciones({ env }: Contexto) {
   return Response.json({ entregadas, total: filas.length });
 }
 
+/**
+ * ¿Anda el bot? Le pregunta a Telegram si el bot recibe los mensajes en /api/telegram (el "webhook"),
+ * cuántos quedaron sin entregar y cuál fue el último error, y le manda un mensaje de prueba al admin.
+ */
+async function probarTelegram({ env }: Contexto) {
+  if (!env.TELEGRAM_TOKEN) return Response.json({ error: 'Falta configurar TELEGRAM_TOKEN en Cloudflare' }, { status: 503 });
+  if (!env.TELEGRAM_ADMIN) return Response.json({ error: 'Falta configurar TELEGRAM_ADMIN en Cloudflare' }, { status: 503 });
+  const info = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_TOKEN}/getWebhookInfo`).catch(() => null);
+  if (!info) return Response.json({ error: 'No se pudo conectar con Telegram' }, { status: 502 });
+  if (info.status === 401) return Response.json({ error: 'Telegram dice que el token del bot (TELEGRAM_TOKEN) es incorrecto' }, { status: 502 });
+  const { result } = (await info.json()) as { result?: { url?: string; pending_update_count?: number; last_error_date?: number; last_error_message?: string } };
+  const mensaje = await enviarMensaje(env.TELEGRAM_TOKEN, Number(env.TELEGRAM_ADMIN), '🤖 Prueba desde el panel de admin: el bot anda y te puede escribir.');
+  return Response.json({
+    enviado: mensaje.ok,
+    // Solo se dice si está conectado a este sitio: la dirección completa y el token no salen del servidor.
+    conectado: Boolean(result?.url?.endsWith('/api/telegram')),
+    pendientes: result?.pending_update_count ?? 0,
+    ultimoError: result?.last_error_message ? { mensaje: result.last_error_message, fecha: (result.last_error_date ?? 0) * 1000 } : null,
+  });
+}
+
 export async function onRequestPost(contexto: Contexto) {
   const error = await rechazar(contexto);
   if (error) return error;
   const datos = (await contexto.request.json().catch(() => null)) as { accion?: unknown; barrio?: unknown } | null;
   if (datos?.accion === 'probar-notificaciones') return probarNotificaciones(contexto);
+  if (datos?.accion === 'probar-telegram') return probarTelegram(contexto);
   if (datos?.accion !== 'limpiar') return Response.json({ error: 'Acción desconocida' }, { status: 400 });
   const barrio = datos.barrio === undefined ? undefined : barrioValido(datos.barrio);
   if (barrio === null) return Response.json({ error: 'Barrio inválido' }, { status: 400 });

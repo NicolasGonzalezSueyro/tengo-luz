@@ -103,6 +103,13 @@ test('ignora la fecha de publicación y usa la fecha de los cortes', () => {
   assert.equal(parsearNota(html, URL).mantenimientos[0].fecha, '2026-10-31');
 });
 
+test('el primer día del mes puede venir con ordinal: "1° de noviembre"', () => {
+  const html = nota(conLista('Córdoba capital', 'De 07:30 a 12:30: barrio Los Boulevares.'), 'domingo 1° de noviembre');
+  const url = 'https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo/';
+  assert.equal(parsearNota(html, url).mantenimientos[0].fecha, '2026-11-01');
+  assert.equal(parsearNota(nota(conLista('Córdoba', 'De 8 a 9: barrio Centro.'), 'domingo 1º de noviembre'), url).mantenimientos[0].fecha, '2026-11-01');
+});
+
 test('una nota de fin de año puede anunciar cortes de enero del año siguiente', () => {
   const html = nota(conLista('Córdoba capital', 'De 07:30 a 10:30: Barrio Centro.'), 'jueves 1 de enero');
   const url = 'https://eldoce.tv/actualidad/2026/12/31/cortes-de-luz-de-epec-para-este-jueves/';
