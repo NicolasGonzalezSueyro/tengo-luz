@@ -17,7 +17,7 @@ import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 /** @typedef {import('./estado.js').EstadoBarrio} EstadoBarrio */
 /** @typedef {{ id: string, nombre: string | null, tipo: 'poligono' | 'punto', fuente: string }} Barrio */
 /** @typedef {GeoJSON.Feature<GeoJSON.Geometry, Barrio>} FeatureBarrio */
-/** @typedef {{ nombre: string, descripcion: string, tipo?: 'ruta' | 'localidad' }} Zona */
+/** @typedef {{ nombre: string, descripcion: string, tipo?: 'ruta' | 'localidad', osm?: string }} Zona */
 /** @typedef {import('./dom.js').Hijo} Hijo */
 
 const CORDOBA = /** @type {L.LatLngTuple} */ ([-31.4167, -64.1833]);
@@ -221,6 +221,12 @@ function estiloZona(nombre) {
   return { ...estilo(nombre), color: nombre === barrioElegido ? p.elegido : p.zona, weight: 2.5, dashArray: '7 6', fillOpacity: 0.35 };
 }
 
+/** El centro de un círculo (el promedio de sus vértices). @param {GeoJSON.Polygon} geometria @returns {[number, number]} */
+function centroDeZona(geometria) {
+  const vertices = geometria.coordinates[0].slice(0, -1); // el último repite el primero
+  return [vertices.reduce((s, v) => s + v[0], 0) / vertices.length, vertices.reduce((s, v) => s + v[1], 0) / vertices.length];
+}
+
 /** @type {Map<string, L.Layer[]>} capas de cada barrio o zona, para enfocarlas por nombre */
 const capasPorNombre = new Map();
 
@@ -285,7 +291,21 @@ function pintarMapa() {
       // Si todos los cortes de la localidad ese día tienen su sector, la localidad queda solo como contorno.
       const delDia = estados.get(nombre)?.cortes ?? [];
       const todoConSector = delDia.length > 0 && delDia.every((c) => c.sector);
-      const capa = L.geoJSON(zona, { style: () => ({ ...estiloZona(nombre), ...(todoConSector ? { fillOpacity: 0.04 } : {}) }) })
+      const estiloDeLaZona = { ...estiloZona(nombre), ...(todoConSector ? { fillOpacity: 0.04 } : {}) };
+      // Un pueblo sin límite en OpenStreetMap (un punto, o cargado a mano) viene como un círculo de cientos de metros:
+      // se dibuja como un punto de tamaño fijo en la pantalla, que no crece al acercar ni desaparece al alejar.
+      const sinLimite = zona.properties.tipo === 'localidad' && !(zona.properties.osm ?? 'R').startsWith('R');
+      if (sinLimite) {
+        const [lon, lat] = centroDeZona(zona.geometry);
+        const punto = L.circleMarker([lat, lon], { radius: 12, ...estiloDeLaZona })
+          .bindTooltip(comoTexto(`${nombre} (ubicación aproximada)`))
+          .on('click', () => elegirBarrio(nombre))
+          .addTo(capaZonas);
+        clasesDeBarrio(punto, nombre);
+        capasPorNombre.set(nombre, [punto]);
+        continue;
+      }
+      const capa = L.geoJSON(zona, { style: () => estiloDeLaZona })
         .bindTooltip(comoTexto(`${nombre} (zona aproximada)`), { sticky: true })
         .on('click', () => elegirBarrio(nombre))
         .addTo(capaZonas);
