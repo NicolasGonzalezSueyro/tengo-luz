@@ -101,6 +101,8 @@ test('bot: texto pegado sin lugares reconocibles no se puede publicar hasta corr
 
 test('clasificar: falla, servicio restablecido u otra cosa', () => {
   assert.equal(clasificar('Por una falla en la red, usuarios de B° Alberdi se encuentran sin suministro.'), 'falla');
+  // Un tweet real de @EpecOficial (1/11/2026): "Informamos al normalizar" no es que ya volvió.
+  assert.equal(clasificar('Barrios Valle Escondido, Los Boulevares y Arguello Lourdes ➡️ restricción del servicio. Informamos al normalizar'), 'falla');
   assert.equal(clasificar('Se restableció el servicio en barrio Alberdi.'), 'restablecida');
   assert.equal(clasificar('Quedó normalizado el suministro en Centro.'), 'restablecida');
   assert.equal(clasificar('Cortes programados para mañana por mantenimiento.'), 'otra');

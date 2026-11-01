@@ -116,7 +116,7 @@ export type Publicacion = { id: string; url: string; texto: string; publicado?: 
 export type Resultado = { id: string; estado: 'pendiente' | 'sin_lugares' | 'repetida' | 'restablecida' | 'ignorada'; lugares: string[] };
 
 // Cómo habla EPEC de un corte que no estaba programado, y de cuando vuelve la luz.
-const HABLA_DE_FALLA = /\b(falla|averia|sin (suministro|servicio|energia|luz)|interrup|inconveniente|afectad|contingencia|imprevist|no programad|desperfecto|cable cortado|tormenta)/;
+const HABLA_DE_FALLA = /\b(falla|averia|sin (suministro|servicio|energia|luz)|interrup|inconveniente|afectad|contingencia|imprevist|no programad|desperfecto|cable cortado|tormenta|restriccion del servicio)/;
 const HABLA_DE_REGRESO = /\b(restablec|normalizad|normalizo|volvio (el servicio|la luz|la energia)|repuesto el servicio)/;
 
 /** Qué es una publicación: una falla, el aviso de que volvió la luz, u otra cosa (cortes programados, campañas…). */
