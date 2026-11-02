@@ -1274,5 +1274,31 @@
    ],
    "departamento": "Totoral"
   }
+ ],
+ "la falda": [
+  {
+   "nombre": "La Falda",
+   "osm": "R9370777",
+   "tipo": "town",
+   "rango": 14,
+   "punto": [
+    -64.4829365,
+    -31.0946192
+   ],
+   "departamento": "Punilla"
+  }
+ ],
+ "huerta grande": [
+  {
+   "nombre": "Huerta Grande",
+   "osm": "N198452377",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.4898979,
+    -31.075161
+   ],
+   "departamento": "Punilla"
+  }
  ]
 }

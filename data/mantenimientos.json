@@ -13263,5 +13263,130 @@
       "Río Cuarto"
     ],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-02",
+    "desde": "07:30",
+    "hasta": "10:30",
+    "zona": "Barrio Ampliación Poeta Lugones, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/01/cortes-de-luz-de-epec-para-este-lunes-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Ampliación Poeta Lugones"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-02",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "Barrios Jardín del Sur y Obras Sanitarias, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/01/cortes-de-luz-de-epec-para-este-lunes-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Jardín del Sur",
+      "Obras Sanitarias"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-02",
+    "desde": "08:30",
+    "hasta": "14:00",
+    "zona": "Barrio Residencial Sur.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/01/cortes-de-luz-de-epec-para-este-lunes-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Residencial Sur"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "La Falda",
+    "fecha": "2026-11-02",
+    "desde": "12:00",
+    "hasta": "15:00",
+    "zona": "barrio Alto del Gigante.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/01/cortes-de-luz-de-epec-para-este-lunes-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "La Falda"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.49897,
+        -31.08618
+      ],
+      [
+        -64.49855,
+        -31.08753
+      ],
+      [
+        -64.4974,
+        -31.08852
+      ],
+      [
+        -64.49583,
+        -31.08888
+      ],
+      [
+        -64.49425,
+        -31.08852
+      ],
+      [
+        -64.4931,
+        -31.08753
+      ],
+      [
+        -64.49268,
+        -31.08618
+      ],
+      [
+        -64.4931,
+        -31.08484
+      ],
+      [
+        -64.49425,
+        -31.08385
+      ],
+      [
+        -64.49583,
+        -31.08349
+      ],
+      [
+        -64.4974,
+        -31.08385
+      ],
+      [
+        -64.49855,
+        -31.08484
+      ],
+      [
+        -64.49897,
+        -31.08618
+      ]
+    ]
+  },
+  {
+    "localidad": "Huerta Grande",
+    "fecha": "2026-11-02",
+    "desde": "12:00",
+    "hasta": "15:00",
+    "zona": "barrio El Condor.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/01/cortes-de-luz-de-epec-para-este-lunes-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Huerta Grande"
+    ],
+    "sinUbicar": []
   }
 ]
