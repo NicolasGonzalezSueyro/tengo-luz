@@ -13388,5 +13388,159 @@
       "Huerta Grande"
     ],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Villa María",
+    "fecha": "2026-11-04",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "barrio Centro, en calle Catamarca Nº 1259, entre las calles José Ingenieros y Lisandro de la Torre.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/03/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-ciudades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-04",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "barrios Acosta y Renacimiento.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/03/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-ciudades-afectadas/",
+    "barrios": [
+      "Acosta",
+      "Renacimiento"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-04",
+    "desde": "08:30",
+    "hasta": "12:30",
+    "zona": "Edificio Leonardo. Además algunos usuarios de calle Las Heras, San Lorenzo, Juan B. Justo, Sargento Cabral y Gral. Paz.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/03/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-ciudades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-04",
+    "desde": "11:00",
+    "hasta": "12:30",
+    "zona": "barrio Catedral, en perímetro comprendido por las calles: López y Planes, Libertador Sur, Sáenz Peña y Sarmiento.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/03/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-ciudades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -62.10809,
+        -31.43416
+      ],
+      [
+        -62.10767,
+        -31.4355
+      ],
+      [
+        -62.10651,
+        -31.43649
+      ],
+      [
+        -62.10493,
+        -31.43685
+      ],
+      [
+        -62.07367,
+        -31.43932
+      ],
+      [
+        -62.07209,
+        -31.43896
+      ],
+      [
+        -62.07094,
+        -31.43797
+      ],
+      [
+        -62.07052,
+        -31.43662
+      ],
+      [
+        -62.07094,
+        -31.43528
+      ],
+      [
+        -62.07209,
+        -31.43429
+      ],
+      [
+        -62.07367,
+        -31.43393
+      ],
+      [
+        -62.0862,
+        -31.43233
+      ],
+      [
+        -62.10493,
+        -31.43146
+      ],
+      [
+        -62.10651,
+        -31.43182
+      ],
+      [
+        -62.10767,
+        -31.43281
+      ],
+      [
+        -62.10809,
+        -31.43416
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-04",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "barrios Altamira, Ampliación Altamira, Acosta y Renacimiento.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/03/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-ciudades-afectadas/",
+    "barrios": [
+      "Altamira",
+      "Ampliación Altamira",
+      "Acosta",
+      "Renacimiento"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-04",
+    "desde": "14:00",
+    "hasta": "17:00",
+    "zona": "barrio Residencial San Roque.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/03/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-ciudades-afectadas/",
+    "barrios": [
+      "Residencial San Roque"
+    ],
+    "zonas": [],
+    "sinUbicar": []
   }
 ]
