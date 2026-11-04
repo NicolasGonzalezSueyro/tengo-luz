@@ -31,10 +31,17 @@ export async function descargar(url: string): Promise<string> {
   return res.text();
 }
 
+/**
+ * Si un link es de la nota diaria de cortes. El Doce la titula de varias formas: "cortes-de-luz-de-epec-para-…",
+ * "multiples-cortes-de-luz-de-epec-…" o "cortes-de-luz-programados-en-cordoba-…". Otras notas con "cortes"
+ * (de calles, o de una tormenta) no tienen la lista de horarios y no sirven.
+ */
+export const esNotaDeCortes = (url: string) => /\/[^/]*cortes-de-luz-(de-epec|programados)[^/]*\/?$/.test(url);
+
 /** Devuelve los links a las notas de cortes de luz que figuran en el sitemap de noticias (las más nuevas primero). */
 export async function buscarNotas(): Promise<string[]> {
   const xml = await descargar(SITEMAP);
-  return [...xml.matchAll(/<loc>([^<]*\/cortes-de-luz-de-epec[^<]*)<\/loc>/g)].map((m) => m[1]);
+  return [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]).filter(esNotaDeCortes);
 }
 
 /**

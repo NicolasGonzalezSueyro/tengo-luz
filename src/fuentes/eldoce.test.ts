@@ -1,6 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parsearNota } from './eldoce.ts';
+import { esNotaDeCortes, parsearNota } from './eldoce.ts';
+
+test('esNotaDeCortes: reconoce los distintos títulos de la nota diaria, y no otras notas con "cortes"', () => {
+  const base = 'https://eldoce.tv/actualidad/2026/11';
+  assert.equal(esNotaDeCortes(`${base}/01/cortes-de-luz-de-epec-para-este-lunes-en-cordoba-barrios-y-localidades-afectadas/`), true);
+  assert.equal(esNotaDeCortes(`${base}/05/multiples-cortes-de-luz-de-epec-para-este-martes-en-cordoba/`), true);
+  // El martes 3/11 El Doce cambió el título y el robot no la vio.
+  assert.equal(esNotaDeCortes(`${base}/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/`), true);
+  assert.equal(esNotaDeCortes(`${base}/03/visita-del-papa-a-cordoba-calle-por-calle-donde-habra-cortes-y-desde-que-hora/`), false);
+  assert.equal(esNotaDeCortes(`${base}/03/cayo-granizo-y-hay-cortes-de-luz-en-varios-barrios/`), false);
+});
 
 // HTML reducido con las dos estructuras que vimos en notas reales de El Doce.
 function nota(secciones: string, fechaTexto = 'sábado 31 de octubre'): string {
