@@ -13390,6 +13390,421 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Salsipuedes",
+    "fecha": "2026-11-03",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "Barrio Villa sol, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "Salsipuedes"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.30009,
+        -31.12011
+      ],
+      [
+        -64.29967,
+        -31.12146
+      ],
+      [
+        -64.29852,
+        -31.12245
+      ],
+      [
+        -64.29694,
+        -31.12281
+      ],
+      [
+        -64.29537,
+        -31.12245
+      ],
+      [
+        -64.29422,
+        -31.12146
+      ],
+      [
+        -64.2938,
+        -31.12011
+      ],
+      [
+        -64.29422,
+        -31.11876
+      ],
+      [
+        -64.29537,
+        -31.11778
+      ],
+      [
+        -64.29694,
+        -31.11742
+      ],
+      [
+        -64.29852,
+        -31.11778
+      ],
+      [
+        -64.29967,
+        -31.11876
+      ],
+      [
+        -64.30009,
+        -31.12011
+      ]
+    ]
+  },
+  {
+    "localidad": "Salsipuedes",
+    "fecha": "2026-11-03",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "Cerro del Sol.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "Salsipuedes"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.30158,
+        -31.11827
+      ],
+      [
+        -64.30137,
+        -31.11894
+      ],
+      [
+        -64.30079,
+        -31.11943
+      ],
+      [
+        -64.3,
+        -31.11961
+      ],
+      [
+        -64.29922,
+        -31.11943
+      ],
+      [
+        -64.29864,
+        -31.11894
+      ],
+      [
+        -64.29843,
+        -31.11827
+      ],
+      [
+        -64.29864,
+        -31.11759
+      ],
+      [
+        -64.29922,
+        -31.1171
+      ],
+      [
+        -64.3,
+        -31.11692
+      ],
+      [
+        -64.30079,
+        -31.1171
+      ],
+      [
+        -64.30137,
+        -31.11759
+      ],
+      [
+        -64.30158,
+        -31.11827
+      ]
+    ]
+  },
+  {
+    "localidad": "Salsipuedes",
+    "fecha": "2026-11-03",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "El Pueblito, secciones M, H, J, E y G.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "Salsipuedes"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Salsipuedes",
+    "fecha": "2026-11-03",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "Los Torres.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "Salsipuedes"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.30685,
+        -31.1075
+      ],
+      [
+        -64.30664,
+        -31.10817
+      ],
+      [
+        -64.30606,
+        -31.10867
+      ],
+      [
+        -64.30527,
+        -31.10885
+      ],
+      [
+        -64.30449,
+        -31.10867
+      ],
+      [
+        -64.30391,
+        -31.10817
+      ],
+      [
+        -64.3037,
+        -31.1075
+      ],
+      [
+        -64.30391,
+        -31.10683
+      ],
+      [
+        -64.30449,
+        -31.10633
+      ],
+      [
+        -64.30527,
+        -31.10615
+      ],
+      [
+        -64.30606,
+        -31.10633
+      ],
+      [
+        -64.30664,
+        -31.10683
+      ],
+      [
+        -64.30685,
+        -31.1075
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-03",
+    "desde": "07:30",
+    "hasta": "10:30",
+    "zona": "barrio Ampliación Poeta Lugones, de manera parcial.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [
+      "Ampliación Poeta Lugones"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "manera parcial"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-03",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "Barrio Jardín del Sur y Obras Sanitarias, de manera parcial.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [
+      "Jardín del Sur",
+      "Obras Sanitarias"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "manera parcial"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-03",
+    "desde": "08:30",
+    "hasta": "14:00",
+    "zona": "barrio Residencial Sur.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [
+      "Residencial Sur"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-03",
+    "desde": "08:30",
+    "hasta": "12:30",
+    "zona": "edificio Venetto 8 y algunos usuarios de las calles Pellegrini, 9 de Julio, Prager, Martin Luther King y Bernardo D’Elía.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.51365,
+        -31.42092
+      ],
+      [
+        -64.51344,
+        -31.42159
+      ],
+      [
+        -64.51286,
+        -31.42209
+      ],
+      [
+        -64.51207,
+        -31.42227
+      ],
+      [
+        -64.51128,
+        -31.42209
+      ],
+      [
+        -64.5107,
+        -31.42159
+      ],
+      [
+        -64.51049,
+        -31.42092
+      ],
+      [
+        -64.5107,
+        -31.42025
+      ],
+      [
+        -64.51128,
+        -31.41975
+      ],
+      [
+        -64.51207,
+        -31.41957
+      ],
+      [
+        -64.51286,
+        -31.41975
+      ],
+      [
+        -64.51344,
+        -31.42025
+      ],
+      [
+        -64.51365,
+        -31.42092
+      ]
+    ]
+  },
+  {
+    "localidad": "La Falda",
+    "fecha": "2026-11-03",
+    "desde": "12:00",
+    "hasta": "15:00",
+    "zona": "barrio Alto del Gigante.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "La Falda"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.49897,
+        -31.08618
+      ],
+      [
+        -64.49855,
+        -31.08753
+      ],
+      [
+        -64.4974,
+        -31.08852
+      ],
+      [
+        -64.49583,
+        -31.08888
+      ],
+      [
+        -64.49425,
+        -31.08852
+      ],
+      [
+        -64.4931,
+        -31.08753
+      ],
+      [
+        -64.49268,
+        -31.08618
+      ],
+      [
+        -64.4931,
+        -31.08484
+      ],
+      [
+        -64.49425,
+        -31.08385
+      ],
+      [
+        -64.49583,
+        -31.08349
+      ],
+      [
+        -64.4974,
+        -31.08385
+      ],
+      [
+        -64.49855,
+        -31.08484
+      ],
+      [
+        -64.49897,
+        -31.08618
+      ]
+    ]
+  },
+  {
+    "localidad": "Huerta Grande",
+    "fecha": "2026-11-03",
+    "desde": "12:00",
+    "hasta": "15:00",
+    "zona": "barrio El Cóndor.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
+    "barrios": [],
+    "zonas": [
+      "Huerta Grande"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Villa María",
     "fecha": "2026-11-04",
     "desde": "07:00",
