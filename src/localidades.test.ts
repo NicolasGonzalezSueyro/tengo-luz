@@ -94,7 +94,7 @@ test('crearUbicadorDeLocalidades: usa las del mapa, busca las nuevas una sola ve
     noEncontradas: ['Pueblo inventado'],
   });
   assert.equal(zonas.find((z) => z.properties.nombre === 'San Antonio')?.properties.osm, 'N3'); // el de cerca de Deán Funes
-  assert.match(zonas.find((z) => z.properties.nombre === 'San Antonio')!.properties.descripcion, /círculo/); // sin límite en OSM
+  assert.match(zonas.find((z) => z.properties.nombre === 'San Antonio')!.properties.descripcion, /referencia aproximada/); // sin límite en OSM
 
   // La segunda vez no se busca de nuevo, y "San Antonio" solo (sin referencia) queda sin marcar.
   busquedas.length = 0;
@@ -112,7 +112,7 @@ test('aplicarManuales: un pueblo cargado a mano con coordenadas de Google Maps s
   assert.deepEqual(invalidas, ['La Tuna', 'Mal copiado']); // latitud y longitud al revés, y texto
   assert.equal(cambiaron, true);
   assert.equal(zonas[0].properties.nombre, 'Mula Muerta');
-  assert.match(zonas[0].properties.descripcion, /se ubicó a mano/);
+  assert.match(zonas[0].properties.descripcion, /La ubicación de Mula Muerta es una referencia aproximada/);
 
   const red = { buscar: async () => assert.fail('no tiene que buscar'), geometria: async () => assert.fail('ya tiene su círculo') };
   assert.deepEqual(await crearUbicadorDeLocalidades(zonas, buscadas, red)(['Mula Muerta']), { localidades: ['Mula Muerta'], noEncontradas: [] });

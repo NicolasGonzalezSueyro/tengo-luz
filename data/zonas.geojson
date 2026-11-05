@@ -7,7 +7,7 @@
     "nombre": "Zona rural Ruta 9 Norte",
     "tipo": "ruta",
     "patron": "\\bruta (nacional )?9\\b.*\\bnorte\\b|\\bruta 9 norte\\b",
-    "descripcion": "Zona rural a los costados de la Ruta Nacional 9, al norte de Guiñazú. EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada."
+    "descripcion": "Zona rural a los costados de la Ruta Nacional 9, al norte de Guiñazú. El anuncio describe el corte por la ruta: el área marcada es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -99,7 +99,7 @@
     "nombre": "Camino a 60 Cuadras (desde el Km 13)",
     "tipo": "ruta",
     "patron": "\\bcamino (a )?60 cuadras\\b",
-    "descripcion": "Zona a los costados del Camino a 60 Cuadras, desde el Km 13 hacia el sur. EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada."
+    "descripcion": "Zona a los costados del Camino a 60 Cuadras, desde el Km 13 hacia el sur. El anuncio describe el corte por la ruta: el área marcada es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -187,7 +187,7 @@
     "nombre": "Villa Allende",
     "tipo": "localidad",
     "patron": "\\bvilla allende\\b",
-    "descripcion": "Se marca el casco urbano de Villa Allende (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Allende. Es una referencia aproximada.",
     "osm": "R6091815",
     "contorno": true
    },
@@ -735,7 +735,7 @@
     "nombre": "Mendiolaza",
     "tipo": "localidad",
     "patron": "\\bmendiolaza\\b",
-    "descripcion": "Se marca el casco urbano de Mendiolaza (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Mendiolaza. Es una referencia aproximada.",
     "osm": "R9453753",
     "contorno": true
    },
@@ -1367,7 +1367,7 @@
     "nombre": "Unquillo",
     "tipo": "localidad",
     "patron": "\\bunquillo\\b",
-    "descripcion": "Se marca el casco urbano de Unquillo (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Unquillo. Es una referencia aproximada.",
     "osm": "R8804980",
     "contorno": true
    },
@@ -1859,7 +1859,7 @@
     "nombre": "Río Ceballos",
     "tipo": "localidad",
     "patron": "\\brio ceballos\\b",
-    "descripcion": "Se marca el casco urbano de Río Ceballos (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Río Ceballos. Es una referencia aproximada.",
     "osm": "R9460381",
     "contorno": true
    },
@@ -3603,7 +3603,7 @@
     "nombre": "Saldán",
     "tipo": "localidad",
     "patron": "\\bsaldan\\b",
-    "descripcion": "Se marca el casco urbano de Saldán (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Saldán. Es una referencia aproximada.",
     "osm": "R9414254",
     "contorno": true
    },
@@ -3767,7 +3767,7 @@
     "nombre": "La Calera",
     "tipo": "localidad",
     "patron": "\\bla calera\\b",
-    "descripcion": "Se marca el casco urbano de La Calera (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Calera. Es una referencia aproximada.",
     "osm": "R9435036",
     "contorno": true
    },
@@ -4771,7 +4771,7 @@
     "nombre": "Malagueño",
     "tipo": "localidad",
     "patron": "\\bmalagueno\\b",
-    "descripcion": "Se marca el casco urbano de Malagueño (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Malagueño. Es una referencia aproximada.",
     "osm": "R9450679",
     "contorno": true
    },
@@ -7717,7 +7717,7 @@
     "nombre": "Villa Carlos Paz",
     "tipo": "localidad",
     "patron": "\\bcarlos paz\\b",
-    "descripcion": "Se marca el casco urbano de Villa Carlos Paz (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Carlos Paz. Es una referencia aproximada.",
     "osm": "R2284280",
     "contorno": true
    },
@@ -9149,7 +9149,7 @@
     "nombre": "Alta Gracia",
     "tipo": "localidad",
     "patron": "\\balta gracia\\b",
-    "descripcion": "Se marca el casco urbano de Alta Gracia (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Alta Gracia. Es una referencia aproximada.",
     "osm": "R9720880",
     "contorno": true
    },
@@ -13545,7 +13545,7 @@
     "nombre": "Estación Juárez Celman",
     "tipo": "localidad",
     "patron": "\\bjuarez celman\\b",
-    "descripcion": "Se marca el casco urbano de Estación Juárez Celman (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Estación Juárez Celman. Es una referencia aproximada.",
     "osm": "R9427931",
     "contorno": true
    },
@@ -14663,7 +14663,7 @@
     "nombre": "Colonia Tirolesa",
     "tipo": "localidad",
     "patron": "\\bcolonia tirolesa\\b",
-    "descripcion": "Se marca el casco urbano de Colonia Tirolesa (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Colonia Tirolesa. Es una referencia aproximada.",
     "osm": "R9409810",
     "contorno": true
    },
@@ -17422,7 +17422,7 @@
     "tipo": "localidad",
     "patron": "^rio cuarto$",
     "osm": "R3921415",
-    "descripcion": "Se marca el casco urbano de Río Cuarto (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Río Cuarto. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -20224,7 +20224,7 @@
     "tipo": "localidad",
     "patron": "^cosquin$",
     "osm": "R2284272",
-    "descripcion": "Se marca el casco urbano de Cosquín (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Cosquín. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -21052,7 +21052,7 @@
     "tipo": "localidad",
     "patron": "^ballesteros sur$",
     "osm": "N198440064",
-    "descripcion": "Se marca el casco urbano de Ballesteros Sud (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Ballesteros Sud. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -21338,7 +21338,7 @@
     "tipo": "localidad",
     "patron": "^campillo$",
     "osm": "R5229059",
-    "descripcion": "Se marca el casco urbano de Del Campillo (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Del Campillo. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -21376,7 +21376,7 @@
     "tipo": "localidad",
     "patron": "^villa valeria$",
     "osm": "R9477316",
-    "descripcion": "Se marca el casco urbano de Villa Valeria (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Valeria. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -21698,7 +21698,7 @@
     "tipo": "localidad",
     "patron": "^mattaldi$",
     "osm": "R9453726",
-    "descripcion": "Se marca el casco urbano de Mattaldi (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Mattaldi. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -21828,7 +21828,7 @@
     "tipo": "localidad",
     "patron": "^cruz eje$",
     "osm": "R6669405",
-    "descripcion": "Se marca el casco urbano de Cruz del Eje (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Cruz del Eje. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -22644,7 +22644,7 @@
     "tipo": "localidad",
     "patron": "^ausonia$",
     "osm": "R7333186",
-    "descripcion": "Se marca el casco urbano de Ausonia (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Ausonia. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -22698,7 +22698,7 @@
     "tipo": "localidad",
     "patron": "^bengolea$",
     "osm": "R5145126",
-    "descripcion": "Se marca el casco urbano de Bengolea (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Bengolea. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -22752,7 +22752,7 @@
     "tipo": "localidad",
     "patron": "^chazon$",
     "osm": "R9405820",
-    "descripcion": "Se marca el casco urbano de Chazón (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Chazón. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -22960,7 +22960,7 @@
     "tipo": "localidad",
     "patron": "^etruria$",
     "osm": "R5129316",
-    "descripcion": "Se marca el casco urbano de Etruria (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Etruria. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -23038,7 +23038,7 @@
     "tipo": "localidad",
     "patron": "^idiazabal$",
     "osm": "R9432941",
-    "descripcion": "Se marca el casco urbano de Idiazábal (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Idiazábal. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -23140,7 +23140,7 @@
     "tipo": "localidad",
     "patron": "^la laguna$",
     "osm": "R5135415",
-    "descripcion": "Se marca el casco urbano de La Laguna (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Laguna. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -23202,7 +23202,7 @@
     "tipo": "localidad",
     "patron": "^pascanas$",
     "osm": "N198409417",
-    "descripcion": "Se marca el casco urbano de Pascanas (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Pascanas. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -23540,7 +23540,7 @@
     "tipo": "localidad",
     "patron": "^pasco$",
     "osm": "R5135784",
-    "descripcion": "Se marca el casco urbano de Pasco (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Pasco. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -23586,7 +23586,7 @@
     "tipo": "localidad",
     "patron": "^ucacha$",
     "osm": "R5145127",
-    "descripcion": "Se marca el casco urbano de Ucacha (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Ucacha. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -23928,7 +23928,7 @@
     "tipo": "localidad",
     "patron": "^salsipuedes$",
     "osm": "R9381823",
-    "descripcion": "Se marca el casco urbano de Salsipuedes (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Salsipuedes. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -25400,7 +25400,7 @@
     "tipo": "localidad",
     "patron": "^san francisco chanar$",
     "osm": "R5986838",
-    "descripcion": "Se marca el casco urbano de San Francisco del Chañar (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de San Francisco del Chañar. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -25754,7 +25754,7 @@
     "tipo": "localidad",
     "patron": "^arroyo algodon$",
     "osm": "R5335599",
-    "descripcion": "Se marca el casco urbano de Arroyo Algodón (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Arroyo Algodón. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -25844,7 +25844,7 @@
     "tipo": "localidad",
     "patron": "^los zorros$",
     "osm": "N198400478",
-    "descripcion": "Se marca el casco urbano de Los Zorros (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Los Zorros. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -25950,7 +25950,7 @@
     "tipo": "localidad",
     "patron": "^tanti$",
     "osm": "R5889834",
-    "descripcion": "Se marca el casco urbano de Tanti (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Tanti. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -26624,7 +26624,7 @@
     "tipo": "localidad",
     "patron": "^villa santa cruz lago$",
     "osm": "N5576303452",
-    "descripcion": "Se marca el casco urbano de Villa Santa Cruz del Lago (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Santa Cruz del Lago. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -29146,7 +29146,7 @@
     "tipo": "localidad",
     "patron": "^cabalango$",
     "osm": "R5889833",
-    "descripcion": "Se marca el casco urbano de Cabalango (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Cabalango. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -29308,7 +29308,7 @@
     "tipo": "localidad",
     "patron": "^villa yacanto calamuchita$",
     "osm": "R8298167",
-    "descripcion": "Se marca el casco urbano de Villa Yacanto de Calamuchita (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Yacanto de Calamuchita. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -29426,7 +29426,7 @@
     "tipo": "localidad",
     "patron": "^villa ascasubi$",
     "osm": "N198433329",
-    "descripcion": "Se marca el casco urbano de Villa Ascasubi (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Ascasubi. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -29886,7 +29886,7 @@
     "tipo": "localidad",
     "patron": "^villa maria$",
     "osm": "R2262361",
-    "descripcion": "Se marca el casco urbano de Villa María (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa María. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -33318,7 +33318,7 @@
     "tipo": "localidad",
     "patron": "^san francisco$",
     "osm": "R3918962",
-    "descripcion": "Se marca el casco urbano de San Francisco (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de San Francisco. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -33696,7 +33696,7 @@
     "tipo": "localidad",
     "patron": "^bialet masse$",
     "osm": "R3919538",
-    "descripcion": "Se marca el casco urbano de Bialet Massé (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Bialet Massé. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -34756,7 +34756,7 @@
     "tipo": "localidad",
     "patron": "^pampa alta$",
     "osm": "N8421819596",
-    "descripcion": "Se marca el casco urbano de Pampa Alta (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Pampa Alta. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -35892,7 +35892,7 @@
     "tipo": "localidad",
     "patron": "^san clemente$",
     "osm": "N198419753",
-    "descripcion": "Se marca el casco urbano de San Clemente (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de San Clemente. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -36358,7 +36358,7 @@
     "tipo": "localidad",
     "patron": "^rio segundo$",
     "osm": "R2330523",
-    "descripcion": "Se marca el casco urbano de Río Segundo (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Río Segundo. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -36492,7 +36492,7 @@
     "tipo": "localidad",
     "patron": "^capilla monte$",
     "osm": "R2284097",
-    "descripcion": "Se marca el casco urbano de Capilla del Monte (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Capilla del Monte. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -37312,7 +37312,7 @@
     "tipo": "localidad",
     "patron": "^villa nueva$",
     "osm": "R4585334",
-    "descripcion": "Se marca el casco urbano de Villa Nueva (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Nueva. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -37522,7 +37522,7 @@
     "tipo": "localidad",
     "patron": "^james craik$",
     "osm": "R3087413",
-    "descripcion": "Se marca el casco urbano de James Craik (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de James Craik. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -37576,7 +37576,7 @@
     "tipo": "localidad",
     "patron": "^tancacha$",
     "osm": "R5145065",
-    "descripcion": "Se marca el casco urbano de Tancacha (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Tancacha. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -37968,7 +37968,7 @@
     "tipo": "localidad",
     "patron": "^villa parque siquiman$",
     "osm": "R3920833",
-    "descripcion": "Se marca el casco urbano de Villa Parque Siquiman (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Parque Siquiman. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -38556,7 +38556,7 @@
     "tipo": "localidad",
     "patron": "^bell ville$",
     "osm": "R9401489",
-    "descripcion": "Se marca el casco urbano de Bell Ville (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Bell Ville. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -41248,7 +41248,7 @@
     "tipo": "localidad",
     "patron": "^dean funes$",
     "osm": "N198446830",
-    "descripcion": "Se marca el casco urbano de Deán Funes (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Deán Funes. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -42226,7 +42226,7 @@
     "tipo": "localidad",
     "patron": "^quilino$",
     "osm": "R5199728",
-    "descripcion": "Se marca el casco urbano de Quilino (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Quilino. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -42300,7 +42300,7 @@
     "tipo": "localidad",
     "patron": "^villa quilino$",
     "osm": "R5199729",
-    "descripcion": "Se marca el casco urbano de Villa Quilino (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Quilino. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -42418,7 +42418,7 @@
     "tipo": "localidad",
     "patron": "^los cadillos$",
     "osm": "N7641142214",
-    "descripcion": "OpenStreetMap no tiene el límite de Los Cadillos: el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Los Cadillos es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -42487,7 +42487,7 @@
     "tipo": "localidad",
     "patron": "^las chacras$",
     "osm": "N198458034",
-    "descripcion": "OpenStreetMap no tiene el límite de Las Chacras: el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Las Chacras es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -42556,7 +42556,7 @@
     "tipo": "localidad",
     "patron": "^san jose las salinas$",
     "osm": "R5199736",
-    "descripcion": "Se marca el casco urbano de San José de las Salinas (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de San José de las Salinas. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -42672,7 +42672,7 @@
     "tipo": "localidad",
     "patron": "^lucio v mansilla$",
     "osm": "R2289630",
-    "descripcion": "Se marca el casco urbano de Lucio V. Mansilla (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Lucio V. Mansilla. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -42718,7 +42718,7 @@
     "tipo": "localidad",
     "patron": "^agua hedionda$",
     "osm": "N7641153531",
-    "descripcion": "OpenStreetMap no tiene el límite de Agua Hedionda: el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Agua Hedionda es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -42787,7 +42787,7 @@
     "tipo": "localidad",
     "patron": "^el tuscal$",
     "osm": "N198449373",
-    "descripcion": "Se marca el casco urbano de El Tuscal (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de El Tuscal. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -42869,7 +42869,7 @@
     "tipo": "localidad",
     "patron": "^agua oro$",
     "osm": "N198437883",
-    "descripcion": "Se marca el casco urbano de Agua de Oro (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Agua de Oro. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -43955,7 +43955,7 @@
     "tipo": "localidad",
     "patron": "^la granja$",
     "osm": "R9436134",
-    "descripcion": "Se marca el casco urbano de La Granja (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Granja. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -46547,7 +46547,7 @@
     "tipo": "localidad",
     "patron": "^estacion general paz$",
     "osm": "N198451572",
-    "descripcion": "Se marca el casco urbano de Estación General Paz (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Estación General Paz. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -46789,7 +46789,7 @@
     "tipo": "localidad",
     "patron": "^ascochinga$",
     "osm": "N198439632",
-    "descripcion": "Se marca el casco urbano de Ascochinga (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Ascochinga. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -47777,7 +47777,7 @@
     "tipo": "localidad",
     "patron": "^la paz$",
     "osm": "N198457368",
-    "descripcion": "Se marca el casco urbano de La Paz (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Paz. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -48167,7 +48167,7 @@
     "tipo": "localidad",
     "patron": "^general cabrera$",
     "osm": "R5282315",
-    "descripcion": "Se marca el casco urbano de General Cabrera (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de General Cabrera. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -48261,7 +48261,7 @@
     "tipo": "localidad",
     "patron": "^colazo$",
     "osm": "R7265735",
-    "descripcion": "Se marca el casco urbano de Colazo (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Colazo. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -48411,7 +48411,7 @@
     "tipo": "localidad",
     "patron": "^las junturas$",
     "osm": "R3918725",
-    "descripcion": "Se marca el casco urbano de Las Junturas (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Las Junturas. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -48469,7 +48469,7 @@
     "tipo": "localidad",
     "patron": "^la cumbre$",
     "osm": "N198455035",
-    "descripcion": "Se marca el casco urbano de La Cumbre (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Cumbre. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -49665,7 +49665,7 @@
     "tipo": "localidad",
     "patron": "^los cocos$",
     "osm": "N198398920",
-    "descripcion": "Se marca el casco urbano de Los Cocos (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Los Cocos. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -50431,7 +50431,7 @@
     "tipo": "localidad",
     "patron": "^san roque$",
     "osm": "N497377641",
-    "descripcion": "Se marca el casco urbano de San Roque (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de San Roque. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -50661,7 +50661,7 @@
     "tipo": "localidad",
     "patron": "^villa totoral$",
     "osm": "R9477393",
-    "descripcion": "Se marca el casco urbano de Villa del Totoral (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa del Totoral. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -51591,7 +51591,7 @@
     "tipo": "localidad",
     "patron": "^villa ciudad america$",
     "osm": "R9474625",
-    "descripcion": "Se marca el casco urbano de Villa Ciudad de América (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Ciudad de América. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -53459,7 +53459,7 @@
     "tipo": "localidad",
     "patron": "^camilo aldao$",
     "osm": "R3815445",
-    "descripcion": "Se marca el casco urbano de Camilo Aldao (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Camilo Aldao. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -53497,7 +53497,7 @@
     "tipo": "localidad",
     "patron": "^marcos juarez$",
     "osm": "R9477660",
-    "descripcion": "Se marca el casco urbano de Marcos Juárez (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Marcos Juárez. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -54779,7 +54779,7 @@
     "tipo": "localidad",
     "patron": "^villa parque santa ana$",
     "osm": "N3064117738",
-    "descripcion": "Se marca el casco urbano de Villa Parque Santa Ana (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Parque Santa Ana. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -55137,7 +55137,7 @@
     "tipo": "localidad",
     "patron": "^icho cruz$",
     "osm": "N198434702",
-    "descripcion": "Se marca el casco urbano de Icho Cruz (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Icho Cruz. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -55903,7 +55903,7 @@
     "tipo": "localidad",
     "patron": "^las perdices$",
     "osm": "R4166757",
-    "descripcion": "Se marca el casco urbano de Las Perdices (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Las Perdices. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -55945,7 +55945,7 @@
     "tipo": "localidad",
     "patron": "^dalmacio velez sarsfield$",
     "osm": "N198446810",
-    "descripcion": "Se marca el casco urbano de Dalmacio Vélez Sarsfield (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Dalmacio Vélez Sarsfield. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -56213,7 +56213,7 @@
     "tipo": "localidad",
     "patron": "^ticino$",
     "osm": "R5141579",
-    "descripcion": "Se marca el casco urbano de Ticino (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Ticino. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -56267,7 +56267,7 @@
     "tipo": "localidad",
     "patron": "^potrero garay$",
     "osm": "R6132856",
-    "descripcion": "Se marca el casco urbano de Potrero de Garay (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Potrero de Garay. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -56689,7 +56689,7 @@
     "tipo": "localidad",
     "patron": "^villa los aromos$",
     "osm": "R5317149",
-    "descripcion": "Se marca el casco urbano de Villa Los Aromos (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Los Aromos. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -56803,7 +56803,7 @@
     "tipo": "localidad",
     "patron": "^carnerillo$",
     "osm": "R5633345",
-    "descripcion": "Se marca el casco urbano de Carnerillo (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Carnerillo. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -56865,7 +56865,7 @@
     "tipo": "localidad",
     "patron": "^charras$",
     "osm": "R3914774",
-    "descripcion": "Se marca el casco urbano de Charras (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Charras. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -56907,7 +56907,7 @@
     "tipo": "localidad",
     "patron": "^chucul$",
     "osm": "N198444076",
-    "descripcion": "Se marca el casco urbano de Chucul (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Chucul. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57163,7 +57163,7 @@
     "tipo": "localidad",
     "patron": "^olaeta$",
     "osm": "R5633346",
-    "descripcion": "Se marca el casco urbano de Olaeta (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Olaeta. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57201,7 +57201,7 @@
     "tipo": "localidad",
     "patron": "^leones$",
     "osm": "R9447024",
-    "descripcion": "Se marca el casco urbano de Leones (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Leones. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57303,7 +57303,7 @@
     "tipo": "localidad",
     "patron": "^ramon j carcano$",
     "osm": "R8840782",
-    "descripcion": "Se marca el casco urbano de Ramón J. Carcano (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Ramón J. Carcano. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57401,7 +57401,7 @@
     "tipo": "localidad",
     "patron": "^pilar$",
     "osm": "R2330522",
-    "descripcion": "Se marca el casco urbano de Pilar (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Pilar. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57715,7 +57715,7 @@
     "tipo": "localidad",
     "patron": "^canada luque$",
     "osm": "R6004441",
-    "descripcion": "Se marca el casco urbano de Cañada de Luque (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Cañada de Luque. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57777,7 +57777,7 @@
     "tipo": "localidad",
     "patron": "^atahona$",
     "osm": "R9399955",
-    "descripcion": "El anuncio de EPEC no nombra barrios de Atahona que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada."
+    "descripcion": "El anuncio no detalla barrios de Atahona: se marca toda la localidad como referencia."
    },
    "geometry": {
     "type": "Polygon",
@@ -57850,7 +57850,7 @@
     "tipo": "localidad",
     "patron": "^las penas$",
     "osm": "R6002324",
-    "descripcion": "Se marca el casco urbano de Las Peñas (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Las Peñas. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -57972,7 +57972,7 @@
     "tipo": "localidad",
     "patron": "^los mistoles$",
     "osm": "R6002327",
-    "descripcion": "Se marca el casco urbano de Los Mistoles (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Los Mistoles. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -58026,7 +58026,7 @@
     "tipo": "localidad",
     "patron": "^capilla siton$",
     "osm": "N198442005",
-    "descripcion": "Se marca el casco urbano de Capilla de Sitón (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Capilla de Sitón. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -58200,7 +58200,7 @@
     "tipo": "localidad",
     "patron": "^la posta$",
     "osm": "N198457496",
-    "descripcion": "Se marca el casco urbano de La Posta (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Posta. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -58390,7 +58390,7 @@
     "tipo": "localidad",
     "patron": "^sarmiento$",
     "osm": "R5998601",
-    "descripcion": "Se marca el casco urbano de Sarmiento (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Sarmiento. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -58452,7 +58452,7 @@
     "tipo": "localidad",
     "patron": "^canada rio pinto$",
     "osm": "N198441731",
-    "descripcion": "Se marca el casco urbano de Cañada de Río Pinto (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Cañada de Río Pinto. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -58574,7 +58574,7 @@
     "tipo": "localidad",
     "patron": "^agua las piedras$",
     "osm": "N198437828",
-    "descripcion": "OpenStreetMap no tiene el límite de Agua de las Piedras: el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Agua de las Piedras es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -58643,7 +58643,7 @@
     "tipo": "localidad",
     "patron": "^villa gutierrez$",
     "osm": "R6002280",
-    "descripcion": "Se marca el casco urbano de Villa Gutiérrez (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Gutiérrez. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -58701,7 +58701,7 @@
     "tipo": "localidad",
     "patron": "^villa albertina$",
     "osm": "N198433126",
-    "descripcion": "Se marca el casco urbano de Villa Albertina (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Villa Albertina. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -59193,7 +59193,7 @@
     "tipo": "localidad",
     "patron": "^avellaneda$",
     "osm": "R5198109",
-    "descripcion": "Se marca el casco urbano de Avellaneda (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Avellaneda. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -59251,7 +59251,7 @@
     "tipo": "localidad",
     "patron": "^macha$",
     "osm": "N198400957",
-    "descripcion": "OpenStreetMap no tiene el límite de Macha: el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Macha es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -59320,7 +59320,7 @@
     "tipo": "localidad",
     "patron": "^mula muerta$",
     "osm": "manual:mula muerta",
-    "descripcion": "Mula Muerta no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Mula Muerta es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -59389,7 +59389,7 @@
     "tipo": "localidad",
     "patron": "^la tuna$",
     "osm": "manual:la tuna",
-    "descripcion": "La Tuna no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de La Tuna es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",
@@ -59458,7 +59458,7 @@
     "tipo": "localidad",
     "patron": "^la falda$",
     "osm": "R9370777",
-    "descripcion": "Se marca el casco urbano de La Falda (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de La Falda. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -60076,7 +60076,7 @@
     "tipo": "localidad",
     "patron": "^huerta grande$",
     "osm": "N198452377",
-    "descripcion": "Se marca el casco urbano de Huerta Grande (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Huerta Grande. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -60994,7 +60994,7 @@
     "tipo": "localidad",
     "patron": "^laborde$",
     "osm": "N198454604",
-    "descripcion": "Se marca el casco urbano de Laborde (la parte con casas, según OpenStreetMap) como referencia aproximada.",
+    "descripcion": "El área marcada corresponde a la zona urbana de Laborde. Es una referencia aproximada.",
     "contorno": true
    },
    "geometry": {
@@ -61404,7 +61404,7 @@
     "tipo": "localidad",
     "patron": "^cuesta blanca$",
     "osm": "N3256614517",
-    "descripcion": "OpenStreetMap no tiene el límite de Cuesta Blanca: el círculo marca dónde queda, como referencia aproximada."
+    "descripcion": "La ubicación de Cuesta Blanca es una referencia aproximada."
    },
    "geometry": {
     "type": "Polygon",

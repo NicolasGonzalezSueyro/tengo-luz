@@ -4,19 +4,22 @@
 // por separado (en Valle Escondido: Los Cielos, Las Terrazas, La Reserva…). Hasta ahora eran solo un punto.
 // 1. Baja de OpenStreetMap las zonas residenciales y barrios con nombre de la ciudad: si el lugar tiene contorno
 //    ahí, se usa ese (y también se suman los que no tenía el mapa: más divisiones para reconocer).
+//    Antes que OSM, los loteos aprobados y autorizados por la Municipalidad (Mapas Córdoba, IDECOR): contorno oficial.
 // 2. Los puntos de OSM sin contorno y los nombres de los cortes que no se encuentran (buscados en Nominatim)
 //    reciben un contorno APROXIMADO chico (hasta 300 m, repartido con los vecinos), sin salirse del barrio
-//    municipal que los contiene: un country de Valle Escondido no pisa el barrio de al lado.
+//    municipal que los contiene, cortado por las avenidas (no cruza Mahatma Gandhi ni ninguna otra) y ajustado a
+//    las manzanas oficiales de la Provincia, así el borde sigue las calles.
 // Quedan en data/barrios-interior.geojson con localidad "Córdoba" (el lector y la página los tratan igual que al
 // resto). Correr después de `npm run barrios-interior`, que reescribe ese archivo.
 // Datos © colaboradores de OpenStreetMap, licencia ODbL.
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import * as turf from '@turf/turf';
 import type { Position } from 'geojson';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';
 import {
-  aliviar, aproximar, areaDe, consultarOverpass, interseccion, km2, SERVIDORES,
+  aliviar, aproximar, areaDe, consultarOverpass, diferencia, enTitulo, interseccion, km2, SERVIDORES, unir,
   type Area, type BarrioInterior, type ElementoOsm, type Semilla,
 } from './barrios-interior.ts';
 import { CAPITAL } from './mantenimiento.ts';
@@ -73,6 +76,76 @@ for (const e of elementos) {
   if (!anterior || km2(area) > km2(anterior.area)) areasOsm.set(clave, { base, area });
 }
 
+// Los loteos de la Municipalidad (con caché en disco): nombre oficial y de fantasía ("Urbanización Siete Soles").
+const IDECOR = 'https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/wfs';
+async function bajarIdecor(capa: string, extra: Record<string, string> = {}, archivo = `${CACHE}/idecor-${capa}.json`) {
+  const guardado = await readFile(archivo, 'utf8').catch(() => null);
+  if (guardado) return JSON.parse(guardado) as { features: (Area & { properties: Record<string, unknown> })[] };
+  const url = new URL(IDECOR);
+  url.search = new URLSearchParams({
+    service: 'WFS', version: '1.0.0', request: 'GetFeature', typeName: `idecor:${capa}`, outputFormat: 'application/json', srsName: 'EPSG:4326', ...extra,
+  }).toString();
+  await pausa(300); // sin apurar al servidor de la Provincia
+  const res = await fetch(url, { headers: IDENTIFICACION, signal: AbortSignal.timeout(120_000) });
+  if (!res.ok) throw new Error(`Mapas Córdoba respondió ${res.status} para ${capa}`);
+  const datos = await res.json();
+  await mkdir(dirname(archivo), { recursive: true });
+  await writeFile(archivo, JSON.stringify(datos));
+  return datos as { features: (Area & { properties: Record<string, unknown> })[] };
+}
+const sinPrefijoOficial = (n: string) => sinPrefijo(enTitulo(n).replace(/^(urbanizaci[oó]n|loteo|barrio|complejo habitacional)\s+/i, ''));
+const loteos = new Map<string, { base: string; area: Area }>();
+for (const capa of ['loteos_muni_aprobados', 'loteos_muni_autorizados']) {
+  for (const f of (await bajarIdecor(capa)).features) {
+    if (!f.geometry) continue;
+    const area = { type: 'Feature', properties: {}, geometry: f.geometry } as Area;
+    if (km2(area) < 0.003 || km2(area) > 3) continue;
+    // El nombre de fantasía es como lo conoce la gente; el oficial también se guarda para encontrarlo.
+    const nombres = [f.properties.nombfant, f.properties.nombre].map((n) => sinPrefijoOficial(String(n ?? ''))).filter((n) => n.length >= 3 && n !== 'None');
+    for (const base of nombres) if (!loteos.has(claveDeBarrio(base))) loteos.set(claveDeBarrio(base), { base: nombres[0], area });
+  }
+}
+
+// Las avenidas y calles principales: un contorno aproximado no las cruza.
+const archivoAvenidas = `${CACHE}/osm-capital-avenidas.json`;
+let avenidas = JSON.parse(await readFile(archivoAvenidas, 'utf8').catch(() => 'null')) as ElementoOsm[] | null;
+if (!avenidas) {
+  avenidas = await consultarOverpass(`[out:json][timeout:180];
+    way["highway"~"^(motorway|trunk|primary|secondary|tertiary)(_link)?$"](${CAJA});out geom qt;`, 'avenidas de Córdoba', SERVIDORES[1]);
+  await writeFile(archivoAvenidas, JSON.stringify(avenidas));
+}
+const lineasAvenidas = avenidas.filter((e) => (e.geometry?.length ?? 0) >= 2).map((e) => turf.lineString(e.geometry!.map((p) => [p.lon, p.lat])));
+
+/** El pedazo del área del lado de la avenida donde está el lugar. */
+function cortarPorAvenidas(area: Area, punto: Position): Area {
+  const [o, s, e, n] = turf.bbox(area);
+  const cerca = lineasAvenidas.filter((l) => {
+    const [lo, ls, le, ln] = turf.bbox(l);
+    return lo <= e && le >= o && ls <= n && ln >= s;
+  });
+  if (cerca.length === 0) return area;
+  const franjas = cerca.map((l) => turf.buffer(l, 6, { units: 'meters' }) as Area | undefined).filter((f): f is Area => Boolean(f));
+  const zona = unir(franjas);
+  const recortada = zona ? diferencia(area, zona) : area;
+  if (!recortada) return area;
+  const partes = turf.flatten(recortada).features as Area[];
+  return partes.find((p) => turf.booleanPointInPolygon(punto, p))
+    ?? partes.sort((a, b) => turf.distance(punto, turf.centroid(a)) - turf.distance(punto, turf.centroid(b)))[0] ?? area;
+}
+
+/** El área ajustada a las manzanas oficiales que caen adentro, con las calles internas cerradas. */
+async function ajustarAManzanas(area: Area, nombre: string): Promise<Area> {
+  const [o, s, e, n] = turf.bbox(area);
+  const archivo = `${CACHE}/manzanas/${claveDeBarrio(nombre).replace(/\s+/g, '-')}.json`;
+  const manzanas = await bajarIdecor('manzana', { bbox: `${o},${s},${e},${n},EPSG:4326` }, archivo).catch(() => ({ features: [] as Area[] }));
+  const adentro = manzanas.features.filter((m) => m.geometry && turf.booleanPointInPolygon(turf.pointOnFeature(m), area));
+  if (adentro.length === 0) return area;
+  // Se agranda 9 m y se achica 9 m: las calles entre manzanas quedan adentro y el borde sigue la línea de las cuadras.
+  const juntas = unir(adentro.map((m) => turf.buffer(m, 9, { units: 'meters' }) as Area));
+  const ajustada = juntas && (turf.buffer(juntas, -9, { units: 'meters' }) as Area | undefined);
+  return ajustada ?? area;
+}
+
 // 2. Lo que hay que enmarcar: los puntos del mapa y los nombres de los cortes que no aparecen en ningún lado.
 const semillas: Semilla[] = mapa.features
   .filter((f) => f.properties.tipo === 'punto' && f.properties.nombre)
@@ -107,7 +180,7 @@ for (const nombre of faltan) {
 // 3. Cada lugar con su contorno de OSM (si está cerca del punto: los nombres se repiten) o uno aproximado.
 const nuevos: BarrioInterior[] = [];
 const vistos = new Set<string>();
-const agregar = (base: string, area: Area, tipo: 'poligono' | 'aproximado', fuente: 'osm' | 'nominatim') => {
+const agregar = (base: string, area: Area, tipo: 'poligono' | 'aproximado', fuente: 'osm' | 'nominatim' | 'municipio') => {
   const clave = claveDeBarrio(base);
   if (vistos.has(clave)) return;
   vistos.add(clave);
@@ -117,26 +190,40 @@ const sinContorno: Semilla[] = [];
 for (const s of semillas) {
   // "Country La Reserva" ya está en el mapa municipal como "La Reserva".
   if (esMunicipal([CAPITAL], sinPrefijo(s.base)).barrios.length > 0) continue;
+  const cerca2km = (a: Area) => turf.booleanPointInPolygon(s.punto, a) || turf.distance(s.punto, turf.centroid(a), { units: 'kilometers' }) < 2;
+  const loteo = loteos.get(claveDeBarrio(sinPrefijoOficial(s.base)));
+  if (loteo && cerca2km(loteo.area)) {
+    agregar(s.base, loteo.area, 'poligono', 'municipio');
+    continue;
+  }
   const osm = areasOsm.get(claveDeBarrio(sinPrefijo(s.base)));
   const cerca = osm && (turf.booleanPointInPolygon(s.punto, osm.area)
     || turf.distance(s.punto, turf.centroid(osm.area), { units: 'kilometers' }) < 1.5);
   if (cerca) agregar(s.base, osm.area, 'poligono', 'osm');
   else sinContorno.push(s);
 }
-// Las zonas de OSM que el mapa no tenía (ni como punto): más divisiones dentro de los barrios grandes.
+// Los loteos y las zonas de OSM que el mapa no tenía (ni como punto): más divisiones dentro de los barrios grandes.
+for (const { base, area } of loteos.values()) {
+  if (esMunicipal([CAPITAL], base).barrios.length > 0) continue;
+  agregar(base, area, 'poligono', 'municipio');
+}
 for (const { base, area } of areasOsm.values()) {
   if (esMunicipal([CAPITAL], base).barrios.length > 0) continue;
   agregar(base, area, 'poligono', 'osm');
 }
 const conContorno = nuevos.map((f) => f as Area);
-for (const { base, area, fuente } of aproximar(sinContorno, conContorno, null, 300)) {
-  // Sin salirse del barrio municipal que contiene el punto.
-  const centro = turf.centroid(area).geometry.coordinates;
-  const padre = municipales.find((m) => turf.booleanPointInPolygon(centro, m));
-  agregar(base, (padre && interseccion(area, padre)) || area, 'aproximado', fuente);
+const aproximados = aproximar(sinContorno, conContorno, null, 300);
+for (const [i, { base, area, fuente }] of aproximados.entries()) {
+  const punto = sinContorno[i].punto;
+  // Sin salirse del barrio municipal que contiene el punto, sin cruzar avenidas y siguiendo las manzanas.
+  const padre = municipales.find((m) => turf.booleanPointInPolygon(punto, m));
+  const enElBarrio = (padre && interseccion(area, padre)) || area;
+  const ajustada = await ajustarAManzanas(cortarPorAvenidas(enElBarrio, punto), base);
+  agregar(base, cortarPorAvenidas(ajustada, punto), 'aproximado', fuente);
+  if ((i + 1) % 25 === 0) console.log(`  ${i + 1}/${aproximados.length} aproximados ajustados a las manzanas`);
 }
 
 const resto = interior.features.filter((f) => f.properties.localidad !== CAPITAL);
 await writeFile('data/barrios-interior.geojson', JSON.stringify(aplicarContornos({ type: 'FeatureCollection', features: [...resto, ...nuevos] }, 'interior')) + '\n');
 const cuenta = (tipo: string) => nuevos.filter((f) => f.properties.tipo === tipo).length;
-console.log(`Capital: ${cuenta('poligono')} lugares con contorno de OSM y ${cuenta('aproximado')} aproximados.`);
+console.log(`Capital: ${cuenta('poligono')} lugares con contorno (oficial u OSM) y ${cuenta('aproximado')} aproximados.`);

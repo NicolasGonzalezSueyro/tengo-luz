@@ -4,7 +4,7 @@
   "description": "Mapa de cortes y mantenimientos de luz por barrio en Córdoba",
   "private": true,
   "type": "module",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">=24"
   },

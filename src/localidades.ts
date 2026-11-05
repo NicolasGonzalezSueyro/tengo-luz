@@ -179,7 +179,7 @@ export function aplicarManuales(zonas: Localidad[], buscadas: Record<string, Can
         tipo: 'localidad',
         patron: `^${escapar(normalizar(nombre))}$`,
         osm,
-        descripcion: `${nombre} no figura en OpenStreetMap: se ubicó a mano y el círculo marca dónde queda, como referencia aproximada.`,
+        descripcion: `La ubicación de ${nombre} es una referencia aproximada.`,
       },
       geometry: geometria,
     };
@@ -267,8 +267,8 @@ export function crearUbicadorDeLocalidades(
         patron: `^${escapar(normalizar(nombre))}$`,
         osm: c.osm,
         descripcion: !c.osm.startsWith('R')
-          ? `OpenStreetMap no tiene el límite de ${c.nombre}: el círculo marca dónde queda, como referencia aproximada.`
-          : `El anuncio de EPEC no nombra barrios de ${nombre} que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada.`,
+          ? `La ubicación de ${c.nombre} es una referencia aproximada.`
+          : `El anuncio no detalla barrios de ${nombre}: se marca toda la localidad como referencia.`,
       },
       geometry: geometria,
     });

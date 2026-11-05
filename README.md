@@ -231,8 +231,8 @@ npm run simplificar   # vuelve a simplificar los contornos del mapa
 ## Fuentes y licencia
 
 - **Cortes:** notas públicas de [El Doce](https://eldoce.tv), que replican los anuncios de EPEC. Cada corte guarda el link a la nota de origen.
-- **Barrios:** capa pública de barrios de la [Municipalidad de Córdoba](https://cordoba.maps.arcgis.com/home/item.html?id=60f4e6cbb6ee47e88679a76a5b763326), complementada con datos © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL).
+- **Barrios:** capa pública de barrios de la [Municipalidad de Córdoba](https://cordoba.maps.arcgis.com/home/item.html?id=60f4e6cbb6ee47e88679a76a5b763326), complementada con datos © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL) y capas de [Mapas Córdoba](https://www.mapascordoba.gob.ar) (IDECOR, Provincia de Córdoba).
 - **Íconos:** estilo [Lucide](https://lucide.dev) (ISC).
 - **Tipografía:** [Outfit](https://github.com/Outfitio/Outfit-Fonts) (SIL Open Font License, en [`web/fuentes/OFL.txt`](web/fuentes/OFL.txt)).
 
-Código bajo licencia [MIT](LICENSE). Hecho por Nicolás González Sueyro en Córdoba.
+**Licencia:** © 2026 Nicolás González Sueyro, todos los derechos reservados. El código se puede consultar, pero no usar, copiar ni modificar sin autorización escrita (ver [`LICENSE`](LICENSE)). Los datos de terceros mantienen sus licencias. Hecho en Córdoba.

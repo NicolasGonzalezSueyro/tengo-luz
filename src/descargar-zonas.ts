@@ -28,14 +28,14 @@ const ZONAS = [
     nombre: 'Zona rural Ruta 9 Norte',
     // Se compara contra el texto normalizado del anuncio (minúsculas, sin tildes ni "de"/"del").
     patron: String.raw`\bruta (nacional )?9\b.*\bnorte\b|\bruta 9 norte\b`,
-    descripcion: 'Zona rural a los costados de la Ruta Nacional 9, al norte de Guiñazú. EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.',
+    descripcion: 'Zona rural a los costados de la Ruta Nacional 9, al norte de Guiñazú. El anuncio describe el corte por la ruta: el área marcada es una referencia aproximada.',
     // Tramo de la RN9 desde el límite norte de la ciudad hasta unos 7 km más al norte.
     filtro: 'way["highway"]["ref"~"^RN ?9$"](-31.312,-64.200,-31.250,-64.150)',
   },
   {
     nombre: 'Camino a 60 Cuadras (desde el Km 13)',
     patron: String.raw`\bcamino (a )?60 cuadras\b`,
-    descripcion: 'Zona a los costados del Camino a 60 Cuadras, desde el Km 13 hacia el sur. EPEC describe este corte por la ruta, no por barrios: el contorno marrón es una referencia aproximada.',
+    descripcion: 'Zona a los costados del Camino a 60 Cuadras, desde el Km 13 hacia el sur. El anuncio describe el corte por la ruta: el área marcada es una referencia aproximada.',
     // El Km 13 queda cerca de la latitud -31,536; tomamos unos 5 km hacia el sur.
     filtro: 'way["highway"]["name"="Camino a 60 Cuadras"](-31.580,-64.200,-31.534,-64.050)',
   },
@@ -149,7 +149,7 @@ if (import.meta.main) {
         tipo: 'localidad',
         patron: localidad.patron,
         osm: `R${localidad.relacion}`,
-        descripcion: `El anuncio de EPEC no nombra barrios de ${localidad.nombre} que se puedan ubicar: se marca toda la localidad (su límite municipal) como referencia aproximada.`,
+        descripcion: `El anuncio no detalla barrios de ${localidad.nombre}: se marca toda la localidad como referencia.`,
       },
       geometry: { type: limite.type, coordinates: redondear(limite.coordinates) },
     });

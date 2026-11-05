@@ -493,7 +493,7 @@ if (import.meta.main) {
       if (casco) {
         localidad.geometry = aliviar(casco).geometry as never;
         localidad.properties.contorno = true; // ya no es un círculo: la página lo dibuja como área
-        localidad.properties.descripcion = `Se marca el casco urbano de ${nombre} (la parte con casas, según OpenStreetMap) como referencia aproximada.`;
+        localidad.properties.descripcion = `El área marcada corresponde a la zona urbana de ${nombre}. Es una referencia aproximada.`;
       }
       const pedidos = nombresEpec.get(nombre)?.size ?? 0;
       console.log(`[${n + 1}/${localidades.length}] ${nombre}: ${conContorno.length} con contorno, ${aproximados.length} aproximados`

@@ -1,21 +1,20 @@
-MIT License
+Copyright (c) 2026 Nicolás González Sueyro. Todos los derechos reservados.
 
-Copyright (c) 2026 Nicolas Gonzalez Sueyro
+¿Tengo luz? (código fuente, diseño, textos, íconos y herramientas de este repositorio)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+El código se publica únicamente para que pueda ser consultado. No se concede ningún permiso
+para usarlo, copiarlo, modificarlo, distribuirlo, publicarlo, sublicenciarlo, venderlo ni
+ofrecerlo como servicio, en todo o en parte, sin autorización previa y por escrito del autor.
+Ver el repositorio en GitHub no otorga ninguna de esas autorizaciones.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Para pedir una licencia de uso: https://github.com/NicolasGonzalezSueyro
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Datos y componentes de terceros (conservan sus propias licencias y no quedan alcanzados por
+este aviso):
+- Datos © colaboradores de OpenStreetMap, licencia ODbL (https://www.openstreetmap.org/copyright).
+  Los archivos de data/ armados con esos datos se rigen por la ODbL.
+- Barrios de la Municipalidad de Córdoba y capas de Mapas Córdoba (IDECOR, Provincia de Córdoba).
+- Tipografía Outfit (SIL Open Font License, ver web/fuentes/OFL.txt) e íconos estilo Lucide (ISC).
+
+Las versiones publicadas antes del 6 de noviembre de 2026 bajo licencia MIT mantienen esa
+licencia para quienes las obtuvieron en ese momento.
