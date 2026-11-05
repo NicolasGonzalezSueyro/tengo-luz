@@ -188,8 +188,10 @@ async function buscarEnOsm(piezas: Piezas, [sur, oeste, norte, este]: Caja) {
     piezas.lugares.length + piezas.barrios.length > 0 && `nwr["name"~"${patron([...piezas.lugares, ...piezas.barrios])}"]${caja}->.lugares; .lugares out center;`,
   ].filter(Boolean);
   // Overpass es gratuito y compartido: si está ocupado o nos pide esperar, reintentamos con calma.
+  // Si el balanceador de overpass-api.de falla (502), se prueba directo con los servidores que tiene detrás.
+  const servidores = [OVERPASS, 'https://gall.openstreetmap.de/api/interpreter', 'https://lambert.openstreetmap.de/api/interpreter'];
   for (let intento = 1; ; intento++) {
-    const res = await fetch(OVERPASS, {
+    const res = await fetch(servidores[(intento - 1) % servidores.length], {
       method: 'POST',
       headers: IDENTIFICACION,
       body: new URLSearchParams({ data: `[out:json][timeout:60];${consultas.join('')}` }),

@@ -1,7 +1,7 @@
 // @ts-check
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { estadisticas, minutos } from './estadisticas.js';
+import { estadisticas, estadisticasFallas, minutos } from './estadisticas.js';
 
 /** @param {string} fecha @param {string} desde @param {string} hasta @param {string[]} barrios @param {object} [extra] */
 const corte = (fecha, desde, hasta, barrios, extra = {}) => ({
@@ -38,4 +38,19 @@ test('estadisticas sin cortes no se rompe', () => {
   assert.equal(e.desde, null);
   assert.equal(e.duracionMediana, 0);
   assert.deepEqual(e.masAfectados, []);
+});
+
+test('estadisticasFallas: cantidad, horas, lugares y franja horaria (en hora de Córdoba)', () => {
+  const hora = 60 * 60 * 1000;
+  const nueve = Date.parse('2026-11-01T09:00:00-03:00');
+  const e = estadisticasFallas([
+    { lugares: ['Centro', 'Alberdi'], creado: nueve, hasta: nueve + 2 * hora }, // mañana, 2 h
+    { lugares: ['Centro'], creado: nueve + 10 * hora, hasta: nueve + 16 * hora }, // 19 h → noche; sigue activa
+  ], nueve + 11 * hora);
+  assert.equal(e.cortes, 2);
+  assert.equal(e.horas, 3); // 2 h de la primera + 1 h de la que sigue (hasta "ahora")
+  assert.equal(e.lugaresAfectados, 2);
+  assert.deepEqual(e.masAfectados[0], { nombre: 'Centro', cortes: 2, minutos: 180 });
+  assert.deepEqual(e.porFranja.map((f) => f.cortes), [0, 1, 0, 1]);
+  assert.equal(estadisticasFallas([]).cortes, 0);
 });

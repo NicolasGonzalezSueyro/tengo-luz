@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { aplicarManuales, crearUbicadorDeLocalidades, elegir, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
+import { aplicarManuales, crearUbicadorDeLocalidades, elegir, nombresDeLocalidades, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
 
 // Los textos son renglones reales de las notas de El Doce.
 
@@ -34,6 +34,25 @@ test('nombresDeLocalidades: si el corte empieza nombrando localidades, el títul
     ['Quilino', 'Los Cadillos', 'Lucio V Mansilla', 'El Tuscal'],
   );
   assert.deepEqual(nombresDeLocalidades('Villa Allende', 'barrios Lomas Sur y Barrio Norte I. Localidad de Córdoba capital: barrio Villa Cornú.'), ['Villa Allende']);
+});
+
+test('tramosDelCorte: cada pedazo del texto con sus localidades', () => {
+  assert.deepEqual(
+    tramosDelCorte('La Calera', 'Barrios Centro, Covicco y Cerro Norte. Localidades de Del Campillo, Villa Valeria, Mattaldi y Bruzone.'),
+    [
+      { nombres: ['La Calera'], texto: 'Barrios Centro, Covicco y Cerro Norte' },
+      { nombres: ['Del Campillo', 'Villa Valeria', 'Mattaldi', 'Bruzone'], texto: '' },
+    ],
+  );
+  assert.deepEqual(
+    tramosDelCorte('Río Ceballos', 'barrios El Cedro y Sábato. Localidad de Unquillo: barrios Loteo La Bancaria y Los Talitas.'),
+    [
+      { nombres: ['Río Ceballos'], texto: 'barrios El Cedro y Sábato' },
+      { nombres: ['Unquillo'], texto: 'barrios Loteo La Bancaria y Los Talitas.' },
+    ],
+  );
+  assert.deepEqual(tramosDelCorte('Villa María', 'barrio Centro, en forma parcial.'), [{ nombres: ['Villa María'], texto: 'barrio Centro, en forma parcial.' }]);
+  assert.deepEqual(tramosDelCorte('Tanti', 'corte total en la localidad'), [{ nombres: ['Tanti'], texto: 'corte total en la localidad' }]);
 });
 
 const candidato = (nombre: string, osm: string, rango: number, punto: [number, number]): Candidato =>

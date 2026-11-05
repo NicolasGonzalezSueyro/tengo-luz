@@ -16,7 +16,12 @@ const MESES = [
 // Una hora como la escriben en las notas: "8", "8:30", "8.30" o "08:30".
 const HORA = String.raw`\d{1,2}(?:[:.]\d{2})?`;
 // Un renglón de corte: guion opcional, uno o más rangos ("De 8 a 12:30", "De 6 a 7.30 y de 14 a 17 hs"), dos puntos y la zona.
-const CORTE = new RegExp(String.raw`^[-–—•]?\s*(De ${HORA} a ${HORA}(?: y de ${HORA} a ${HORA})*)(?: ?hs\.?)?\s*:\s*(.+)$`, 'i');
+// La última hora no puede cortarse antes de sus minutos: en "De 9 a 12:30 hs Sector: …" los dos puntos de "12:30" no
+// son los de la zona. A veces falta el ":" ("De 9 a 11:30 barrio Pueyrredón") o viene "hs Sector:".
+const CORTE = new RegExp(
+  String.raw`^[-–—•]?\s*(De ${HORA} a ${HORA}(?: y de ${HORA} a ${HORA})*)(?![:.]?\d)(?:\s*hs\.?)?(?:\s*sector(?=\s*:))?\s*:?\s*(.+)$`,
+  'i',
+);
 // Para detectar renglones que parecen un corte aunque no tengan el formato esperado.
 const PARECE_CORTE = new RegExp(String.raw`\bde ${HORA} a ${HORA}`, 'i');
 

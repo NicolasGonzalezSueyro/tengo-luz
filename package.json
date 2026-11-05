@@ -16,15 +16,21 @@
     "lugares": "node src/lugares.ts",
     "bot": "node --env-file=.env src/configurar-bot.ts",
     "dev": "node src/servidor.ts",
-    "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/zonas.geojson data/mantenimientos.json data/actualizado.json dist/data/",
+    "build": "rm -rf dist && mkdir dist && cp -r web/. dist/ && rm -f dist/*.test.js && mkdir dist/data && cp data/barrios.geojson data/zonas.geojson data/mantenimientos.json data/actualizado.json data/barrios-interior.geojson dist/data/",
     "test": "node --test \"src/**/*.test.ts\" \"web/**/*.test.js\"",
     "typecheck": "tsc",
     "simplificar": "node src/simplificar.ts",
+    "barrios-interior": "node src/barrios-interior.ts",
+    "barrios-capital": "node src/barrios-capital.ts",
+    "editor": "node src/faltantes.ts && node src/editor.ts",
+    "faltantes": "node src/faltantes.ts",
+    "sectores-fallas": "node src/sectores-fallas.ts",
     "claves-push": "node src/push.ts",
     "e2e": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
+    "@turf/turf": "^7.2.0",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^26.6.6",
     "typescript": "^7.0.2"

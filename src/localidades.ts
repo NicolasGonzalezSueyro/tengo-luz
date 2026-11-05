@@ -17,7 +17,8 @@ export type Candidato = { nombre: string; osm: string; tipo: string; rango: numb
 type Geometria = { type: string; coordinates: unknown };
 export type Localidad = {
   type: 'Feature';
-  properties: { nombre: string; tipo?: 'ruta' | 'localidad'; patron: string; descripcion: string; osm?: string };
+  // contorno: el área es el casco urbano o se corrigió a mano (no un círculo alrededor del centro).
+  properties: { nombre: string; tipo?: 'ruta' | 'localidad'; patron: string; descripcion: string; osm?: string; contorno?: boolean };
   geometry: Geometria;
 };
 
@@ -40,12 +41,30 @@ const ENCABEZADO = /(?:^|[.;:]\s*)(?:en\s+)?(?:las?\s+)?localidad(?:es)?\s+(?:de
  * Si el texto empieza diciendo de qué localidades es, manda el texto: a veces la nota lo pone bajo el título de otra.
  */
 export function nombresDeLocalidades(seccion: string, zona: string): string[] {
+  return [...new Set(tramosDelCorte(seccion, zona).flatMap((t) => t.nombres))];
+}
+
+/** Un pedazo del texto de un corte con las localidades a las que se refiere. */
+export type Tramo = { nombres: string[]; texto: string };
+
+/**
+ * Parte el texto de un corte por localidad: lo que viene antes del primer "Localidad de X:" es de la sección de la
+ * nota, y lo que sigue a cada "Localidad(es) de …:" es de esas localidades. Así los barrios de cada tramo se buscan
+ * solo en su localidad: en "Barrios Centro y Covicco. Localidades de Del Campillo y Mattaldi." (bajo el título
+ * "La Calera"), Centro y Covicco son de La Calera, no del sur de la provincia.
+ */
+export function tramosDelCorte(seccion: string, zona: string): Tramo[] {
   // Iniciales con punto ("Lucio V. Mansilla") cortarían la lista en el punto.
   const texto = zona.replace(/\b([A-Z]|Gral|Pte|Cnel|Dr|Ing|Int|Sta|Sto)\.\s*/g, '$1 ');
   const encabezados = [...texto.matchAll(ENCABEZADO)];
-  const delTexto = encabezados.flatMap((m) => partir(m[1]));
+  const tramos: Tramo[] = [];
   const usarSeccion = encabezados[0]?.index !== 0 && !/otras localidades/i.test(seccion);
-  return [...new Set([...(usarSeccion ? partir(seccion) : []), ...delTexto])];
+  if (usarSeccion) tramos.push({ nombres: partir(seccion), texto: texto.slice(0, encabezados[0]?.index ?? texto.length).trim() });
+  encabezados.forEach((m, i) => {
+    const despues = texto.slice(m.index! + m[0].length, encabezados[i + 1]?.index ?? texto.length);
+    tramos.push({ nombres: partir(m[1]), texto: despues.replace(/^\s*[:.]\s*/, '').trim() });
+  });
+  return tramos.filter((t) => t.nombres.length > 0);
 }
 
 function partir(lista: string): string[] {

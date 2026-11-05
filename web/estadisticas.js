@@ -69,3 +69,38 @@ export function estadisticas(cortes) {
     porFranja,
   };
 }
+
+/** @typedef {{ lugares: string[], creado: number, hasta: number }} FallaHistorica */
+
+const HORA_MS = 60 * 60 * 1000;
+// Córdoba está siempre en UTC-3 (Argentina no cambia la hora): la hora local sale restando 3 horas.
+const horaEnCordoba = (/** @type {number} */ momento) => new Date(momento - 3 * HORA_MS).getUTCHours();
+
+/**
+ * Los cortes repentinos: las fallas que EPEC confirmó en sus redes (vienen de /api/fallas?historial).
+ * Una falla que sigue activa cuenta hasta ahora.
+ * @param {FallaHistorica[]} fallas @param {number} [ahora]
+ */
+export function estadisticasFallas(fallas, ahora = Date.now()) {
+  const duracion = (/** @type {FallaHistorica} */ f) => Math.max(0, (Math.min(f.hasta, ahora) - f.creado) / 60_000);
+  /** @type {Map<string, { cortes: number, minutos: number }>} */
+  const porLugar = new Map();
+  for (const f of fallas) {
+    for (const lugar of f.lugares) {
+      const actual = porLugar.get(lugar) ?? { cortes: 0, minutos: 0 };
+      porLugar.set(lugar, { cortes: actual.cortes + 1, minutos: actual.minutos + duracion(f) });
+    }
+  }
+  const lugares = [...porLugar].map(([nombre, datos]) => ({ nombre, ...datos }))
+    .sort((a, b) => b.cortes - a.cortes || b.minutos - a.minutos || a.nombre.localeCompare(b.nombre, 'es'));
+  const porFranja = FRANJAS.map(({ nombre }) => ({ nombre, cortes: 0 }));
+  for (const f of fallas) porFranja[FRANJAS.findIndex((franja) => horaEnCordoba(f.creado) < franja.hasta)].cortes++;
+  return {
+    cortes: fallas.length,
+    horas: Math.round(fallas.reduce((total, f) => total + duracion(f), 0) / 60),
+    lugaresAfectados: lugares.length,
+    duracionMediana: mediana(fallas.map(duracion)),
+    masAfectados: lugares.slice(0, 10),
+    porFranja,
+  };
+}

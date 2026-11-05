@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { baseLocal } from './base-local.ts';
 import { responder } from './bot.ts';
-import { clasificar, esConfiable, fallasActivas, fallasPendientes, lugaresEnTexto, textoDePublicacion } from './fallas.ts';
+import { clasificar, esConfiable, fallasActivas, fallasPendientes, lugaresEnTexto, reconocerLugares, textoDePublicacion } from './fallas.ts';
 import { onRequestGet as verFallas, onRequestPost as recibir } from '../functions/api/fallas.ts';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 
@@ -20,6 +20,17 @@ test('lugaresEnTexto: encuentra los lugares en un texto libre, los más largos p
   const texto = '⚠️ Por una falla en la red, sin suministro en B° Alto Alberdi y sector de Villa María. Personal trabaja para normalizar.';
   assert.deepEqual(lugaresEnTexto(LUGARES, texto), ['Alto Alberdi', 'Villa María']); // "Alberdi" solo no cuenta
   assert.deepEqual(lugaresEnTexto(LUGARES, 'Trabajamos para normalizar el servicio.'), []);
+});
+
+test('reconocerLugares: barrios del interior con su localidad, y nunca el barrio de capital con el mismo nombre', () => {
+  const lugares = ['Centro', 'Alberdi', 'Argüello Lourdes', 'Santa Isabel 2ª Sección', 'Villa María', 'Centro (Villa María)', 'Valle Escondido (Villa María)', 'La Calera', 'Covico (La Calera)'];
+  const localidades = new Set(['Villa María', 'La Calera']);
+  const reconocer = (texto: string) => reconocerLugares(lugares, localidades, texto);
+  assert.deepEqual(reconocer('Villa María: falla en barrio Centro, sin suministro.'), ['Centro (Villa María)']);
+  assert.deepEqual(reconocer('La Calera: sin suministro en barrios Covicco y Centro.'), ['Covico (La Calera)']); // el Centro de capital no
+  assert.deepEqual(reconocer('Corte total en la localidad de La Calera.'), ['La Calera']); // sin barrios: la localidad
+  assert.deepEqual(reconocer('Sin suministro en barrios Alberdi y Arguello Lourdes.').sort(), ['Alberdi', 'Argüello Lourdes']);
+  assert.deepEqual(reconocer('Falla en barrio Santa Isabel 2.'), ['Santa Isabel 2ª Sección']);
 });
 
 test('textoDePublicacion: lee el texto con oEmbed y si falla devuelve null', async (t) => {
@@ -140,24 +151,24 @@ test('POST /api/fallas: pide la clave, valida, no repite y deja las fallas esper
   assert.match(alAdmin.find((m) => m.chat_id === 7)!.text, /EPEC confirmó una falla en Centro/);
 
   // Varias juntas: la repetida no se duplica, lo que no es falla se ignora, la de "volvió la luz" se avisa,
-  // y la rara (mezcla una localidad del interior con un barrio de capital) espera que el admin la revise.
+  // y la rara (no nombra ningún lugar del mapa) espera que el admin la revise.
   alAdmin.length = 0;
   const { resultados } = await (await enviar({
     publicaciones: [
       falla,
       { id: '1986', url: 'https://x.com/EpecOficial/status/1986', texto: 'Cortes programados para mañana.' },
-      { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Centro.' },
-      { id: '1988', url: 'https://x.com/EpecOficial/status/1988', texto: 'Villa María: falla en barrio Centro, sin suministro.' },
+      { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Alberdi.' },
+      { id: '1988', url: 'https://x.com/EpecOficial/status/1988', texto: 'Falla en la zona del dique, hay usuarios sin suministro.' },
     ],
   })).json();
-  assert.deepEqual(resultados.map((r: { estado: string }) => r.estado), ['repetida', 'ignorada', 'restablecida', 'pendiente']);
+  assert.deepEqual(resultados.map((r: { estado: string }) => r.estado), ['repetida', 'ignorada', 'restablecida', 'sin_lugares']);
   assert.equal(alAdmin.length, 1);
-  assert.match(alAdmin[0].text, /volvió el servicio en Centro[\s\S]*Esta necesita que la revises[\s\S]*📍 Villa María, Centro[\s\S]*\/confirmar/);
+  assert.match(alAdmin[0].text, /volvió el servicio en Alberdi. No había fallas publicadas ahí[\s\S]*Esta necesita que la revises[\s\S]*❓ No reconocí[\s\S]*\/corregir/);
   assert.equal((await fallasPendientes(env.DB)).length, 1);
 
   // Si el extractor reenvía el mismo lote (por ejemplo, porque no pudo guardar el último id), se absorbe en silencio.
   const reenvio = await (await enviar({
-    publicaciones: [falla, { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Centro.' }],
+    publicaciones: [falla, { id: '1987', url: 'https://x.com/EpecOficial/status/1987', texto: 'Se restableció el servicio en barrio Alberdi.' }],
   })).json();
   assert.deepEqual(reenvio.resultados.map((r: { estado: string }) => r.estado), ['repetida', 'repetida']);
   assert.equal(alAdmin.length, 1); // ningún aviso nuevo
@@ -170,6 +181,88 @@ test('POST /api/fallas: pide la clave, valida, no repite y deja las fallas esper
   assert.match(await responder(env.DB, 1, '/agregar 999 Alberdi', admin), /No hay una falla publicada con el número 999/);
   assert.match(await responder(env.DB, 1, `/fin_falla ${publicada.id}`, admin), /Saqué la falla/);
   assert.equal((await fallasActivas(env.DB, Date.now() + 1)).length, 0);
+});
+
+test('restablecimiento: cuando EPEC dice que volvió el servicio, salen del mapa solo esos lugares', async (t) => {
+  const env = { DB: baseLocal(), FALLAS_CLAVE: 'clave', TELEGRAM_TOKEN: 'token', TELEGRAM_ADMIN: '1' };
+  const alAdmin: string[] = [];
+  t.mock.method(globalThis, 'fetch', async (_url: string, opciones: RequestInit) => (alAdmin.push(JSON.parse(String(opciones.body)).text), new Response('{}')));
+  let n = 0;
+  const publicar = async (texto: string) => (await recibir({
+    request: new Request('http://x/api/fallas', {
+      method: 'POST', headers: { Authorization: 'Bearer clave' }, body: JSON.stringify({ id: String(++n), url: `https://x.com/EpecOficial/status/${n}`, texto }),
+    }),
+    env,
+  })).json();
+
+  await publicar('Falla: sin suministro en barrios Centro y Alberdi.');
+  assert.deepEqual((await fallasActivas(env.DB, Date.now())).map((f) => f.lugares), [['Alberdi', 'Centro']]);
+
+  // Vuelve en una parte: la otra sigue marcada.
+  assert.deepEqual((await publicar('Se restableció el servicio en barrio Centro.')).resultados[0].quitados, ['Centro']);
+  assert.deepEqual((await fallasActivas(env.DB, Date.now())).map((f) => f.lugares), [['Alberdi']]);
+  assert.match(alAdmin.at(-1)!, /volvió el servicio en Centro: lo saqué del mapa/);
+
+  // Vuelve en el resto: la falla termina, pero el historial guarda dónde fue.
+  await publicar('Quedó normalizado el suministro en Alberdi.');
+  assert.equal((await fallasActivas(env.DB, Date.now())).length, 0);
+  const historial = (await env.DB.prepare('SELECT lugares FROM fallas WHERE confirmada = 1').bind().all()).results;
+  assert.deepEqual(historial.map((f) => JSON.parse(String(f.lugares))), [['Alberdi']]);
+
+  // Sin lugares reconocibles no se saca nada: se le avisa al admin.
+  await publicar('Falla: sin suministro en barrio Centro.');
+  await publicar('Ya se normalizó el servicio en la zona.');
+  assert.equal((await fallasActivas(env.DB, Date.now())).length, 1);
+  assert.match(alAdmin.at(-1)!, /no reconocí en qué lugares/);
+});
+
+test('/api/fallas?historial: las fallas publicadas, para las estadísticas, sin las pendientes ni las de "volvió el servicio"', async () => {
+  const env = { DB: baseLocal() };
+  const db = env.DB;
+  const ahora = Date.now();
+  await db.prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, ?)').bind('["Centro"]', 'a', 'u1', ahora - 5000, ahora, 1).run();
+  await db.prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, ?)').bind('["Alberdi"]', 'b', 'u2', ahora, ahora, 0).run();
+  await db.prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, ?)').bind('["Centro"]', 'c', 'u3', ahora, ahora, -1).run();
+  const historial = await (await verFallas({ request: new Request('http://x/api/fallas?historial'), env })).json();
+  assert.deepEqual(historial, [{ lugares: ['Centro'], creado: ahora - 5000, hasta: ahora }]);
+});
+
+test('sectores de fallas: el robot ve las que describen calles, y solo con la clave guarda un sector válido', async () => {
+  const env = { DB: baseLocal(), FALLAS_CLAVE: 'clave' };
+  const ahora = Date.now();
+  const insertar = (texto: string) => env.DB.prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, 1)')
+    .bind('["Centro"]', texto, `u${texto.length}`, ahora, ahora + 3_600_000).run();
+  await insertar('Sin suministro en barrio Centro, sector comprendido por calles Mitre y Belgrano.');
+  await insertar('Sin suministro en barrio Centro.'); // sin calles: no hace falta sector
+  const pedir = (url: string, clave?: string, cuerpo?: object) => new Request(url, {
+    method: cuerpo ? 'POST' : 'GET', headers: clave ? { Authorization: `Bearer ${clave}` } : {}, body: cuerpo ? JSON.stringify(cuerpo) : undefined,
+  });
+
+  assert.equal((await verFallas({ request: pedir('http://x/api/fallas?sin-sector'), env })).status, 401);
+  const pendientes = await (await verFallas({ request: pedir('http://x/api/fallas?sin-sector', 'clave'), env })).json();
+  assert.deepEqual(pendientes.map((f: { texto: string }) => f.texto.slice(0, 20)), ['Sin suministro en ba']);
+  const id = pendientes[0].id;
+
+  const sector = [[-64.19, -31.41], [-64.18, -31.41], [-64.18, -31.42], [-64.19, -31.41]];
+  assert.equal((await recibir({ request: pedir('http://x/api/fallas', 'otra', { accion: 'sectores', sectores: [{ id, sector }] }), env })).status, 401);
+  const fuera = [[10, 10], [11, 10], [11, 11]]; // fuera de la provincia: no se acepta
+  assert.deepEqual(await (await recibir({ request: pedir('http://x/api/fallas', 'clave', { accion: 'sectores', sectores: [{ id, sector: fuera }] }), env })).json(), { guardados: 0 });
+  assert.deepEqual(await (await recibir({ request: pedir('http://x/api/fallas', 'clave', { accion: 'sectores', sectores: [{ id, sector }] }), env })).json(), { guardados: 1 });
+
+  // El mapa lo recibe, y ya no está entre las que esperan.
+  const publicas = await (await verFallas({ request: pedir('http://x/api/fallas'), env })).json();
+  assert.deepEqual(publicas.find((f: { sector?: unknown }) => f.sector).sector, sector);
+  assert.deepEqual(await (await verFallas({ request: pedir('http://x/api/fallas?sin-sector', 'clave'), env })).json(), []);
+});
+
+test('bot: compartir un link de "volvió el servicio" saca esos lugares', async (t) => {
+  const db = baseLocal();
+  t.mock.method(globalThis, 'fetch', async () => oembed('Falla: sin suministro en barrio Centro.'));
+  await responder(db, 1, 'https://x.com/EPEC/status/1', admin);
+  await responder(db, 1, '/confirmar', admin);
+  t.mock.method(globalThis, 'fetch', async () => oembed('Se restableció el servicio en barrio Centro.'));
+  assert.match(await responder(db, 1, 'https://x.com/EPEC/status/2', admin), /volvió el servicio en Centro: lo saqué del mapa/);
+  assert.equal((await fallasActivas(db, T)).length, 0);
 });
 
 test('esConfiable: con lugares, y sin mezclar localidades del interior con barrios de capital', () => {

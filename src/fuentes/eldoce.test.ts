@@ -113,6 +113,16 @@ test('ignora la fecha de publicación y usa la fecha de los cortes', () => {
   assert.equal(parsearNota(html, URL).mantenimientos[0].fecha, '2026-10-31');
 });
 
+test('la hora con minutos no se corta: "12:30 hs Sector:" y renglones sin dos puntos', () => {
+  const html = nota(conLista('Córdoba', 'De 9 a 12:30 hs Sector: barrio Centro.', 'De 9 a 11:30 barrio Pueyrredón.', 'De 8 a 12: Sector comprendido por calles Mitre y Belgrano.'));
+  const cortes = parsearNota(html, URL).mantenimientos.map((m) => [m.desde, m.hasta, m.zona]);
+  assert.deepEqual(cortes, [
+    ['09:00', '12:30', 'barrio Centro.'],
+    ['09:00', '11:30', 'barrio Pueyrredón.'],
+    ['08:00', '12:00', 'Sector comprendido por calles Mitre y Belgrano.'],
+  ]);
+});
+
 test('el primer día del mes puede venir con ordinal: "1° de noviembre"', () => {
   const html = nota(conLista('Córdoba capital', 'De 07:30 a 12:30: barrio Los Boulevares.'), 'domingo 1° de noviembre');
   const url = 'https://eldoce.tv/actualidad/2026/10/31/cortes-de-luz-de-epec-para-este-domingo/';

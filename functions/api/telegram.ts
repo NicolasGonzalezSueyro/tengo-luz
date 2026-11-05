@@ -1,4 +1,4 @@
-import lugares from '../../data/lugares.js';
+import lugares, { localidades } from '../../data/lugares.js';
 import { responder } from '../../src/bot.ts';
 import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
@@ -27,6 +27,7 @@ export async function onRequestPost({ request, env, waitUntil }: Contexto) {
 
   const texto = await responder(env.DB, chat, message.text, {
     lugares,
+    localidades,
     esAdmin: String(chat) === env.TELEGRAM_ADMIN,
     // Los avisos salen después de contestar (waitUntil), así Telegram no espera ni repite el mensaje.
     avisarFalla: async (falla) => {

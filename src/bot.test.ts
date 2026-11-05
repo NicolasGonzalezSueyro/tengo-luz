@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { avisosPendientes, buscarLugar, marcarAvisado, olvidarChat, responder } from './bot.ts';
 import { baseLocal } from './base-local.ts';
 import { guardarReporte } from './reportes.ts';
-import { leer, listarLugares } from './lugares.ts';
+import { leerTodo, listarLugares } from './lugares.ts';
 import lugaresGuardados from '../data/lugares.js';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 import { onRequestPost as avisar } from '../functions/api/avisar.ts';
@@ -21,7 +21,7 @@ const corte = (fecha: string, barrios: string[], zonas: string[] = []): Corte =>
 });
 
 test('data/lugares.js está al día con los mapas (si falla: npm run lugares)', () => {
-  assert.deepEqual(lugaresGuardados, listarLugares(leer('barrios.geojson'), leer('zonas.geojson')));
+  assert.deepEqual(lugaresGuardados, listarLugares(...leerTodo()));
 });
 
 test('buscarLugar: exacto sin tildes, o los que contienen el texto', () => {

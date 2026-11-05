@@ -1,6 +1,7 @@
-import { writeFile } from 'node:fs/promises';
-import { normalizar } from './barrios.ts';
+import { readFile, writeFile } from 'node:fs/promises';
+import { normalizar, separarDeLocalidades } from './barrios.ts';
 import { simplificarGeometria } from './simplificar.ts';
+import { aplicarContornos } from './contornos.ts';
 
 // Arma data/barrios.geojson, el mapa de barrios de Córdoba capital. Se corre a mano de vez en cuando
 // (`npm run barrios`): los límites de los barrios casi no cambian.
@@ -106,9 +107,14 @@ const puntos = osm.flatMap((e) => {
   }];
 });
 
+const localidades = new Set((JSON.parse(await readFile('data/zonas.geojson', 'utf8')) as { features: { properties: { nombre: string; tipo?: string } }[] })
+  .features.filter((z) => z.properties.tipo === 'localidad').map((z) => z.properties.nombre));
+separarDeLocalidades([...poligonos, ...puntos], localidades);
+
 const barrios = [...poligonos, ...puntos]
   .sort((a, b) => (a.properties.nombre ?? '').localeCompare(b.properties.nombre ?? '', 'es'))
   // Contornos simplificados (src/simplificar.ts): el archivo pesa 4 veces menos y a la vista queda igual.
   .map((f) => ({ ...f, geometry: simplificarGeometria(f.geometry) }));
-await writeFile(ARCHIVO, JSON.stringify({ type: 'FeatureCollection', features: barrios }) + '\n');
+// Los contornos corregidos a mano con el editor (src/contornos.ts) mandan.
+await writeFile(ARCHIVO, JSON.stringify(aplicarContornos({ type: 'FeatureCollection', features: barrios }, 'barrios')) + '\n');
 console.log(`Guardados ${poligonos.length} barrios de la Municipalidad y ${puntos.length} puntos de OSM en ${ARCHIVO}`);

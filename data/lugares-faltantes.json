@@ -1,0 +1,1382 @@
+[
+ {
+  "nombre": "Villa Corema",
+  "localidad": "Río Ceballos",
+  "veces": 9
+ },
+ {
+  "nombre": "Libertador San Martín",
+  "localidad": "Río Ceballos",
+  "veces": 6
+ },
+ {
+  "nombre": "Centro",
+  "localidad": "Saldán",
+  "veces": 6
+ },
+ {
+  "nombre": "El Caracol",
+  "localidad": "Río Ceballos",
+  "veces": 5
+ },
+ {
+  "nombre": "El Cedro",
+  "localidad": "Río Ceballos",
+  "veces": 5
+ },
+ {
+  "nombre": "Los Nogales Norte",
+  "localidad": "Río Ceballos",
+  "veces": 5
+ },
+ {
+  "nombre": "Sábato",
+  "localidad": "Río Ceballos",
+  "veces": 5
+ },
+ {
+  "nombre": "El Sauce",
+  "localidad": "Salsipuedes",
+  "veces": 5
+ },
+ {
+  "nombre": "Terrazas de Villa Allende",
+  "localidad": "Villa Allende",
+  "veces": 5
+ },
+ {
+  "nombre": "Cantegril",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Coop",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Don Justo Pietri",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Horizonte",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Los Vascos",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Nuevo Río Ceballos",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Parque Luján",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Pérez Taboada",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Plan Amuchástegui",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Prosur",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "San Jorge",
+  "localidad": "Río Ceballos",
+  "veces": 4
+ },
+ {
+  "nombre": "Bella Vista",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Centro",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Cooperativa Agua de Oro",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Las Tejas",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Los Nogales Antena",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Progreso",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Reconquista",
+  "localidad": "Salsipuedes",
+  "veces": 4
+ },
+ {
+  "nombre": "Cantera Gran Ombú",
+  "localidad": "Villa Allende",
+  "veces": 4
+ },
+ {
+  "nombre": "Cumbres del Golf",
+  "localidad": "Villa Allende",
+  "veces": 4
+ },
+ {
+  "nombre": "Terranova",
+  "localidad": "Villa Allende",
+  "veces": 4
+ },
+ {
+  "nombre": "Colonia José María Paz",
+  "localidad": "Alta Gracia",
+  "veces": 3
+ },
+ {
+  "nombre": "Fogón Gaucho",
+  "localidad": "Alta Gracia",
+  "veces": 3
+ },
+ {
+  "nombre": "Potrerillo de Larreta",
+  "localidad": "Alta Gracia",
+  "veces": 3
+ },
+ {
+  "nombre": "Segundo Paredón",
+  "localidad": "Alta Gracia",
+  "veces": 3
+ },
+ {
+  "nombre": "Valle Chico",
+  "localidad": "Alta Gracia",
+  "veces": 3
+ },
+ {
+  "nombre": "Mataderos",
+  "localidad": "La Calera",
+  "veces": 3
+ },
+ {
+  "nombre": "Altos de Luján",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Centro",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Don Bosco",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "El Cantegril",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Hipólito Yrigoyen",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Isquitipe",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Los Nogales Sur",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Lumiere",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "María Cristina",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Marino",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Moreyra",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "San Cayetano",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "San Francisco",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Santa Teresita",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Sarmiento",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Terrazas de Río Ceballos",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "Villa Josefina",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "San Francisco",
+  "localidad": "Saldán",
+  "veces": 3
+ },
+ {
+  "nombre": "Camino al Cuadrado",
+  "localidad": "Salsipuedes",
+  "veces": 3
+ },
+ {
+  "nombre": "La Colonial",
+  "localidad": "Salsipuedes",
+  "veces": 3
+ },
+ {
+  "nombre": "Las Torres",
+  "localidad": "Salsipuedes",
+  "veces": 3
+ },
+ {
+  "nombre": "Potrero del Alto",
+  "localidad": "Salsipuedes",
+  "veces": 3
+ },
+ {
+  "nombre": "Las Marías",
+  "localidad": "Unquillo",
+  "veces": 3
+ },
+ {
+  "nombre": "Los Quebrachitos",
+  "localidad": "Unquillo",
+  "veces": 3
+ },
+ {
+  "nombre": "Parque PYMES",
+  "localidad": "Villa Allende",
+  "veces": 3
+ },
+ {
+  "nombre": "Campo de Barrandegui",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Campo Lima",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Cantera Carnelutti",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Cantera El Cerrito",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Colonia Evita",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "COSAG",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Country Anglo Viejo",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Dalvit",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "El Cerrito",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Estancia Los Nogales",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Gómez",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Jackson",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "La Cautiva",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "La Gruta",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "La Isla",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "La Taimada",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "La Viña",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Las Tres Marías",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Muscari",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Nuestra Señora del Huerto",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
+  "nombre": "Calpivan",
+  "localidad": "La Calera",
+  "veces": 2
+ },
+ {
+  "nombre": "Los Algarrobos",
+  "localidad": "La Calera",
+  "veces": 2
+ },
+ {
+  "nombre": "Los Prados 1",
+  "localidad": "La Calera",
+  "veces": 2
+ },
+ {
+  "nombre": "Sur",
+  "localidad": "Leones",
+  "veces": 2
+ },
+ {
+  "nombre": "Las Corzuelas",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
+  "nombre": "San Francisco",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
+  "nombre": "Soles Serranos",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
+  "nombre": "Talar del Este",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
+  "nombre": "Bella Vista Libertador San Martín",
+  "localidad": "Río Ceballos",
+  "veces": 2
+ },
+ {
+  "nombre": "Camino Estancia Santo Domingo",
+  "localidad": "Río Ceballos",
+  "veces": 2
+ },
+ {
+  "nombre": "La Adelina",
+  "localidad": "Río Ceballos",
+  "veces": 2
+ },
+ {
+  "nombre": "Ernesto Guevara",
+  "localidad": "Saldán",
+  "veces": 2
+ },
+ {
+  "nombre": "Luis de Tejeda",
+  "localidad": "Saldán",
+  "veces": 2
+ },
+ {
+  "nombre": "Portón de Piedra",
+  "localidad": "Saldán",
+  "veces": 2
+ },
+ {
+  "nombre": "El Pueblito secciones M",
+  "localidad": "Salsipuedes",
+  "veces": 2
+ },
+ {
+  "nombre": "Frigorífico La Superior",
+  "localidad": "Villa Allende",
+  "veces": 2
+ },
+ {
+  "nombre": "Alberdi",
+  "localidad": "Villa Carlos Paz",
+  "veces": 2
+ },
+ {
+  "nombre": "Caseros",
+  "localidad": "Villa Carlos Paz",
+  "veces": 2
+ },
+ {
+  "nombre": "Miguel Juárez",
+  "localidad": "Villa Carlos Paz",
+  "veces": 2
+ },
+ {
+  "nombre": "San Martín",
+  "localidad": "Villa Carlos Paz",
+  "veces": 2
+ },
+ {
+  "nombre": "Santa Rita",
+  "localidad": "Villa Carlos Paz",
+  "veces": 2
+ },
+ {
+  "nombre": "Villa Ernestina",
+  "localidad": "Villa Carlos Paz",
+  "veces": 2
+ },
+ {
+  "nombre": "Derivación Grunaut",
+  "localidad": "Villa Ciudad de América",
+  "veces": 2
+ },
+ {
+  "nombre": "Derivación Valle Fantástico",
+  "localidad": "Villa Ciudad de América",
+  "veces": 2
+ },
+ {
+  "nombre": "La Gruta",
+  "localidad": "Villa Ciudad de América",
+  "veces": 2
+ },
+ {
+  "nombre": "Potrero Garay",
+  "localidad": "Villa Ciudad de América",
+  "veces": 2
+ },
+ {
+  "nombre": "Mariapolis",
+  "localidad": "Villa María",
+  "veces": 2
+ },
+ {
+  "nombre": "Parque Industrial",
+  "localidad": "Villa María",
+  "veces": 2
+ },
+ {
+  "nombre": "Centro Empleados de Comercio",
+  "localidad": "Villa Nueva",
+  "veces": 2
+ },
+ {
+  "nombre": "Ecotec",
+  "localidad": "Villa Nueva",
+  "veces": 2
+ },
+ {
+  "nombre": "Miraflores",
+  "localidad": "Villa Nueva",
+  "veces": 2
+ },
+ {
+  "nombre": "Rincón Escondido",
+  "localidad": "Villa Nueva",
+  "veces": 2
+ },
+ {
+  "nombre": "La Floresta",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 2
+ },
+ {
+  "nombre": "Santa Ana",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 2
+ },
+ {
+  "nombre": "Valle del Sol",
+  "localidad": "Villa Santa Cruz del Lago",
+  "veces": 2
+ },
+ {
+  "nombre": "Campo Tagle",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Cerro La Colmena",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Comuna San Clemente",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Dela Mea",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Derivación de Forbes",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Estancia La Granadilla",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Grasso Cremonini",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "La Ernestina",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "La Herradura",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Espinillos",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Pampa Alta",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Paso de la Pampa",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "San Clemente",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa del Cóndor",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
+  "nombre": "De La Localidad",
+  "localidad": "Ballesteros Sud",
+  "veces": 1
+ },
+ {
+  "nombre": "Bialet Centro :",
+  "localidad": "Bialet Massé",
+  "veces": 1
+ },
+ {
+  "nombre": "Centro",
+  "localidad": "Bialet Massé",
+  "veces": 1
+ },
+ {
+  "nombre": "Mirador del Lago",
+  "localidad": "Bialet Massé",
+  "veces": 1
+ },
+ {
+  "nombre": "IPV",
+  "localidad": "Capilla del Monte",
+  "veces": 1
+ },
+ {
+  "nombre": "Ampliacion Cerveceros",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Barrancas La Rivera",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Cerro Moro",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Ciudad Los Ninos",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "El Tachito",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "En Ruta 9 Norte",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Eva Peron",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Favaloro Sur",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Jardin Boulevard",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Las Americas",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Lasalle",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Docentes",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Matienzo",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Mirador Serranas",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Parque Las Rosas",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Parque Norte",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "V Achaval",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa El Terraplen",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Aeródromo",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Altos del Sol",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Centro",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "El Quilino",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Fátima",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Independiente",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "La Curva",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "La Toma",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Leopoldo Herrera",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Altos",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Malvinas Argentinas",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Mitre",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Pozo Cavado",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Tiro Federal",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Toco Toco",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Cooperativa de Dean Funes",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Copacabana",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "El Estanque",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Inschilín",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Pozos",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Museo Fader",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Paraje Santa Cruz",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "San Pedro de Toyos",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "San Pedro Norte",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "San Pedro Viejo",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Suace Punco",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Alicia",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Colimba",
+  "localidad": "Deán Funes",
+  "veces": 1
+ },
+ {
+  "nombre": "Chesta",
+  "localidad": "General Cabrera",
+  "veces": 1
+ },
+ {
+  "nombre": "comuna de San Roque",
+  "localidad": "General Cabrera",
+  "veces": 1
+ },
+ {
+  "nombre": "IPV",
+  "localidad": "General Cabrera",
+  "veces": 1
+ },
+ {
+  "nombre": "Nuevo",
+  "localidad": "General Cabrera",
+  "veces": 1
+ },
+ {
+  "nombre": "El Condor",
+  "localidad": "Huerta Grande",
+  "veces": 1
+ },
+ {
+  "nombre": "Solares",
+  "localidad": "Icho Cruz",
+  "veces": 1
+ },
+ {
+  "nombre": "IPV",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "Monoblock",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "Rumi Huasy",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "B Peiretti",
+  "localidad": "Leones",
+  "veces": 1
+ },
+ {
+  "nombre": "Cañada de Luque",
+  "localidad": "Leones",
+  "veces": 1
+ },
+ {
+  "nombre": "Cooperativas de Sarmiento",
+  "localidad": "Leones",
+  "veces": 1
+ },
+ {
+  "nombre": "D Hernández",
+  "localidad": "Leones",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa del Totoral",
+  "localidad": "Leones",
+  "veces": 1
+ },
+ {
+  "nombre": "Antena de Claro San Clemente",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Campo Tagle",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Cerro la Colmena",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Comuna San Clemente",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Dela Mea",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Derivación de Forbes",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Estancia la Granadilla",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Grasso Cremonini",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "La Ernestina",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "La Herradura",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Pampa Alta",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Paso de la Pampa",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Río San José",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "San Clemente",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa del Cóndor",
+  "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "IPV Loza",
+  "localidad": "Río Ceballos",
+  "veces": 1
+ },
+ {
+  "nombre": "La Amistad",
+  "localidad": "Río Ceballos",
+  "veces": 1
+ },
+ {
+  "nombre": "Loza",
+  "localidad": "Río Ceballos",
+  "veces": 1
+ },
+ {
+  "nombre": "Parque Atalaya",
+  "localidad": "Río Ceballos",
+  "veces": 1
+ },
+ {
+  "nombre": "Parque Guerrero",
+  "localidad": "Río Ceballos",
+  "veces": 1
+ },
+ {
+  "nombre": "Anses",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Bomberos",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Dentro Del Horario Consignado:",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Médico",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Pizarro",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Río Limay",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "toma de agua de EMOS",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Campamento Minetti",
+  "localidad": "Saldán",
+  "veces": 1
+ },
+ {
+  "nombre": "predio Club Atlético Belgrano",
+  "localidad": "Saldán",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Saldan",
+  "localidad": "Saldán",
+  "veces": 1
+ },
+ {
+  "nombre": "La Colonia",
+  "localidad": "Salsipuedes",
+  "veces": 1
+ },
+ {
+  "nombre": "2 Hermanos",
+  "localidad": "San Francisco",
+  "veces": 1
+ },
+ {
+  "nombre": "Chalet",
+  "localidad": "San Francisco",
+  "veces": 1
+ },
+ {
+  "nombre": "General Roca",
+  "localidad": "San Francisco",
+  "veces": 1
+ },
+ {
+  "nombre": "Manuel Belgrano",
+  "localidad": "San Francisco",
+  "veces": 1
+ },
+ {
+  "nombre": "Parque Maipú",
+  "localidad": "San Francisco",
+  "veces": 1
+ },
+ {
+  "nombre": "El Parador",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "El Parador de Tanti",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Chañares",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Mallin",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Tanti Viejo",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Doumas",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Muñoz",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Nueva",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Campo Norte I",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Comarcas de Allende",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Complejo Comercial Nueva Allende",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Frigorífico",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Golf",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Hoyo Cinco",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Cornú",
+  "localidad": "Villa Allende",
+  "veces": 1
+ },
+ {
+  "nombre": "Además algunos usuarios de",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Alvear",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Carlos Paz 1",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Edificio Leonardo",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Ferre",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Juan B Justo",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Pje",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Pjes",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Sorrentino",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "El Pedacito",
+  "localidad": "Villa del Totoral",
+  "veces": 1
+ },
+ {
+  "nombre": "Además",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Ameghino",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Centro Sur Edificio Vartalitis",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Del Rosario",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Don Emilio",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Las Cañitas",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Planta de frío",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Predio de los Judiciales",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "San Antonio",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Tecnológico Villa María",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Villanueva",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Jardín del Golf",
+  "localidad": "Villa Nueva",
+  "veces": 1
+ },
+ {
+  "nombre": "Miradores del Golf",
+  "localidad": "Villa Nueva",
+  "veces": 1
+ },
+ {
+  "nombre": "Rincón de la Reserva",
+  "localidad": "Villa Nueva",
+  "veces": 1
+ },
+ {
+  "nombre": "Estancia Los Cerrillos",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 1
+ },
+ {
+  "nombre": "HORPAS",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 1
+ },
+ {
+  "nombre": "Mi Valle Golf",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 1
+ },
+ {
+  "nombre": "Monumento Myriam Stefford",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 1
+ },
+ {
+  "nombre": "Santa Lucía",
+  "localidad": "Villa Parque Santa Ana",
+  "veces": 1
+ },
+ {
+  "nombre": "Tierra de Ensueño",
+  "localidad": "Villa Parque Siquiman",
+  "veces": 1
+ }
+]

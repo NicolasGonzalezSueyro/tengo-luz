@@ -14,6 +14,8 @@ export type Ubicacion = {
   barrios: string[]; // nombres tal cual figuran en data/barrios.geojson
   zonas: string[]; // zonas aproximadas de data/zonas.geojson
   sinUbicar: string[]; // pedazos de texto que no pudimos asociar a un barrio ni a una zona (normalizados)
+  // Localidades del interior donde se cortan solo algunos barrios o un sector: se dibuja su contorno, sin pintarla.
+  parciales?: string[];
 };
 
 /** Una zona aproximada: su nombre y la expresión regular que reconoce el texto del anuncio. */
@@ -97,9 +99,21 @@ export function normalizar(nombre: string): string {
  * Prepara el buscador una sola vez: nombres del mapa y alias, indexados por su forma normalizada.
  * Un alias en null marca un nombre ambiguo: no se ubica solo aunque coincida con algo del mapa.
  */
+/**
+ * Un barrio de capital que se llama igual que una localidad ("San Francisco", "Deán Funes") pasa a ser
+ * "San Francisco (Córdoba)", como los barrios del interior: si no, la página los confunde y al tocar el barrio va
+ * al pueblo. El ubicador lo sigue encontrando como "San Francisco". Devuelve cuántos cambió.
+ */
+export function separarDeLocalidades(barrios: { properties: { nombre: string | null } }[], localidades: Set<string>): number {
+  const repetidos = barrios.filter((f) => f.properties.nombre && localidades.has(f.properties.nombre));
+  for (const f of repetidos) f.properties.nombre = `${f.properties.nombre} (Córdoba)`;
+  return repetidos.length;
+}
+
 export function crearUbicador(nombres: string[], alias: Record<string, string | null>, zonasAproximadas: ZonaAproximada[] = []) {
   const zonasConPatron = zonasAproximadas.map((z) => ({ nombre: z.nombre, patron: new RegExp(z.patron) }));
-  const indice = new Map(nombres.map((n) => [normalizar(n), n]));
+  // "San Francisco (Córdoba)" es el barrio de capital que se llama igual que una localidad: EPEC escribe "San Francisco".
+  const indice = new Map(nombres.map((n) => [normalizar(n.replace(/ \(Córdoba\)$/, '')), n]));
   for (const [otroNombre, nombreDelMapa] of Object.entries(alias)) {
     if (nombreDelMapa === null) {
       indice.delete(normalizar(otroNombre));
@@ -135,7 +149,7 @@ export function crearUbicador(nombres: string[], alias: Record<string, string | 
       texto = texto.slice(0, corte);
     }
 
-    for (const pedazo of texto.split(/,| y /)) {
+    for (const pedazo of texto.split(/,| y | e (?=h?i)/)) {
       const nombre = normalizar(pedazo);
       if (!nombre) continue;
       const delMapa = indice.get(nombre);

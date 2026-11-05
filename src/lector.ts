@@ -2,13 +2,15 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { barrioEnPunto, momentoEnCordoba } from '../web/estado.js';
 import { alertar } from './alertar.ts';
 import {
-  centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, type Punto, type Ubicacion,
+  centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, separarDeLocalidades, type Punto, type Ubicacion,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
-import { aplicarManuales, crearUbicadorDeLocalidades, nombresDeLocalidades, type Candidato, type Localidad } from './localidades.ts';
+import { aplicarManuales, crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
+import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
 import { escribirLugares } from './lugares.ts';
 import { sectorDelCorte, type Caja } from './sectores.ts';
 import { CAPITAL, unir, type Mantenimiento } from './mantenimiento.ts';
+import { aplicarContornos } from './contornos.ts';
 
 const ARCHIVO = 'data/mantenimientos.json';
 // Leemos las últimas notas por si alguna corrida anterior falló o la nota se actualizó.
@@ -89,16 +91,40 @@ if (invalidas.length > 0) {
   });
 }
 const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
+// Los barrios de las localidades del interior (npm run barrios-interior): con contorno de OSM o aproximado.
+const interior = await leerJson<{ features: { properties: BarrioConocido & { tipo: string } }[] }>('data/barrios-interior.geojson')
+  .catch(() => ({ features: [] }));
+const buscarEnLocalidad = crearBuscadorDeBarrios(interior.features.map((f) => f.properties));
+// "Corte total en la localidad", "todos los barrios": se pinta el casco urbano entero.
+const TODA_LA_LOCALIDAD = /\b(corte total|toda la localidad|todas? las localidades|todos los barrios|ambas localidades|en forma total en la localidad)\b/i;
+
 const guardadosYNuevos = unir(await leerGuardados(), nuevos);
-const localidadesDe = new Map<string, string[]>();
+const ubicacionDe = new Map<string, Ubicacion>();
 const noEncontradas = new Set<string>();
 for (const m of guardadosYNuevos.filter((c) => c.localidad !== CAPITAL)) {
   const clave = `${m.localidad}|${m.zona}`;
-  if (localidadesDe.has(clave)) continue;
+  if (ubicacionDe.has(clave)) continue;
   try {
-    const { localidades, noEncontradas: nuevasSinUbicar } = await ubicarLocalidades(nombresDeLocalidades(m.localidad, m.zona));
-    localidadesDe.set(clave, localidades);
-    nuevasSinUbicar.forEach((n) => noEncontradas.add(n));
+    // Cada tramo del texto con sus localidades: los barrios se buscan solo en ellas.
+    const ubicacion: Required<Ubicacion> = { barrios: [], zonas: [], sinUbicar: [], parciales: [] };
+    for (const tramo of tramosDelCorte(m.localidad, m.zona)) {
+      const { localidades, noEncontradas: nuevasSinUbicar } = await ubicarLocalidades(tramo.nombres);
+      nuevasSinUbicar.forEach((n) => noEncontradas.add(n));
+      if (localidades.length === 0) continue;
+      const { barrios, sinUbicar } = buscarEnLocalidad(localidades, tramo.texto);
+      ubicacion.zonas.push(...localidades);
+      ubicacion.barrios.push(...barrios);
+      ubicacion.sinUbicar.push(...sinUbicar.map(normalizar));
+      // Si nombra barrios o calles, no es toda la localidad: se pintan esos barrios (o el sector), no el pueblo.
+      const entera = TODA_LA_LOCALIDAD.test(tramo.texto) || (barrios.length === 0 && sinUbicar.length === 0 && !esDescripcion(normalizar(tramo.texto)));
+      if (!entera) ubicacion.parciales.push(...localidades);
+    }
+    ubicacionDe.set(clave, {
+      barrios: [...new Set(ubicacion.barrios)],
+      zonas: [...new Set(ubicacion.zonas)],
+      sinUbicar: [...new Set(ubicacion.sinUbicar)],
+      ...(ubicacion.parciales.length ? { parciales: [...new Set(ubicacion.parciales)] } : {}),
+    });
   } catch (error) {
     // Sin conexión con OpenStreetMap: ese corte queda afuera esta vez y se vuelve a intentar en la próxima corrida.
     console.warn(`⚠️  No pude ubicar las localidades de "${clave.slice(0, 80)}…": ${(error as Error).message}`);
@@ -113,11 +139,29 @@ if (noEncontradas.size > 0) {
 }
 
 /**
- * Capital se ubica por barrios (y rutas). Fuera de capital se marcan las localidades,
- * y nunca barrios de capital: un "barrio Don Bosco" de Alta Gracia no tiene que pintar uno de capital.
+ * Capital se ubica por barrios (y rutas). Fuera de capital, por localidad y por los barrios de esa localidad:
+ * nunca barrios de capital, así un "barrio Don Bosco" de Alta Gracia no pinta el de capital.
  */
 const ubicarCorte = (m: Mantenimiento): Ubicacion =>
-  m.localidad === CAPITAL ? ubicar(m.zona) : { barrios: [], zonas: localidadesDe.get(`${m.localidad}|${m.zona}`) ?? [], sinUbicar: [] };
+  m.localidad === CAPITAL ? ubicarEnCapital(m.zona) : ubicacionDe.get(`${m.localidad}|${m.zona}`) ?? { barrios: [], zonas: [], sinUbicar: [] };
+
+// Capital: lo que no se encuentra a la primera se busca con la comparación tolerante ("Santa Isabel 2" es
+// "Santa Isabel 2ª Sección"), entre los barrios de capital y los que se agregaron con contorno aproximado.
+const buscarEnCapital = crearBuscadorDeBarrios([
+  ...mapa.features.flatMap((f) => (f.properties.nombre ? [{ nombre: f.properties.nombre, base: f.properties.nombre, localidad: CAPITAL }] : [])),
+  ...interior.features.map((f) => f.properties).filter((b) => b.localidad === CAPITAL),
+]);
+function ubicarEnCapital(zona: string): Ubicacion {
+  const ubicacion = ubicar(zona);
+  const barrios = new Set(ubicacion.barrios);
+  const sinUbicar = ubicacion.sinUbicar.filter((pedazo) => {
+    if (esDescripcion(pedazo)) return true;
+    const [encontrado] = buscarEnCapital([CAPITAL], pedazo).barrios;
+    if (encontrado) barrios.add(encontrado);
+    return !encontrado;
+  });
+  return { ...ubicacion, barrios: [...barrios], sinUbicar };
+}
 
 const todos: (Mantenimiento & Ubicacion & { sector?: Punto[] })[] = guardadosYNuevos
   .map((m) => ({ ...m, ...ubicarCorte(m) }))
@@ -134,7 +178,8 @@ const porNombre = (features: { properties: { nombre: string | null }; geometry: 
 
 /** Dónde buscar el sector: la localidad (si es una sola), o los barrios del corte en capital si el texto nombra calles. */
 function zonaDeBusqueda(m: Mantenimiento & Ubicacion) {
-  if (m.localidad !== CAPITAL) return m.zonas.length === 1 ? porNombre(zonas.features, m.zonas) : [];
+  // En el interior, el sector se arma solo si el anuncio describe calles (los barrios ya tienen su contorno).
+  if (m.localidad !== CAPITAL) return m.zonas.length === 1 && esDescripcion(normalizar(m.zona)) ? porNombre(zonas.features, m.zonas) : [];
   return m.barrios.length > 0 && m.sinUbicar.some(esDescripcion) ? porNombre(mapa.features, m.barrios) : [];
 }
 
@@ -189,7 +234,10 @@ if ((await readFile(ARCHIVO, 'utf8').catch(() => '')) !== nuevoTexto) {
 await writeFile(ARCHIVO, nuevoTexto);
 await writeFile(BUSCADAS, JSON.stringify(buscadas, null, 1) + '\n');
 if (zonas.features.length > localidadesAntes || cambiaronManuales) {
-  await writeFile(ZONAS, JSON.stringify(zonas, null, 1) + '\n');
+  await writeFile(ZONAS, JSON.stringify(aplicarContornos(zonas, 'zonas'), null, 1) + '\n');
+  // Una localidad nueva que se llama como un barrio de capital: el barrio pasa a "X (Córdoba)".
+  const nombresDeLocalidades = new Set(zonas.features.filter((z) => z.properties.tipo === 'localidad').map((z) => z.properties.nombre));
+  if (separarDeLocalidades(mapa.features, nombresDeLocalidades) > 0) await writeFile('data/barrios.geojson', JSON.stringify(mapa) + '\n');
   escribirLugares(); // el bot y los reportes reconocen las localidades nuevas
   console.log(`🗺️  ${zonas.features.length - localidadesAntes} localidades nuevas en el mapa`);
 }
@@ -204,7 +252,8 @@ if (sinUbicar.length) console.log(`❓ Sin ubicar (se pueden agregar a data/alia
 // (los que decidimos no ubicar a propósito).
 const ignorados = new Set(Object.keys(alias).filter((nombre) => alias[nombre] === null).map(normalizar));
 const queVienen = todos.filter((m) => m.fecha >= momentoEnCordoba().fecha);
-const desconocidos = [...new Set(queVienen.flatMap((m) => m.sinUbicar))].filter((texto) => !esDescripcion(texto) && !ignorados.has(texto));
+// Solo capital: los barrios del interior que no se encuentran quedan en el informe del robot, sin alertas.
+const desconocidos = [...new Set(queVienen.filter((m) => m.localidad === CAPITAL).flatMap((m) => m.sinUbicar))].filter((texto) => !esDescripcion(texto) && !ignorados.has(texto));
 if (desconocidos.length > 0) {
   alertas.push({
     texto: `Hay barrios de cortes que vienen que no pude ubicar en el mapa:\n${desconocidos.map((d) => `• ${d}`).join('\n')}`,

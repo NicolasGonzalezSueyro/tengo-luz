@@ -28,7 +28,8 @@ test('el buscador autocompleta mientras se escribe y abre el barrio', async ({ p
   await page.goto('/');
   const buscador = page.getByRole('combobox', { name: 'Buscar barrio' });
   await buscador.pressSequentially('alber');
-  const opcion = page.getByRole('option', { name: /^Alberdi/ });
+  // El de capital, no "Alberdi de Horizonte" ni "Alberdi Norte (Río Cuarto)" (el texto puede sumar "Sin luz").
+  const opcion = page.locator('[role="option"][data-nombre="Alberdi"]');
   await expect(opcion).toBeVisible();
   await opcion.click();
   await expect(barrioElegido(page)).toHaveText('Alberdi');

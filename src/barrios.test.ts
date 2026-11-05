@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { centro, crearUbicador, distanciaKm, lugaresSeparados, normalizar, type Punto } from './barrios.ts';
+import { centro, crearUbicador, distanciaKm, lugaresSeparados, normalizar, separarDeLocalidades, type Punto } from './barrios.ts';
 
 // Un mapa chiquito con nombres reales de data/barrios.geojson.
 const NOMBRES = [
@@ -35,6 +35,20 @@ test('lista de barrios separada por comas e "y"', () => {
     zonas: [],
     sinUbicar: ['san martin anexo'],
   });
+});
+
+test('"e" también separa: "Argüello e Ituzaingó" (y no corta palabras con "e" sueltas)', () => {
+  assert.deepEqual(ubicar('Barrios Las Rosas e Ituzaingó Anexo.').barrios, ['Las Rosas']);
+  assert.deepEqual(ubicar('Barrios Las Rosas e Ituzaingó Anexo.').sinUbicar, ['ituzaingo anexo']);
+  assert.deepEqual(ubicar('Barrio Español.').barrios, ['Español']);
+});
+
+test('un barrio que se llama como una localidad ("San Francisco (Córdoba)") se encuentra con el nombre que usa EPEC', () => {
+  const barrios = [{ properties: { nombre: 'San Francisco' } }, { properties: { nombre: 'Las Rosas' } }];
+  assert.equal(separarDeLocalidades(barrios, new Set(['San Francisco', 'Villa María'])), 1);
+  assert.deepEqual(barrios.map((b) => b.properties.nombre), ['San Francisco (Córdoba)', 'Las Rosas']);
+  const conLocalidad = crearUbicador([...NOMBRES, 'San Francisco (Córdoba)'], {});
+  assert.deepEqual(conLocalidad('Barrios San Francisco y Las Rosas.').barrios, ['San Francisco (Córdoba)', 'Las Rosas']);
 });
 
 test('"Sud" en la nota y "Sur" en el mapa (y al revés) son el mismo barrio', () => {

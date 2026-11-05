@@ -4,8 +4,8 @@
 import { etiquetaDia, lugaresDelCorte, type Corte } from '../web/estado.js';
 import { estadisticas, limpiarReportes } from './admin.ts';
 import {
-  agregarLugares, cancelarFalla, confirmarFallas, corregirLugares, DURACION, fallasActivas, fallasPendientes, LINK_X, linksDeX,
-  lugaresEnTexto, MAXIMO_LINKS, prepararFalla, terminarFallas, textoDePublicacion, type Falla,
+  agregarLugares, cancelarFalla, clasificar, confirmarFallas, corregirLugares, DURACION, fallasActivas, fallasPendientes, LINK_X, linksDeX,
+  MAXIMO_LINKS, prepararFalla, reconocerLugares, restablecerLugares, terminarFallas, textoDePublicacion, type Falla,
 } from './fallas.ts';
 import { contarReportes, type BaseDeDatos } from './reportes.ts';
 
@@ -52,6 +52,13 @@ function listarPublicadas(fallas: Falla[], titulo: string) {
       `Sumar lugares: /agregar ${f.id} … · Sacarla: /fin_falla ${f.id}`,
     ]),
   ].join('\n');
+}
+
+/** El aviso al admin cuando EPEC confirma que volvió el servicio. */
+export function textoRestablecida(r: { lugares: string[]; quitados?: string[] }) {
+  if (r.lugares.length === 0) return '✅ EPEC dice que volvió el servicio, pero no reconocí en qué lugares. Si corresponde, sacá la falla con /fin_falla y su número (mirá cuáles hay con /fallas).';
+  if (!r.quitados?.length) return `✅ EPEC dice que volvió el servicio en ${r.lugares.join(', ')}. No había fallas publicadas ahí.`;
+  return `✅ EPEC confirmó que volvió el servicio en ${r.quitados.join(', ')}: lo saqué del mapa.`;
 }
 
 /** El aviso al admin de lo que el extractor publicó solo. */
@@ -121,8 +128,14 @@ export async function responder(
   chat: number,
   texto: string,
   {
-    lugares, esAdmin, ahora = Date.now(), avisarFalla,
-  }: { lugares: string[]; esAdmin: boolean; ahora?: number; avisarFalla?: (falla: Falla) => Promise<void> },
+    lugares, esAdmin, ahora = Date.now(), avisarFalla, localidades = [],
+  }: {
+    lugares: string[];
+    esAdmin: boolean;
+    ahora?: number;
+    avisarFalla?: (falla: Falla) => Promise<void>;
+    localidades?: string[]; // las localidades del interior, para reconocer sus barrios en las publicaciones de EPEC
+  },
 ): Promise<string> {
   // El admin compartió el link de una publicación de X sin comando: es una falla para cargar.
   if (esAdmin && !texto.trim().startsWith('/') && LINK_X.test(texto)) texto = `/falla ${texto}`;
@@ -217,18 +230,28 @@ export async function responder(
         const links = linksDeX(argumento);
         const avisos: string[] = [];
         if (links.length > MAXIMO_LINKS) avisos.push(`Recibí ${links.length} links: leí los primeros ${MAXIMO_LINKS}. Mandame el resto en otro mensaje.`);
-        if (links.length === 0) {
-          await prepararFalla(db, { texto: argumento, fuente: null, lugares: lugaresEnTexto(lugares, argumento) }, ahora);
-        }
+        /** Una publicación de "volvió el servicio" saca esos lugares del mapa; cualquier otra queda para /confirmar. */
+        const procesar = async (texto: string, fuente: string | null) => {
+          const encontrados = reconocerLugares(lugares, new Set(localidades), texto);
+          if (clasificar(texto) === 'restablecida') {
+            const { quitados } = await restablecerLugares(db, encontrados, ahora);
+            avisos.push(textoRestablecida({ lugares: encontrados, quitados }));
+          } else {
+            await prepararFalla(db, { texto, fuente, lugares: encontrados }, ahora);
+          }
+        };
+        if (links.length === 0) await procesar(argumento, null);
         for (const link of links.slice(0, MAXIMO_LINKS)) {
           const publicacion = await textoDePublicacion(link);
           if (!publicacion) {
             avisos.push(`No pude leer ${link}: copiá su texto y mandalo con /falla delante.`);
             continue;
           }
-          await prepararFalla(db, { texto: publicacion.texto, fuente: link, lugares: lugaresEnTexto(lugares, publicacion.texto) }, ahora);
+          await procesar(publicacion.texto, link);
         }
-        return revisarFallas(await fallasPendientes(db), avisos);
+        const pendientes = await fallasPendientes(db);
+        if (pendientes.length === 0 && avisos.length > 0) return avisos.join('\n');
+        return revisarFallas(pendientes, avisos);
       }
 
       case '/corregir': {

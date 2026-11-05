@@ -1,13 +1,15 @@
 import lugares, { localidades } from '../../data/lugares.js';
-import { resumenPublicadas, revisarFallas } from '../../src/bot.ts';
-import { fallasActivas, fallasPendientes, publicacionValida, recibirPublicaciones, type Publicacion } from '../../src/fallas.ts';
+import { resumenPublicadas, revisarFallas, textoRestablecida } from '../../src/bot.ts';
+import {
+  fallasActivas, fallasPendientes, fallasSinSector, guardarSector, historialDeFallas, publicacionValida, recibirPublicaciones, type Publicacion,
+} from '../../src/fallas.ts';
 import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
 import { claveCorrecta } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
 
 // /api/fallas: las fallas no programadas que confirma EPEC (src/fallas.ts).
-//   GET  → las publicadas, para el mapa (público).
+//   GET  → las publicadas, para el mapa (público). Con ?historial: las de los últimos 90 días, para las estadísticas.
 //   POST → un extractor externo manda publicaciones de EPEC; las fallas confiables se publican solas y las raras
 //          quedan esperando /confirmar en el bot (ver esConfiable).
 //          Pide "Authorization: Bearer <FALLAS_CLAVE>". Body: { "id", "url", "texto", "publicado"? }
@@ -27,10 +29,26 @@ const MAXIMO_POR_PEDIDO = 20;
 const LOCALIDADES = new Set(localidades);
 
 export async function onRequestGet({ request, env }: Contexto) {
+  // /api/fallas?historial → las de los últimos 90 días, para las estadísticas (cambia poco: caché de 10 minutos).
+  if (new URL(request.url).searchParams.has('historial')) {
+    const clave = new Request(new URL('/api/fallas?historial', request.url));
+    const guardada = await cache?.match(clave);
+    if (guardada) return new Response(guardada.body, { headers: { 'Content-Type': 'application/json' } });
+    const historial = await historialDeFallas(env.DB, Date.now() - 90 * 24 * 60 * 60 * 1000);
+    await cache?.put(clave, Response.json(historial, { headers: { 'Cache-Control': 'max-age=600' } }));
+    return Response.json(historial, { headers: { 'Cache-Control': 'max-age=60' } });
+  }
+  // /api/fallas?sin-sector (con FALLAS_CLAVE) → las fallas que describen calles y esperan que el robot arme su sector.
+  if (new URL(request.url).searchParams.has('sin-sector')) {
+    if (!env.FALLAS_CLAVE || !(await claveCorrecta(request, env.FALLAS_CLAVE))) return Response.json({ error: 'Clave incorrecta' }, { status: 401 });
+    const pendientes = (await fallasSinSector(env.DB, Date.now())).map(({ id, texto, lugares }) => ({ id, texto, lugares }));
+    return Response.json(pendientes, { headers: { 'Cache-Control': 'no-store' } });
+  }
   const clave = new Request(new URL('/api/fallas', request.url));
   const guardada = await cache?.match(clave);
   if (guardada) return new Response(guardada.body, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
-  const fallas = (await fallasActivas(env.DB, Date.now())).map(({ lugares, texto, fuente, creado, hasta }) => ({ lugares, texto, fuente, creado, hasta }));
+  const fallas = (await fallasActivas(env.DB, Date.now()))
+    .map(({ lugares, texto, fuente, creado, hasta, sector }) => ({ lugares, texto, fuente, creado, hasta, ...(sector ? { sector } : {}) }));
   await cache?.put(clave, Response.json(fallas, { headers: { 'Cache-Control': `max-age=${SEGUNDOS_EN_CACHE}` } }));
   return Response.json(fallas, { headers: { 'Cache-Control': 'no-store' } });
 }
@@ -48,6 +66,14 @@ export async function onRequestPost({ request, env, waitUntil }: Contexto) {
     }
   })();
   if (!datos || typeof datos !== 'object') return Response.json({ error: 'Se espera JSON' }, { status: 400 });
+  // El robot manda los sectores que armó: { "accion": "sectores", "sectores": [{ "id": 3, "sector": [[lon, lat], …] }] }.
+  if (datos.accion === 'sectores') {
+    const sectores = Array.isArray(datos.sectores) ? (datos.sectores as { id?: unknown; sector?: unknown }[]).slice(0, MAXIMO_POR_PEDIDO) : [];
+    let guardados = 0;
+    for (const s of sectores) if (typeof s?.id === 'number' && (await guardarSector(env.DB, s.id, s.sector, Date.now()))) guardados++;
+    await cache?.delete(new Request(new URL('/api/fallas', request.url))); // que el mapa lo vea enseguida
+    return Response.json({ guardados });
+  }
   // Una sola publicación ({ id, url, texto }) o varias ({ publicaciones: [ … ] }).
   const lista = Array.isArray(datos.publicaciones) ? datos.publicaciones : [datos];
   if (lista.length === 0 || lista.length > MAXIMO_POR_PEDIDO) {
@@ -78,7 +104,7 @@ export async function onRequestPost({ request, env, waitUntil }: Contexto) {
   if (env.TELEGRAM_TOKEN && env.TELEGRAM_ADMIN && (publicadas.length > 0 || nuevas > 0 || restablecidas.length > 0)) {
     const partes = [
       ...(publicadas.length > 0 ? [resumenPublicadas(publicadas)] : []),
-      ...restablecidas.map((r) => `✅ EPEC dice que volvió el servicio${r.lugares.length ? ` en ${r.lugares.join(', ')}` : ''}. Si corresponde, sacala con /fin_falla y su número.`),
+      ...restablecidas.map(textoRestablecida),
       ...(nuevas > 0 ? [revisarFallas(await fallasPendientes(env.DB), [`📥 ${nuevas === 1 ? 'Esta necesita' : `Estas ${nuevas} necesitan`} que la revises:`])] : []),
     ];
     // Telegram no manda mensajes de más de 4096 caracteres.

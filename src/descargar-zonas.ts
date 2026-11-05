@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import type { Localidad } from './localidades.ts';
+import { aplicarContornos } from './contornos.ts';
 
 // Arma data/zonas.geojson: zonas APROXIMADAS que se marcan en el mapa cuando un corte no se puede ubicar por barrios.
 // Se corre a mano (`npm run zonas`). Hay dos tipos:
@@ -158,6 +159,6 @@ if (import.meta.main) {
   const cargadas = new Set(LOCALIDADES.map((l) => `R${l.relacion}`));
   const anteriores = JSON.parse(await readFile(ARCHIVO, 'utf8').catch(() => '{"features":[]}')) as { features: Localidad[] };
   features.push(...anteriores.features.filter((f) => f.properties.tipo === 'localidad' && f.properties.osm && !cargadas.has(f.properties.osm)));
-  await writeFile(ARCHIVO, JSON.stringify({ type: 'FeatureCollection', features }, null, 1) + '\n');
+  await writeFile(ARCHIVO, JSON.stringify(aplicarContornos({ type: 'FeatureCollection', features }, 'zonas'), null, 1) + '\n');
   console.log(`Guardadas ${features.length} zonas aproximadas en ${ARCHIVO}`);
 }

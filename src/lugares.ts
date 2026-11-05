@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 // Arma data/lugares.js: la lista de nombres de barrios y zonas del mapa. La usa el bot de Telegram
 // para reconocer el barrio que le escriben, sin tener que cargar el mapa entero (1,3 MB).
@@ -19,8 +19,15 @@ export const listarLocalidades = (zonas: Coleccion) =>
 
 export const leer = (archivo: string): Coleccion => JSON.parse(readFileSync(new URL(`../data/${archivo}`, import.meta.url), 'utf8'));
 
+/** Todos los mapas: barrios de capital, zonas y localidades, y barrios del interior (si ya se armaron). */
+export const leerTodo = (): Coleccion[] => [
+  leer('barrios.geojson'),
+  leer('zonas.geojson'),
+  ...(existsSync(new URL('../data/barrios-interior.geojson', import.meta.url)) ? [leer('barrios-interior.geojson')] : []),
+];
+
 export function escribirLugares() {
-  const lugares = listarLugares(leer('barrios.geojson'), leer('zonas.geojson'));
+  const lugares = listarLugares(...leerTodo());
   const localidades = listarLocalidades(leer('zonas.geojson'));
   const codigo = `// Generado por \`npm run lugares\` a partir de los mapas: no editar a mano.\nexport default ${JSON.stringify(lugares, null, 1)};\n`
     + `\n// Las que son localidades del interior (el resto son barrios y zonas de capital).\nexport const localidades = ${JSON.stringify(localidades, null, 1)};\n`;

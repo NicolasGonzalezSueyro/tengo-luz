@@ -2,13 +2,23 @@
 // No se leen solas: el admin se las pasa al bot de Telegram (el link de la publicación de X, o el texto
 // pegado), el bot reconoce los lugares y, con /confirmar, se muestran en el mapa unas horas.
 
-import { normalizar } from './barrios.ts';
+import { esDescripcion, normalizar } from './barrios.ts';
+import { CAPITAL } from './mantenimiento.ts';
+import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
 import type { BaseDeDatos } from './reportes.ts';
 
 const HORA = 60 * 60 * 1000;
 export const DURACION = 6 * HORA; // si nadie avisa que volvió la luz (/fin_falla), se saca sola
 
-export type Falla = { id: number; lugares: string[]; texto: string; fuente: string | null; creado: number; hasta: number };
+export type Falla = {
+  id: number;
+  lugares: string[];
+  texto: string;
+  fuente: string | null;
+  creado: number;
+  hasta: number;
+  sector?: [number, number][]; // si EPEC describe calles: el área exacta, que arma el robot (src/sectores-fallas.ts)
+};
 
 // Un link a una publicación de X (o Twitter): https://x.com/usuario/status/123
 export const LINK_X = /https?:\/\/(?:www\.|mobile\.)?(?:x|twitter)\.com\/\w+\/status\/\d+/i;
@@ -35,6 +45,36 @@ export function lugaresEnTexto(lugares: string[], texto: string): string[] {
     resto = resto.replaceAll(` ${clave} `, ' | ');
   }
   return encontrados;
+}
+
+/**
+ * Los lugares del mapa que nombra una publicación de EPEC, con el mapa ampliado. Si nombra localidades del interior,
+ * se buscan sus barrios ("Villa María: barrio Centro" → "Centro (Villa María)"), y la localidad entera solo si no
+ * nombra ninguno; si no nombra ninguna localidad, son barrios de capital, también con la comparación tolerante
+ * ("Arguello Lourdes", "Santa Isabel 2"). Así un "Centro" del interior nunca pinta el de capital.
+ */
+export function reconocerLugares(lugares: string[], localidades: Set<string>, texto: string): string[] {
+  const interior: BarrioConocido[] = [];
+  const capital: BarrioConocido[] = [];
+  for (const lugar of lugares) {
+    const partes = lugar.match(/^(.+) \((.+)\)$/);
+    if (partes && localidades.has(partes[2])) interior.push({ nombre: lugar, base: partes[1], localidad: partes[2] });
+    else if (!localidades.has(lugar)) capital.push({ nombre: lugar, base: lugar, localidad: CAPITAL });
+  }
+  const buscar = crearBuscadorDeBarrios([...interior, ...capital]);
+  const directos = lugaresEnTexto([...capital.map((c) => c.nombre), ...localidades], texto);
+  const nombradas = directos.filter((l) => localidades.has(l));
+  if (nombradas.length === 0) return [...new Set([...directos, ...buscar([CAPITAL], texto).barrios])];
+  const resultado = new Set<string>();
+  for (const localidad of nombradas) {
+    // Sus barrios: los que aparecen tal cual en el texto, y los de las listas aunque estén escritos distinto.
+    const propios = interior.filter((b) => b.localidad === localidad);
+    const enTexto = lugaresEnTexto(propios.map((b) => b.base), texto).map((base) => propios.find((b) => b.base === base)!.nombre);
+    const barrios = [...new Set([...enTexto, ...buscar([localidad], texto).barrios])];
+    if (barrios.length > 0) barrios.forEach((b) => resultado.add(b));
+    else resultado.add(localidad);
+  }
+  return [...resultado];
 }
 
 /**
@@ -65,7 +105,25 @@ const comoFalla = (r: Record<string, unknown>): Falla => ({
   fuente: r.fuente ? String(r.fuente) : null,
   creado: Number(r.creado),
   hasta: Number(r.hasta),
+  ...(r.sector ? { sector: JSON.parse(String(r.sector)) } : {}),
 });
+
+/** Las fallas publicadas que describen calles y todavía no tienen su sector: las que tiene que armar el robot. */
+export async function fallasSinSector(db: BaseDeDatos, ahora: number): Promise<Falla[]> {
+  return (await fallasActivas(db, ahora)).filter((f) => !f.sector && esDescripcion(normalizar(f.texto)));
+}
+
+/**
+ * Guarda el sector de una falla (lo manda el robot). Se valida lo que llega: entre 3 y 2000 puntos, todos dentro de
+ * la provincia de Córdoba. Devuelve false si la falla no existe o el sector no es válido.
+ */
+export async function guardarSector(db: BaseDeDatos, id: number, sector: unknown, ahora: number): Promise<boolean> {
+  const valido = Array.isArray(sector) && sector.length >= 3 && sector.length <= 2000 && sector.every((p) =>
+    Array.isArray(p) && p.length === 2 && p[0] >= -65.8 && p[0] <= -61.7 && p[1] >= -35.1 && p[1] <= -29.4);
+  if (!valido || !(await fallasActivas(db, ahora)).some((f) => f.id === id)) return false;
+  await db.prepare('UPDATE fallas SET sector = ? WHERE id = ?').bind(JSON.stringify(sector), id).run();
+  return true;
+}
 
 /** Deja una falla esperando /confirmar, junto a las que ya estuvieran esperando. */
 export async function prepararFalla(db: BaseDeDatos, f: Pick<Falla, 'lugares' | 'texto' | 'fuente'>, ahora: number) {
@@ -117,6 +175,7 @@ export type Resultado = {
   id: string;
   estado: 'publicada' | 'pendiente' | 'sin_lugares' | 'repetida' | 'restablecida' | 'ignorada';
   lugares: string[];
+  quitados?: string[]; // en una "restablecida": los lugares que se sacaron de fallas publicadas
 };
 
 /**
@@ -175,7 +234,7 @@ export async function recibirPublicaciones(
   const publicadas: Falla[] = [];
   for (const p of publicaciones) {
     const tipo = clasificar(p.texto);
-    const encontrados = lugaresEnTexto(lugares, p.texto);
+    const encontrados = reconocerLugares(lugares, localidades, p.texto);
     if (tipo === 'otra') {
       resultados.push({ id: p.id, estado: 'ignorada', lugares: encontrados });
       continue;
@@ -191,7 +250,9 @@ export async function recibirPublicaciones(
         .prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, -1)')
         .bind(JSON.stringify(encontrados), p.texto, p.url, ahora, ahora)
         .run();
-      resultados.push({ id: p.id, estado: 'restablecida', lugares: encontrados });
+      // Lo que EPEC confirma que se normalizó sale del mapa (solo esos lugares; el resto de la falla sigue).
+      const { quitados } = await restablecerLugares(db, encontrados, ahora);
+      resultados.push({ id: p.id, estado: 'restablecida', lugares: encontrados, quitados });
       continue;
     }
     if (esConfiable(encontrados, localidades)) {
@@ -205,6 +266,28 @@ export async function recibirPublicaciones(
   return { resultados, publicadas };
 }
 
+/**
+ * EPEC confirmó que volvió el servicio en estos lugares: se sacan de las fallas publicadas, y la falla que se queda
+ * sin lugares sale del mapa. Devuelve los lugares que se sacaron y los números de las fallas que terminaron.
+ */
+export async function restablecerLugares(db: BaseDeDatos, lugares: string[], ahora: number): Promise<{ quitados: string[]; terminadas: number[] }> {
+  const quitados = new Set<string>();
+  const terminadas: number[] = [];
+  for (const falla of await fallasActivas(db, ahora)) {
+    const quedan = falla.lugares.filter((l) => !lugares.includes(l));
+    if (quedan.length === falla.lugares.length) continue;
+    falla.lugares.filter((l) => lugares.includes(l)).forEach((l) => quitados.add(l));
+    if (quedan.length === 0) {
+      // Termina: se guardan sus lugares, para el historial y las estadísticas.
+      await db.prepare('UPDATE fallas SET hasta = ? WHERE id = ?').bind(ahora, falla.id).run();
+      terminadas.push(falla.id);
+    } else {
+      await db.prepare('UPDATE fallas SET lugares = ? WHERE id = ?').bind(JSON.stringify(quedan), falla.id).run();
+    }
+  }
+  return { quitados: [...quitados], terminadas };
+}
+
 /** Suma lugares a una falla publicada (los que el texto nombraba y no se reconocieron). Devuelve la falla actualizada. */
 export async function agregarLugares(db: BaseDeDatos, id: number, nuevos: string[], ahora: number): Promise<Falla | null> {
   const falla = (await fallasActivas(db, ahora)).find((f) => f.id === id);
@@ -212,6 +295,12 @@ export async function agregarLugares(db: BaseDeDatos, id: number, nuevos: string
   const lugares = [...new Set([...falla.lugares, ...nuevos])];
   await db.prepare('UPDATE fallas SET lugares = ? WHERE id = ?').bind(JSON.stringify(lugares), id).run();
   return { ...falla, lugares };
+}
+
+/** Las fallas publicadas desde una fecha (para las estadísticas de cortes repentinos), con sus lugares y duración. */
+export async function historialDeFallas(db: BaseDeDatos, desde: number) {
+  const { results } = await db.prepare('SELECT * FROM fallas WHERE confirmada = 1 AND creado > ? ORDER BY creado').bind(desde).all();
+  return results.map(comoFalla).filter((f) => f.lugares.length > 0).map(({ lugares, creado, hasta }) => ({ lugares, creado, hasta }));
 }
 
 /** "Volvió la luz": saca del mapa una falla (por su número) o todas. Devuelve cuántas sacó. */

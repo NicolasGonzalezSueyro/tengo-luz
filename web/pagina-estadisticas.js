@@ -5,7 +5,7 @@
 
 import { h } from './dom.js';
 import { fechaLarga } from './estado.js';
-import { estadisticas } from './estadisticas.js';
+import { estadisticas, estadisticasFallas } from './estadisticas.js';
 import { completarIconos, icono } from './iconos.js';
 
 /** @typedef {import('./estado.js').Corte} Corte */
@@ -54,13 +54,54 @@ function grafico(titulo, nombreIcono, filas) {
 /** @param {number} n @param {string} singular @param {string} plural */
 const cantidad = (n, singular, plural) => `${n} ${n === 1 ? singular : plural}`;
 
+/**
+ * Las barras de "barrios con más cortes" (o fallas), con link a cada uno en el mapa.
+ * @param {{ nombre: string, cortes: number, minutos: number }[]} lugares @param {[string, string]} [unidad]
+ */
+const barrasDeLugares = (lugares, [singular, plural] = ['corte', 'cortes']) => lugares.map((l) => ({
+  nombre: l.nombre,
+  valor: l.cortes,
+  texto: cantidad(l.cortes, singular, plural),
+  detalle: `${l.nombre}: ${cantidad(l.cortes, singular, plural)}, ${duracion(l.minutos)} en total`,
+  enlace: `./?barrio=${encodeURIComponent(l.nombre)}`,
+}));
+
+/** @param {{ nombre: string, cortes: number }[]} franjas */
+const barrasDeFranjas = (franjas) => franjas.map((f) => ({
+  nombre: f.nombre, valor: f.cortes, texto: String(f.cortes), detalle: `${f.nombre}: ${cantidad(f.cortes, 'corte', 'cortes')}`,
+}));
+
+/** @param {string} nombreIcono @param {string} titulo @param {string} bajada */
+const encabezado = (nombreIcono, titulo, bajada) => h('header', { class: 'seccion-estadisticas' },
+  h('h2', {}, icono(/** @type {Parameters<typeof icono>[0]} */ (nombreIcono)), titulo), h('p', {}, bajada));
+
+/** Los cortes repentinos: las fallas que EPEC confirmó en sus redes. @param {ReturnType<typeof estadisticasFallas>} f */
+function seccionFallas(f) {
+  if (f.cortes === 0) {
+    return [h('div', { class: 'aviso' }, icono('info'), h('p', {}, 'Todavía no hay fallas registradas. Aparecen acá cuando EPEC confirma un corte no programado en sus redes.'))];
+  }
+  return [
+    h('div', { class: 'datos' },
+      dato(f.cortes, 'fallas confirmadas'),
+      dato(f.horas, 'horas sin luz en total'),
+      dato(f.lugaresAfectados, 'barrios y localidades afectados'),
+      dato(duracionCorta(f.duracionMediana), 'dura una falla típica'),
+    ),
+    grafico('Barrios y localidades con más fallas', 'pin', barrasDeLugares(f.masAfectados, ['falla', 'fallas'])),
+    grafico('¿A qué hora pasan?', 'reloj', barrasDeFranjas(f.porFranja)),
+  ];
+}
+
 try {
-  const respuesta = await fetch('data/mantenimientos.json');
+  const [respuesta, respuestaFallas] = await Promise.all([fetch('data/mantenimientos.json'), fetch('api/fallas?historial').catch(() => null)]);
   if (!respuesta.ok) throw new Error(`data/mantenimientos.json respondió ${respuesta.status}`);
   const e = estadisticas(/** @type {Corte[]} */ (await respuesta.json()));
+  // Si la base de fallas no responde, la página igual muestra los trabajos programados.
+  const fallas = respuestaFallas?.ok ? estadisticasFallas(await respuestaFallas.json()) : null;
   if (e.desde) /** @type {HTMLElement} */ (document.getElementById('periodo')).textContent = `Desde el ${fechaLarga(e.desde)}`;
 
   contenedor.replaceChildren(
+    encabezado('calendario', 'Trabajos programados', 'Los cortes que EPEC anuncia con anticipación por mantenimiento y obras.'),
     h('div', { class: 'datos' },
       dato(e.cortes, 'cortes anunciados'),
       dato(e.horas, 'horas de corte en total'),
@@ -69,22 +110,17 @@ try {
     ),
     e.dias < 14 ? h('div', { class: 'aviso' }, icono('info'),
       h('p', {}, `Recién empezamos a juntar datos (${cantidad(e.dias, 'día', 'días')}): los números van a ser más representativos con el tiempo.`)) : '',
-    grafico('Barrios y localidades con más cortes', 'pin', e.masAfectados.map((l) => ({
-      nombre: l.nombre,
-      valor: l.cortes,
-      texto: cantidad(l.cortes, 'corte', 'cortes'),
-      detalle: `${l.nombre}: ${cantidad(l.cortes, 'corte', 'cortes')}, ${duracion(l.minutos)} en total`,
-      enlace: `./?barrio=${encodeURIComponent(l.nombre)}`,
-    }))),
+    grafico('Barrios y localidades con más cortes', 'pin', barrasDeLugares(e.masAfectados)),
     grafico('Cortes por día de la semana', 'calendario', e.porDia.map((d) => ({
       nombre: d.nombre, valor: d.cortes, texto: String(d.cortes), detalle: `${d.nombre}: ${cantidad(d.cortes, 'corte', 'cortes')}`,
     }))),
-    grafico('¿A qué hora empiezan?', 'reloj', e.porFranja.map((f) => ({
-      nombre: f.nombre, valor: f.cortes, texto: String(f.cortes), detalle: `${f.nombre}: ${cantidad(f.cortes, 'corte', 'cortes')}`,
-    }))),
+    grafico('¿A qué hora empiezan?', 'reloj', barrasDeFranjas(e.porFranja)),
     h('p', { class: 'nota' },
       `De todos los cortes, ${cantidad(e.totales, 'fue', 'fueron')} en forma total y ${e.granCordoba} en el interior de la provincia. `,
-      'Cada horario anunciado cuenta como un corte. Son los cortes programados que anunció EPEC (no incluye fallas). Sitio no oficial.'),
+      'Cada horario anunciado cuenta como un corte.'),
+    encabezado('alerta', 'Cortes repentinos', 'Las fallas no programadas que EPEC confirma en sus redes (los últimos 90 días).'),
+    ...(fallas ? seccionFallas(fallas) : [h('p', { class: 'nota' }, 'No se pudieron cargar las fallas. Probá recargar la página.')]),
+    h('p', { class: 'nota' }, 'Sitio no oficial, sin relación con EPEC.'),
   );
 } catch (error) {
   contenedor.replaceChildren(h('p', { class: 'error' }, 'No se pudieron cargar los datos. Probá recargar la página.'));

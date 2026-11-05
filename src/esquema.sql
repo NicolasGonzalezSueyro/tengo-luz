@@ -49,5 +49,8 @@ CREATE TABLE IF NOT EXISTS fallas (
   fuente TEXT NOT NULL, -- link a la publicación ('' si se pegó el texto)
   creado INTEGER NOT NULL,
   hasta INTEGER NOT NULL,
-  confirmada INTEGER NOT NULL DEFAULT 0
+  confirmada INTEGER NOT NULL DEFAULT 0,
+  sector TEXT -- si EPEC describe calles: el área exacta como lista JSON de [longitud, latitud] (la arma el robot)
 );
+-- Si la tabla ya existía de antes (sin la columna "sector"), agregarla una sola vez en la consola de D1:
+--   ALTER TABLE fallas ADD COLUMN sector TEXT;

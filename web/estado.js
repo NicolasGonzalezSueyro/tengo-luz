@@ -7,7 +7,8 @@
  * @typedef {{
  *   fecha: string, desde: string, hasta: string, zona: string,
  *   afectacion: 'parcial' | 'total' | null, fuente: string,
- *   barrios: string[], zonas?: string[], sinUbicar: string[], localidad?: string, sector?: [number, number][]
+ *   barrios: string[], zonas?: string[], sinUbicar: string[], localidad?: string, sector?: [number, number][],
+ *   parciales?: string[]
  * }} Corte
  */
 

@@ -50,6 +50,11 @@ jobs:
         env:
           SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
         run: npm run avisar
+      # Las fallas que EPEC describe por calles se achican al sector exacto (sin el secreto FALLAS_CLAVE, no hace nada).
+      - name: Achicar las fallas al sector
+        env:
+          FALLAS_CLAVE: ${{ secrets.FALLAS_CLAVE }}
+        run: npm run sectores-fallas
       # Si cualquier paso de arriba falló, te llega un mensaje del bot (como mucho uno por día) con el link al detalle.
       - name: Avisarte si algo falló
         if: failure()

@@ -13,14 +13,14 @@
    o, si nunca se tocó el botón, siguiendo la configuración del celular/compu.
    ============================================================================================ */
 :root {
-  --fondo: #f3f2fb;
+  --fondo: #f1f6f4;
   --superficie: #ffffff;
-  --superficie-2: #f7f6fd;
-  --texto: #17142b;
-  --texto-suave: #5d5a76;
-  --borde: #e4e1f2;
-  --acento: #6d28d9;
-  --acento-suave: #ede9fe;
+  --superficie-2: #f5f9f7;
+  --texto: #10201c;
+  --texto-suave: #52645f;
+  --borde: #dbe7e2;
+  --acento: #006d59; /* el verde de EPEC */
+  --acento-suave: #dff1ec;
   --acento-texto: #ffffff;
   --luz: #facc15;
   --luz-fuerte: #eab308;
@@ -29,25 +29,25 @@
   --vivo: #ea580c; /* naranja: corte en curso ahora */
   --zona: #92400e; /* marrón: zona aproximada */
   --terminado: #16a34a; /* verde: el corte de hoy ya terminó */
-  --barra: #6d28d9; /* barras de los gráficos de estadísticas */
+  --barra: #006d59; /* barras de los gráficos de estadísticas */
   --sin-luz: #dc2626; /* rojo: vecinos sin luz, sin aviso */
   --falla: #be123c; /* bordó: falla confirmada por EPEC */
-  --sombra: 0 10px 30px -12px rgba(46, 16, 101, 0.25);
-  --degradado: linear-gradient(120deg, #6d28d9 0%, #c026d3 45%, #f97316 100%);
+  --sombra: 0 10px 30px -12px rgba(0, 61, 50, 0.22);
+  --degradado: linear-gradient(120deg, #004a3d 0%, #006d59 50%, #22b2aa 100%);
   --radio: 16px;
   color-scheme: light;
 }
 
 :root[data-tema="oscuro"] {
-  --fondo: #0b0f1f;
-  --superficie: #141a30;
-  --superficie-2: #1b2340;
-  --texto: #eef0fb;
-  --texto-suave: #a4abc8;
-  --borde: #2a3355;
-  --acento: #a78bfa;
-  --acento-suave: #2a2150;
-  --acento-texto: #160b33;
+  --fondo: #07120f;
+  --superficie: #0f1f1b;
+  --superficie-2: #152a24;
+  --texto: #ecf5f2;
+  --texto-suave: #9db5ae;
+  --borde: #22403a;
+  --acento: #3fc7b0;
+  --acento-suave: #12362e;
+  --acento-texto: #032821;
   --luz: #fde047;
   --luz-fuerte: #facc15;
   --luz-suave: #3b3413;
@@ -55,25 +55,25 @@
   --vivo: #fb923c;
   --zona: #d6a46b;
   --terminado: #16a34a;
-  --barra: #8b5cf6;
+  --barra: #2bb39b;
   --sin-luz: #ef4444;
   --falla: #fb7185;
   --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
-  --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
+  --degradado: linear-gradient(120deg, #003b31 0%, #006d59 55%, #138a80 100%);
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema="claro"]) {
-    --fondo: #0b0f1f;
-    --superficie: #141a30;
-    --superficie-2: #1b2340;
-    --texto: #eef0fb;
-    --texto-suave: #a4abc8;
-    --borde: #2a3355;
-    --acento: #a78bfa;
-    --acento-suave: #2a2150;
-    --acento-texto: #160b33;
+    --fondo: #07120f;
+    --superficie: #0f1f1b;
+    --superficie-2: #152a24;
+    --texto: #ecf5f2;
+    --texto-suave: #9db5ae;
+    --borde: #22403a;
+    --acento: #3fc7b0;
+    --acento-suave: #12362e;
+    --acento-texto: #032821;
     --luz: #fde047;
     --luz-fuerte: #facc15;
     --luz-suave: #3b3413;
@@ -81,11 +81,11 @@
     --vivo: #fb923c;
     --zona: #d6a46b;
     --terminado: #16a34a;
-    --barra: #8b5cf6;
+    --barra: #2bb39b;
     --sin-luz: #ef4444;
     --falla: #fb7185;
     --sombra: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
-    --degradado: linear-gradient(120deg, #4c1d95 0%, #86198f 50%, #c2410c 100%);
+    --degradado: linear-gradient(120deg, #003b31 0%, #006d59 55%, #138a80 100%);
     color-scheme: dark;
   }
 }
@@ -527,6 +527,10 @@ a { color: var(--acento); }
 }
 
 /* ---------- Gráficos de barras (estadisticas.html) ---------- */
+.seccion-estadisticas { margin-top: 12px; }
+.seccion-estadisticas h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; font-size: 1.3rem; }
+.seccion-estadisticas p { margin: 0; color: var(--texto-suave); font-size: 0.92rem; }
+
 .barras { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .barra-fila { display: grid; grid-template-columns: minmax(96px, 36%) 1fr auto; align-items: center; gap: 10px; font-size: 0.88rem; }
 .barra-nombre { overflow: hidden; color: var(--texto); text-overflow: ellipsis; white-space: nowrap; }

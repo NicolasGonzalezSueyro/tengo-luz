@@ -17,7 +17,7 @@ import { DESDE, linkWhatsApp, PROBLEMAS, textoDelReclamo } from './reclamo.js';
 /** @typedef {import('./estado.js').EstadoBarrio} EstadoBarrio */
 /** @typedef {{ id: string, nombre: string | null, tipo: 'poligono' | 'punto', fuente: string }} Barrio */
 /** @typedef {GeoJSON.Feature<GeoJSON.Geometry, Barrio>} FeatureBarrio */
-/** @typedef {{ nombre: string, descripcion: string, tipo?: 'ruta' | 'localidad', osm?: string }} Zona */
+/** @typedef {{ nombre: string, descripcion: string, tipo?: 'ruta' | 'localidad', osm?: string, contorno?: boolean }} Zona */
 /** @typedef {import('./dom.js').Hijo} Hijo */
 
 const CORDOBA = /** @type {L.LatLngTuple} */ ([-31.4167, -64.1833]);
@@ -28,13 +28,13 @@ const ES_CELULAR = window.matchMedia('(max-width: 860px)');
 // Colores de los barrios en el mapa, según el tema. El resto de los colores está en estilos.css.
 const PALETAS = {
   claro: {
-    borde: '#8e8aa8', relleno: '#a5a1c2', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
-    enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', zona: '#92400e', elegido: '#6d28d9',
+    borde: '#7d968f', relleno: '#9db3ac', rellenoOp: 0.07, luz: '#facc15', bordeLuz: '#b45309', bordeTotal: '#7c2d12',
+    enCurso: '#f97316', bordeEnCurso: '#c2410c', sinLuz: '#dc2626', zona: '#92400e', elegido: '#2563eb',
     terminado: '#22c55e', bordeTerminado: '#166534', falla: '#be123c',
   },
   oscuro: {
-    borde: '#3a4468', relleno: '#334066', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
-    enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', zona: '#d6a46b', elegido: '#c4b5fd',
+    borde: '#2e4a43', relleno: '#2a4740', rellenoOp: 0.14, luz: '#fde047', bordeLuz: '#facc15', bordeTotal: '#fef08a',
+    enCurso: '#fb923c', bordeEnCurso: '#fdba74', sinLuz: '#ef4444', zona: '#d6a46b', elegido: '#93c5fd',
     terminado: '#4ade80', bordeTerminado: '#bbf7d0', falla: '#fb7185',
   },
 };
@@ -97,6 +97,12 @@ const limitesLocalidades = mapaZonas.features.filter((f) => f.properties.tipo ==
 const primerRegistro = cortes.map((c) => c.fecha).sort()[0];
 // Todo lo que se puede elegir en el mapa. Los reportes con otros nombres se ignoran.
 const lugaresDelMapa = new Set([...mapaBarrios.features.flatMap((f) => f.properties.nombre ?? []), ...zonasPorNombre.keys()]);
+/**
+ * Los barrios de las localidades del interior (data/barrios-interior.geojson): pesan bastante, así que se traen
+ * después de mostrar el mapa (ver cargarInterior). Hasta que llegan, el mapa anda igual, sin ellos.
+ * @type {Map<string, GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon, { nombre: string, base: string, localidad: string, tipo: 'poligono' | 'aproximado' }>>}
+ */
+const interiorPorNombre = new Map();
 
 let ahora = momentoEnCordoba();
 let diaElegido = ahora.fecha;
@@ -108,7 +114,7 @@ let barrioElegido = null;
 let reportes = {};
 /**
  * Fallas no programadas que EPEC confirmó en sus redes y el admin publicó desde el bot (vienen de /api/fallas).
- * @type {{ lugares: string[], texto: string, fuente: string | null, creado: number, hasta: number }[]}
+ * @type {{ lugares: string[], texto: string, fuente: string | null, creado: number, hasta: number, sector?: [number, number][] }[]}
  */
 let fallas = [];
 /** Si el panel muestra un formulario o una explicación, no se redibuja cada minuto (se perdería lo escrito). */
@@ -198,10 +204,12 @@ function estilo(nombre) {
   // programado, el borde lleva el color del corte (amarillo, o naranja si está en curso): así se ven las dos cosas.
   // Los reportes de vecinos no pintan el barrio: son un punto rojo aparte (ver capaVecinos).
   // Sin corte programado, el borde es blanco: con varios barrios con falla pegados, se ve dónde termina cada uno.
-  if (fallaDe(nombre)) {
+  const falla = fallaDe(nombre);
+  if (falla) {
     const conCorte = estado && !estado.terminado;
     const borde = conCorte ? (estado.enCurso ? p.enCurso : p.luz) : '#ffffff';
-    return { color: elegido ? p.elegido : borde, weight: elegido ? 3.5 : conCorte ? 3.5 : 2, fillColor: p.falla, fillOpacity: 0.65 };
+    // Si la falla tiene su sector exacto (lo arma el robot), el barrio queda suave y se pinta fuerte solo el sector.
+    return { color: elegido ? p.elegido : borde, weight: elegido ? 3.5 : conCorte ? 3.5 : 2, fillColor: p.falla, fillOpacity: falla.sector ? 0.15 : 0.65 };
   }
   if (!estado) {
     return { color: elegido ? p.elegido : p.borde, weight: elegido ? 3.5 : 0.7, fillColor: p.relleno, fillOpacity: elegido ? 0.25 : p.rellenoOp };
@@ -313,16 +321,32 @@ function pintarMapa() {
   sectoresPorNombre.clear();
   // La localidad elegida se dibuja aunque ese día no tenga cortes: así el mapa puede ir hasta ella.
   const conFalla = diaElegido === ahora.fecha ? fallas.flatMap((f) => f.lugares) : [];
+  /** @type {L.GeoJSON[]} los barrios del interior, que van encima de su localidad */
+  const encima = [];
   for (const nombre of new Set([...estados.keys(), ...barriosReportados(), ...conFalla, ...(barrioElegido ? [barrioElegido] : [])])) {
+    const delInterior = interiorPorNombre.get(nombre);
+    if (delInterior) {
+      // Borde punteado: no hay un mapa oficial de ese barrio, el contorno es aproximado.
+      const aproximado = delInterior.properties.tipo === 'aproximado';
+      const capa = L.geoJSON(delInterior, { style: () => ({ ...estilo(nombre), ...(aproximado ? { dashArray: '5 4' } : {}) }) })
+        .bindTooltip(comoTexto(aproximado ? `${nombre} (contorno aproximado)` : nombre), { sticky: true })
+        .on('click', () => elegirBarrio(nombre))
+        .addTo(capaZonas);
+      capa.eachLayer((c) => clasesDeBarrio(/** @type {L.Path} */ (c), nombre));
+      capasPorNombre.set(nombre, [capa]);
+      encima.push(capa);
+      continue;
+    }
     const zona = zonasPorNombre.get(nombre);
     if (zona) {
-      // Si todos los cortes de la localidad ese día tienen su sector, la localidad queda solo como contorno.
+      // Si ese día todos sus cortes son de algunos barrios o de un sector, la localidad queda solo como contorno:
+      // se pintan esos barrios, no el pueblo entero.
       const delDia = estados.get(nombre)?.cortes ?? [];
-      const todoConSector = delDia.length > 0 && delDia.every((c) => c.sector);
+      const todoConSector = delDia.length > 0 && delDia.every((c) => c.sector || c.parciales?.includes(nombre));
       const estiloDeLaZona = { ...estiloZona(nombre), ...(todoConSector ? { fillOpacity: 0.04 } : {}) };
       // Un pueblo sin límite en OpenStreetMap (un punto, o cargado a mano) viene como un círculo de cientos de metros:
       // se dibuja como un punto de tamaño fijo en la pantalla, que no crece al acercar ni desaparece al alejar.
-      const sinLimite = zona.properties.tipo === 'localidad' && !(zona.properties.osm ?? 'R').startsWith('R');
+      const sinLimite = zona.properties.tipo === 'localidad' && !zona.properties.contorno && !(zona.properties.osm ?? 'R').startsWith('R');
       if (sinLimite) {
         const [lon, lat] = centroDeZona(zona.geometry);
         const punto = L.circleMarker([lat, lon], { radius: radioPunto() + 1, ...estiloDeLaZona })
@@ -350,6 +374,7 @@ function pintarMapa() {
     clasesDeBarrio(circulo, nombre);
     capasPorNombre.set(nombre, [circulo]);
   }
+  encima.forEach((capa) => capa.bringToFront());
 
   const p = PALETAS[temaActual()];
   for (const corte of cortesDelDia(cortes, diaElegido)) {
@@ -363,6 +388,19 @@ function pintarMapa() {
       .addTo(capaSectores);
     clasesDeBarrio(capa, lugar);
     if (zonasPorNombre.has(lugar)) sectoresPorNombre.set(lugar, [...(sectoresPorNombre.get(lugar) ?? []), capa]);
+  }
+  // El sector exacto de cada falla (las calles que nombró EPEC), en bordó fuerte arriba de sus barrios.
+  for (const falla of diaElegido === ahora.fecha ? fallas : []) {
+    if (!falla.sector) continue;
+    const [lugar] = falla.lugares;
+    const capa = L.polygon(falla.sector.map(([lon, lat]) => /** @type {L.LatLngTuple} */ ([lat, lon])), {
+      color: '#ffffff', weight: 2, fillColor: p.falla, fillOpacity: 0.75,
+    })
+      .bindTooltip(comoTexto(`${falla.lugares.join(', ')}: sector sin luz (falla confirmada por EPEC)`), { sticky: true })
+      .on('click', () => elegirBarrio(lugar))
+      .addTo(capaSectores);
+    capa.getElement()?.classList.add('barrio-sin-luz');
+    falla.lugares.forEach((l) => sectoresPorNombre.set(l, [...(sectoresPorNombre.get(l) ?? []), capa]));
   }
 
   capaVecinos.clearLayers();
@@ -523,6 +561,8 @@ function mostrarBarrio(nombre) {
       h('p', {}, 'El sector marcado se armó con las calles y lugares que nombra el anuncio, usando OpenStreetMap: es aproximado.')),
     zona && !delDia.every((c) => c.sector) && h('div', { class: 'aviso' }, icono('info'),
       h('p', {}, zona.properties.descripcion)),
+    interiorPorNombre.get(nombre)?.properties.tipo === 'aproximado' && h('div', { class: 'aviso' }, icono('info'),
+      h('p', {}, 'No hay un mapa oficial de este barrio: el contorno es aproximado, armado con su ubicación en OpenStreetMap y los barrios vecinos.')),
     delDia.length > 0 && h('ul', { class: 'cortes' }, ...delDia.map((c, i) => tarjetaCorte(c, i, { conBarrios: false, lugar: nombre }))),
     cajaSinLuz(nombre),
     h('h3', {}, icono('historial'), 'Historial'),
@@ -805,7 +845,7 @@ function avisoReclamo() {
 function pie() {
   return h('footer', { class: 'pie' },
     'Sitio no oficial, sin relación con EPEC. Cortes: anuncios publicados por El Doce. ',
-    'Barrios: Municipalidad de Córdoba y © colaboradores de OpenStreetMap. ',
+    'Barrios: Municipalidad de Córdoba, Mapas Córdoba (IDECOR) y © colaboradores de OpenStreetMap. ',
     h('a', { href: 'https://github.com/NicolasGonzalezSueyro/tengo-luz', target: '_blank', rel: 'noopener' }, icono('github'), 'Código'),
   );
 }
@@ -952,7 +992,7 @@ function actualizar() {
 }
 
 // ---------- Buscador con autocompletado ----------
-const nombres = [...lugaresDelMapa].sort((a, b) => a.localeCompare(b, 'es'));
+let nombres = [...lugaresDelMapa].sort((a, b) => a.localeCompare(b, 'es'));
 
 /** El nombre con la parte escrita resaltada. @param {string} nombre @param {string} buscado */
 function resaltar(nombre, buscado) {
@@ -1080,10 +1120,11 @@ botonUbicacion.addEventListener('click', () => {
       const punto = /** @type {L.LatLngTuple} */ ([coords.latitude, coords.longitude]);
       marcadorYo?.remove();
       marcadorYo = L.circleMarker(punto, {
-        radius: 8, color: '#6d28d9', weight: 3, fillColor: '#ffffff', fillOpacity: 1, className: 'yo',
+        radius: 8, color: '#2563eb', weight: 3, fillColor: '#ffffff', fillOpacity: 1, className: 'yo',
       }).bindTooltip('Vos estás acá').addTo(mapa);
       const lugar = /** @type {[number, number]} */ ([coords.longitude, coords.latitude]);
-      const barrio = barrioEnPunto(poligonosBarrios, lugar) ?? barrioEnPunto(limitesLocalidades, lugar);
+      const barrio = barrioEnPunto(poligonosBarrios, lugar) ?? barrioEnPunto([...interiorPorNombre.values()], lugar)
+        ?? barrioEnPunto(limitesLocalidades, lugar);
       if (barrio) {
         avisar(`Estás en ${barrio}`);
         elegirBarrio(barrio);
@@ -1195,11 +1236,57 @@ async function cargarReportes() {
 
 aplicarTema();
 actualizar();
-// Si se abrió un link compartido (?barrio=Alberdi), arranca mostrando ese barrio.
+/** Trae los barrios del interior y los suma al mapa y al buscador. */
+async function cargarInterior() {
+  try {
+    const interior = await pedir('data/barrios-interior.geojson');
+    for (const f of interior.features) {
+      interiorPorNombre.set(f.properties.nombre, f);
+      lugaresDelMapa.add(f.properties.nombre);
+    }
+    nombres = [...lugaresDelMapa].sort((a, b) => a.localeCompare(b, 'es'));
+    // Las divisiones de capital (countries y loteos dentro de un barrio, como los de Valle Escondido): líneas finas
+    // que se ven al acercarse, y se pueden tocar para ver su ficha.
+    const p = PALETAS[temaActual()];
+    capaDivisiones = L.geoJSON(
+      /** @type {GeoJSON.FeatureCollection} */ ({ type: 'FeatureCollection', features: interior.features.filter((/** @type {any} */ f) => f.properties.localidad === 'Córdoba') }),
+      {
+        style: (f) => ({ color: p.borde, weight: 1.2, opacity: 1, fillOpacity: 0, ...(f?.properties.tipo === 'aproximado' ? { dashArray: '3 3' } : {}) }),
+        onEachFeature: (f, capa) => {
+          capa.bindTooltip(comoTexto(f.properties.nombre), { sticky: true });
+          capa.on('click', () => elegirBarrio(f.properties.nombre));
+        },
+      },
+    );
+    mostrarDivisiones();
+    actualizar();
+  } catch {
+    // Sin los barrios del interior, el mapa igual marca las localidades.
+  }
+}
+/** @type {L.GeoJSON | null} */
+let capaDivisiones = null;
+/** Las divisiones de capital, solo de cerca (zoom 14 o más): de lejos serían una maraña de líneas. */
+function mostrarDivisiones() {
+  if (!capaDivisiones) return;
+  if (mapa.getZoom() >= 14) {
+    if (!mapa.hasLayer(capaDivisiones)) capaDivisiones.addTo(mapa);
+    capaDivisiones.bringToBack();
+    capaPoligonos.bringToBack();
+  } else capaDivisiones.remove();
+}
+mapa.on('zoomend', mostrarDivisiones);
+const interiorListo = cargarInterior();
+
+// Si se abrió un link compartido (?barrio=Alberdi), arranca mostrando ese barrio. Si es del interior,
+// espera a que lleguen esos barrios.
 const barrioDelLink = new URLSearchParams(location.search).get('barrio');
-if (barrioDelLink) {
-  const [encontrado] = lugaresDelMapa.has(barrioDelLink) ? [barrioDelLink] : sugerencias(nombres, barrioDelLink, 1);
-  if (encontrado) elegirBarrio(encontrado);
+if (barrioDelLink && lugaresDelMapa.has(barrioDelLink)) elegirBarrio(barrioDelLink);
+else if (barrioDelLink) {
+  interiorListo.then(() => {
+    const [encontrado] = lugaresDelMapa.has(barrioDelLink) ? [barrioDelLink] : sugerencias(nombres, barrioDelLink, 1);
+    if (encontrado) elegirBarrio(encontrado);
+  });
 }
 mostrarActualizado();
 cargarReportes();

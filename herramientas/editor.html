@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editor de contornos</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css">
+  <style>
+    :root { --fondo: #fff; --texto: #1d1d1f; --suave: #6b6b70; --borde: #d8d8dc; --acento: #c2410c; --ok: #15803d; --error: #b91c1c; }
+    @media (prefers-color-scheme: dark) { :root { --fondo: #1c1c1e; --texto: #f2f2f7; --suave: #a1a1a6; --borde: #3a3a3c; --acento: #fb923c; --ok: #4ade80; --error: #f87171; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 15px/1.4 system-ui, sans-serif; color: var(--texto); background: var(--fondo); display: grid; grid-template-columns: 340px 1fr; height: 100vh; }
+    #panel { padding: 16px; overflow-y: auto; border-right: 1px solid var(--borde); display: flex; flex-direction: column; gap: 12px; }
+    #panel > * { flex-shrink: 0; } /* que el panel haga scroll en vez de encimar los textos */
+    #mapa { height: 100vh; }
+    h1 { font-size: 18px; margin: 0; }
+    p { margin: 0; }
+    .ayuda { color: var(--suave); font-size: 13px; }
+    label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 13px; }
+    input { font: inherit; padding: 8px; border: 1px solid var(--borde); border-radius: 8px; background: var(--fondo); color: var(--texto); }
+    .botones { display: flex; flex-wrap: wrap; gap: 6px; }
+    button { font: inherit; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--borde); background: var(--fondo); color: var(--texto); cursor: pointer; }
+    button.principal { background: var(--acento); border-color: var(--acento); color: #fff; font-weight: 600; }
+    button:disabled { opacity: .45; cursor: default; }
+    #elegido { font-weight: 600; }
+    #mensaje { min-height: 20px; font-size: 13px; }
+    #mensaje.ok { color: var(--ok); } #mensaje.error { color: var(--error); }
+    details { border-top: 1px solid var(--borde); padding-top: 10px; }
+    summary { cursor: pointer; font-weight: 600; }
+    ul { padding-left: 18px; margin: 8px 0 0; font-size: 13px; }
+    li button { padding: 0 6px; font-size: 12px; margin-left: 4px; }
+    @media (max-width: 700px) { body { grid-template-columns: 1fr; grid-template-rows: auto 60vh; } #mapa { height: 60vh; } #panel { border-right: 0; } }
+  </style>
+</head>
+<body>
+  <aside id="panel">
+    <h1>✏️ Editor de contornos</h1>
+    <p class="ayuda">Buscá un lugar o tocalo en el mapa. Arrastrá los puntos del borde para moverlos, arrastrá los puntitos del medio para agregar uno, y clic derecho sobre un punto para borrarlo. Arriba a la derecha (ícono de capas) podés poner satélite y prender guías de la Provincia: manzanas, parcelas, radios urbanos y barrios oficiales. Google Maps sirve para comparar a ojo (no se copian contornos de ahí).</p>
+    <label>Lugar
+      <input id="buscar" list="nombres" placeholder="Valle Escondido, Los Cielos, Centro (Villa María)…" autocomplete="off">
+    </label>
+    <datalist id="nombres"></datalist>
+    <p id="elegido">Ningún lugar elegido</p>
+    <p id="detalle" class="ayuda"></p>
+    <div class="botones">
+      <button id="guardar" class="principal" disabled>Guardar contorno</button>
+      <button id="descartar" disabled>Descartar cambios</button>
+      <button id="dibujar" disabled>Dibujar de cero</button>
+      <button id="restaurar" disabled>Volver al original</button>
+    </div>
+    <p id="mensaje" role="status"></p>
+    <a id="google" href="https://www.google.com/maps" target="_blank" rel="noopener">Ver esta zona en Google Maps ↗</a>
+
+    <details>
+      <summary>Agregar un lugar nuevo</summary>
+      <p class="ayuda">Para un barrio, country o paraje que el mapa no tiene. Se dibuja y se guarda como los demás.</p>
+      <label>Nombre (como lo escribe EPEC) <input id="nuevo-nombre" placeholder="Los Cielos"></label>
+      <label>Localidad <input id="nuevo-localidad" list="localidades" value="Córdoba"></label>
+      <datalist id="localidades"></datalist>
+      <div class="botones"><button id="nuevo">Dibujar lugar nuevo</button></div>
+    </details>
+
+    <details>
+      <summary>Lugares que nombra EPEC y faltan (<span id="cuantos-faltan">0</span>)</summary>
+      <p class="ayuda">Ni OpenStreetMap ni la Provincia los tienen. Tocá uno para ir a su localidad y dibujarlo (primero los que más se repiten).</p>
+      <ul id="faltantes"></ul>
+    </details>
+
+    <details open>
+      <summary>Contornos cambiados a mano (<span id="cuantos">0</span>)</summary>
+      <ul id="manuales"></ul>
+    </details>
+    <p class="ayuda">Los cambios quedan en <code>data/contornos-manuales.geojson</code> y se aplican solos cada vez que se regeneran los mapas. Para publicarlos, hacé commit y push como siempre.</p>
+  </aside>
+  <div id="mapa"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"></script>
+  <script type="module" src="editor.js"></script>
+</body>
+</html>
