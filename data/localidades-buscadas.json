@@ -1300,5 +1300,32 @@
    ],
    "departamento": "Punilla"
   }
+ ],
+ "laborde": [
+  {
+   "nombre": "Laborde",
+   "osm": "N198454604",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -62.8574553,
+    -33.1547126
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "w escalante": [],
+ "cuesta blanca": [
+  {
+   "nombre": "Cuesta Blanca",
+   "osm": "N3256614517",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.5780084,
+    -31.4797689
+   ],
+   "departamento": "Punilla"
+  }
  ]
 }

@@ -45,6 +45,11 @@
   "veces": 5
  },
  {
+  "nombre": "Los Prados 1",
+  "localidad": "La Calera",
+  "veces": 4
+ },
+ {
   "nombre": "Cantegril",
   "localidad": "Río Ceballos",
   "veces": 4
@@ -280,11 +285,6 @@
   "veces": 3
  },
  {
-  "nombre": "Las Torres",
-  "localidad": "Salsipuedes",
-  "veces": 3
- },
- {
   "nombre": "Potrero del Alto",
   "localidad": "Salsipuedes",
   "veces": 3
@@ -405,6 +405,16 @@
   "veces": 2
  },
  {
+  "nombre": "Manera Parcial",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "El Condor",
+  "localidad": "Huerta Grande",
+  "veces": 2
+ },
+ {
   "nombre": "Calpivan",
   "localidad": "La Calera",
   "veces": 2
@@ -415,7 +425,7 @@
   "veces": 2
  },
  {
-  "nombre": "Los Prados 1",
+  "nombre": "Los Paraísos",
   "localidad": "La Calera",
   "veces": 2
  },
@@ -925,11 +935,6 @@
   "veces": 1
  },
  {
-  "nombre": "El Condor",
-  "localidad": "Huerta Grande",
-  "veces": 1
- },
- {
   "nombre": "Solares",
   "localidad": "Icho Cruz",
   "veces": 1
@@ -947,6 +952,11 @@
  {
   "nombre": "Rumi Huasy",
   "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "El Gigante",
+  "localidad": "La Falda",
   "veces": 1
  },
  {
@@ -1130,6 +1140,11 @@
   "veces": 1
  },
  {
+  "nombre": "secciones M",
+  "localidad": "Salsipuedes",
+  "veces": 1
+ },
+ {
   "nombre": "2 Hermanos",
   "localidad": "San Francisco",
   "veces": 1
@@ -1235,6 +1250,11 @@
   "veces": 1
  },
  {
+  "nombre": "Algunos Usuarios De Las",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
   "nombre": "Alvear",
   "localidad": "Villa Carlos Paz",
   "veces": 1
@@ -1246,6 +1266,11 @@
  },
  {
   "nombre": "Edificio Leonardo",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "edificio Venetto 8",
   "localidad": "Villa Carlos Paz",
   "veces": 1
  },
@@ -1266,6 +1291,11 @@
  },
  {
   "nombre": "Pjes",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Shopping Wo",
   "localidad": "Villa Carlos Paz",
   "veces": 1
  },
