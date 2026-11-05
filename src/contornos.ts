@@ -6,6 +6,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import type { MultiPolygon, Polygon } from 'geojson';
 
 export const ARCHIVO_MANUALES = 'data/contornos-manuales.geojson';
+// Los rearmados con manzanas y parcelas oficiales después de comparar con Wikimapia (src/revisar-contornos.ts).
+// Se aplican antes que los manuales: si corregís uno a mano en el editor, manda lo tuyo.
+export const ARCHIVO_REVISADOS = 'data/contornos-revisados.geojson';
 /** En qué mapa está el lugar: barrios de capital, localidades y zonas, o barrios del interior (y lugares nuevos). */
 export type Destino = 'barrios' | 'zonas' | 'interior';
 export type ContornoManual = {
@@ -43,7 +46,7 @@ export function leerManuales(archivo = ARCHIVO_MANUALES): ContornoManual[] {
  * Pone los contornos manuales de ese destino en la colección (la cambia ahí mismo). En el interior, un lugar que no
  * existe se agrega como barrio nuevo de su localidad.
  */
-export function aplicarContornos<C extends Coleccion>(coleccion: C, destino: Destino, manuales = leerManuales()): C {
+export function aplicarContornos<C extends Coleccion>(coleccion: C, destino: Destino, manuales = [...leerManuales(ARCHIVO_REVISADOS), ...leerManuales()]): C {
   for (const m of manuales.filter((m) => m.properties.destino === destino)) {
     const existentes = coleccion.features.filter((f) => f.properties.nombre === m.properties.nombre);
     for (const f of existentes) {

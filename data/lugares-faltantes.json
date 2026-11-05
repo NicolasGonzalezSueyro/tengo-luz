@@ -40,11 +40,6 @@
   "veces": 5
  },
  {
-  "nombre": "Terrazas de Villa Allende",
-  "localidad": "Villa Allende",
-  "veces": 5
- },
- {
   "nombre": "Los Prados 1",
   "localidad": "La Calera",
   "veces": 4
@@ -141,11 +136,6 @@
  },
  {
   "nombre": "Cantera Gran Ombú",
-  "localidad": "Villa Allende",
-  "veces": 4
- },
- {
-  "nombre": "Cumbres del Golf",
   "localidad": "Villa Allende",
   "veces": 4
  },
@@ -730,22 +720,12 @@
   "veces": 1
  },
  {
-  "nombre": "Las Americas",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Lasalle",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Los Docentes",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Matienzo",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -1130,11 +1110,6 @@
   "veces": 1
  },
  {
-  "nombre": "Villa Saldan",
-  "localidad": "Saldán",
-  "veces": 1
- },
- {
   "nombre": "La Colonia",
   "localidad": "Salsipuedes",
   "veces": 1
@@ -1236,11 +1211,6 @@
  },
  {
   "nombre": "Hoyo Cinco",
-  "localidad": "Villa Allende",
-  "veces": 1
- },
- {
-  "nombre": "Villa Cornú",
   "localidad": "Villa Allende",
   "veces": 1
  },

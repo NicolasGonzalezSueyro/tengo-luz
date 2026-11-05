@@ -24,6 +24,8 @@
     "barrios-capital": "node src/barrios-capital.ts",
     "editor": "node src/faltantes.ts && node src/editor.ts",
     "faltantes": "node src/faltantes.ts",
+    "comparar-wikimapia": "node --env-file=.env src/comparar-wikimapia.ts",
+    "revisar-contornos": "node src/revisar-contornos.ts",
     "sectores-fallas": "node src/sectores-fallas.ts",
     "claves-push": "node src/push.ts",
     "e2e": "playwright test"
