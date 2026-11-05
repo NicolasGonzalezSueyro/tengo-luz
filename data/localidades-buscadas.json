@@ -1300,5 +1300,19 @@
    ],
    "departamento": "Punilla"
   }
- ]
+ ],
+ "laborde": [
+  {
+   "nombre": "Laborde",
+   "osm": "N198454604",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -62.8574553,
+    -33.1547126
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "w escalante": []
 }

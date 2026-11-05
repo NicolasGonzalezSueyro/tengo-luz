@@ -13957,5 +13957,304 @@
     ],
     "zonas": [],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-05",
+    "desde": "00:00",
+    "hasta": "06:00",
+    "zona": "Shopping Wo y calles: Sabattini, Orgaz, General Paz, 9 de Julio, Alem y Miguel Juárez, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.50189,
+        -31.42186
+      ],
+      [
+        -64.50183,
+        -31.42204
+      ],
+      [
+        -64.50168,
+        -31.42217
+      ],
+      [
+        -64.50147,
+        -31.42222
+      ],
+      [
+        -64.50126,
+        -31.42217
+      ],
+      [
+        -64.4989,
+        -31.42129
+      ],
+      [
+        -64.49874,
+        -31.42116
+      ],
+      [
+        -64.49869,
+        -31.42098
+      ],
+      [
+        -64.49874,
+        -31.4208
+      ],
+      [
+        -64.4989,
+        -31.42067
+      ],
+      [
+        -64.50017,
+        -31.42029
+      ],
+      [
+        -64.50058,
+        -31.42019
+      ],
+      [
+        -64.5008,
+        -31.42014
+      ],
+      [
+        -64.50101,
+        -31.42019
+      ],
+      [
+        -64.50116,
+        -31.42032
+      ],
+      [
+        -64.50183,
+        -31.42168
+      ],
+      [
+        -64.50189,
+        -31.42186
+      ]
+    ]
+  },
+  {
+    "localidad": "La Calera",
+    "fecha": "2026-11-05",
+    "desde": "06:30",
+    "hasta": "07:00",
+    "zona": "barrios: Doctor Cocca, Industrial, Las Flores, La Estanzuela 2, Jardines de La Estanzuela, Los Prados 1 y 2, Terrazas de La Estanzuela y Los Paraísos, en forma total. Barrios: Stoecklin y Calera Central, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "La Calera"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "La Calera",
+    "fecha": "2026-11-05",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "barrios: Stoecklin, en forma total y Calera Central, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "La Calera"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.34425,
+        -31.35144
+      ],
+      [
+        -64.34383,
+        -31.35279
+      ],
+      [
+        -64.34268,
+        -31.35377
+      ],
+      [
+        -64.33321,
+        -31.3569
+      ],
+      [
+        -64.33164,
+        -31.35726
+      ],
+      [
+        -64.33006,
+        -31.3569
+      ],
+      [
+        -64.3289,
+        -31.35591
+      ],
+      [
+        -64.32848,
+        -31.35456
+      ],
+      [
+        -64.3289,
+        -31.35321
+      ],
+      [
+        -64.33006,
+        -31.35223
+      ],
+      [
+        -64.33952,
+        -31.34911
+      ],
+      [
+        -64.3411,
+        -31.34875
+      ],
+      [
+        -64.34268,
+        -31.34911
+      ],
+      [
+        -64.34383,
+        -31.35009
+      ],
+      [
+        -64.34425,
+        -31.35144
+      ]
+    ]
+  },
+  {
+    "localidad": "Laborde",
+    "fecha": "2026-11-05",
+    "desde": "07:00",
+    "hasta": "07:15",
+    "zona": "Localidades de Laborde, Pascanas y W. Escalante.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Laborde",
+      "Pascanas"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-05",
+    "desde": "08:00",
+    "hasta": "09:45",
+    "zona": "barrios Catedral, en perímetro comprendido por las calles: Avellaneda, 9 de julio, Sarmiento y Salta.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Los Cocos",
+    "fecha": "2026-11-05",
+    "desde": "08:00",
+    "hasta": "11:00",
+    "zona": "localidad de Los Cocos, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Los Cocos"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "La Calera",
+    "fecha": "2026-11-05",
+    "desde": "09:00",
+    "hasta": "09:30",
+    "zona": "barrios: Doctor Cocca, Industrial, Las Flores, La Estanzuela 2, Jardines de La Estanzuela, Los Prados 1 y 2, Terrazas de La Estanzuela y Los Paraísos, en forma total. Barrios: Stoecklin y Calera Central, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "La Calera"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "La Falda",
+    "fecha": "2026-11-05",
+    "desde": "12:00",
+    "hasta": "15:00",
+    "zona": "barrio El Gigante",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "La Falda"
+    ],
+    "sinUbicar": [],
+    "sector": [
+      [
+        -64.49897,
+        -31.08618
+      ],
+      [
+        -64.49855,
+        -31.08753
+      ],
+      [
+        -64.4974,
+        -31.08852
+      ],
+      [
+        -64.49583,
+        -31.08888
+      ],
+      [
+        -64.49425,
+        -31.08852
+      ],
+      [
+        -64.4931,
+        -31.08753
+      ],
+      [
+        -64.49268,
+        -31.08618
+      ],
+      [
+        -64.4931,
+        -31.08484
+      ],
+      [
+        -64.49425,
+        -31.08385
+      ],
+      [
+        -64.49583,
+        -31.08349
+      ],
+      [
+        -64.4974,
+        -31.08385
+      ],
+      [
+        -64.49855,
+        -31.08484
+      ],
+      [
+        -64.49897,
+        -31.08618
+      ]
+    ]
   }
 ]
