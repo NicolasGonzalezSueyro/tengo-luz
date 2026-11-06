@@ -16189,5 +16189,142 @@
     "sinUbicar": [
       "corte total en la localidad"
     ]
+  },
+  {
+    "localidad": "Alta Gracia",
+    "fecha": "2026-11-07",
+    "desde": "06:30",
+    "hasta": "08:00",
+    "zona": "barrios: Sur, Poluyan, Sierras Hotel, Liniers, La Cuyanita, Liniers de Horizonte, General Bustos, La Hornilla, Piedra del Sapo y Radio Sónico. en forma total y barrio Pellegrini, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Sur (Alta Gracia)",
+      "Poluyan (Alta Gracia)",
+      "Liniers (Alta Gracia)",
+      "General Bustos (Alta Gracia)",
+      "La Hornilla (Alta Gracia)",
+      "Piedra del Sapo (Alta Gracia)",
+      "Pellegrini (Alta Gracia)"
+    ],
+    "zonas": [
+      "Alta Gracia"
+    ],
+    "sinUbicar": [
+      "sierras hotel",
+      "la cuyanita",
+      "liniers horizonte",
+      "radio sonico"
+    ],
+    "parciales": [
+      "Alta Gracia"
+    ]
+  },
+  {
+    "localidad": "Pilar",
+    "fecha": "2026-11-07",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "Sector Sur, Sector Cementerio y barrio Atlántida.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Pilar"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Pilar"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-07",
+    "desde": "08:30",
+    "hasta": "11:30",
+    "zona": "barrios: Argüello Norte, El Rincón, Quintas de Argüello, Villa Quizquisacate y Los Nogales, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Argüello Norte",
+      "Quintas de Argüello",
+      "Los Nogales"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "el rincon",
+      "villa quizquisacate"
+    ]
+  },
+  {
+    "localidad": "Villa María",
+    "fecha": "2026-11-07",
+    "desde": "13:00",
+    "hasta": "17:00",
+    "zona": "barrio Centro, en sectores de: Instituto del Rosario y Edificio Jacaranda 19.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Centro (Villa María)"
+    ],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [
+      "en sectores instituto rosario",
+      "edificio jacaranda 19"
+    ],
+    "parciales": [
+      "Villa María"
+    ]
+  },
+  {
+    "localidad": "Ballesteros Sud",
+    "fecha": "2026-11-07",
+    "desde": "13:00",
+    "hasta": "13:10",
+    "zona": "corte total en la localidad",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros Sud"
+    ],
+    "sinUbicar": [
+      "corte total en la localidad"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-07",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "barrios: Villas Gran Parque, Villa Retiro y zona rural, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Villa Retiro"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "zona rural",
+      "villas gran parque"
+    ]
+  },
+  {
+    "localidad": "Ballesteros Sud",
+    "fecha": "2026-11-07",
+    "desde": "17:00",
+    "hasta": "17:10",
+    "zona": "corte total en la localidad",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros Sud"
+    ],
+    "sinUbicar": [
+      "corte total en la localidad"
+    ]
   }
 ]
