@@ -16326,5 +16326,525 @@
     "sinUbicar": [
       "corte total en la localidad"
     ]
+  },
+  {
+    "localidad": "Marcos Juarez",
+    "fecha": "2026-11-08",
+    "desde": "05:30",
+    "hasta": "08:30",
+    "zona": "barrios Centro, Noroeste, Noreste, Lavalle, Villa Argentina, Portal Oeste y Portal Este.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Marcos Juárez"
+    ],
+    "sinUbicar": [
+      "centro",
+      "noroeste",
+      "noreste",
+      "lavalle",
+      "villa argentina",
+      "portal oeste",
+      "portal este"
+    ],
+    "parciales": [
+      "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Villa María",
+    "fecha": "2026-11-08",
+    "desde": "06:30",
+    "hasta": "10:30",
+    "zona": "barrios La Arboleda, Valle Escondido, Área 158, Aeropuerto, Las Margaritas y Mariapolis.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "VALLE ESCONDIDO (Villa María)"
+    ],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [
+      "la arboleda",
+      "aeropuerto",
+      "las margaritas",
+      "mariapolis"
+    ],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.23564,
+        -32.37746
+      ],
+      [
+        -63.23521,
+        -32.37881
+      ],
+      [
+        -63.23404,
+        -32.37979
+      ],
+      [
+        -63.23245,
+        -32.38015
+      ],
+      [
+        -63.23085,
+        -32.37979
+      ],
+      [
+        -63.22968,
+        -32.37881
+      ],
+      [
+        -63.22335,
+        -32.36987
+      ],
+      [
+        -63.22292,
+        -32.36853
+      ],
+      [
+        -63.22335,
+        -32.36718
+      ],
+      [
+        -63.22451,
+        -32.36619
+      ],
+      [
+        -63.2301,
+        -32.36338
+      ],
+      [
+        -63.2317,
+        -32.36301
+      ],
+      [
+        -63.2333,
+        -32.36338
+      ],
+      [
+        -63.23446,
+        -32.36436
+      ],
+      [
+        -63.23489,
+        -32.36571
+      ],
+      [
+        -63.23564,
+        -32.37746
+      ]
+    ]
+  },
+  {
+    "localidad": "Bell Ville",
+    "fecha": "2026-11-08",
+    "desde": "06:30",
+    "hasta": "10:30",
+    "zona": "comprendido por las calles Córdoba, Pio Angulo, España y Belgrano y área comprendida por las calles Córdoba, Tucumán, Ascasubi y Ameghino.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Bell Ville"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Bell Ville"
+    ],
+    "sector": [
+      [
+        -62.69629,
+        -32.63012
+      ],
+      [
+        -62.69609,
+        -32.63137
+      ],
+      [
+        -62.69604,
+        -32.63155
+      ],
+      [
+        -62.69588,
+        -32.63168
+      ],
+      [
+        -62.69567,
+        -32.63173
+      ],
+      [
+        -62.68511,
+        -32.62977
+      ],
+      [
+        -62.6849,
+        -32.62972
+      ],
+      [
+        -62.68474,
+        -32.62959
+      ],
+      [
+        -62.68469,
+        -32.62941
+      ],
+      [
+        -62.6848,
+        -32.62811
+      ],
+      [
+        -62.68486,
+        -32.62793
+      ],
+      [
+        -62.68502,
+        -32.6278
+      ],
+      [
+        -62.68523,
+        -32.62775
+      ],
+      [
+        -62.6883,
+        -32.62795
+      ],
+      [
+        -62.68851,
+        -32.628
+      ],
+      [
+        -62.69608,
+        -32.62981
+      ],
+      [
+        -62.69623,
+        -32.62994
+      ],
+      [
+        -62.69629,
+        -32.63012
+      ]
+    ]
+  },
+  {
+    "localidad": "Río cuarto",
+    "fecha": "2026-11-08",
+    "desde": "07:00",
+    "hasta": "08:30",
+    "zona": "barrios Industrial, Carlos Mayer, Once de Noviembre, Fenix.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Barrio Industrial (Río Cuarto)",
+      "Once de Noviembre (Río Cuarto)",
+      "Barrio Fenix (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "carlos mayer"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Río cuarto",
+    "fecha": "2026-11-08",
+    "desde": "07:00",
+    "hasta": "08:30",
+    "zona": "barrios Valaco, Residencial Norte, Banda Norte y Jardín.-De 9 a 10 hs. Sector: barrios Alberdi Norte, Alberdi, Güemes y Peirano.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Valacco (Río Cuarto)",
+      "Residencial Norte (Río Cuarto)",
+      "Banda Norte (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ],
+    "sector": [
+      [
+        -64.34115,
+        -33.10728
+      ],
+      [
+        -64.34072,
+        -33.10863
+      ],
+      [
+        -64.32767,
+        -33.14321
+      ],
+      [
+        -64.32649,
+        -33.14419
+      ],
+      [
+        -64.32488,
+        -33.14456
+      ],
+      [
+        -64.32327,
+        -33.14419
+      ],
+      [
+        -64.3221,
+        -33.14321
+      ],
+      [
+        -64.32166,
+        -33.14186
+      ],
+      [
+        -64.32447,
+        -33.12975
+      ],
+      [
+        -64.3249,
+        -33.1284
+      ],
+      [
+        -64.33514,
+        -33.10593
+      ],
+      [
+        -64.33632,
+        -33.10494
+      ],
+      [
+        -64.33793,
+        -33.10458
+      ],
+      [
+        -64.33954,
+        -33.10494
+      ],
+      [
+        -64.34072,
+        -33.10593
+      ],
+      [
+        -64.34115,
+        -33.10728
+      ]
+    ]
+  },
+  {
+    "localidad": "Río cuarto",
+    "fecha": "2026-11-08",
+    "desde": "07:00",
+    "hasta": "13:00",
+    "zona": "cuadrante comprendido entre las calles Lavalle, Bv Ameghino, Saavedra y Bv Roca.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "cuadrante"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ],
+    "sector": [
+      [
+        -64.34379,
+        -33.13345
+      ],
+      [
+        -64.34371,
+        -33.13372
+      ],
+      [
+        -64.34347,
+        -33.13392
+      ],
+      [
+        -64.34315,
+        -33.13399
+      ],
+      [
+        -64.34283,
+        -33.13392
+      ],
+      [
+        -64.34259,
+        -33.13372
+      ],
+      [
+        -64.33924,
+        -33.13063
+      ],
+      [
+        -64.33915,
+        -33.13036
+      ],
+      [
+        -64.33924,
+        -33.13009
+      ],
+      [
+        -64.33947,
+        -33.1299
+      ],
+      [
+        -64.33979,
+        -33.12982
+      ],
+      [
+        -64.34012,
+        -33.1299
+      ],
+      [
+        -64.34035,
+        -33.13009
+      ],
+      [
+        -64.34371,
+        -33.13318
+      ],
+      [
+        -64.34379,
+        -33.13345
+      ]
+    ]
+  },
+  {
+    "localidad": "Bell Ville",
+    "fecha": "2026-11-08",
+    "desde": "07:00",
+    "hasta": "08:00",
+    "zona": "zona Centro, en área comprendida por las calles Córdoba, Tucumán, Ascasubi, Ameghino y 25 de mayo.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [],
+    "zonas": [
+      "Bell Ville"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Bell Ville"
+    ],
+    "sector": [
+      [
+        -62.68873,
+        -32.62831
+      ],
+      [
+        -62.6886,
+        -32.62961
+      ],
+      [
+        -62.68854,
+        -32.62979
+      ],
+      [
+        -62.68839,
+        -32.62993
+      ],
+      [
+        -62.68817,
+        -32.62997
+      ],
+      [
+        -62.68796,
+        -32.62993
+      ],
+      [
+        -62.68502,
+        -32.62842
+      ],
+      [
+        -62.68486,
+        -32.62829
+      ],
+      [
+        -62.6848,
+        -32.62811
+      ],
+      [
+        -62.68486,
+        -32.62793
+      ],
+      [
+        -62.68502,
+        -32.6278
+      ],
+      [
+        -62.68523,
+        -32.62775
+      ],
+      [
+        -62.6883,
+        -32.62795
+      ],
+      [
+        -62.68851,
+        -32.628
+      ],
+      [
+        -62.68867,
+        -32.62813
+      ],
+      [
+        -62.68873,
+        -32.62831
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-08",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "barrio José Ignacio Rucci y camino a La Carbonada.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "José Ignacio Rucci"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "camino a la carbonada"
+    ]
+  },
+  {
+    "localidad": "Río cuarto",
+    "fecha": "2026-11-08",
+    "desde": "09:00",
+    "hasta": "10:00",
+    "zona": "barrios Valaco, Los Paraísos, Las Delicias, Reforma Universitaria y Universidad.",
+    "afectacion": null,
+    "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Valacco (Río Cuarto)",
+      "Barrio Paraiso (Río Cuarto)",
+      "Las Delicias (Río Cuarto)",
+      "Barrio Universidad (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "reforma universitaria"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
   }
 ]
