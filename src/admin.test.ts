@@ -85,3 +85,14 @@ test('/api/calendario entrega el .ics solo de cortes que existen', async () => {
   assert.match(String(respuesta.headers.get('Content-Type')), /^text\/calendar/);
   assert.match(await respuesta.text(), /SUMMARY:⚡ Corte de luz en Alberdi/);
 });
+
+test('/api/admin: después de 10 claves mal puestas desde la misma conexión, frena 15 minutos', async () => {
+  const env = { DB: baseLocal(), ADMIN_CLAVE: 'secreta' };
+  const pedido = (clave: string, ip = '1.2.3.4') => new Request('http://x/api/admin', { headers: { Authorization: `Bearer ${clave}`, 'CF-Connecting-IP': ip } });
+  for (let i = 0; i < 10; i++) assert.equal((await admin.onRequestGet({ request: pedido(`mala${i}`), env })).status, 401);
+  // Ya frenado: ni siquiera con la clave buena (así no sirve seguir probando).
+  assert.equal((await admin.onRequestGet({ request: pedido('mala'), env })).status, 429);
+  assert.equal((await admin.onRequestGet({ request: pedido('secreta'), env })).status, 429);
+  // Otra conexión entra normal.
+  assert.equal((await admin.onRequestGet({ request: pedido('secreta', '5.6.7.8'), env })).status, 200);
+});

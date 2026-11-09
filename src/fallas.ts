@@ -2,6 +2,7 @@
 // No se leen solas: el admin se las pasa al bot de Telegram (el link de la publicación de X, o el texto
 // pegado), el bot reconoce los lugares y, con /confirmar, se muestran en el mapa unas horas.
 
+import { alias as aliasInterior } from '../data/lugares.js';
 import { esDescripcion, normalizar } from './barrios.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
@@ -53,7 +54,7 @@ export function lugaresEnTexto(lugares: string[], texto: string): string[] {
  * nombra ninguno; si no nombra ninguna localidad, son barrios de capital, también con la comparación tolerante
  * ("Arguello Lourdes", "Santa Isabel 2"). Así un "Centro" del interior nunca pinta el de capital.
  */
-export function reconocerLugares(lugares: string[], localidades: Set<string>, texto: string): string[] {
+export function reconocerLugares(lugares: string[], localidades: Set<string>, texto: string, alias: Record<string, string | null> = aliasInterior): string[] {
   const interior: BarrioConocido[] = [];
   const capital: BarrioConocido[] = [];
   for (const lugar of lugares) {
@@ -61,7 +62,7 @@ export function reconocerLugares(lugares: string[], localidades: Set<string>, te
     if (partes && localidades.has(partes[2])) interior.push({ nombre: lugar, base: partes[1], localidad: partes[2] });
     else if (!localidades.has(lugar)) capital.push({ nombre: lugar, base: lugar, localidad: CAPITAL });
   }
-  const buscar = crearBuscadorDeBarrios([...interior, ...capital]);
+  const buscar = crearBuscadorDeBarrios([...interior, ...capital], alias);
   const directos = lugaresEnTexto([...capital.map((c) => c.nombre), ...localidades], texto);
   const nombradas = directos.filter((l) => localidades.has(l));
   if (nombradas.length === 0) return [...new Set([...directos, ...buscar([CAPITAL], texto).barrios])];

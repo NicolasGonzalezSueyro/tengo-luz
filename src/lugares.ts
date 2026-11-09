@@ -29,8 +29,12 @@ export const leerTodo = (): Coleccion[] => [
 export function escribirLugares() {
   const lugares = listarLugares(...leerTodo());
   const localidades = listarLocalidades(leer('zonas.geojson'));
+  const aliasArchivo = new URL('../data/alias-interior.json', import.meta.url);
+  const alias = existsSync(aliasArchivo) ? JSON.parse(readFileSync(aliasArchivo, 'utf8')) : {};
   const codigo = `// Generado por \`npm run lugares\` a partir de los mapas: no editar a mano.\nexport default ${JSON.stringify(lugares, null, 1)};\n`
-    + `\n// Las que son localidades del interior (el resto son barrios y zonas de capital).\nexport const localidades = ${JSON.stringify(localidades, null, 1)};\n`;
+    + `\n// Las que son localidades del interior (el resto son barrios y zonas de capital).\nexport const localidades = ${JSON.stringify(localidades, null, 1)};\n`
+    + `\n// Cómo escribe EPEC algunos barrios del interior que en el mapa tienen otro nombre (data/alias-interior.json).\n`
+    + `/** @type {Record<string, string | null>} */\nexport const alias = ${JSON.stringify(alias, null, 1)};\n`;
   writeFileSync(new URL('../data/lugares.js', import.meta.url), codigo);
   console.log(`📝 data/lugares.js: ${lugares.length} lugares, ${localidades.length} localidades`);
 }

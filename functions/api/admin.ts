@@ -3,7 +3,7 @@ import { SITIO } from '../../src/bot.ts';
 import { olvidarNavegador } from '../../src/notificaciones.ts';
 import { enviarPush, type ClavePush } from '../../src/push.ts';
 import { barrioValido, type BaseDeDatos } from '../../src/reportes.ts';
-import { claveCorrecta } from '../../src/seguridad.ts';
+import { revisarClave } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
 
 // La API del panel de admin (web/admin.html). Pide la clave ADMIN_CLAVE, que se configura en Cloudflare.
@@ -20,7 +20,9 @@ type Contexto = {
 /** Revisa la clave antes de cualquier cosa. Devuelve la respuesta de error, o null si está todo bien. */
 async function rechazar({ request, env }: Contexto) {
   if (!env.ADMIN_CLAVE) return Response.json({ error: 'Falta configurar ADMIN_CLAVE en Cloudflare' }, { status: 503 });
-  if (!(await claveCorrecta(request, env.ADMIN_CLAVE))) return Response.json({ error: 'Clave incorrecta' }, { status: 401 });
+  const resultado = await revisarClave(request, env.ADMIN_CLAVE, env.DB, env.ADMIN_CLAVE);
+  if (resultado === 'bloqueado') return Response.json({ error: 'Demasiados intentos: probá de nuevo en 15 minutos' }, { status: 429 });
+  if (resultado === 'mala') return Response.json({ error: 'Clave incorrecta' }, { status: 401 });
   return null;
 }
 

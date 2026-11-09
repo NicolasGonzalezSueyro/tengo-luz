@@ -1,5 +1,6 @@
 import { marcarAvisado, yaAvisado } from '../../src/bot.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
+import { claveCorrecta } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
 import { momentoEnCordoba } from '../../web/estado.js';
 
@@ -14,7 +15,7 @@ type Contexto = {
 };
 
 export async function onRequestPost({ request, env }: Contexto) {
-  if (!env.SECRETO_BOT || request.headers.get('Authorization') !== `Bearer ${env.SECRETO_BOT}`) {
+  if (!env.SECRETO_BOT || !(await claveCorrecta(request, env.SECRETO_BOT))) {
     return new Response('No autorizado', { status: 401 });
   }
   // Quien llega acá ya probó tener el secreto, así que le contamos el motivo exacto de cualquier falla.

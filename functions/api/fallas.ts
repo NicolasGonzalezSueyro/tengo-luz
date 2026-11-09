@@ -5,7 +5,7 @@ import {
 } from '../../src/fallas.ts';
 import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
-import { claveCorrecta } from '../../src/seguridad.ts';
+import { revisarClave } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
 
 // /api/fallas: las fallas no programadas que confirma EPEC (src/fallas.ts).
@@ -40,7 +40,9 @@ export async function onRequestGet({ request, env }: Contexto) {
   }
   // /api/fallas?sin-sector (con FALLAS_CLAVE) → las fallas que describen calles y esperan que el robot arme su sector.
   if (new URL(request.url).searchParams.has('sin-sector')) {
-    if (!env.FALLAS_CLAVE || !(await claveCorrecta(request, env.FALLAS_CLAVE))) return Response.json({ error: 'Clave incorrecta' }, { status: 401 });
+    if (!env.FALLAS_CLAVE) return Response.json({ error: 'Clave incorrecta' }, { status: 401 });
+    const clave = await revisarClave(request, env.FALLAS_CLAVE, env.DB, env.FALLAS_CLAVE);
+    if (clave !== 'ok') return Response.json({ error: clave === 'bloqueado' ? 'Demasiados intentos' : 'Clave incorrecta' }, { status: clave === 'bloqueado' ? 429 : 401 });
     const pendientes = (await fallasSinSector(env.DB, Date.now())).map(({ id, texto, lugares }) => ({ id, texto, lugares }));
     return Response.json(pendientes, { headers: { 'Cache-Control': 'no-store' } });
   }
@@ -55,7 +57,8 @@ export async function onRequestGet({ request, env }: Contexto) {
 
 export async function onRequestPost({ request, env, waitUntil }: Contexto) {
   if (!env.FALLAS_CLAVE) return Response.json({ error: 'Falta configurar FALLAS_CLAVE en Cloudflare' }, { status: 503 });
-  if (!(await claveCorrecta(request, env.FALLAS_CLAVE))) return Response.json({ error: 'Clave incorrecta' }, { status: 401 });
+  const clave = await revisarClave(request, env.FALLAS_CLAVE, env.DB, env.FALLAS_CLAVE);
+  if (clave !== 'ok') return Response.json({ error: clave === 'bloqueado' ? 'Demasiados intentos' : 'Clave incorrecta' }, { status: clave === 'bloqueado' ? 429 : 401 });
   const cuerpo = await request.text();
   if (cuerpo.length > 60_000) return Response.json({ error: 'Pedido demasiado grande' }, { status: 413 });
   const datos = (() => {

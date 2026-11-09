@@ -299,3 +299,9 @@ test('webhook: al confirmar avisa por Telegram a quienes siguen esos lugares, un
   assert.deepEqual(fallas.map((f: { lugares: string[] }) => f.lugares), [['Centro']]);
   assert.equal('id' in fallas[0], false); // la API pública no muestra datos internos
 });
+
+test('reconocerLugares usa los alias del interior (como escribe EPEC un barrio que en el mapa se llama distinto)', () => {
+  const lugares = ['Dos Hermanos (San Francisco)', 'San Francisco'];
+  const alias = { '2 Hermanos (San Francisco)': 'Dos Hermanos (San Francisco)' };
+  assert.deepEqual(reconocerLugares(lugares, new Set(['San Francisco']), 'Falla en San Francisco, barrio 2 Hermanos.', alias), ['Dos Hermanos (San Francisco)']);
+});

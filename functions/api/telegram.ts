@@ -2,6 +2,7 @@ import lugares, { localidades } from '../../data/lugares.js';
 import { responder } from '../../src/bot.ts';
 import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
+import { igualesSeguro } from '../../src/seguridad.ts';
 
 // Telegram llama a esta dirección (/api/telegram) cada vez que alguien le escribe al bot ("webhook").
 // La respuesta va en la misma contestación, así que para responder no hace falta el token del bot.
@@ -17,7 +18,7 @@ type Contexto = {
 type Mensaje = { message?: { chat?: { id?: unknown }; text?: unknown } };
 
 export async function onRequestPost({ request, env, waitUntil }: Contexto) {
-  if (!env.SECRETO_BOT || request.headers.get('X-Telegram-Bot-Api-Secret-Token') !== env.SECRETO_BOT) {
+  if (!env.SECRETO_BOT || !(await igualesSeguro(request.headers.get('X-Telegram-Bot-Api-Secret-Token') ?? '', env.SECRETO_BOT))) {
     return new Response('No autorizado', { status: 401 });
   }
   const { message } = ((await request.json().catch(() => null)) ?? {}) as Mensaje;

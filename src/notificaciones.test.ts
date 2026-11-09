@@ -102,3 +102,18 @@ test('cuando 3 vecinos reportan un barrio, se avisa a quienes lo siguen una sola
   await reporte('4.4.4.4');
   assert.equal(pedidos.length, 2); // el cuarto no repite el aviso del día
 });
+
+test('/api/push: una conexión no puede crear más de 20 navegadores nuevos por hora', async () => {
+  const env = { DB: baseLocal(), CLAVE: 'secreta', PUSH_CLAVE: JSON.stringify(await generarClave()) };
+  const pedido = (cuerpo: object, ip = '1.2.3.4') => new Request('http://x/api/push', { method: 'POST', headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': ip }, body: JSON.stringify(cuerpo) });
+  const primero = await suscripcionDePrueba('https://fcm.googleapis.com/fcm/send/0');
+  for (let i = 0; i < 20; i++) {
+    const s = i === 0 ? primero : { ...primero, endpoint: `https://fcm.googleapis.com/fcm/send/${i}` };
+    assert.equal((await push.onRequestPost({ request: pedido({ accion: 'agregar', barrio: 'Alberdi', suscripcion: s }), env })).status, 200);
+  }
+  const otro = { ...primero, endpoint: 'https://fcm.googleapis.com/fcm/send/21' };
+  assert.equal((await push.onRequestPost({ request: pedido({ accion: 'agregar', barrio: 'Alberdi', suscripcion: otro }), env })).status, 429);
+  // Sumar un barrio a un navegador que ya está no cuenta, y otra conexión puede suscribirse.
+  assert.equal((await push.onRequestPost({ request: pedido({ accion: 'agregar', barrio: 'Centro', suscripcion: primero }), env })).status, 200);
+  assert.equal((await push.onRequestPost({ request: pedido({ accion: 'agregar', barrio: 'Alberdi', suscripcion: otro }, '5.6.7.8'), env })).status, 200);
+});

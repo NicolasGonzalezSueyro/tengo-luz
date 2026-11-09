@@ -1,6 +1,7 @@
 import { avisosPendientes } from '../../src/bot.ts';
 import { avisosPushPendientes, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
+import { claveCorrecta } from '../../src/seguridad.ts';
 import { momentoEnCordoba, type Corte } from '../../web/estado.js';
 
 // El robot de GitHub llama a /api/avisar cada hora con los cortes de hoy en adelante (src/avisar.ts).
@@ -10,7 +11,7 @@ import { momentoEnCordoba, type Corte } from '../../web/estado.js';
 type Contexto = { request: Request; env: { DB: BaseDeDatos; SECRETO_BOT?: string; TELEGRAM_TOKEN?: string; PUSH_CLAVE?: string } };
 
 export async function onRequestPost({ request, env }: Contexto) {
-  if (!env.SECRETO_BOT || request.headers.get('Authorization') !== `Bearer ${env.SECRETO_BOT}`) {
+  if (!env.SECRETO_BOT || !(await claveCorrecta(request, env.SECRETO_BOT))) {
     return new Response('No autorizado', { status: 401 });
   }
   if (!env.TELEGRAM_TOKEN) throw new Error('Falta configurar TELEGRAM_TOKEN en Cloudflare');

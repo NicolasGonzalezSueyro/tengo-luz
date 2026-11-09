@@ -2036,3 +2036,18 @@ export const localidades = [
  "Villa Valeria",
  "Villa Yacanto de Calamuchita"
 ];
+
+// Cómo escribe EPEC algunos barrios del interior que en el mapa tienen otro nombre (data/alias-interior.json).
+/** @type {Record<string, string | null>} */
+export const alias = {
+ "2 Hermanos (San Francisco)": "Dos Hermanos (San Francisco)",
+ "Ameghino (Villa María)": "Florentino Ameghino (Villa María)",
+ "Bialet Centro (Bialet Massé)": "Centro (Bialet Massé)",
+ "Carlos Mayer (Río Cuarto)": "Doctor Carlos A. Mayer (Río Cuarto)",
+ "Country Anglo Viejo (Alta Gracia)": "Anglo Viejo Country (Alta Gracia)",
+ "El Parador de Tanti (Tanti)": "El Parador (Tanti)",
+ "Mirador del Lago (Bialet Massé)": "Villa Mirador del Lago San Roque (Bialet Massé)",
+ "Pizarro (Río Cuarto)": "Ingeniero Manuel Pizarro (Río Cuarto)",
+ "Santa Rita (Villa Carlos Paz)": "Santa Rita del Lago (Villa Carlos Paz)",
+ "Secciones M (Salsipuedes)": "Seccion M (Salsipuedes)"
+};
