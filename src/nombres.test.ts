@@ -40,3 +40,15 @@ test('reconoce los barrios aunque EPEC los escriba distinto, siempre dentro de l
   // Lo que no está, se informa.
   assert.deepEqual(buscar(['La Calera'], 'Barrios IPV y Monoblock.').sinUbicar, ['IPV', 'Monoblock']);
 });
+
+test('un barrio que está en las dos localidades del anuncio se marca en las dos', () => {
+  assert.deepEqual(buscar(['La Calera', 'Villa María'], 'barrios Centro y Covico.').barrios, ['Centro (La Calera)', 'Centro (Villa María)', 'Covico (La Calera)']);
+});
+test('los alias del interior reconocen cómo escribe EPEC un barrio que en el mapa tiene otro nombre', () => {
+  const conAlias = crearBuscadorDeBarrios([barrio('Dos Hermanos', 'San Francisco')], {
+    '2 Hermanos (San Francisco)': 'Dos Hermanos (San Francisco)',
+    'Otro (Villa María)': 'Dos Hermanos (San Francisco)', // de otra localidad: no se usa
+  });
+  assert.deepEqual(conAlias(['San Francisco'], 'barrios 2 Hermanos.').barrios, ['Dos Hermanos (San Francisco)']);
+  assert.deepEqual(conAlias(['Villa María'], 'barrio Otro.').barrios, []);
+});

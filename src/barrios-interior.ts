@@ -537,7 +537,7 @@ if (import.meta.main) {
         if (conocidos.has(claveDeBarrio(pedido))) continue;
         const lugar = await buscarEnNominatim(pedido, localidad, cacheNominatim);
         if (lugar) {
-          const base = pedido.replace(/\b\w/g, (l) => l.toUpperCase());
+          const base = pedido.replace(/(^|\s)\p{L}/gu, (l) => l.toUpperCase()); // con \b\w, "Cóndor" quedaba "CóNdor"
           if (!tomarOficial(base, lugar)) semillas.push({ base, punto: lugar, fuente: 'nominatim' });
           conocidos.add(claveDeBarrio(pedido));
           encontrados++;

@@ -275,11 +275,6 @@
   "veces": 2
  },
  {
-  "nombre": "Country Anglo Viejo",
-  "localidad": "Alta Gracia",
-  "veces": 2
- },
- {
   "nombre": "Dalvit",
   "localidad": "Alta Gracia",
   "veces": 2
@@ -311,16 +306,6 @@
  },
  {
   "nombre": "La Gruta",
-  "localidad": "Alta Gracia",
-  "veces": 2
- },
- {
-  "nombre": "La Isla",
-  "localidad": "Alta Gracia",
-  "veces": 2
- },
- {
-  "nombre": "La Paisanita",
   "localidad": "Alta Gracia",
   "veces": 2
  },
@@ -436,11 +421,6 @@
  },
  {
   "nombre": "San Martín",
-  "localidad": "Villa Carlos Paz",
-  "veces": 2
- },
- {
-  "nombre": "Santa Rita",
   "localidad": "Villa Carlos Paz",
   "veces": 2
  },
@@ -575,16 +555,6 @@
   "veces": 1
  },
  {
-  "nombre": "Bialet Centro",
-  "localidad": "Bialet Massé",
-  "veces": 1
- },
- {
-  "nombre": "Mirador del Lago",
-  "localidad": "Bialet Massé",
-  "veces": 1
- },
- {
   "nombre": "Barrancas La Rivera",
   "localidad": "Córdoba",
   "veces": 1
@@ -620,17 +590,7 @@
   "veces": 1
  },
  {
-  "nombre": "Favaloro Sur",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Jardin Boulevard",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Lasalle",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -651,21 +611,6 @@
  },
  {
   "nombre": "V Achaval",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Villa El Terraplen",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Villa Quizquisacate",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Villas Gran Parque",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -890,11 +835,6 @@
   "veces": 1
  },
  {
-  "nombre": "Comuna San Clemente",
-  "localidad": "Pampa Alta",
-  "veces": 1
- },
- {
   "nombre": "Dela Mea",
   "localidad": "Pampa Alta",
   "veces": 1
@@ -925,22 +865,12 @@
   "veces": 1
  },
  {
-  "nombre": "Paso de la Pampa",
-  "localidad": "Pampa Alta",
-  "veces": 1
- },
- {
   "nombre": "Río San José",
   "localidad": "Pampa Alta",
   "veces": 1
  },
  {
   "nombre": "San Clemente",
-  "localidad": "Pampa Alta",
-  "veces": 1
- },
- {
-  "nombre": "Villa del Cóndor",
   "localidad": "Pampa Alta",
   "veces": 1
  },
@@ -975,22 +905,12 @@
   "veces": 1
  },
  {
-  "nombre": "Carlos Mayer",
-  "localidad": "Río Cuarto",
-  "veces": 1
- },
- {
   "nombre": "Cuadrante",
   "localidad": "Río Cuarto",
   "veces": 1
  },
  {
   "nombre": "Médico",
-  "localidad": "Río Cuarto",
-  "veces": 1
- },
- {
-  "nombre": "Pizarro",
   "localidad": "Río Cuarto",
   "veces": 1
  },
@@ -1025,16 +945,6 @@
   "veces": 1
  },
  {
-  "nombre": "secciones M",
-  "localidad": "Salsipuedes",
-  "veces": 1
- },
- {
-  "nombre": "2 Hermanos",
-  "localidad": "San Francisco",
-  "veces": 1
- },
- {
   "nombre": "Chalet",
   "localidad": "San Francisco",
   "veces": 1
@@ -1052,11 +962,6 @@
  {
   "nombre": "Parque Maipú",
   "localidad": "San Francisco",
-  "veces": 1
- },
- {
-  "nombre": "El Parador de Tanti",
-  "localidad": "Tanti",
   "veces": 1
  },
  {
@@ -1166,11 +1071,6 @@
  },
  {
   "nombre": "Aeropuerto",
-  "localidad": "Villa María",
-  "veces": 1
- },
- {
-  "nombre": "Ameghino",
   "localidad": "Villa María",
   "veces": 1
  },

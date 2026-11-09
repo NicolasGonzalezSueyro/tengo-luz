@@ -94,7 +94,8 @@ const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
 // Los barrios de las localidades del interior (npm run barrios-interior): con contorno de OSM o aproximado.
 const interior = await leerJson<{ features: { properties: BarrioConocido & { tipo: string } }[] }>('data/barrios-interior.geojson')
   .catch(() => ({ features: [] }));
-const buscarEnLocalidad = crearBuscadorDeBarrios(interior.features.map((f) => f.properties));
+const aliasInterior = await leerJson<Record<string, string | null>>('data/alias-interior.json').catch(() => ({}));
+const buscarEnLocalidad = crearBuscadorDeBarrios(interior.features.map((f) => f.properties), aliasInterior);
 // "Corte total en la localidad", "todos los barrios": se pinta el casco urbano entero.
 const TODA_LA_LOCALIDAD = /\b(corte total|toda la localidad|todas? las localidades|todos los barrios|ambas localidades|en forma total en la localidad)\b/i;
 

@@ -21,7 +21,7 @@ const interior = await leer<{ features: { properties: BarrioConocido }[] }>('dat
 
 const sinRed = { buscar: async () => [] as Candidato[], geometria: async () => ({ type: 'Polygon', coordinates: [] }) };
 const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, { ...buscadas }, sinRed);
-const buscarEnInterior = crearBuscadorDeBarrios(interior.features.map((f) => f.properties));
+const buscarEnInterior = crearBuscadorDeBarrios(interior.features.map((f) => f.properties), await leer<Record<string, string | null>>('data/alias-interior.json', {}));
 const nombresCapital = mapa.features.flatMap((f) => f.properties.nombre ?? []);
 const ubicarEnCapital = crearUbicador(nombresCapital, alias);
 const buscarEnCapital = crearBuscadorDeBarrios([

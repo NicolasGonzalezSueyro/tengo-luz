@@ -1,7 +1,9 @@
 {
   "Barrio Cárcano": "Ramón J. Cárcano",
   "Cárcano": "Ramón J. Cárcano",
+  "Favaloro Sur": "René Favaloro Sud",
   "La Favela": "Villa de Emergencia  \"La Favela\"",
+  "Lasalle": "La Salle",
   "Los Manantiales": "Manantiales",
   "Loteo Santa Mónica": null,
   "Mutual Docente": "Mutual de los Docentes",
@@ -9,5 +11,8 @@
   "Parque Horizonte": "Horizonte",
   "Primero de Julio": "1 de Julio",
   "Pueyrredón": "General Pueyrredon",
-  "Villa Urquiza": "Villa General Urquiza"
+  "Villa El Terraplen": "Villa de Emergencia El Terraplen",
+  "Villa Quizquisacate": "Villa Quisquisacate",
+  "Villa Urquiza": "Villa General Urquiza",
+  "Villas Gran Parque": "Villa Gran Parque"
 }

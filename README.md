@@ -119,6 +119,8 @@ El mapa de barrios ([`data/barrios.geojson`](data/barrios.geojson)) se arma con 
 **Lugares que faltan.** `npm run faltantes` (lo corre solo el editor) lista en `data/lugares-faltantes.json` los barrios y parajes que nombra EPEC y ninguna fuente tiene (ni OSM, ni la Provincia, ni Nominatim, ni [GeoNames](https://www.geonames.org)), ordenados por cuántas veces aparecen. El editor los muestra: se toca uno, va a su localidad con el nombre ya cargado, y se dibuja.
 
 **Alias.** [`data/alias-barrios.json`](data/alias-barrios.json) dice "cuando la nota dice X, en el mapa es Y". Solo se agregan con evidencia: ubicando el lugar en un mapa y comprobando que cae dentro del polígono. Un alias en `null` marca un nombre que no se debe ubicar solo (por ejemplo, "Loteo Santa Mónica", que EPEC lista con capital pero está en Calamuchita).
+
+**Alias del interior.** [`data/alias-interior.json`](data/alias-interior.json) hace lo mismo para los barrios del interior, con la localidad entre paréntesis: `"2 Hermanos (San Francisco)": "Dos Hermanos (San Francisco)"`.
 </details>
 
 <details>

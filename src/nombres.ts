@@ -58,16 +58,32 @@ export type BarrioConocido = { nombre: string; base: string; localidad: string }
  * Prepara el buscador con los barrios del interior. Devuelve una función que, dadas las localidades de un tramo y su
  * texto, dice qué barrios del mapa nombra y qué nombres no se encontraron.
  */
-export function crearBuscadorDeBarrios(barrios: BarrioConocido[]) {
+export function crearBuscadorDeBarrios(conocidos: BarrioConocido[], alias: Record<string, string | null> = {}) {
+  // Alias del interior (data/alias-interior.json): "2 Hermanos (San Francisco)" → "Dos Hermanos (San Francisco)".
+  const porNombre = new Map(conocidos.map((b) => [b.nombre, b]));
+  const barrios = [...conocidos];
+  for (const [dicho, enMapa] of Object.entries(alias)) {
+    const destino = enMapa ? porNombre.get(enMapa) : undefined;
+    const partes = dicho.match(/^(.+) \((.+)\)$/);
+    if (destino && partes?.[2] === destino.localidad) barrios.push({ ...destino, base: partes[1] });
+  }
   const porLocalidad = new Map<string, (BarrioConocido & { clave: string; simple: string })[]>();
   for (const b of barrios) {
     const lista = porLocalidad.get(b.localidad) ?? porLocalidad.set(b.localidad, []).get(b.localidad)!;
     lista.push({ ...b, clave: claveDeBarrio(b.base), simple: claveSimple(b.base) });
   }
 
-  /** El barrio que corresponde a un nombre, o null. Primero exacto, después cada vez más tolerante, siempre único. */
-  function buscarUno(candidatos: (BarrioConocido & { clave: string; simple: string })[], nombre: string): string | null {
-    const unico = (lista: typeof candidatos) => (new Set(lista.map((c) => c.nombre)).size === 1 ? lista[0].nombre : null);
+  /**
+   * Los barrios que corresponden a un nombre, o null. Primero exacto, después cada vez más tolerante, siempre único
+   * en cada localidad. Si el anuncio nombra dos localidades y las dos tienen ese barrio ("La Isla" en Alta Gracia y
+   * en Los Aromos), van los dos: el corte abarca a ambas.
+   */
+  function buscarUno(candidatos: (BarrioConocido & { clave: string; simple: string })[], nombre: string): string[] | null {
+    const unico = (lista: typeof candidatos) => {
+      const porLocalidad = new Map<string, Set<string>>();
+      for (const c of lista) (porLocalidad.get(c.localidad) ?? porLocalidad.set(c.localidad, new Set()).get(c.localidad)!).add(c.nombre);
+      return [...porLocalidad.values()].every((s) => s.size === 1) ? [...porLocalidad.values()].map((s) => [...s][0]) : null;
+    };
     const clave = claveDeBarrio(nombre);
     const simple = claveSimple(nombre);
     if (!simple) return null;
@@ -93,8 +109,8 @@ export function crearBuscadorDeBarrios(barrios: BarrioConocido[]) {
     const encontrados = new Set<string>();
     const sinUbicar: string[] = [];
     for (const nombre of nombresDelTramo(texto)) {
-      const barrio = buscarUno(candidatos, nombre);
-      if (barrio) encontrados.add(barrio);
+      const barrios = buscarUno(candidatos, nombre);
+      if (barrios) barrios.forEach((b) => encontrados.add(b));
       else sinUbicar.push(nombre);
     }
     return { barrios: [...encontrados], sinUbicar };
