@@ -1,7 +1,7 @@
 import lugares, { localidades } from '../../data/lugares.js';
 import { resumenPublicadas, revisarFallas, textoRestablecida } from '../../src/bot.ts';
 import {
-  fallasActivas, fallasPendientes, fallasSinSector, guardarSector, historialDeFallas, publicacionValida, recibirPublicaciones, type Publicacion,
+  fallasActivas, fallasPendientes, fallasSinSector, guardarSector, historialDeFallas, nombraCalles, publicacionValida, recibirPublicaciones, type Publicacion,
 } from '../../src/fallas.ts';
 import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
@@ -50,7 +50,9 @@ export async function onRequestGet({ request, env }: Contexto) {
   const guardada = await cache?.match(clave);
   if (guardada) return new Response(guardada.body, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
   const fallas = (await fallasActivas(env.DB, Date.now()))
-    .map(({ lugares, texto, fuente, creado, hasta, sector }) => ({ lugares, texto, fuente, creado, hasta, ...(sector ? { sector } : {}) }));
+    // El sector va solo si la falla nombra calles: las que solo nombran barrios se pintan por barrio (algunas
+    // viejas tienen un sector armado por error, por el "se trabaja en el sector" del final).
+    .map(({ lugares, texto, fuente, creado, hasta, sector }) => ({ lugares, texto, fuente, creado, hasta, ...(sector && nombraCalles(texto) ? { sector } : {}) }));
   await cache?.put(clave, Response.json(fallas, { headers: { 'Cache-Control': `max-age=${SEGUNDOS_EN_CACHE}` } }));
   return Response.json(fallas, { headers: { 'Cache-Control': 'no-store' } });
 }

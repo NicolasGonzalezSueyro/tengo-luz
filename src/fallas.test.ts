@@ -234,6 +234,8 @@ test('sectores de fallas: el robot ve las que describen calles, y solo con la cl
     .bind('["Centro"]', texto, `u${texto.length}`, ahora, ahora + 3_600_000).run();
   await insertar('Sin suministro en barrio Centro, sector comprendido por calles Mitre y Belgrano.');
   await insertar('Sin suministro en barrio Centro.'); // sin calles: no hace falta sector
+  // Solo barrios, con el "se trabaja en el sector" de siempre: se pintan los barrios, no un sector.
+  await insertar('Barrios Alto Alberdi, Villa Paez y Marechal ➡️ restricción del servicio. Se trabaja en el sector.');
   const pedir = (url: string, clave?: string, cuerpo?: object) => new Request(url, {
     method: cuerpo ? 'POST' : 'GET', headers: clave ? { Authorization: `Bearer ${clave}` } : {}, body: cuerpo ? JSON.stringify(cuerpo) : undefined,
   });

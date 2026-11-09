@@ -111,8 +111,17 @@ const comoFalla = (r: Record<string, unknown>): Falla => ({
 
 /** Las fallas publicadas que describen calles y todavía no tienen su sector: las que tiene que armar el robot. */
 export async function fallasSinSector(db: BaseDeDatos, ahora: number): Promise<Falla[]> {
-  return (await fallasActivas(db, ahora)).filter((f) => !f.sector && esDescripcion(normalizar(f.texto)));
+  return (await fallasActivas(db, ahora)).filter((f) => !f.sector && nombraCalles(f.texto));
 }
+
+// Calles, rutas o un punto ("sector comprendido por calles…", "sobre ruta 5 a la altura del km 12"). No alcanza con
+// la palabra "sector": casi todas las fallas terminan con "se trabaja en el sector", aunque solo nombren barrios.
+const CALLES = /\b(calles?|comprendid[oa]s?|esquina|interseccion|avenida|av|bv|bulevar|boulevard|ruta|km|pasaje|altura)\b/;
+/**
+ * Si la falla describe calles o un lugar puntual: ahí se pinta el sector (el área de esas calles). Si solo nombra
+ * barrios, se pintan los barrios enteros.
+ */
+export const nombraCalles = (texto: string) => CALLES.test(normalizar(texto));
 
 /**
  * Guarda el sector de una falla (lo manda el robot). Se valida lo que llega: entre 3 y 2000 puntos, todos dentro de

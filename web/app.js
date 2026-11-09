@@ -209,20 +209,20 @@ function estilo(nombre) {
     const conCorte = estado && !estado.terminado;
     const borde = conCorte ? (estado.enCurso ? p.enCurso : p.luz) : '#ffffff';
     // Si la falla tiene su sector exacto (lo arma el robot), el barrio queda suave y se pinta fuerte solo el sector.
-    return { color: elegido ? p.elegido : borde, weight: elegido ? 3.5 : conCorte ? 3.5 : 2, fillColor: p.falla, fillOpacity: falla.sector ? 0.15 : 0.65 };
+    return { color: elegido ? p.elegido : borde, weight: elegido ? 3.5 : conCorte ? 3.5 : 2, fillColor: p.falla, fillOpacity: falla.sector ? 0.15 : 0.45 };
   }
   if (!estado) {
     return { color: elegido ? p.elegido : p.borde, weight: elegido ? 3.5 : 0.7, fillColor: p.relleno, fillOpacity: elegido ? 0.25 : p.rellenoOp };
   }
   // Verde: todos los cortes de hoy en este barrio ya terminaron.
   if (estado.terminado) {
-    return { color: elegido ? p.elegido : p.bordeTerminado, weight: elegido ? 3.5 : 1.3, fillColor: p.terminado, fillOpacity: 0.5 };
+    return { color: elegido ? p.elegido : p.bordeTerminado, weight: elegido ? 3.5 : 1.3, fillColor: p.terminado, fillOpacity: 0.35 };
   }
   return {
     color: elegido ? p.elegido : estado.enCurso ? p.bordeEnCurso : estado.total ? p.bordeTotal : p.bordeLuz,
     weight: elegido ? 3.5 : estado.total ? 2.5 : 1.3,
     fillColor: estado.enCurso ? p.enCurso : p.luz,
-    fillOpacity: 0.6,
+    fillOpacity: 0.4, // transparente: que se vean las calles y los nombres de abajo
   };
 }
 
@@ -381,7 +381,7 @@ function pintarMapa() {
     if (!corte.sector) continue;
     const [lugar] = lugaresDelCorte(corte);
     const capa = L.polygon(corte.sector.map(([lon, lat]) => /** @type {L.LatLngTuple} */ ([lat, lon])), {
-      ...estilo(lugar), color: lugar === barrioElegido ? p.elegido : p.zona, weight: 2.5, dashArray: '4 4', fillOpacity: 0.6,
+      ...estilo(lugar), color: lugar === barrioElegido ? p.elegido : p.zona, weight: 2.5, dashArray: '4 4', fillOpacity: 0.45,
     })
       .bindTooltip(comoTexto(`${lugar}: sector del corte, ${horario(corte)} (aproximado)`), { sticky: true })
       .on('click', () => elegirBarrio(lugar))
@@ -394,7 +394,7 @@ function pintarMapa() {
     if (!falla.sector) continue;
     const [lugar] = falla.lugares;
     const capa = L.polygon(falla.sector.map(([lon, lat]) => /** @type {L.LatLngTuple} */ ([lat, lon])), {
-      color: '#ffffff', weight: 2, fillColor: p.falla, fillOpacity: 0.75,
+      color: '#ffffff', weight: 2, fillColor: p.falla, fillOpacity: 0.5,
     })
       .bindTooltip(comoTexto(`${falla.lugares.join(', ')}: sector sin luz (falla confirmada por EPEC)`), { sticky: true })
       .on('click', () => elegirBarrio(lugar))
@@ -952,9 +952,19 @@ function elegirBarrio(nombre) {
   if (capas.length > 0) {
     // En el celu el panel abierto tapa la parte de abajo del mapa: dejamos ese espacio libre al hacer zoom.
     const tapado = ES_CELULAR.matches ? panel.getBoundingClientRect().height : 0;
-    mapa.flyToBounds(L.featureGroup(capas).getBounds(), {
-      maxZoom: 15, paddingTopLeft: [30, 30], paddingBottomRight: [30, 30 + tapado], duration: 0.8,
-    });
+    const limites = L.featureGroup(capas).getBounds();
+    const opciones = { maxZoom: 15, paddingTopLeft: L.point(30, 30), paddingBottomRight: L.point(30, 30 + tapado) };
+    const destino = Math.min(15, mapa.getBoundsZoom(limites, false, L.point(60, 60 + tapado)));
+    const arriba = mapa.latLngToContainerPoint(limites.getNorthWest());
+    const abajo = mapa.latLngToContainerPoint(limites.getSouthEast());
+    const tamano = mapa.getSize();
+    const seVeEntero = arriba.x >= 0 && arriba.y >= 0 && abajo.x <= tamano.x && abajo.y <= tamano.y - tapado;
+    // Si ya se ve entero y con buen zoom (se tocó en el mapa), no se mueve. Cerca: se desliza sin alejarse.
+    // Lejos: "vuela". Volar entre dos barrios vecinos alejaba y acercaba el mapa, y parecía que vibraba.
+    if (!(seVeEntero && mapa.getZoom() >= destino - 1)) {
+      if (Math.abs(destino - mapa.getZoom()) <= 2) mapa.fitBounds(limites, { ...opciones, animate: true, duration: 0.5 });
+      else mapa.flyToBounds(limites, { ...opciones, duration: 0.8 });
+    }
   }
   mostrarBarrio(nombre);
 }
@@ -1256,6 +1266,24 @@ async function cargarInterior() {
         },
       },
     );
+    // Las localidades y los barrios del interior también se pueden tocar aunque ese día no tengan cortes (La Calera,
+    // Carlos Paz…): contorno fino, sin relleno. Van en un "lienzo" (canvas): son unos mil y en el celu no lo traban.
+    // En su propio "pane", debajo de los barrios pintados (SVG): si no, el lienzo los tapa y no se pueden tocar.
+    mapa.createPane('tocables').style.zIndex = '390';
+    const lienzo = L.canvas({ padding: 0.5, pane: 'tocables' });
+    const tocable = (/** @type {any} */ f, /** @type {L.Layer} */ capa) => {
+      capa.bindTooltip(comoTexto(f.properties.nombre), { sticky: true });
+      capa.on('click', () => elegirBarrio(f.properties.nombre));
+    };
+    capaLocalidades = L.geoJSON(
+      /** @type {GeoJSON.FeatureCollection} */ ({ type: 'FeatureCollection', features: [...zonasPorNombre.values()].filter((z) => z.properties.tipo === 'localidad' && z.properties.contorno) }),
+      // GeoJSON le pasa sus opciones a cada polígono, así que "renderer" funciona aunque sus tipos no lo nombren.
+      /** @type {L.GeoJSONOptions & L.PathOptions} */ ({ renderer: lienzo, style: () => ({ color: p.borde, weight: 1, opacity: 0.8, fillOpacity: 0 }), onEachFeature: tocable }),
+    );
+    capaBarriosInterior = L.geoJSON(
+      /** @type {GeoJSON.FeatureCollection} */ ({ type: 'FeatureCollection', features: interior.features.filter((/** @type {any} */ f) => f.properties.localidad !== 'Córdoba') }),
+      /** @type {L.GeoJSONOptions & L.PathOptions} */ ({ renderer: lienzo, style: (/** @type {any} */ f) => ({ color: p.borde, weight: 1, opacity: 1, fillOpacity: 0, ...(f?.properties.tipo === 'aproximado' ? { dashArray: '3 3' } : {}) }), onEachFeature: tocable }),
+    );
     mostrarDivisiones();
     actualizar();
   } catch {
@@ -1264,14 +1292,27 @@ async function cargarInterior() {
 }
 /** @type {L.GeoJSON | null} */
 let capaDivisiones = null;
-/** Las divisiones de capital, solo de cerca (zoom 14 o más): de lejos serían una maraña de líneas. */
+/** @type {L.GeoJSON | null} */
+let capaLocalidades = null;
+/** @type {L.GeoJSON | null} */
+let capaBarriosInterior = null;
+/** Pone o saca una capa según el zoom. @param {L.GeoJSON | null} capa @param {boolean} va */
+function segunZoom(capa, va) {
+  if (!capa) return;
+  if (va && !mapa.hasLayer(capa)) capa.addTo(mapa);
+  else if (!va && mapa.hasLayer(capa)) capa.remove();
+}
+/**
+ * Las divisiones de capital y los barrios del interior, solo de cerca (de lejos serían una maraña de líneas); las
+ * localidades, desde que se ve la provincia de cerca. Quedan debajo de los barrios pintados.
+ */
 function mostrarDivisiones() {
-  if (!capaDivisiones) return;
-  if (mapa.getZoom() >= 14) {
-    if (!mapa.hasLayer(capaDivisiones)) capaDivisiones.addTo(mapa);
-    capaDivisiones.bringToBack();
-    capaPoligonos.bringToBack();
-  } else capaDivisiones.remove();
+  const zoom = mapa.getZoom();
+  segunZoom(capaLocalidades, zoom >= 10);
+  segunZoom(capaBarriosInterior, zoom >= 13);
+  segunZoom(capaDivisiones, zoom >= 14);
+  capaDivisiones?.bringToBack();
+  capaPoligonos.bringToBack();
 }
 mapa.on('zoomend', mostrarDivisiones);
 const interiorListo = cargarInterior();

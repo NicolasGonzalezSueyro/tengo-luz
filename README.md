@@ -4,7 +4,7 @@
 
 [![Tests](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/tests.yml)
 [![Actualizar cortes](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml/badge.svg)](https://github.com/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml)
-![Licencia MIT](https://img.shields.io/badge/licencia-MIT-blue)
+![Licencia: todos los derechos reservados](https://img.shields.io/badge/licencia-todos%20los%20derechos%20reservados-lightgrey)
 ![Costo: $0](https://img.shields.io/badge/costo-%240-brightgreen)
 
 ### 🌐 [tengo-luz.pages.dev](https://tengo-luz.pages.dev)
