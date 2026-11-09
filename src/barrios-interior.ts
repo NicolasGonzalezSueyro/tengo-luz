@@ -15,7 +15,7 @@
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as turf from '@turf/turf';
-import type { Feature, MultiPolygon, Polygon, Position } from 'geojson';
+import type { Feature, MultiPoint, MultiPolygon, Point, Polygon, Position } from 'geojson';
 import { normalizar } from './barrios.ts';
 import { redondear } from './descargar-zonas.ts';
 import { crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
@@ -252,6 +252,63 @@ async function bajarBarriosOficiales(localidad: Localidad): Promise<{ base: stri
   return [...vistos.values()];
 }
 
+let radios: Promise<Map<string, Area[]>> | null = null;
+/** Los radios urbanos oficiales de la Provincia (Mapas Córdoba), por nombre de localidad. Se bajan una vez. */
+export function radiosUrbanos(): Promise<Map<string, Area[]>> {
+  return radios ??= (async () => {
+    const archivo = `${CACHE}/idecor-radios_urbanos.json`;
+    let datos = JSON.parse(await readFile(archivo, 'utf8').catch(() => 'null')) as { features: Feature<Polygon | MultiPolygon, { nombre?: string }>[] } | null;
+    if (!datos) {
+      const url = new URL(IDECOR);
+      url.search = new URLSearchParams({
+        service: 'WFS', version: '2.0.0', request: 'GetFeature', typeNames: 'idecor:radios_urbanos', outputFormat: 'application/json', srsName: 'EPSG:4326',
+      }).toString();
+      const res = await fetch(url, { headers: IDENTIFICACION, signal: AbortSignal.timeout(180_000) });
+      if (!res.ok) throw new Error(`Mapas Córdoba respondió ${res.status} para radios_urbanos`);
+      datos = await res.json();
+      await writeFile(archivo, JSON.stringify(datos));
+    }
+    const porNombre = new Map<string, Area[]>();
+    for (const f of datos!.features) {
+      if (!f.geometry || !f.properties.nombre) continue;
+      const clave = normalizar(f.properties.nombre);
+      (porNombre.get(clave) ?? porNombre.set(clave, []).get(clave)!).push({ type: 'Feature', properties: {}, geometry: f.geometry });
+    }
+    return porNombre;
+  })();
+}
+
+let parajes: Promise<{ clave: string; punto: Position }[]> | null = null;
+/** Los parajes, comunas y localidades que la Provincia tiene como punto (Mapas Córdoba). Se bajan una vez. */
+function parajesDeLaProvincia(): Promise<{ clave: string; punto: Position }[]> {
+  return parajes ??= (async () => {
+    const archivo = `${CACHE}/idecor-localidad_punto.json`;
+    let datos = JSON.parse(await readFile(archivo, 'utf8').catch(() => 'null')) as { features: Feature<Point | MultiPoint, { localidad?: string }>[] } | null;
+    if (!datos) {
+      const url = new URL(IDECOR);
+      url.search = new URLSearchParams({
+        service: 'WFS', version: '2.0.0', request: 'GetFeature', typeNames: 'idecor:localidad_punto', outputFormat: 'application/json', srsName: 'EPSG:4326',
+      }).toString();
+      const res = await fetch(url, { headers: IDENTIFICACION, signal: AbortSignal.timeout(120_000) }).catch(() => null);
+      if (!res?.ok) return []; // sin estos puntos se sigue buscando en Nominatim
+      datos = await res.json();
+      await writeFile(archivo, JSON.stringify(datos));
+    }
+    return datos!.features.filter((f) => f.geometry && f.properties.localidad)
+      .map((f) => ({ clave: claveDeBarrio(f.properties.localidad!), punto: turf.centroid(f).geometry.coordinates }));
+  })();
+}
+
+/**
+ * El casco recortado al radio urbano oficial de su localidad: las calles y casas sueltas de las sierras no lo
+ * estiran hasta el pueblo de al lado. Si no hay radio (parajes, comunas sin plano) o no se tocan, queda como estaba.
+ */
+export function alRadio(casco: Area | null, radiosDeLaLocalidad: Area[]): Area | null {
+  if (!casco || radiosDeLaLocalidad.length === 0) return casco;
+  const partes = radiosDeLaLocalidad.map((r) => interseccion(casco, r)).filter((a): a is Area => Boolean(a));
+  return unir(partes) ?? casco;
+}
+
 // ---------------------------------------------------------------------------------------------
 // Casco urbano
 // ---------------------------------------------------------------------------------------------
@@ -333,7 +390,7 @@ async function turnoNominatim() {
 /** Busca un barrio por nombre dentro de la caja de la localidad (Nominatim, con caché). */
 async function buscarEnNominatim(nombre: string, localidad: Localidad, cache: Record<string, Position | null>): Promise<Position | null> {
   const clave = `${localidad.properties.nombre}|${claveDeBarrio(nombre)}`;
-  if (clave in cache) return cache[clave];
+  if (clave in cache) return cache[clave] ?? buscarParaje(nombre, localidad, cache);
   const [oeste, sur, este, norte] = turf.bbox(turf.buffer(comoArea(localidad), 2, { units: 'kilometers' })!);
   const url = new URL(NOMINATIM);
   url.search = new URLSearchParams({
@@ -357,6 +414,11 @@ async function buscarEnNominatim(nombre: string, localidad: Localidad, cache: Re
  * buscan solos, como lugar poblado, hasta 25 km alrededor de la localidad.
  */
 async function buscarParaje(nombre: string, localidad: Localidad, cache: Record<string, Position | null>): Promise<Position | null> {
+  // Primero los parajes y comunas que la Provincia tiene ubicados (Potrero de Garay, San Clemente, Los Pozos…).
+  const centro = turf.centroid(comoArea(localidad)).geometry.coordinates;
+  const buscado = claveDeBarrio(nombre.replace(/^(comuna|paraje)\s+(de\s+)?/i, ''));
+  const oficial = (await parajesDeLaProvincia()).find((p) => p.clave === buscado && turf.distance(centro, p.punto) < 30);
+  if (oficial) return oficial.punto;
   const clave = `paraje|${localidad.properties.nombre}|${claveDeBarrio(nombre)}`;
   if (clave in cache) return cache[clave];
   const [oeste, sur, este, norte] = turf.bbox(turf.buffer(comoArea(localidad), 25, { units: 'kilometers' })!);
@@ -463,7 +525,8 @@ if (import.meta.main) {
         return true;
       };
       const puntos = osm.puntos.filter((p) => !areas.has(claveDeBarrio(p.base)) && !tomarOficial(p.base, p.punto));
-      const casco = cascoUrbano(elementos, localidad, [...areas.values()].map((a) => a.area));
+      const radio = (await radiosUrbanos()).get(normalizar(nombre)) ?? [];
+      const casco = alRadio(cascoUrbano(elementos, localidad, [...areas.values()].map((a) => a.area)), radio);
 
       // Lo que nombra EPEC y OSM no tiene: se busca en Nominatim dentro de la localidad.
       // Los nombres que son localidades no se buscan: ya tienen su casco.

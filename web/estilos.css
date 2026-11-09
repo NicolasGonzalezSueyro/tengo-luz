@@ -717,6 +717,14 @@ a.barra-nombre:hover { text-decoration: underline; }
 }
 :root[data-tema="oscuro"] .barrio-con-corte { filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.55)); }
 @media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .barrio-con-corte { filter: drop-shadow(0 0 6px rgba(253, 224, 71, 0.55)); } }
+/* En el celular nada late ni brilla en el mapa: cualquier animación o halo obliga a redibujar todos los barrios en
+   cada cuadro (con 40 barrios en curso, el mapa se arrastraba a 13 cuadros por segundo y se clavaba). Se destacan fijos. */
+@media (max-width: 860px), (hover: none) {
+  .barrio-con-corte, .barrio-en-curso, .barrio-sin-luz, .punto-vecinos, .yo { animation: none !important; filter: none !important; }
+  :root .barrio-con-corte.barrio-en-curso { fill-opacity: 0.9; stroke-width: 4px; }
+  .barrio-sin-luz { fill-opacity: 0.9; }
+  .yo { stroke-width: 8px; stroke-opacity: 0.35; }
+}
 
 /* Tu ubicación: un punto con una onda. */
 .yo { animation: yo-onda 2s ease-out infinite; }

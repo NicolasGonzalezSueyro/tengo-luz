@@ -30,11 +30,12 @@ const buscarEnCapital = crearBuscadorDeBarrios([
 ]);
 const ignorados = new Set(Object.keys(alias).filter((n) => alias[n] === null).map(normalizar));
 // Frases que no son lugares: "corte total en toda la localidad", "IPEM Nº 203"…
-const NO_ES_LUGAR = /\b(corte total|toda la localidad|ambas localidades|todos los barrios|en forma (total|parcial))\b|\d{2,}/i;
+// También restos del texto del anuncio: "además algunos usuarios de", "dentro del horario consignado", "manera parcial".
+const NO_ES_LUGAR = /\b(corte total|toda la localidad|ambas localidades|todos los barrios|en forma (total|parcial)|manera parcial|usuarios|adem[aá]s|horario)\b|\d{2,}/i;
 
 const cuenta = new Map<string, Faltante>();
 const sumar = (nombre: string, localidad: string) => {
-  const limpio = nombre.trim().replace(/\s+/g, ' ');
+  const limpio = nombre.trim().replace(/\s*:$/, '').replace(/\s+/g, ' ');
   if (limpio.length < 3 || NO_ES_LUGAR.test(limpio) || limpio.split(' ').length > 5) return;
   const bonito = limpio === limpio.toLowerCase() ? limpio.replace(/(^|\s)\p{L}/gu, (l) => l.toUpperCase()) : limpio;
   const clave = `${localidad}|${normalizar(limpio)}`;

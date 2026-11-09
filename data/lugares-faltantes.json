@@ -10,11 +10,6 @@
   "veces": 6
  },
  {
-  "nombre": "Centro",
-  "localidad": "Saldán",
-  "veces": 6
- },
- {
   "nombre": "El Caracol",
   "localidad": "Río Ceballos",
   "veces": 5
@@ -35,13 +30,18 @@
   "veces": 5
  },
  {
-  "nombre": "El Sauce",
-  "localidad": "Salsipuedes",
-  "veces": 5
+  "nombre": "Jardines de la Estanzuela",
+  "localidad": "La Calera",
+  "veces": 4
  },
  {
-  "nombre": "Los Prados 1",
+  "nombre": "Terrazas de la Estanzuela",
   "localidad": "La Calera",
+  "veces": 4
+ },
+ {
+  "nombre": "Buena Vista",
+  "localidad": "Río Ceballos",
   "veces": 4
  },
  {
@@ -92,21 +92,6 @@
  {
   "nombre": "Prosur",
   "localidad": "Río Ceballos",
-  "veces": 4
- },
- {
-  "nombre": "San Jorge",
-  "localidad": "Río Ceballos",
-  "veces": 4
- },
- {
-  "nombre": "Bella Vista",
-  "localidad": "Salsipuedes",
-  "veces": 4
- },
- {
-  "nombre": "Centro",
-  "localidad": "Salsipuedes",
   "veces": 4
  },
  {
@@ -260,11 +245,6 @@
   "veces": 3
  },
  {
-  "nombre": "San Francisco",
-  "localidad": "Saldán",
-  "veces": 3
- },
- {
   "nombre": "Camino al Cuadrado",
   "localidad": "Salsipuedes",
   "veces": 3
@@ -280,18 +260,13 @@
   "veces": 3
  },
  {
-  "nombre": "Las Marías",
-  "localidad": "Unquillo",
-  "veces": 3
- },
- {
-  "nombre": "Los Quebrachitos",
-  "localidad": "Unquillo",
-  "veces": 3
- },
- {
   "nombre": "Parque PYMES",
   "localidad": "Villa Allende",
+  "veces": 3
+ },
+ {
+  "nombre": "Mariapolis",
+  "localidad": "Villa María",
   "veces": 3
  },
  {
@@ -370,6 +345,11 @@
   "veces": 2
  },
  {
+  "nombre": "La Paisanita",
+  "localidad": "Alta Gracia",
+  "veces": 2
+ },
+ {
   "nombre": "La Taimada",
   "localidad": "Alta Gracia",
   "veces": 2
@@ -395,11 +375,6 @@
   "veces": 2
  },
  {
-  "nombre": "Manera Parcial",
-  "localidad": "Córdoba",
-  "veces": 2
- },
- {
   "nombre": "El Condor",
   "localidad": "Huerta Grande",
   "veces": 2
@@ -422,11 +397,6 @@
  {
   "nombre": "Sur",
   "localidad": "Leones",
-  "veces": 2
- },
- {
-  "nombre": "Las Corzuelas",
-  "localidad": "Mendiolaza",
   "veces": 2
  },
  {
@@ -535,11 +505,6 @@
   "veces": 2
  },
  {
-  "nombre": "Mariapolis",
-  "localidad": "Villa María",
-  "veces": 2
- },
- {
   "nombre": "Parque Industrial",
   "localidad": "Villa María",
   "veces": 2
@@ -575,22 +540,12 @@
   "veces": 2
  },
  {
-  "nombre": "Valle del Sol",
-  "localidad": "Villa Santa Cruz del Lago",
-  "veces": 2
- },
- {
   "nombre": "Campo Tagle",
   "localidad": "Alta Gracia",
   "veces": 1
  },
  {
   "nombre": "Cerro La Colmena",
-  "localidad": "Alta Gracia",
-  "veces": 1
- },
- {
-  "nombre": "Comuna San Clemente",
   "localidad": "Alta Gracia",
   "veces": 1
  },
@@ -615,6 +570,11 @@
   "veces": 1
  },
  {
+  "nombre": "La Cuyanita",
+  "localidad": "Alta Gracia",
+  "veces": 1
+ },
+ {
   "nombre": "La Ernestina",
   "localidad": "Alta Gracia",
   "veces": 1
@@ -625,7 +585,7 @@
   "veces": 1
  },
  {
-  "nombre": "Los Espinillos",
+  "nombre": "Liniers de Horizonte",
   "localidad": "Alta Gracia",
   "veces": 1
  },
@@ -635,7 +595,7 @@
   "veces": 1
  },
  {
-  "nombre": "Paso de la Pampa",
+  "nombre": "Radio Sónico",
   "localidad": "Alta Gracia",
   "veces": 1
  },
@@ -645,33 +605,18 @@
   "veces": 1
  },
  {
-  "nombre": "Villa del Cóndor",
-  "localidad": "Alta Gracia",
-  "veces": 1
- },
- {
   "nombre": "De La Localidad",
   "localidad": "Ballesteros Sud",
   "veces": 1
  },
  {
-  "nombre": "Bialet Centro :",
-  "localidad": "Bialet Massé",
-  "veces": 1
- },
- {
-  "nombre": "Centro",
+  "nombre": "Bialet Centro",
   "localidad": "Bialet Massé",
   "veces": 1
  },
  {
   "nombre": "Mirador del Lago",
   "localidad": "Bialet Massé",
-  "veces": 1
- },
- {
-  "nombre": "IPV",
-  "localidad": "Capilla del Monte",
   "veces": 1
  },
  {
@@ -685,12 +630,22 @@
   "veces": 1
  },
  {
+  "nombre": "Camino A La Carbonada",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Cerro Moro",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Ciudad Los Ninos",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "El Rincon",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -755,17 +710,22 @@
   "veces": 1
  },
  {
+  "nombre": "Villa Quizquisacate",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Villas Gran Parque",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Aeródromo",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
  {
   "nombre": "Altos del Sol",
-  "localidad": "Cruz del Eje",
-  "veces": 1
- },
- {
-  "nombre": "Centro",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
@@ -835,22 +795,7 @@
   "veces": 1
  },
  {
-  "nombre": "Copacabana",
-  "localidad": "Deán Funes",
-  "veces": 1
- },
- {
-  "nombre": "El Estanque",
-  "localidad": "Deán Funes",
-  "veces": 1
- },
- {
   "nombre": "Inschilín",
-  "localidad": "Deán Funes",
-  "veces": 1
- },
- {
-  "nombre": "Los Pozos",
   "localidad": "Deán Funes",
   "veces": 1
  },
@@ -861,11 +806,6 @@
  },
  {
   "nombre": "Paraje Santa Cruz",
-  "localidad": "Deán Funes",
-  "veces": 1
- },
- {
-  "nombre": "San Pedro de Toyos",
   "localidad": "Deán Funes",
   "veces": 1
  },
@@ -881,16 +821,6 @@
  },
  {
   "nombre": "Suace Punco",
-  "localidad": "Deán Funes",
-  "veces": 1
- },
- {
-  "nombre": "Villa Alicia",
-  "localidad": "Deán Funes",
-  "veces": 1
- },
- {
-  "nombre": "Villa Colimba",
   "localidad": "Deán Funes",
   "veces": 1
  },
@@ -962,6 +892,36 @@
  {
   "nombre": "Villa del Totoral",
   "localidad": "Leones",
+  "veces": 1
+ },
+ {
+  "nombre": "Centro",
+  "localidad": "Marcos Juárez",
+  "veces": 1
+ },
+ {
+  "nombre": "Lavalle",
+  "localidad": "Marcos Juárez",
+  "veces": 1
+ },
+ {
+  "nombre": "Noreste",
+  "localidad": "Marcos Juárez",
+  "veces": 1
+ },
+ {
+  "nombre": "Noroeste",
+  "localidad": "Marcos Juárez",
+  "veces": 1
+ },
+ {
+  "nombre": "Portal Este",
+  "localidad": "Marcos Juárez",
+  "veces": 1
+ },
+ {
+  "nombre": "Portal Oeste",
+  "localidad": "Marcos Juárez",
   "veces": 1
  },
  {
@@ -1075,7 +1035,12 @@
   "veces": 1
  },
  {
-  "nombre": "Dentro Del Horario Consignado:",
+  "nombre": "Carlos Mayer",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Cuadrante",
   "localidad": "Río Cuarto",
   "veces": 1
  },
@@ -1086,6 +1051,11 @@
  },
  {
   "nombre": "Pizarro",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Reforma Universitaria",
   "localidad": "Río Cuarto",
   "veces": 1
  },
@@ -1160,11 +1130,6 @@
   "veces": 1
  },
  {
-  "nombre": "Mallin",
-  "localidad": "Tanti",
-  "veces": 1
- },
- {
   "nombre": "Tanti Viejo",
   "localidad": "Tanti",
   "veces": 1
@@ -1212,16 +1177,6 @@
  {
   "nombre": "Hoyo Cinco",
   "localidad": "Villa Allende",
-  "veces": 1
- },
- {
-  "nombre": "Además algunos usuarios de",
-  "localidad": "Villa Carlos Paz",
-  "veces": 1
- },
- {
-  "nombre": "Algunos Usuarios De Las",
-  "localidad": "Villa Carlos Paz",
   "veces": 1
  },
  {
@@ -1280,7 +1235,7 @@
   "veces": 1
  },
  {
-  "nombre": "Además",
+  "nombre": "Aeropuerto",
   "localidad": "Villa María",
   "veces": 1
  },
@@ -1305,7 +1260,17 @@
   "veces": 1
  },
  {
+  "nombre": "La Arboleda",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
   "nombre": "Las Cañitas",
+  "localidad": "Villa María",
+  "veces": 1
+ },
+ {
+  "nombre": "Las Margaritas",
   "localidad": "Villa María",
   "veces": 1
  },
@@ -1316,11 +1281,6 @@
  },
  {
   "nombre": "Predio de los Judiciales",
-  "localidad": "Villa María",
-  "veces": 1
- },
- {
-  "nombre": "San Antonio",
   "localidad": "Villa María",
   "veces": 1
  },
