@@ -15,11 +15,6 @@
   "veces": 5
  },
  {
-  "nombre": "El Cedro",
-  "localidad": "Río Ceballos",
-  "veces": 5
- },
- {
   "nombre": "Los Nogales Norte",
   "localidad": "Río Ceballos",
   "veces": 5
@@ -80,11 +75,6 @@
   "veces": 4
  },
  {
-  "nombre": "Pérez Taboada",
-  "localidad": "Río Ceballos",
-  "veces": 4
- },
- {
   "nombre": "Plan Amuchástegui",
   "localidad": "Río Ceballos",
   "veces": 4
@@ -140,11 +130,6 @@
   "veces": 3
  },
  {
-  "nombre": "Potrerillo de Larreta",
-  "localidad": "Alta Gracia",
-  "veces": 3
- },
- {
   "nombre": "Segundo Paredón",
   "localidad": "Alta Gracia",
   "veces": 3
@@ -157,11 +142,6 @@
  {
   "nombre": "Mataderos",
   "localidad": "La Calera",
-  "veces": 3
- },
- {
-  "nombre": "Altos de Luján",
-  "localidad": "Río Ceballos",
   "veces": 3
  },
  {
@@ -216,11 +196,6 @@
  },
  {
   "nombre": "San Cayetano",
-  "localidad": "Río Ceballos",
-  "veces": 3
- },
- {
-  "nombre": "San Francisco",
   "localidad": "Río Ceballos",
   "veces": 3
  },
@@ -385,11 +360,6 @@
   "veces": 2
  },
  {
-  "nombre": "Los Algarrobos",
-  "localidad": "La Calera",
-  "veces": 2
- },
- {
   "nombre": "Los Paraísos",
   "localidad": "La Calera",
   "veces": 2
@@ -401,11 +371,6 @@
  },
  {
   "nombre": "San Francisco",
-  "localidad": "Mendiolaza",
-  "veces": 2
- },
- {
-  "nombre": "Soles Serranos",
   "localidad": "Mendiolaza",
   "veces": 2
  },
@@ -620,11 +585,6 @@
   "veces": 1
  },
  {
-  "nombre": "Ampliacion Cerveceros",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Barrancas La Rivera",
   "localidad": "Córdoba",
   "veces": 1
@@ -636,11 +596,6 @@
  },
  {
   "nombre": "Cerro Moro",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Ciudad Los Ninos",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -676,11 +631,6 @@
  },
  {
   "nombre": "Lasalle",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Los Docentes",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -975,11 +925,6 @@
   "veces": 1
  },
  {
-  "nombre": "Pampa Alta",
-  "localidad": "Pampa Alta",
-  "veces": 1
- },
- {
   "nombre": "Paso de la Pampa",
   "localidad": "Pampa Alta",
   "veces": 1
@@ -1006,11 +951,6 @@
  },
  {
   "nombre": "La Amistad",
-  "localidad": "Río Ceballos",
-  "veces": 1
- },
- {
-  "nombre": "Loza",
   "localidad": "Río Ceballos",
   "veces": 1
  },
@@ -1115,17 +1055,7 @@
   "veces": 1
  },
  {
-  "nombre": "El Parador",
-  "localidad": "Tanti",
-  "veces": 1
- },
- {
   "nombre": "El Parador de Tanti",
-  "localidad": "Tanti",
-  "veces": 1
- },
- {
-  "nombre": "Los Chañares",
   "localidad": "Tanti",
   "veces": 1
  },
