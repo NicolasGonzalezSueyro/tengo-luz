@@ -83,7 +83,7 @@ flowchart LR
 ## Decisiones de diseño
 
 - **$0 y sin servidores.** Todo corre en planes gratuitos: no hay que pagar ni dejar nada prendido.
-- **Respetar a las fuentes.** El sitio de EPEC protege sus datos con una clave privada y un firewall contra programas automáticos, así que no se lee de ahí: sacar esa clave o esquivar el firewall sería saltarse una protección puesta a propósito. Se usan notas periodísticas públicas, con un `User-Agent` que identifica al proyecto, y se respetan los `robots.txt` (por eso se descartó Cba24n, que prohíbe los lectores automáticos). El objetivo es conseguir acceso oficial de EPEC.
+- **Respetar a las fuentes.** El sitio de EPEC protege sus datos con una clave privada y un firewall contra programas automáticos, así que no se lee de ahí: sacar esa clave o esquivar el firewall sería saltarse una protección puesta a propósito. Se usan notas periodísticas públicas, con un `User-Agent` que identifica al proyecto, y se respetan los `robots.txt` (por eso se descartó Cba24n, que prohíbe los lectores automáticos).
 - **Privacidad.** El reclamo se arma en el navegador: el contrato y la dirección viajan solo dentro del link de WhatsApp y nunca pasan por un servidor. Los reportes de vecinos no guardan la IP, sino un hash SHA-256 de la IP con una clave secreta y la fecha, que cambia cada día y no permite volver a la IP. La ubicación GPS se usa solo en el navegador.
 - **No fallar en silencio.** Si el robot falla, si El Doce deja de publicar, aparece un barrio desconocido o los barrios de un mismo corte quedan a más de 8 km entre sí (señal de que un nombre repetido se ubicó mal), el bot avisa al admin (como mucho una vez por día por problema). Una nota rara no frena a las demás, y un aviso que falla nunca impide guardar los cortes.
 - **Accesible.** Navegable con teclado, buscador con el patrón ARIA *combobox*, textos alternativos y respeto por "reducir movimiento".
@@ -221,11 +221,11 @@ npm run simplificar   # vuelve a simplificar los contornos del mapa
 - **Rendimiento:** simplificar geometrías con Douglas-Peucker para que la página pese 4 veces menos.
 - **Tests de punta a punta** con Playwright: probar la página como la usa una persona, en compu y celular.
 - **Monitoreo:** que el sistema avise cuando algo falla en vez de romperse en silencio.
-- **Ética con los datos:** respetar `robots.txt` y las protecciones de los sitios, y pedir acceso oficial en vez de esquivarlas.
+- **Ética con los datos:** respetar `robots.txt` y las protecciones de los sitios, sin esquivarlas.
 
 ## Próximos pasos
 
-- [ ] Mapa revisado zona por zona, de capital hasta los límites de la provincia: cada localidad con su contorno y sus barrios.
+- [x] Mapa revisado zona por zona, de capital hasta los límites de la provincia: cada localidad con su contorno y sus barrios.
 - [ ] Cortes de hoy, mañana y pasado desde fuentes públicas que permitan leerse de forma automática.
 - [x] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
 - [x] Estadísticas: qué barrios tienen más cortes y en qué horarios.
