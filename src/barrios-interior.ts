@@ -18,9 +18,9 @@ import * as turf from '@turf/turf';
 import type { Feature, MultiPoint, MultiPolygon, Point, Polygon, Position } from 'geojson';
 import { normalizar } from './barrios.ts';
 import { redondear } from './descargar-zonas.ts';
-import { crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
+import { crearUbicadorDeLocalidades, escapar, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
 import { claveDeBarrio, nombresDelTramo } from './nombres.ts';
-import { aplicarContornos } from './contornos.ts';
+import { aplicarContornos, ARCHIVO_REVISADOS, leerManuales } from './contornos.ts';
 
 // Overpass: los dos servidores que están detrás de overpass-api.de (su balanceador a veces responde 502 aunque
 // ellos anden). Una consulta a la vez en cada uno, como piden (2 por conexión), con mucha paciencia ante los errores.
@@ -278,9 +278,9 @@ export function radiosUrbanos(): Promise<Map<string, Area[]>> {
   })();
 }
 
-let parajes: Promise<{ clave: string; punto: Position }[]> | null = null;
+let parajes: Promise<{ clave: string; nombre: string; punto: Position }[]> | null = null;
 /** Los parajes, comunas y localidades que la Provincia tiene como punto (Mapas Córdoba). Se bajan una vez. */
-function parajesDeLaProvincia(): Promise<{ clave: string; punto: Position }[]> {
+function parajesDeLaProvincia(): Promise<{ clave: string; nombre: string; punto: Position }[]> {
   return parajes ??= (async () => {
     const archivo = `${CACHE}/idecor-localidad_punto.json`;
     let datos = JSON.parse(await readFile(archivo, 'utf8').catch(() => 'null')) as { features: Feature<Point | MultiPoint, { localidad?: string }>[] } | null;
@@ -295,7 +295,7 @@ function parajesDeLaProvincia(): Promise<{ clave: string; punto: Position }[]> {
       await writeFile(archivo, JSON.stringify(datos));
     }
     return datos!.features.filter((f) => f.geometry && f.properties.localidad)
-      .map((f) => ({ clave: claveDeBarrio(f.properties.localidad!), punto: turf.centroid(f).geometry.coordinates }));
+      .map((f) => ({ clave: claveDeBarrio(f.properties.localidad!), nombre: enTitulo(f.properties.localidad!), punto: turf.centroid(f).geometry.coordinates }));
   })();
 }
 
@@ -319,7 +319,7 @@ export function alRadio(casco: Area | null, radiosDeLaLocalidad: Area[]): Area |
  * calles pero no las zonas residenciales), cerrando huecos chicos (40 m). Se quedan los pedazos grandes o cercanos
  * al centro del pueblo, y se recorta al ejido. Si OSM no tiene nada, devuelve null (queda el contorno que ya había).
  */
-export function cascoUrbano(elementos: ElementoOsm[], localidad: Localidad, barrios: Area[]): Area | null {
+export function cascoUrbano(elementos: ElementoOsm[], centro: Position, alcance: number, barrios: Area[]): Area | null {
   const usos = elementos
     .filter((e) => /^(residential|commercial|retail|industrial)$/.test(e.tags?.landuse ?? ''))
     .map(areaDe)
@@ -332,14 +332,15 @@ export function cascoUrbano(elementos: ElementoOsm[], localidad: Localidad, barr
   if (!todo) return null;
   const ampliado = turf.buffer(todo, 40, { units: 'meters' }) as Area | undefined;
   if (!ampliado) return null;
-  const centro = turf.centroid(comoArea(localidad));
-  const partes = turf.flatten(ampliado).features.filter((p) =>
-    km2(p) > 0.05 || turf.distance(turf.centroid(p), centro, { units: 'kilometers' }) < 2);
+  // Los pedazos cerca del centro del pueblo, o que tocan uno de sus barrios. Antes entraba cualquier pedazo grande
+  // y el casco se comía los pueblos de al lado (Tanti, Icho Cruz).
+  const cerca = (p: Area) => turf.distance(turf.pointOnFeature(p), centro, { units: 'kilometers' }) < alcance
+    || turf.booleanPointInPolygon(centro, p);
+  const partes = turf.flatten(ampliado).features.filter((p) => cerca(p) || barrios.some((b) => interseccion(p, b)));
   const casco = unir(partes);
-  if (!casco) return null;
-  const esEjido = (localidad.properties.osm ?? '').startsWith('R');
-  const recortado = esEjido ? interseccion(casco, comoArea(localidad)) : casco;
-  return recortado ? (turf.simplify(recortado, { tolerance: 0.0001 }) as Area) : null;
+  // No se recorta al contorno guardado: ese es el casco de la corrida anterior, y recortarlo lo iba achicando
+  // hasta dejar barrios afuera (La Calera, Saldán). El límite lo pone el radio urbano oficial (alRadio).
+  return casco ? simplificar(casco, 0.0001) : null;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -465,9 +466,62 @@ export function aproximar(semillas: Semilla[], conContorno: Area[], casco: Area 
   return resultado;
 }
 
+const NUMEROS: Record<string, string> = { uno: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5', seis: '6', siete: '7', ocho: '8', nueve: '9', diez: '10' };
+/** "Country Tejas Cuatro", "Tejas 4" y "TEJAS 4 (Malagueño)" son el mismo lugar. Exportado para los tests. */
+export function claveDeLugar(base: string): string {
+  const limpio = base.replace(/\s*\([^)]*\)/g, '').replace(/^(country|barrio privado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo)\s+/i, '');
+  return claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? p).join(' ');
+}
+
+type BarrioConFuente = { properties: { nombre: string; base?: string; localidad: string; tipo?: string; fuente?: string; alias?: string[] } };
+const CONFIANZA: Record<string, number> = { municipio: 0, municipalidad: 0, manual: 1, osm: 2, nominatim: 3 };
+/**
+ * Un barrio por lugar en cada localidad. Si dos fuentes traen el mismo ("Tejas 4" y "Country Tejas Cuatro"), queda
+ * el más confiable (del municipio, dibujado a mano, de OSM, aproximado) y el nombre del otro queda como alias, así
+ * se lo sigue reconociendo como lo escriba EPEC. Exportado para los tests.
+ */
+export function sinRepetidos<F extends BarrioConFuente>(barrios: F[]): F[] {
+  const rango = (b: F) => (b.properties.tipo === 'aproximado' ? 10 : 0) + (CONFIANZA[b.properties.fuente ?? ''] ?? 5);
+  const ganador = new Map<string, F>();
+  for (const b of [...barrios].sort((x, y) => rango(x) - rango(y))) {
+    const clave = `${b.properties.localidad}|${claveDeLugar(b.properties.base ?? b.properties.nombre)}`;
+    const ya = ganador.get(clave);
+    if (!ya) ganador.set(clave, b);
+    else if (ya.properties.base !== b.properties.base) ya.properties.alias = [...new Set([...(ya.properties.alias ?? []), b.properties.base ?? b.properties.nombre])];
+  }
+  const quedan = new Set(ganador.values());
+  return barrios.filter((b) => quedan.has(b));
+}
+
+/** Si dos nombres son la misma localidad: iguales, o uno es el comienzo del otro ("Villa Yacanto de Calamuchita"). */
+export function mismaLocalidad(a: string, b: string): boolean {
+  const x = claveDeLugar(a);
+  const y = claveDeLugar(b);
+  return x === y || x.startsWith(`${y} `) || y.startsWith(`${x} `);
+}
+
+/**
+ * Simplifica el contorno. Si queda algún pedacito de menos de 4 puntos (pasa al restar una localidad de otra), se
+ * descartan los pedacitos de menos de 1000 m² y se vuelve a probar; si igual no se puede, queda como estaba.
+ */
+export function simplificar(a: Area, tolerancia: number): Area {
+  try {
+    return turf.simplify(a, { tolerance: tolerancia, highQuality: false }) as Area;
+  } catch {
+    const grandes = turf.flatten(a).features.filter((p) => turf.area(p) >= 1000);
+    if (grandes.length === 0) return a;
+    const sinPedacitos = { ...a, geometry: { type: 'MultiPolygon', coordinates: grandes.map((p) => p.geometry.coordinates) } } as Area;
+    try {
+      return turf.simplify(sinPedacitos, { tolerance: tolerancia, highQuality: false }) as Area;
+    } catch {
+      return sinPedacitos;
+    }
+  }
+}
+
 /** Coordenadas con 5 decimales (~1 m) y contorno simplificado (~5 m): el archivo queda liviano. */
 export const aliviar = (a: Area): Area => {
-  const simple = turf.simplify(a, { tolerance: 0.00005, highQuality: false }) as Area;
+  const simple = simplificar(a, 0.00005);
   return { ...simple, geometry: { ...simple.geometry, coordinates: redondear(simple.geometry.coordinates) as never } };
 };
 
@@ -482,6 +536,54 @@ if (import.meta.main) {
   const buscadas = JSON.parse(await readFile('data/localidades-buscadas.json', 'utf8')) as Record<string, Candidato[]>;
   const cacheNominatim = JSON.parse(await readFile(`${CACHE}/nominatim.json`, 'utf8').catch(() => '{}')) as Record<string, Position | null>;
   const soloEsta = process.argv[2]; // para probar con una sola localidad: npm run barrios-interior -- "La Calera"
+
+  // Localidades oficiales que quedaron adentro de otra (Villa San Nicolás y Yocsina en Malagueño, Tala Huasi junto a
+  // Icho Cruz): van con su propio contorno. "dentroDe" sirve para reconocerlas si EPEC las nombra como barrio de la
+  // grande. No se agregan las que se llaman como un barrio de capital (Guiñazú): ahí manda capital.
+  const radiosOficiales = await radiosUrbanos();
+  const capitalJson = JSON.parse(await readFile('data/barrios.geojson', 'utf8')) as { features: { properties: { nombre: string | null } }[] };
+  const barriosDeCapital = new Set(capitalJson.features.flatMap((f) => (f.properties.nombre ? [claveDeLugar(f.properties.nombre)] : [])));
+  const nuestras = zonas.features.filter((z) => z.properties.tipo === 'localidad');
+  const barriosAnteriores = (JSON.parse(await readFile('data/barrios-interior.geojson', 'utf8').catch(() => '{"features":[]}')) as { features: BarrioInterior[] }).features;
+  for (const p of await parajesDeLaProvincia()) {
+    if (nuestras.some((z) => mismaLocalidad(z.properties.nombre, p.nombre) && turf.distance(turf.centroid(comoArea(z)), p.punto) < 15)) continue;
+    const madre = nuestras.find((z) => z.properties.contorno && turf.booleanPointInPolygon(p.punto, comoArea(z)));
+    if (!madre || barriosDeCapital.has(claveDeLugar(p.nombre))) continue;
+    // Si la grande ya tiene un barrio que se llama así ("Country Cuatro Hojas" en Mendiolaza, "Colanchanga" en Río
+    // Ceballos), es ese barrio: no se crea otra localidad encima.
+    const clave = claveDeLugar(p.nombre);
+    const contiene = (a: string, b: string) => ` ${a} `.includes(` ${b} `);
+    if (barriosAnteriores.some((b) => b.properties.localidad === madre.properties.nombre
+      && (contiene(claveDeLugar(b.properties.base), clave) || contiene(clave, claveDeLugar(b.properties.base))))) continue;
+    const radio = radiosOficiales.get(normalizar(p.nombre));
+    const area = (radio?.length ? unir(radio) : null) ?? turf.circle(p.punto, 1.5, { units: 'kilometers', steps: 32 });
+    zonas.features.push({
+      type: 'Feature',
+      properties: {
+        nombre: p.nombre, tipo: 'localidad', patron: `^${escapar(normalizar(p.nombre))}$`,
+        descripcion: `La ubicación de ${p.nombre} es una referencia aproximada.`, dentroDe: madre.properties.nombre,
+      },
+      geometry: area.geometry,
+    } as Localidad);
+    console.log(`+ ${p.nombre}: localidad propia (estaba dentro de ${madre.properties.nombre})`);
+  }
+  // Los barrios rearmados con manzanas oficiales o dibujados a mano también son de la localidad (La Calera).
+  const dibujados = new Map<string, Area[]>();
+  for (const m of [...leerManuales(ARCHIVO_REVISADOS), ...leerManuales()].filter((m) => m.properties.destino === 'interior' && m.properties.localidad)) {
+    dibujados.set(m.properties.localidad!, [...(dibujados.get(m.properties.localidad!) ?? []), { type: 'Feature', properties: {}, geometry: m.geometry } as Area]);
+  }
+  /** El punto oficial de la localidad (no se corre de una corrida a otra, como el centro del contorno). */
+  const puntosOficiales = await parajesDeLaProvincia();
+  const centroDe = (localidad: Localidad): Position => {
+    const propio = turf.centroid(comoArea(localidad)).geometry.coordinates;
+    const oficial = puntosOficiales.filter((p) => mismaLocalidad(p.nombre, localidad.properties.nombre))
+      .sort((a, b) => turf.distance(a.punto, propio) - turf.distance(b.punto, propio))[0];
+    return oficial && turf.distance(oficial.punto, propio) < 15 ? oficial.punto : propio;
+  };
+  /** El radio oficial de una localidad, aunque la Provincia lo escriba un poco distinto ("Villa Yacanto"). */
+  const radioDe = (localidad: Localidad): Area[] => radiosOficiales.get(normalizar(localidad.properties.nombre))
+    ?? [...radiosOficiales.entries()].filter(([n, areas]) => mismaLocalidad(n, localidad.properties.nombre)
+      && areas.some((a) => turf.booleanPointInPolygon(turf.centroid(comoArea(localidad)), a))).flatMap(([, a]) => a);
 
   // Los barrios que nombra EPEC en cada localidad, tramo por tramo (sin buscar nada en internet).
   const sinRed = { buscar: async () => [] as Candidato[], geometria: async () => ({ type: 'Polygon', coordinates: [] }) };
@@ -525,8 +627,20 @@ if (import.meta.main) {
         return true;
       };
       const puntos = osm.puntos.filter((p) => !areas.has(claveDeBarrio(p.base)) && !tomarOficial(p.base, p.punto));
-      const radio = (await radiosUrbanos()).get(normalizar(nombre)) ?? [];
-      const casco = alRadio(cascoUrbano(elementos, localidad, [...areas.values()].map((a) => a.area)), radio);
+      // "Todo lo urbano": las calles cerca del centro, recortadas al radio oficial, más todos sus barrios aunque el
+      // radio sea viejo y les quede chico (La Calera, Saldán). Una localidad que está adentro de otra, más acotada.
+      const radio = radioDe(localidad);
+      const centro = centroDe(localidad);
+      const alcance = localidad.properties.dentroDe ? 1.2 : radio.length > 0 ? 8 : 3;
+      // Una localidad que está adentro de otra no toma barrios: los de alrededor son de la grande.
+      if (localidad.properties.dentroDe) {
+        areas.clear();
+        puntos.length = 0;
+      }
+      const propios = [...areas.values()].map((a) => a.area).concat(localidad.properties.dentroDe ? [] : dibujados.get(nombre) ?? [])
+        .filter((a) => turf.distance(turf.pointOnFeature(a), centro) < alcance + 3);
+      const calles = alRadio(cascoUrbano(elementos, centro, alcance, propios), radio);
+      const casco = calles ? unir([calles, ...propios]) : null;
 
       // Lo que nombra EPEC y OSM no tiene: se busca en Nominatim dentro de la localidad.
       // Los nombres que son localidades no se buscan: ya tienen su casco.
@@ -575,16 +689,38 @@ if (import.meta.main) {
     }
   }));
 
-  // Nombres únicos en todo el mapa (dos barrios de la misma localidad con el mismo nombre: queda el primero).
-  const vistos = new Set<string>();
-  const unicos = barrios.filter((b) => !vistos.has(b.properties.nombre) && vistos.add(b.properties.nombre));
+  // Cada localidad termina donde empieza otra: se le restan los radios oficiales de las demás (salvo el que la
+  // contiene, si es un enclave) y las localidades que tiene adentro.
+  const conCasco = zonas.features.filter((z) => z.properties.tipo === 'localidad' && z.properties.contorno);
+  for (const z of conCasco) {
+    const area = comoArea(z);
+    const [o, s, e, n] = turf.bbox(area);
+    const toca = (a: Area) => { const [ao, as, ae, an] = turf.bbox(a); return ao <= e && ae >= o && as <= n && an >= s; };
+    const centro = turf.pointOnFeature(area);
+    const ajenos = [...radiosOficiales.entries()].filter(([nombre]) => !mismaLocalidad(nombre, z.properties.nombre))
+      .flatMap(([, areas]) => areas).filter((a) => toca(a) && !turf.booleanPointInPolygon(centro, a));
+    const hijas = conCasco.filter((h) => h.properties.dentroDe === z.properties.nombre).map(comoArea);
+    // Sus barrios no se tocan; y una localidad que está adentro de otra no se queda con los barrios de la grande.
+    const poligonosDe = (localidad: string) => unir(barrios.filter((b) => b.properties.localidad === localidad && b.properties.tipo !== 'aproximado') as Area[]);
+    const propios = poligonosDe(z.properties.nombre);
+    const deLaMadre = z.properties.dentroDe ? poligonosDe(z.properties.dentroDe) : null;
+    const quitar = unir([...ajenos, ...hijas, ...(deLaMadre ? [deLaMadre] : [])]);
+    const resto = quitar && propios ? diferencia(quitar, propios) : quitar;
+    const queda = resto ? diferencia(area, resto) : null;
+    if (queda && km2(queda) > 0.05) z.geometry = aliviar(queda).geometry as never;
+  }
+  // Un barrio que ahora es una localidad propia (El Pueblito en Salsipuedes) deja de estar como barrio.
+  const reemplazados = new Set(zonas.features.filter((z) => z.properties.dentroDe).map((z) => `${z.properties.dentroDe}|${claveDeLugar(z.properties.nombre)}`));
+  const sinReemplazados = barrios.filter((b) => !reemplazados.has(`${b.properties.localidad}|${claveDeLugar(b.properties.base)}`));
   if (!soloEsta) {
-    // Los contornos corregidos a mano con el editor (src/contornos.ts) mandan.
-    await writeFile('data/barrios-interior.geojson', JSON.stringify(aplicarContornos({ type: 'FeatureCollection', features: unicos }, 'interior')) + '\n');
+    // Los contornos corregidos a mano con el editor (src/contornos.ts) mandan. Después, un barrio por lugar.
+    const conManuales = aplicarContornos({ type: 'FeatureCollection', features: sinReemplazados }, 'interior');
+    const unicos = sinRepetidos(conManuales.features);
+    await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: unicos }) + '\n');
     await writeFile('data/zonas.geojson', JSON.stringify(aplicarContornos(zonas, 'zonas'), null, 1) + '\n');
   } else {
-    await writeFile(`${CACHE}/prueba-${normalizar(soloEsta).replace(/\s+/g, '-')}.geojson`, JSON.stringify({ type: 'FeatureCollection', features: [...unicos, ...localidades] }));
+    await writeFile(`${CACHE}/prueba-${normalizar(soloEsta).replace(/\s+/g, '-')}.geojson`, JSON.stringify({ type: 'FeatureCollection', features: [...sinReemplazados, ...localidades] }));
   }
-  console.log(`Listo: ${unicos.length} barrios del interior.`);
+  console.log(`Listo: ${sinReemplazados.length} barrios del interior (antes de sacar repetidos).`);
 }
 

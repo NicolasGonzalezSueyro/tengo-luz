@@ -5,7 +5,7 @@ import {
   centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, separarDeLocalidades, type Punto, type Ubicacion,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
-import { aplicarManuales, crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
+import { aplicarManuales, crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad, localidadesComoBarrios } from './localidades.ts';
 import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
 import { escribirLugares } from './lugares.ts';
 import { sectorDelCorte, type Caja } from './sectores.ts';
@@ -95,7 +95,7 @@ const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
 const interior = await leerJson<{ features: { properties: BarrioConocido & { tipo: string } }[] }>('data/barrios-interior.geojson')
   .catch(() => ({ features: [] }));
 const aliasInterior = await leerJson<Record<string, string | null>>('data/alias-interior.json').catch(() => ({}));
-const buscarEnLocalidad = crearBuscadorDeBarrios(interior.features.map((f) => f.properties), aliasInterior);
+const buscarEnLocalidad = crearBuscadorDeBarrios([...interior.features.map((f) => f.properties), ...localidadesComoBarrios(zonas.features)], aliasInterior);
 // "Corte total en la localidad", "todos los barrios": se pinta el casco urbano entero.
 const TODA_LA_LOCALIDAD = /\b(corte total|toda la localidad|todas? las localidades|todos los barrios|ambas localidades|en forma total en la localidad)\b/i;
 

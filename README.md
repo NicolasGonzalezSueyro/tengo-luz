@@ -225,7 +225,8 @@ npm run simplificar   # vuelve a simplificar los contornos del mapa
 
 ## Próximos pasos
 
-- [ ] Acceso oficial a los datos de cortes de EPEC.
+- [ ] Mapa revisado zona por zona, de capital hasta los límites de la provincia: cada localidad con su contorno y sus barrios.
+- [ ] Cortes de hoy, mañana y pasado desde fuentes públicas que permitan leerse de forma automática.
 - [x] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
 - [x] Estadísticas: qué barrios tienen más cortes y en qué horarios.
 - [x] Fallas no programadas confirmadas por EPEC en sus redes.

@@ -52,7 +52,8 @@ export function nombresDelTramo(texto: string): string[] {
     .filter((p) => p.length > 2 && p.split(/\s+/).length <= 6 && !/\d\s*hs\b/i.test(p) && !esDescripcion(normalizar(p)));
 }
 
-export type BarrioConocido = { nombre: string; base: string; localidad: string };
+// alias: otros nombres del mismo barrio (de los repetidos que se juntaron, ver sinRepetidos en barrios-interior).
+export type BarrioConocido = { nombre: string; base: string; localidad: string; alias?: string[] };
 
 /**
  * Prepara el buscador con los barrios del interior. Devuelve una función que, dadas las localidades de un tramo y su
@@ -61,7 +62,7 @@ export type BarrioConocido = { nombre: string; base: string; localidad: string }
 export function crearBuscadorDeBarrios(conocidos: BarrioConocido[], alias: Record<string, string | null> = {}) {
   // Alias del interior (data/alias-interior.json): "2 Hermanos (San Francisco)" → "Dos Hermanos (San Francisco)".
   const porNombre = new Map(conocidos.map((b) => [b.nombre, b]));
-  const barrios = [...conocidos];
+  const barrios = [...conocidos, ...conocidos.flatMap((b) => (b.alias ?? []).map((a) => ({ ...b, base: a })))];
   for (const [dicho, enMapa] of Object.entries(alias)) {
     const destino = enMapa ? porNombre.get(enMapa) : undefined;
     const partes = dicho.match(/^(.+) \((.+)\)$/);

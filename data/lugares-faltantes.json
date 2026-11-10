@@ -25,16 +25,6 @@
   "veces": 5
  },
  {
-  "nombre": "Jardines de la Estanzuela",
-  "localidad": "La Calera",
-  "veces": 4
- },
- {
-  "nombre": "Terrazas de la Estanzuela",
-  "localidad": "La Calera",
-  "veces": 4
- },
- {
   "nombre": "Buena Vista",
   "localidad": "Río Ceballos",
   "veces": 4
@@ -377,16 +367,6 @@
  {
   "nombre": "La Adelina",
   "localidad": "Río Ceballos",
-  "veces": 2
- },
- {
-  "nombre": "Ernesto Guevara",
-  "localidad": "Saldán",
-  "veces": 2
- },
- {
-  "nombre": "Luis de Tejeda",
-  "localidad": "Saldán",
   "veces": 2
  },
  {

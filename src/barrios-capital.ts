@@ -20,7 +20,7 @@ import type { Position } from 'geojson';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';
 import {
   aliviar, aproximar, areaDe, consultarOverpass, diferencia, enTitulo, interseccion, km2, SERVIDORES, unir,
-  type Area, type BarrioInterior, type ElementoOsm, type Semilla,
+  sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
 } from './barrios-interior.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio, crearBuscadorDeBarrios } from './nombres.ts';
@@ -224,6 +224,7 @@ for (const [i, { base, area, fuente }] of aproximados.entries()) {
 }
 
 const resto = interior.features.filter((f) => f.properties.localidad !== CAPITAL);
-await writeFile('data/barrios-interior.geojson', JSON.stringify(aplicarContornos({ type: 'FeatureCollection', features: [...resto, ...nuevos] }, 'interior')) + '\n');
+const conManuales = aplicarContornos({ type: 'FeatureCollection', features: [...resto, ...nuevos] }, 'interior');
+await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: sinRepetidos(conManuales.features) }) + '\n');
 const cuenta = (tipo: string) => nuevos.filter((f) => f.properties.tipo === tipo).length;
 console.log(`Capital: ${cuenta('poligono')} lugares con contorno (oficial u OSM) y ${cuenta('aproximado')} aproximados.`);

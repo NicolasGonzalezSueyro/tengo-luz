@@ -4,7 +4,7 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';
-import { crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
+import { crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad, localidadesComoBarrios } from './localidades.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
 
@@ -21,7 +21,7 @@ const interior = await leer<{ features: { properties: BarrioConocido }[] }>('dat
 
 const sinRed = { buscar: async () => [] as Candidato[], geometria: async () => ({ type: 'Polygon', coordinates: [] }) };
 const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, { ...buscadas }, sinRed);
-const buscarEnInterior = crearBuscadorDeBarrios(interior.features.map((f) => f.properties), await leer<Record<string, string | null>>('data/alias-interior.json', {}));
+const buscarEnInterior = crearBuscadorDeBarrios([...interior.features.map((f) => f.properties), ...localidadesComoBarrios(zonas.features)], await leer<Record<string, string | null>>('data/alias-interior.json', {}));
 const nombresCapital = mapa.features.flatMap((f) => f.properties.nombre ?? []);
 const ubicarEnCapital = crearUbicador(nombresCapital, alias);
 const buscarEnCapital = crearBuscadorDeBarrios([

@@ -18,7 +18,8 @@ type Geometria = { type: string; coordinates: unknown };
 export type Localidad = {
   type: 'Feature';
   // contorno: el área es el casco urbano o se corrigió a mano (no un círculo alrededor del centro).
-  properties: { nombre: string; tipo?: 'ruta' | 'localidad'; patron: string; descripcion: string; osm?: string; contorno?: boolean };
+  // dentroDe: una localidad oficial que está adentro de otra (Yocsina en Malagueño); EPEC a veces la nombra como su barrio.
+  properties: { nombre: string; tipo?: 'ruta' | 'localidad'; patron: string; descripcion: string; osm?: string; contorno?: boolean; dentroDe?: string };
   geometry: Geometria;
 };
 
@@ -148,7 +149,15 @@ export async function geometriaDe(c: Candidato): Promise<Geometria> {
   return { type: 'Polygon', coordinates: [redondear(corredor([c.punto], RADIO_METROS[c.tipo] ?? 500))] };
 }
 
-const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/**
+ * Las localidades que están adentro de otra (Yocsina en Malagueño), como si fueran sus barrios: si EPEC escribe
+ * "Malagueño: barrio Yocsina", se pinta la localidad Yocsina.
+ */
+export const localidadesComoBarrios = (zonas: Localidad[]) => zonas
+  .filter((z) => z.properties.tipo === 'localidad' && z.properties.dentroDe)
+  .map((z) => ({ nombre: z.properties.nombre, base: z.properties.nombre, localidad: z.properties.dentroDe! }));
+
+export const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * Localidades cargadas a mano (data/localidades-manuales.json) para los pueblos que OpenStreetMap no tiene:
