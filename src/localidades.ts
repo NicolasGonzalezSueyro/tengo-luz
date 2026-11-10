@@ -153,9 +153,20 @@ export async function geometriaDe(c: Candidato): Promise<Geometria> {
  * Las localidades que están adentro de otra (Yocsina en Malagueño), como si fueran sus barrios: si EPEC escribe
  * "Malagueño: barrio Yocsina", se pinta la localidad Yocsina.
  */
-export const localidadesComoBarrios = (zonas: Localidad[]) => zonas
-  .filter((z) => z.properties.tipo === 'localidad' && z.properties.dentroDe)
-  .map((z) => ({ nombre: z.properties.nombre, base: z.properties.nombre, localidad: z.properties.dentroDe! }));
+export const localidadesComoBarrios = (zonas: Localidad[]) => [
+  ...zonas
+    .filter((z) => z.properties.tipo === 'localidad' && z.properties.dentroDe)
+    .map((z) => ({ nombre: z.properties.nombre, base: z.properties.nombre, localidad: z.properties.dentroDe! })),
+  // La localidad entera nombrada como barrio de sí misma ("Saldán: barrio Villa Saldán"): se pinta la localidad.
+  ...zonas
+    .filter((z) => z.properties.tipo === 'localidad')
+    .flatMap((z) => {
+      const nombre = z.properties.nombre;
+      // El buscador ya ignora el "Villa" del principio ("Villa Saldán" = "Saldán"). Las que empiezan con "Villa" no se
+      // agregan: "Carlos Paz 1" (una línea, no la ciudad) pintaba Villa Carlos Paz entera.
+      return /^villa /i.test(nombre) ? [] : [{ nombre, base: nombre, localidad: nombre }];
+    }),
+];
 
 export const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 

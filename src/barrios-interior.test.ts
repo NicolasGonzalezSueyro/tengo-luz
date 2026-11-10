@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import * as turf from '@turf/turf';
-import { alRadio, claveDeLugar, enTitulo, km2, mismaLocalidad, sinRepetidos } from './barrios-interior.ts';
+import { alRadio, claveDeLugar, claveSinLocalidad, enTitulo, km2, mismaLocalidad, sinRepetidos } from './barrios-interior.ts';
 
 test('enTitulo arregla los nombres en mayúsculas de las capas oficiales', () => {
   assert.equal(enTitulo('LAS MERCEDES (EX COLCAR)'), 'Las Mercedes');
@@ -39,4 +39,10 @@ test('sinRepetidos junta los que se escriben casi igual si están en el mismo lu
   const b = (base: string, x: number) => ({ type: 'Feature', geometry: cuadrado(x), properties: { nombre: base, base, localidad: 'Córdoba', tipo: 'poligono', fuente: 'osm' } });
   const quedan = sinRepetidos([b('Brisas de Manantiales', -64.2), b('Brisas de Manatiales', -64.2), b('Brisas de Manantiale', -63.5)]);
   assert.deepEqual(quedan.map((x) => x.properties.base), ['Brisas de Manantiales', 'Brisas de Manantiale']);
+});
+test('claveSinLocalidad: "El Talar de Mendiolaza" es "El Talar", "Villa Allende Centro" es "Centro"', () => {
+  assert.equal(claveSinLocalidad('El Talar de Mendiolaza', 'Mendiolaza'), claveSinLocalidad('El Talar', 'Mendiolaza'));
+  assert.equal(claveSinLocalidad('Villa Allende Centro', 'Villa Allende'), claveSinLocalidad('Centro', 'Villa Allende'));
+  assert.equal(claveDeLugar('Las Cañitas Barrio Privado'), claveDeLugar('Las Cañitas'));
+  assert.notEqual(claveSinLocalidad('Nuevo Malagueño', 'Malagueño'), claveSinLocalidad('Malagueño', 'Malagueño'));
 });

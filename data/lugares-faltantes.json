@@ -25,6 +25,11 @@
   "veces": 5
  },
  {
+  "nombre": "Los Prados 1",
+  "localidad": "La Calera",
+  "veces": 4
+ },
+ {
   "nombre": "Buena Vista",
   "localidad": "Río Ceballos",
   "veces": 4
@@ -127,11 +132,6 @@
  {
   "nombre": "Valle Chico",
   "localidad": "Alta Gracia",
-  "veces": 3
- },
- {
-  "nombre": "Mataderos",
-  "localidad": "La Calera",
   "veces": 3
  },
  {
@@ -841,11 +841,6 @@
  },
  {
   "nombre": "Río San José",
-  "localidad": "Pampa Alta",
-  "veces": 1
- },
- {
-  "nombre": "San Clemente",
   "localidad": "Pampa Alta",
   "veces": 1
  },

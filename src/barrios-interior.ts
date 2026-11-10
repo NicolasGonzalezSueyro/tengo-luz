@@ -473,7 +473,8 @@ export function claveDeLugar(base: string): string {
   // "Coop. La Unidad" y "Cooperativa La Unidad", "Ex Batallón 141" y "Batallon 141", "Greenville II" y "GreenVille 2",
   // "Villa de Emergencia El Chaparral" y "Villa El Chaparral".
   const limpio = base.replace(/\s*\([^)]*\)/g, '').replace(/^villa de emergencia\s+/i, 'villa ')
-    .replace(/^((country|barrio privado|barrio cerrado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo|privado|ex|coop\.?|cooperativa)\s+)+/i, '');
+    .replace(/^((country|barrio privado|barrio cerrado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo|privado|ex|coop\.?|cooperativa)\s+)+/i, '')
+    .replace(/\s*-?\s*barrio (cerrado|privado)\s*-?\s*$/i, ''); // "Las Cañitas Barrio Privado", "La Serena -Barrio Cerrado-"
   return claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? ROMANOS[p] ?? p).join(' ');
 }
 
@@ -484,11 +485,22 @@ const CONFIANZA: Record<string, number> = { municipio: 0, municipalidad: 0, manu
  * el más confiable (del municipio, dibujado a mano, de OSM, aproximado) y el nombre del otro queda como alias, así
  * se lo sigue reconociendo como lo escriba EPEC. Exportado para los tests.
  */
+/** "El Talar de Mendiolaza" y "El Talar", "Villa Allende Centro" y "Centro": el nombre sin la localidad. */
+export function claveSinLocalidad(base: string, localidad: string): string {
+  const loc = claveDeLugar(localidad);
+  const clave = claveDeLugar(base);
+  const sin = clave.replace(new RegExp(`( de| del)? ${loc}$`), '').replace(new RegExp(`^${loc} `), '');
+  return sin.length >= 3 ? sin : clave;
+}
+
 export function sinRepetidos<F extends BarrioConFuente>(barrios: F[]): F[] {
   const rango = (b: F) => (b.properties.tipo === 'aproximado' ? 10 : 0) + (CONFIANZA[b.properties.fuente ?? ''] ?? 5);
   const ganador = new Map<string, F>();
-  for (const b of [...barrios].sort((x, y) => rango(x) - rango(y))) {
-    const clave = `${b.properties.localidad}|${claveDeLugar(b.properties.base ?? b.properties.nombre)}`;
+  // Un "barrio" que es la localidad entera ("Villa Saldán" en Saldán) se saca: se encima con todos los demás.
+  const esLaLocalidad = (b: F) => b.properties.localidad !== 'Córdoba'
+    && claveDeLugar(b.properties.base ?? b.properties.nombre).replace(/^villa /, '') === claveDeLugar(b.properties.localidad).replace(/^villa /, '');
+  for (const b of [...barrios].filter((x) => !esLaLocalidad(x)).sort((x, y) => rango(x) - rango(y))) {
+    const clave = `${b.properties.localidad}|${claveSinLocalidad(b.properties.base ?? b.properties.nombre, b.properties.localidad)}`;
     const ya = ganador.get(clave);
     if (!ya) ganador.set(clave, b);
     else if (ya.properties.base !== b.properties.base) ya.properties.alias = [...new Set([...(ya.properties.alias ?? []), b.properties.base ?? b.properties.nombre])];
@@ -667,7 +679,10 @@ if (import.meta.main) {
       }
       const propios = [...areas.values()].map((a) => a.area).concat(localidad.properties.dentroDe ? [] : dibujados.get(nombre) ?? [])
         .filter((a) => turf.distance(turf.pointOnFeature(a), centro) < alcance + 3);
-      const calles = alRadio(cascoUrbano(elementos, centro, alcance, propios), radio);
+      const crudo = alRadio(cascoUrbano(elementos, centro, alcance, propios), radio);
+      // Las calles de dos pueblos pegados forman un solo pedazo: a una localidad que está adentro de otra se le corta en
+      // un círculo alrededor de su centro (si no, Yocsina se quedaba con el centro de Malagueño).
+      const calles = crudo && localidad.properties.dentroDe ? interseccion(crudo, turf.circle(centro, alcance, { units: 'kilometers', steps: 48 })) : crudo;
       const casco = calles ? unir([calles, ...propios]) : null;
 
       // Lo que nombra EPEC y OSM no tiene: se busca en Nominatim dentro de la localidad.
@@ -720,19 +735,28 @@ if (import.meta.main) {
   // Cada localidad termina donde empieza otra: se le restan los radios oficiales de las demás (salvo el que la
   // contiene, si es un enclave) y las localidades que tiene adentro.
   const conCasco = zonas.features.filter((z) => z.properties.tipo === 'localidad' && z.properties.contorno);
+  const centros = new Map(conCasco.map((z) => [z, centroDe(z)]));
+  const originales = new Map(conCasco.map((z) => [z, comoArea(z)]));
   for (const z of conCasco) {
-    const area = comoArea(z);
+    // Sus barrios cercanos (también los aproximados: Dumesnil y Casa Bamba son de La Calera) son parte de lo urbano.
+    const centroZ = centros.get(z)!;
+    const cercanos = barrios.filter((b) => b.properties.localidad === z.properties.nombre
+      && turf.distance(turf.pointOnFeature(b as Area), centroZ) < (radioDe(z).length > 0 ? 11 : 6)) as Area[];
+    const area = unir([comoArea(z), ...(z.properties.dentroDe ? [] : cercanos)]) ?? comoArea(z);
     const [o, s, e, n] = turf.bbox(area);
     const toca = (a: Area) => { const [ao, as, ae, an] = turf.bbox(a); return ao <= e && ae >= o && as <= n && an >= s; };
     const centro = turf.pointOnFeature(area);
     const ajenos = [...radiosOficiales.entries()].filter(([nombre]) => !mismaLocalidad(nombre, z.properties.nombre))
       .flatMap(([, areas]) => areas).filter((a) => toca(a) && !turf.booleanPointInPolygon(centro, a));
     const hijas = conCasco.filter((h) => h.properties.dentroDe === z.properties.nombre).map(comoArea);
+    // Cada localidad se queda con su centro: si el de otra cae adentro de esta (Saldán dentro de Villa Allende), se resta.
+    const vecinas = conCasco.filter((v) => v !== z && v.properties.dentroDe !== z.properties.nombre && z.properties.dentroDe !== v.properties.nombre
+      && turf.booleanPointInPolygon(centros.get(v)!, originales.get(z)!)).map((v) => originales.get(v)!);
     // Sus barrios no se tocan; y una localidad que está adentro de otra no se queda con los barrios de la grande.
     const poligonosDe = (localidad: string) => unir(barrios.filter((b) => b.properties.localidad === localidad && b.properties.tipo !== 'aproximado') as Area[]);
     const propios = poligonosDe(z.properties.nombre);
     const deLaMadre = z.properties.dentroDe ? poligonosDe(z.properties.dentroDe) : null;
-    const quitar = unir([...ajenos, ...hijas, ...(deLaMadre ? [deLaMadre] : [])]);
+    const quitar = unir([...ajenos, ...hijas, ...vecinas, ...(deLaMadre ? [deLaMadre] : [])]);
     const resto = quitar && propios ? diferencia(quitar, propios) : quitar;
     const queda = resto ? diferencia(area, resto) : null;
     if (queda && km2(queda) > 0.05) z.geometry = aliviar(queda).geometry as never;

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { claveSimple, crearBuscadorDeBarrios, distancia, nombresDelTramo } from './nombres.ts';
+import { localidadesComoBarrios } from './localidades.ts';
 
 // Barrios reales de La Calera (OpenStreetMap) y de Villa María, y cómo los escribe EPEC en sus anuncios.
 const barrio = (base: string, localidad: string) => ({ nombre: `${base} (${localidad})`, base, localidad });
@@ -51,4 +52,11 @@ test('los alias del interior reconocen cómo escribe EPEC un barrio que en el ma
   });
   assert.deepEqual(conAlias(['San Francisco'], 'barrios 2 Hermanos.').barrios, ['Dos Hermanos (San Francisco)']);
   assert.deepEqual(conAlias(['Villa María'], 'barrio Otro.').barrios, []);
+});
+test('localidadesComoBarrios: la localidad nombrada como barrio de sí misma, y las que están adentro de otra', () => {
+  const zona = (nombre: string, dentroDe?: string) => ({ type: 'Feature', properties: { nombre, tipo: 'localidad', patron: '', descripcion: '', ...(dentroDe ? { dentroDe } : {}) }, geometry: null }) as never;
+  const buscarCon = crearBuscadorDeBarrios(localidadesComoBarrios([zona('Saldán'), zona('Villa Carlos Paz'), zona('Yocsina', 'Malagueño')]));
+  assert.deepEqual(buscarCon(['Saldán'], 'barrio Villa Saldán.').barrios, ['Saldán']);
+  assert.deepEqual(buscarCon(['Malagueño'], 'barrios Yocsina.').barrios, ['Yocsina']);
+  assert.deepEqual(buscarCon(['Villa Carlos Paz'], 'barrio Carlos Paz 1.').barrios, []); // una línea, no la ciudad entera
 });
