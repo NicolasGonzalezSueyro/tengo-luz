@@ -14,6 +14,7 @@ import type { Feature, MultiPolygon, Polygon } from 'geojson';
 import { ARCHIVO_REVISADOS, type ContornoManual } from './contornos.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio } from './nombres.ts';
+import { claveDeLugar } from './barrios-interior.ts';
 
 type Area = Feature<Polygon | MultiPolygon>;
 const CACHE = '.cache/wikimapia';
@@ -82,13 +83,45 @@ if (import.meta.main) {
   type Comparado = { nombre: string; localidad: string; tipo: string; fuente: string; coincidencia: number; wikimapia: { id: string } };
   type Encontrado = { nombre: string; localidad: string; wikimapia: { id: string } };
   const { comparados, encontrados } = JSON.parse(await readFile(`${CACHE}/informe.json`, 'utf8')) as { comparados: Comparado[]; encontrados: Encontrado[] };
-  const objetos = new Map((JSON.parse(await readFile(`${CACHE}/objetos.json`, 'utf8')) as { id: string; geometria: Polygon }[])
-    .map((o) => [o.id, { type: 'Feature', properties: {}, geometry: o.geometria } as Area]));
+  const crudos = JSON.parse(await readFile(`${CACHE}/objetos.json`, 'utf8')) as { id: string; nombre: string; ha: number; geometria: Polygon }[];
+  const objetos = new Map(crudos.map((o) => [o.id, { type: 'Feature', properties: {}, geometry: o.geometria } as Area]));
+
+  // Los aproximados que la comparación no encontró por nombre exacto: se busca una referencia de nombre parecido
+  // ("7 Soles Universitario" y "Country Siete Soles") a menos de 1 km. Si la referencia es casi igual a un barrio
+  // oficial de capital, no sirve: es el barrio entero, no la parte que se busca.
+  const yaComparados = new Set(comparados.map((c) => `${c.localidad}|${claveDeBarrio(c.nombre)}`));
+  const interiorActual = JSON.parse(await readFile('data/barrios-interior.geojson', 'utf8')) as { features: (Area & { properties: { nombre: string; base?: string; localidad: string; tipo: string } })[] };
+  const oficialesCapital = (JSON.parse(await readFile('data/barrios.geojson', 'utf8')) as { features: Area[] }).features.filter((f) => f.geometry?.type !== ('Point' as string));
+  const contiene = (a: string, b: string) => ` ${a} `.includes(` ${b} `);
+  const conClave = crudos.filter((o) => o.ha >= 0.5 && o.ha < 300).map((o) => ({ ...o, clave: claveDeLugar(o.nombre.replace(/\s+-\s+.*$/, '')), area: objetos.get(o.id)! }));
+  const esBarrioOficial = (a: Area) => oficialesCapital.some((b) => {
+    try {
+      const comun = turf.intersect(turf.featureCollection([a, b]));
+      return Boolean(comun) && turf.area(comun!) > 0.7 * Math.max(turf.area(a), turf.area(b));
+    } catch {
+      return false;
+    }
+  });
+  const parecidos: { nombre: string; localidad: string; tipo: string; fuente: string; coincidencia: number; wikimapia: { id: string } }[] = [];
+  for (const d of interiorActual.features.filter((f) => f.properties.tipo === 'aproximado')) {
+    if (yaComparados.has(`${d.properties.localidad}|${claveDeBarrio(d.properties.nombre)}`)) continue;
+    const clave = claveDeLugar(d.properties.base ?? d.properties.nombre);
+    if (clave.length < 5) continue;
+    const centro = turf.centroid(d).geometry.coordinates;
+    const ref = conClave.filter((o) => (o.clave === clave || contiene(o.clave, clave) || contiene(clave, o.clave))
+      && turf.distance(centro, turf.centroid(o.area).geometry.coordinates) < 1)
+      .sort((a, b) => turf.distance(centro, turf.centroid(a.area).geometry.coordinates) - turf.distance(centro, turf.centroid(b.area).geometry.coordinates))[0];
+    if (ref && !esBarrioOficial(ref.area)) {
+      parecidos.push({ nombre: d.properties.nombre, localidad: d.properties.localidad, tipo: 'aproximado', fuente: 'parecido', coincidencia: 0, wikimapia: { id: ref.id } });
+    }
+  }
+  console.log(`   ${parecidos.length} aproximados con una referencia de nombre parecido`);
 
   // Qué rearmar: los aproximados y los de OSM que no coinciden (los oficiales de la Municipalidad y de los
   // municipios no se tocan: si difieren, el oficial manda), y los que faltaban.
   const aRevisar = [
     ...comparados.filter((c) => c.coincidencia < 0.6 && (c.tipo === 'aproximado' || c.fuente === 'osm')),
+    ...parecidos,
     ...encontrados.map((e) => ({ ...e, nombre: e.localidad === CAPITAL ? e.nombre : `${e.nombre} (${e.localidad})` })),
   ];
   const vistos = new Set<string>();

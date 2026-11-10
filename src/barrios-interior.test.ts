@@ -34,3 +34,9 @@ test('mismaLocalidad: iguales o uno es el comienzo del otro, pero no cualquier p
   assert.equal(mismaLocalidad('Malagueño', 'MALAGUEÑO'), true);
   assert.equal(mismaLocalidad('Pampa Alta', 'La Pampa'), false);
 });
+test('sinRepetidos junta los que se escriben casi igual si están en el mismo lugar, no si están lejos', () => {
+  const cuadrado = (x: number) => turf.bboxPolygon([x, -31.5, x + 0.01, -31.49]).geometry;
+  const b = (base: string, x: number) => ({ type: 'Feature', geometry: cuadrado(x), properties: { nombre: base, base, localidad: 'Córdoba', tipo: 'poligono', fuente: 'osm' } });
+  const quedan = sinRepetidos([b('Brisas de Manantiales', -64.2), b('Brisas de Manatiales', -64.2), b('Brisas de Manantiale', -63.5)]);
+  assert.deepEqual(quedan.map((x) => x.properties.base), ['Brisas de Manantiales', 'Brisas de Manantiale']);
+});

@@ -19,7 +19,7 @@ import type { Feature, MultiPoint, MultiPolygon, Point, Polygon, Position } from
 import { normalizar } from './barrios.ts';
 import { redondear } from './descargar-zonas.ts';
 import { crearUbicadorDeLocalidades, escapar, tramosDelCorte, type Candidato, type Localidad } from './localidades.ts';
-import { claveDeBarrio, nombresDelTramo } from './nombres.ts';
+import { claveDeBarrio, distancia, nombresDelTramo } from './nombres.ts';
 import { aplicarContornos, ARCHIVO_REVISADOS, leerManuales } from './contornos.ts';
 
 // Overpass: los dos servidores que están detrás de overpass-api.de (su balanceador a veces responde 502 aunque
@@ -466,11 +466,15 @@ export function aproximar(semillas: Semilla[], conContorno: Area[], casco: Area 
   return resultado;
 }
 
+const ROMANOS: Record<string, string> = { ii: '2', iii: '3', iv: '4', vi: '6', vii: '7', viii: '8' };
 const NUMEROS: Record<string, string> = { uno: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5', seis: '6', siete: '7', ocho: '8', nueve: '9', diez: '10' };
 /** "Country Tejas Cuatro", "Tejas 4" y "TEJAS 4 (Malagueño)" son el mismo lugar. Exportado para los tests. */
 export function claveDeLugar(base: string): string {
-  const limpio = base.replace(/\s*\([^)]*\)/g, '').replace(/^(country|barrio privado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo)\s+/i, '');
-  return claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? p).join(' ');
+  // "Coop. La Unidad" y "Cooperativa La Unidad", "Ex Batallón 141" y "Batallon 141", "Greenville II" y "GreenVille 2",
+  // "Villa de Emergencia El Chaparral" y "Villa El Chaparral".
+  const limpio = base.replace(/\s*\([^)]*\)/g, '').replace(/^villa de emergencia\s+/i, 'villa ')
+    .replace(/^((country|barrio privado|barrio cerrado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo|privado|ex|coop\.?|cooperativa)\s+)+/i, '');
+  return claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? ROMANOS[p] ?? p).join(' ');
 }
 
 type BarrioConFuente = { properties: { nombre: string; base?: string; localidad: string; tipo?: string; fuente?: string; alias?: string[] } };
@@ -489,7 +493,31 @@ export function sinRepetidos<F extends BarrioConFuente>(barrios: F[]): F[] {
     if (!ya) ganador.set(clave, b);
     else if (ya.properties.base !== b.properties.base) ya.properties.alias = [...new Set([...(ya.properties.alias ?? []), b.properties.base ?? b.properties.nombre])];
   }
+  // Los que se escriben casi igual ("Brisas de Manatiales" y "Brisas de Manantiales") y están en el mismo lugar.
   const quedan = new Set(ganador.values());
+  const lista = [...quedan].sort((x, y) => rango(x) - rango(y));
+  const caja = (b: F) => turf.bbox(b as unknown as Area);
+  for (const [i, a] of lista.entries()) {
+    if (!quedan.has(a)) continue;
+    const ka = claveDeLugar(a.properties.base ?? a.properties.nombre);
+    for (const b of lista.slice(i + 1)) {
+      if (!quedan.has(b) || b.properties.localidad !== a.properties.localidad) continue;
+      const kb = claveDeLugar(b.properties.base ?? b.properties.nombre);
+      const largo = Math.min(ka.length, kb.length);
+      const tolerancia = largo >= 14 ? 2 : largo >= 8 ? 1 : 0;
+      if (tolerancia === 0 || Math.abs(ka.length - kb.length) > tolerancia || distancia(ka, kb) > tolerancia) continue;
+      let cerca = false;
+      try {
+        const [ao, as, ae, an] = caja(a), [bo, bs, be, bn] = caja(b);
+        cerca = !(ao > be || bo > ae || as > bn || bs > an);
+      } catch {
+        // sin geometría: no se puede saber si es el mismo lugar
+      }
+      if (!cerca) continue; // lejos: son dos lugares distintos
+      quedan.delete(b);
+      a.properties.alias = [...new Set([...(a.properties.alias ?? []), b.properties.base ?? b.properties.nombre])];
+    }
+  }
   return barrios.filter((b) => quedan.has(b));
 }
 

@@ -20,7 +20,7 @@ import type { Position } from 'geojson';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';
 import {
   aliviar, aproximar, areaDe, consultarOverpass, diferencia, enTitulo, interseccion, km2, SERVIDORES, unir,
-  sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
+  claveDeLugar, sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
 } from './barrios-interior.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio, crearBuscadorDeBarrios } from './nombres.ts';
@@ -178,18 +178,48 @@ for (const nombre of faltan) {
 }
 
 // 3. Cada lugar con su contorno de OSM (si está cerca del punto: los nombres se repiten) o uno aproximado.
+// Nada fuera del radio urbano oficial de capital (Lomas Sur, Tejas Tres… son de Villa Allende o Malagueño), ni nombres
+// que no son lugares ("Manzana 4", "Asentamiento" a secas).
+const radiosProvincia = JSON.parse(await readFile('.cache/barrios-interior/idecor-radios_urbanos.json', 'utf8').catch(() => '{"features":[]}')) as { features: (Area & { properties: { nombre?: string } })[] };
+const radioCapital = radiosProvincia.features.filter((r) => r.geometry && /^c[oó]rdoba$/i.test(r.properties.nombre ?? ''));
+const enCapital = (a: Area) => radioCapital.length === 0 || radioCapital.some((r) => turf.booleanPointInPolygon(turf.pointOnFeature(a), r));
+const BASURA = /^(manzana|mz\.?|lote|parcela)\b|^asentamiento$/i;
 const nuevos: BarrioInterior[] = [];
 const vistos = new Set<string>();
 const agregar = (base: string, area: Area, tipo: 'poligono' | 'aproximado', fuente: 'osm' | 'nominatim' | 'municipio') => {
   const clave = claveDeBarrio(base);
-  if (vistos.has(clave)) return;
+  if (vistos.has(clave) || BASURA.test(base.trim()) || !enCapital(area)) return;
   vistos.add(clave);
   nuevos.push({ ...aliviar(area), properties: { nombre: base, base, localidad: CAPITAL, tipo, fuente } } as BarrioInterior);
 };
 const sinContorno: Semilla[] = [];
+// "Alejandro Carbó" con el pin adentro del barrio "Carbo", "Argüello Lourdes" en "Lourdes": es el mismo barrio con otro
+// nombre. No se dibuja otro encima: queda como alias (data/alias-barrios.json) y el corte pinta el barrio oficial.
+// Las partes de un barrio (Ampliación, Anexo, Bajo, IPV…) sí son divisiones.
+// Solo cuenta como el mismo nombre si lo que sobra son palabras genéricas, títulos o nombres de pila ("Alejandro
+// Carbó" y "Carbo", "Parque Liceo Primera Sección" y "Parque Liceo 1° Sección"). Nunca si sobra algo que describe una
+// parte ("Brisas de Manantiales" no es "Manantiales II", "Talleres Este" no es "Talleres") ni si cambia un número.
+const PARTE = /^(ampliaci[oó]n|anexo|bajo|alto|nuevo|nueva|sector|secci[oó]n|ipv|cooperativa|coop|country|barrio cerrado)\b/i;
+const ORDINALES: Record<string, string> = { primera: '1', primero: '1', segunda: '2', segundo: '2', tercera: '3', tercero: '3', cuarta: '4', cuarto: '4', quinta: '5', quinto: '5' };
+const GENERICAS = new Set(['barrio', 'residencial', 'ciudad', 'parque', 'estancia', 'villa', 'finca', 'tte', 'teniente', 'doctor', 'dr', 'general',
+  'presidente', 'ingeniero', 'alejandro', 'mariano', 'nicolas', 'benjamin', 'policarpio', 'rene', 'jose', 'juan', 'manuel', 'militar', 'seccion']);
+const palabras = (t: string) => claveDeLugar(t).split(' ').map((p) => ORDINALES[p] ?? p.replace(/^(\d+)[aoº°]?$/, '$1')).filter((p) => p.length > 0);
+const esVariante = (a: string, b: string) => {
+  const x = new Set(palabras(a)), y = new Set(palabras(b));
+  const comunes = [...x].filter((p) => y.has(p));
+  if (comunes.filter((p) => !GENERICAS.has(p) && !/^\d+$/.test(p)).length === 0) return false;
+  const sobran = [...x, ...y].filter((p) => !(x.has(p) && y.has(p)));
+  return sobran.every((p) => GENERICAS.has(p) || (p.length <= 2 && !/^\d+$/.test(p)));
+};
+const aliasNuevos: Record<string, string> = {};
 for (const s of semillas) {
   // "Country La Reserva" ya está en el mapa municipal como "La Reserva".
   if (esMunicipal([CAPITAL], sinPrefijo(s.base)).barrios.length > 0) continue;
+  const padre = municipales.find((m) => turf.booleanPointInPolygon(s.punto, m));
+  if (padre && !PARTE.test(s.base) && enCapital(turf.point(s.punto) as unknown as Area) && esVariante(s.base, padre.properties.nombre!)) {
+    if (!(s.base in alias)) aliasNuevos[s.base] = padre.properties.nombre!;
+    continue;
+  }
   const cerca2km = (a: Area) => turf.booleanPointInPolygon(s.punto, a) || turf.distance(s.punto, turf.centroid(a), { units: 'kilometers' }) < 2;
   const loteo = loteos.get(claveDeBarrio(sinPrefijoOficial(s.base)));
   if (loteo && cerca2km(loteo.area)) {
@@ -203,12 +233,17 @@ for (const s of semillas) {
   else sinContorno.push(s);
 }
 // Los loteos y las zonas de OSM que el mapa no tenía (ni como punto): más divisiones dentro de los barrios grandes.
+// Un loteo o un área de OSM que es el barrio oficial con otro nombre ("Matienzo" y "Tte. Benjamin Matienzo") tampoco.
+const esElBarrioOficial = (base: string, area: Area) => {
+  const padre = municipales.find((m) => turf.booleanPointInPolygon(turf.pointOnFeature(area), m));
+  return Boolean(padre) && !PARTE.test(base) && esVariante(base, padre!.properties.nombre!);
+};
 for (const { base, area } of loteos.values()) {
-  if (esMunicipal([CAPITAL], base).barrios.length > 0) continue;
+  if (esMunicipal([CAPITAL], base).barrios.length > 0 || esElBarrioOficial(base, area)) continue;
   agregar(base, area, 'poligono', 'municipio');
 }
 for (const { base, area } of areasOsm.values()) {
-  if (esMunicipal([CAPITAL], base).barrios.length > 0) continue;
+  if (esMunicipal([CAPITAL], base).barrios.length > 0 || esElBarrioOficial(base, area)) continue;
   agregar(base, area, 'poligono', 'osm');
 }
 const conContorno = nuevos.map((f) => f as Area);
@@ -223,6 +258,12 @@ for (const [i, { base, area, fuente }] of aproximados.entries()) {
   if ((i + 1) % 25 === 0) console.log(`  ${i + 1}/${aproximados.length} aproximados ajustados a las manzanas`);
 }
 
+if (Object.keys(aliasNuevos).length > 0) {
+  const todos = { ...alias, ...aliasNuevos };
+  const ordenados = Object.fromEntries(Object.entries(todos).sort(([a], [b]) => a.localeCompare(b, 'es')));
+  await writeFile('data/alias-barrios.json', JSON.stringify(ordenados, null, 2) + '\n');
+  console.log(`🔗 ${Object.keys(aliasNuevos).length} alias nuevos (mismo barrio con otro nombre): ${Object.entries(aliasNuevos).map(([a, b]) => `${a} → ${b}`).join(', ')}`);
+}
 const resto = interior.features.filter((f) => f.properties.localidad !== CAPITAL);
 const conManuales = aplicarContornos({ type: 'FeatureCollection', features: [...resto, ...nuevos] }, 'interior');
 await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: sinRepetidos(conManuales.features) }) + '\n');
