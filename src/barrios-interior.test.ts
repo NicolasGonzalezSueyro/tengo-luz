@@ -46,3 +46,10 @@ test('claveSinLocalidad: "El Talar de Mendiolaza" es "El Talar", "Villa Allende 
   assert.equal(claveDeLugar('Las Cañitas Barrio Privado'), claveDeLugar('Las Cañitas'));
   assert.notEqual(claveSinLocalidad('Nuevo Malagueño', 'Malagueño'), claveSinLocalidad('Malagueño', 'Malagueño'));
 });
+test('sinRepetidos entre localidades: el mismo barrio en el mismo lugar se va la copia de capital', () => {
+  const cuadrado = turf.bboxPolygon([-64.30, -31.32, -64.29, -31.31]).geometry;
+  const b = (localidad: string, fuente: string) => ({ type: 'Feature', geometry: cuadrado, properties: { nombre: `San Remo (${localidad})`, base: 'San Remo', localidad, tipo: 'poligono', fuente } });
+  assert.deepEqual(sinRepetidos([b('Córdoba', 'osm'), b('Saldán', 'osm')]).map((x) => x.properties.localidad), ['Saldán']);
+  // Entre dos localidades del interior quedan los dos: EPEC puede nombrarlo en cualquiera.
+  assert.deepEqual(sinRepetidos([b('Saldán', 'osm'), b('Villa Allende', 'municipio')]).map((x) => x.properties.localidad), ['Saldán', 'Villa Allende']);
+});

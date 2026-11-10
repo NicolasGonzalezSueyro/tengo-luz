@@ -493,7 +493,7 @@ export function claveSinLocalidad(base: string, localidad: string): string {
   return sin.length >= 3 ? sin : clave;
 }
 
-export function sinRepetidos<F extends BarrioConFuente>(barrios: F[]): F[] {
+export function sinRepetidos<F extends BarrioConFuente>(barrios: F[], centros?: Map<string, Position>, nombradosEnCapital?: Set<string>): F[] {
   const rango = (b: F) => (b.properties.tipo === 'aproximado' ? 10 : 0) + (CONFIANZA[b.properties.fuente ?? ''] ?? 5);
   const ganador = new Map<string, F>();
   // Un "barrio" que es la localidad entera ("Villa Saldán" en Saldán) se saca: se encima con todos los demás.
@@ -507,6 +507,46 @@ export function sinRepetidos<F extends BarrioConFuente>(barrios: F[]): F[] {
   }
   // Los que se escriben casi igual ("Brisas de Manatiales" y "Brisas de Manantiales") y están en el mismo lugar.
   const quedan = new Set(ganador.values());
+  // El mismo barrio como división de capital y como barrio de una localidad vecina, en el mismo lugar ("San Remo" de
+  // Saldán): se va la copia de capital (salvo que sea oficial). Entre dos localidades del interior quedan los dos: EPEC
+  // puede nombrarlo en cualquiera, y sacar uno rompía el reconocimiento ("Centro" de Villa Nueva, "Bella Vista").
+  const porClave = new Map<string, F[]>();
+  for (const b of quedan) {
+    const clave = claveDeLugar(b.properties.base ?? b.properties.nombre);
+    porClave.set(clave, [...(porClave.get(clave) ?? []), b]);
+  }
+  const preferencia = (b: F) => {
+    const oficial = ['municipio', 'municipalidad'].includes(b.properties.fuente ?? '') ? 0 : 1;
+    const capital = b.properties.localidad === 'Córdoba' ? 1 : 0;
+    const centro = centros?.get(b.properties.localidad);
+    let distanciaAlCentro = 0;
+    try {
+      distanciaAlCentro = centro ? turf.distance(turf.pointOnFeature(b as unknown as Area), centro) : 0;
+    } catch {
+      // sin geometría
+    }
+    return oficial * 1000 + capital * 100 + distanciaAlCentro;
+  };
+  for (const grupo of porClave.values()) {
+    if (new Set(grupo.map((b) => b.properties.localidad)).size < 2) continue;
+    const orden = [...grupo].sort((x, y) => preferencia(x) - preferencia(y));
+    for (const [i, a] of orden.entries()) {
+      if (!quedan.has(a)) continue;
+      for (const b of orden.slice(i + 1)) {
+        if (!quedan.has(b) || b.properties.localidad === a.properties.localidad) continue;
+        if (b.properties.localidad !== 'Córdoba' || a.properties.localidad === 'Córdoba') continue;
+        // EPEC la nombra en sus cortes de capital ("Ciudad de los Niños"): sin esta copia, el corte no se pinta.
+        if (nombradosEnCapital?.has(claveDeLugar(b.properties.base ?? b.properties.nombre))) continue;
+        try {
+          const comun = turf.intersect(turf.featureCollection([a as unknown as Area, b as unknown as Area]));
+          const menor = Math.min(turf.area(a as unknown as Area), turf.area(b as unknown as Area));
+          if (comun && turf.area(comun) >= 0.3 * menor) quedan.delete(b);
+        } catch {
+          // sin geometría: no se puede saber si es el mismo lugar
+        }
+      }
+    }
+  }
   const lista = [...quedan].sort((x, y) => rango(x) - rango(y));
   const caja = (b: F) => turf.bbox(b as unknown as Area);
   for (const [i, a] of lista.entries()) {
@@ -736,6 +776,25 @@ if (import.meta.main) {
   // contiene, si es un enclave) y las localidades que tiene adentro.
   const conCasco = zonas.features.filter((z) => z.properties.tipo === 'localidad' && z.properties.contorno);
   const centros = new Map(conCasco.map((z) => [z, centroDe(z)]));
+  // Un barrio de OSM que quedó en la localidad equivocada (el contorno de Villa Allende cubría Saldán cuando se bajó):
+  // si está fuera del radio oficial de la suya y más cerca del centro de otra, pasa a esa otra.
+  const porNombre = new Map(conCasco.map((z) => [z.properties.nombre, z]));
+  for (const b of barrios) {
+    // Solo áreas de OSM; y si EPEC lo nombra en su localidad actual, se queda ahí (aunque el punto esté corrido).
+    if (b.properties.fuente !== 'osm' || b.properties.tipo !== 'poligono') continue;
+    if ([...(nombresEpec.get(b.properties.localidad) ?? [])].some((n) => claveDeBarrio(n) === claveDeBarrio(b.properties.base))) continue;
+    const propia = porNombre.get(b.properties.localidad);
+    const radioPropio = propia ? radioDe(propia) : [];
+    const punto = turf.pointOnFeature(b as Area);
+    if (!propia || radioPropio.length === 0 || radioPropio.some((r) => turf.booleanPointInPolygon(punto, r))) continue;
+    const distanciaPropia = turf.distance(punto, centros.get(propia)!);
+    const otra = conCasco.filter((z) => z !== propia && !z.properties.dentroDe)
+      .map((z) => ({ z, d: turf.distance(punto, centros.get(z)!) })).sort((x, y) => x.d - y.d)[0];
+    if (!otra || otra.d >= distanciaPropia || otra.d > 3) continue;
+    b.properties.localidad = otra.z.properties.nombre;
+    b.properties.nombre = `${b.properties.base} (${otra.z.properties.nombre})`;
+  }
+  const centrosPorNombre = new Map(conCasco.map((z) => [z.properties.nombre, centros.get(z)!]));
   const originales = new Map(conCasco.map((z) => [z, comoArea(z)]));
   for (const z of conCasco) {
     // Sus barrios cercanos (también los aproximados: Dumesnil y Casa Bamba son de La Calera) son parte de lo urbano.
@@ -767,7 +826,7 @@ if (import.meta.main) {
   if (!soloEsta) {
     // Los contornos corregidos a mano con el editor (src/contornos.ts) mandan. Después, un barrio por lugar.
     const conManuales = aplicarContornos({ type: 'FeatureCollection', features: sinReemplazados }, 'interior');
-    const unicos = sinRepetidos(conManuales.features);
+    const unicos = sinRepetidos(conManuales.features, centrosPorNombre);
     await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: unicos }) + '\n');
     await writeFile('data/zonas.geojson', JSON.stringify(aplicarContornos(zonas, 'zonas'), null, 1) + '\n');
   } else {

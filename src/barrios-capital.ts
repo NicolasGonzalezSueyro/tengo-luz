@@ -152,8 +152,10 @@ const semillas: Semilla[] = mapa.features
   .map((f) => ({ base: f.properties.nombre!, punto: f.geometry.coordinates as Position, fuente: 'osm' as const }));
 
 const faltan = new Set<string>();
+const nombradosEnCapital = new Set<string>(); // lo que EPEC nombra en sus cortes de capital y no es un barrio municipal
 for (const c of cortes.filter((c) => (c.localidad ?? CAPITAL) === CAPITAL)) {
   for (const pedazo of ubicar(c.zona).sinUbicar) {
+    nombradosEnCapital.add(claveDeLugar(pedazo));
     if (esDescripcion(pedazo) || ignorados.has(pedazo) || /^\d/.test(pedazo) || pedazo.split(' ').length > 5) continue;
     if (tolerante([CAPITAL], pedazo).barrios.length === 0 && !areasOsm.has(claveDeBarrio(pedazo))) faltan.add(pedazo);
   }
@@ -266,6 +268,6 @@ if (Object.keys(aliasNuevos).length > 0) {
 }
 const resto = interior.features.filter((f) => f.properties.localidad !== CAPITAL);
 const conManuales = aplicarContornos({ type: 'FeatureCollection', features: [...resto, ...nuevos] }, 'interior');
-await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: sinRepetidos(conManuales.features) }) + '\n');
+await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: sinRepetidos(conManuales.features, undefined, nombradosEnCapital) }) + '\n');
 const cuenta = (tipo: string) => nuevos.filter((f) => f.properties.tipo === tipo).length;
 console.log(`Capital: ${cuenta('poligono')} lugares con contorno (oficial u OSM) y ${cuenta('aproximado')} aproximados.`);
