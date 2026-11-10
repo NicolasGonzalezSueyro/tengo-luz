@@ -224,7 +224,8 @@
       "Cerro Norte (La Calera)",
       "Maipú (La Calera)",
       "Minetti (La Calera)",
-      "Loma De La Cruz (La Calera)",
+      "Matadero (La Calera)",
+      "Loma de La Cruz (La Calera)",
       "La Campana (La Calera)",
       "Dumesnil (La Calera)"
     ],
@@ -235,7 +236,6 @@
       "Mattaldi"
     ],
     "sinUbicar": [
-      "mataderos",
       "rumi huasy"
     ],
     "parciales": [
@@ -251,7 +251,8 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/03/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Barrio San Antonio (Cruz del Eje)"
+      "Barrio San Antonio (Cruz del Eje)",
+      "Centro (Cruz del Eje)"
     ],
     "zonas": [
       "Cruz del Eje"
@@ -268,8 +269,7 @@
       "pozo cavado",
       "aerodromo",
       "el quilino",
-      "la curva",
-      "centro"
+      "la curva"
     ],
     "parciales": [
       "Cruz del Eje"
@@ -366,7 +366,8 @@
     "fuente": "https://eldoce.tv/actualidad/2026/09/08/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Piedra del Sapo (Alta Gracia)",
-      "Tiro Federal (Alta Gracia)"
+      "Tiro Federal (Alta Gracia)",
+      "Potrerillo de Larreta (Alta Gracia)"
     ],
     "zonas": [
       "Alta Gracia"
@@ -374,7 +375,6 @@
     "sinUbicar": [
       "fogon gaucho",
       "colonia jose maria paz",
-      "potrerillo larreta",
       "segundo paredon",
       "valle chico"
     ],
@@ -393,6 +393,7 @@
     "barrios": [
       "Touring Club (Alta Gracia)",
       "Alta Gracia Country Golf (Alta Gracia)",
+      "Anglo Viejo Country (Alta Gracia)",
       "El Golf (Alta Gracia)",
       "La Rinconada (Alta Gracia)",
       "Santa Teresa de Jesús (Alta Gracia)"
@@ -402,7 +403,6 @@
     ],
     "sinUbicar": [
       "cosag",
-      "country anglo viejo",
       "nuestra senora huerto",
       "la vina",
       "la gruta",
@@ -449,6 +449,7 @@
     "barrios": [
       "Touring Club (Alta Gracia)",
       "Alta Gracia Country Golf (Alta Gracia)",
+      "Anglo Viejo Country (Alta Gracia)",
       "El Golf (Alta Gracia)",
       "La Rinconada (Alta Gracia)",
       "Santa Teresa de Jesús (Alta Gracia)"
@@ -458,7 +459,6 @@
     ],
     "sinUbicar": [
       "cosag",
-      "country anglo viejo",
       "nuestra senora huerto",
       "la vina",
       "la gruta",
@@ -477,7 +477,8 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/08/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Bela Vista (Río Ceballos)",
+      "Pérez Taboada (Río Ceballos)",
+      "San Jorge (Río Ceballos)",
       "La Quebrada (Río Ceballos)",
       "Colanchanga (Río Ceballos)"
     ],
@@ -486,8 +487,7 @@
     ],
     "sinUbicar": [
       "villa corema",
-      "perez taboada",
-      "san jorge",
+      "buena vista",
       "plan amuchastegui"
     ],
     "parciales": [
@@ -538,11 +538,14 @@
       "El Bosque (Salsipuedes)",
       "Villa Sol (Salsipuedes)",
       "Ariel (Salsipuedes)",
+      "El Sauce (Salsipuedes)",
+      "Bella Vista (Salsipuedes)",
       "El Talita (Salsipuedes)",
       "Cerro del Sol (Salsipuedes)",
       "El Pueblito (Salsipuedes)",
       "Villa las Selvas (Salsipuedes)",
       "Oro Verde (Salsipuedes)",
+      "Centro (Salsipuedes)",
       "Plasman y Amuchastegui (Salsipuedes)",
       "Los Torres (Salsipuedes)",
       "San Ambrosio (Salsipuedes)",
@@ -555,9 +558,6 @@
       "los nogales antena",
       "progreso",
       "la colonial",
-      "el sauce",
-      "bella vista",
-      "centro",
       "las tejas",
       "reconquista",
       "camino al cuadrado",
@@ -581,7 +581,10 @@
       "Ramenvil (Río Ceballos)",
       "Santa Fe (Río Ceballos)",
       "Villa Ñu Porá (Río Ceballos)",
-      "Bela Vista (Río Ceballos)",
+      "Altos de Luján (Río Ceballos)",
+      "San Francisco (Río Ceballos)",
+      "Pérez Taboada (Río Ceballos)",
+      "San Jorge (Río Ceballos)",
       "La Quebrada (Río Ceballos)",
       "Colanchanga (Río Ceballos)"
     ],
@@ -599,18 +602,15 @@
       "villa josefina",
       "terrazas rio ceballos",
       "don justo pietri",
-      "altos lujan",
       "sarmiento",
       "santa teresita",
       "san cayetano",
       "hipolito yrigoyen",
       "lumiere",
       "bella vista libertador san martin",
-      "san francisco",
       "maria cristina",
       "villa corema",
-      "perez taboada",
-      "san jorge",
+      "buena vista",
       "plan amuchastegui"
     ],
     "parciales": [
@@ -626,6 +626,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/09/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
+      "El Cedro (Río Ceballos)",
       "Bela Vista (Río Ceballos)",
       "Villa Catalina (Río Ceballos)",
       "Aires Del Nordeste (Río Ceballos)"
@@ -634,7 +635,6 @@
       "Río Ceballos"
     ],
     "sinUbicar": [
-      "el cedro",
       "parque lujan",
       "los vascos",
       "sabato",
@@ -793,7 +793,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/09/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Centro (Villa Allende)",
+      "Villa Allende Centro (Villa Allende)",
       "Las Rosas (Villa Allende)"
     ],
     "zonas": [
@@ -1022,11 +1022,14 @@
       "El Bosque (Salsipuedes)",
       "Villa Sol (Salsipuedes)",
       "Ariel (Salsipuedes)",
+      "El Sauce (Salsipuedes)",
+      "Bella Vista (Salsipuedes)",
       "El Talita (Salsipuedes)",
       "Cerro del Sol (Salsipuedes)",
       "El Pueblito (Salsipuedes)",
       "Villa las Selvas (Salsipuedes)",
       "Oro Verde (Salsipuedes)",
+      "Centro (Salsipuedes)",
       "Plasman y Amuchastegui (Salsipuedes)",
       "Los Torres (Salsipuedes)",
       "San Ambrosio (Salsipuedes)",
@@ -1039,9 +1042,6 @@
       "los nogales antena",
       "progreso",
       "la colonial",
-      "el sauce",
-      "bella vista",
-      "centro",
       "las tejas",
       "reconquista",
       "camino al cuadrado",
@@ -1065,7 +1065,10 @@
       "Ramenvil (Río Ceballos)",
       "Santa Fe (Río Ceballos)",
       "Villa Ñu Porá (Río Ceballos)",
-      "Bela Vista (Río Ceballos)",
+      "Altos de Luján (Río Ceballos)",
+      "San Francisco (Río Ceballos)",
+      "Pérez Taboada (Río Ceballos)",
+      "San Jorge (Río Ceballos)",
       "La Quebrada (Río Ceballos)",
       "Colanchanga (Río Ceballos)"
     ],
@@ -1083,18 +1086,15 @@
       "villa josefina",
       "terrazas rio ceballos",
       "don justo pietri",
-      "altos lujan",
       "sarmiento",
       "santa teresita",
       "san cayetano",
       "hipolito yrigoyen",
       "lumiere",
       "bella vista libertador san martin",
-      "san francisco",
       "maria cristina",
       "villa corema",
-      "perez taboada",
-      "san jorge",
+      "buena vista",
       "plan amuchastegui"
     ],
     "parciales": [
@@ -1110,6 +1110,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/09/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
+      "El Cedro (Río Ceballos)",
       "Bela Vista (Río Ceballos)",
       "Villa Catalina (Río Ceballos)",
       "Aires Del Nordeste (Río Ceballos)"
@@ -1118,7 +1119,6 @@
       "Río Ceballos"
     ],
     "sinUbicar": [
-      "el cedro",
       "parque lujan",
       "los vascos",
       "sabato",
@@ -1177,14 +1177,14 @@
     "barrios": [
       "O.s.n.",
       "Cerveceros",
-      "Villa San Carlos"
+      "Villa San Carlos",
+      "Los Docentes",
+      "Ampliacion Cerveceros"
     ],
     "zonas": [],
     "sinUbicar": [
       "2",
-      "3",
-      "los docentes",
-      "ampliacion cerveceros"
+      "3"
     ]
   },
   {
@@ -1218,16 +1218,16 @@
     "zona": "Localidad de Tanti: barrio El Parador de Tanti. Localidad de Villa Santa Cruz del Lago: barrio Valle del Sol. Localidad de Cabalango.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/15/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "El Parador (Tanti)",
+      "Valle Del Sol (Villa Santa Cruz del Lago)"
+    ],
     "zonas": [
       "Tanti",
       "Villa Santa Cruz del Lago",
       "Cabalango"
     ],
-    "sinUbicar": [
-      "el parador tanti",
-      "valle sol"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Tanti",
       "Villa Santa Cruz del Lago"
@@ -1262,7 +1262,9 @@
     "fuente": "https://eldoce.tv/actualidad/2026/09/15/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Cóndor Bajo (Villa Allende)",
+      "Barrio Privado Cumbres del Golf (Villa Allende)",
       "Barrio Industrial (Villa Allende)",
+      "Terrazas de Villa Allende (Villa Allende)",
       "Las Polinesias (Villa Allende)",
       "Villa Brizuela (Villa Allende)",
       "Cumbres (Villa Allende)"
@@ -1271,8 +1273,6 @@
       "Villa Allende"
     ],
     "sinUbicar": [
-      "cumbres golf",
-      "terrazas villa allende",
       "cantera gran ombu",
       "terranova"
     ],
@@ -1515,10 +1515,13 @@
       "El Bosque (Salsipuedes)",
       "Villa Sol (Salsipuedes)",
       "Ariel (Salsipuedes)",
+      "El Sauce (Salsipuedes)",
+      "Bella Vista (Salsipuedes)",
       "El Talita (Salsipuedes)",
       "Cerro del Sol (Salsipuedes)",
       "Villa las Selvas (Salsipuedes)",
       "Oro Verde (Salsipuedes)",
+      "Centro (Salsipuedes)",
       "Plasman y Amuchastegui (Salsipuedes)",
       "Los Torres (Salsipuedes)",
       "El Pueblito (Salsipuedes)",
@@ -1532,10 +1535,7 @@
       "los nogales antena",
       "progreso",
       "la colonial",
-      "el sauce",
-      "bella vista",
       "el pueblito secciones m",
-      "centro",
       "las tejas",
       "reconquista",
       "camino al cuadrado",
@@ -1556,7 +1556,7 @@
     "fuente": "https://eldoce.tv/actualidad/2026/09/16/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Silvina (Salsipuedes)",
-      "San Miguel (Salsipuedes)"
+      "Estancia San Miguel (Salsipuedes)"
     ],
     "zonas": [
       "Salsipuedes"
@@ -1628,11 +1628,12 @@
     "zona": "barrios Parque Norte y Ciudad de los Niños, en forma parcial.",
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/09/16/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Ciudad Los Ninos"
+    ],
     "zonas": [],
     "sinUbicar": [
-      "parque norte",
-      "ciudad los ninos"
+      "parque norte"
     ]
   },
   {
@@ -1662,7 +1663,8 @@
     "fuente": "https://eldoce.tv/actualidad/2026/09/16/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Piedra del Sapo (Alta Gracia)",
-      "Tiro Federal (Alta Gracia)"
+      "Tiro Federal (Alta Gracia)",
+      "Potrerillo de Larreta (Alta Gracia)"
     ],
     "zonas": [
       "Alta Gracia"
@@ -1670,7 +1672,6 @@
     "sinUbicar": [
       "fogon gaucho",
       "colonia jose maria paz",
-      "potrerillo larreta",
       "segundo paredon",
       "valle chico"
     ],
@@ -1789,7 +1790,7 @@
     "fuente": "https://eldoce.tv/actualidad/2026/09/16/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "San Alfonso del Talar (Mendiolaza)",
-      "El Talar (Mendiolaza)"
+      "El Talar de Mendiolaza (Mendiolaza)"
     ],
     "zonas": [
       "Mendiolaza"
@@ -1975,13 +1976,13 @@
     "zona": "barrios Ameghino, entre las calles: Buenos Aires, Parajón Ortiz, Santa Fe e Intendente Peña.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/17/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Florentino Ameghino (Villa María)"
+    ],
     "zonas": [
       "Villa María"
     ],
-    "sinUbicar": [
-      "ameghino"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Villa María"
     ]
@@ -2041,13 +2042,13 @@
     "zona": "Mirador del Lago en forma parcial.",
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/09/17/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa Mirador del Lago San Roque (Bialet Massé)"
+    ],
     "zonas": [
       "Bialet Massé"
     ],
-    "sinUbicar": [
-      "mirador lago"
-    ],
+    "sinUbicar": [],
     "sector": [
       [
         -64.46861,
@@ -2171,21 +2172,25 @@
     "zona": "En las localidades de Pampa Alta y San Clemente: Villa del Cóndor, Grasso Cremonini, Campo Tagle, La Ernestina, Pampa Alta, Paso de la Pampa, Escuela 24 de Septiembre (Paso de la Pampa), Cerro la Colmena, Comuna San Clemente, San Clemente, Loteo Dela Mea, La Herradura, Río San José, Estancia la Granadilla, Antena de Claro (San Clemente) y Derivación de Forbes.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/17/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa Del Cóndor (Pampa Alta)",
+      "Villa Del Cóndor (San Clemente)",
+      "Pampa Alta",
+      "Paso De La Pampa (Pampa Alta)",
+      "Paso De La Pampa (San Clemente)",
+      "Comuna San Clemente (Pampa Alta)",
+      "Comuna San Clemente (San Clemente)",
+      "San Clemente"
+    ],
     "zonas": [
       "Pampa Alta",
       "San Clemente"
     ],
     "sinUbicar": [
-      "villa condor",
       "grasso cremonini",
       "campo tagle",
       "la ernestina",
-      "pampa alta",
-      "paso la pampa",
       "cerro la colmena",
-      "comuna san clemente",
-      "san clemente",
       "dela mea",
       "la herradura",
       "rio san jose",
@@ -2244,13 +2249,13 @@
     "zona": "barrio San Antonio, entre las calles: Paraguay, Tierra del Fuego, López y Planes y Marcos Juárez.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/17/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "San Antonio (Villa María)"
+    ],
     "zonas": [
       "Villa María"
     ],
-    "sinUbicar": [
-      "san antonio"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Villa María"
     ]
@@ -2315,7 +2320,8 @@
     "fuente": "https://eldoce.tv/actualidad/2026/09/18/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "El Durazno (Tanti)",
-      "Flor Serrana (Tanti)"
+      "Flor Serrana (Tanti)",
+      "Mallin (Tanti)"
     ],
     "zonas": [
       "Tanti"
@@ -2323,7 +2329,6 @@
     "sinUbicar": [
       "tanti viejo",
       "villa nueva",
-      "mallin",
       "villa doumas"
     ],
     "parciales": [
@@ -2776,7 +2781,9 @@
       "El Bosque (Salsipuedes)",
       "Cerro del Sol (Salsipuedes)",
       "Villa las Selvas (Salsipuedes)",
-      "Oro Verde (Salsipuedes)"
+      "Oro Verde (Salsipuedes)",
+      "Centro (Salsipuedes)",
+      "El Sauce (Salsipuedes)"
     ],
     "zonas": [
       "Salsipuedes"
@@ -2786,10 +2793,8 @@
       "progreso",
       "el pueblito secciones m",
       "cooperativa agua oro",
-      "centro",
       "las tejas",
-      "reconquista",
-      "el sauce"
+      "reconquista"
     ],
     "parciales": [
       "Salsipuedes"
@@ -2806,14 +2811,14 @@
     "barrios": [
       "Villa Sol (Salsipuedes)",
       "Ariel (Salsipuedes)",
+      "Bella Vista (Salsipuedes)",
       "El Talita (Salsipuedes)"
     ],
     "zonas": [
       "Salsipuedes"
     ],
     "sinUbicar": [
-      "la colonia",
-      "bella vista"
+      "la colonia"
     ],
     "parciales": [
       "Salsipuedes"
@@ -2918,6 +2923,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/22/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
+      "IPV (Capilla del Monte)",
       "Balumba (Capilla del Monte)",
       "Aguas Azules (Capilla del Monte)",
       "Las Gemelas (Capilla del Monte)"
@@ -2925,9 +2931,7 @@
     "zonas": [
       "Capilla del Monte"
     ],
-    "sinUbicar": [
-      "ipv"
-    ],
+    "sinUbicar": [],
     "sector": [
       [
         -64.53799,
@@ -3593,13 +3597,13 @@
     "zona": "barrio Bialet Centro en forma parcial: desde entrada a Hospital Dean Funes hasta YPF cruce Ruta 38 con Ruta 55.",
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/10/05/multiples-cortes-de-luz-de-epec-para-este-martes-en-cordoba-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Centro (Bialet Massé)"
+    ],
     "zonas": [
       "Bialet Massé"
     ],
-    "sinUbicar": [
-      "bialet centro"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Bialet Massé"
     ]
@@ -4021,7 +4025,7 @@
     "afectacion": "total",
     "fuente": "https://eldoce.tv/actualidad/2026/10/05/multiples-cortes-de-luz-de-epec-para-este-martes-en-cordoba-localidades-afectadas/",
     "barrios": [
-      "El Talar (Mendiolaza)"
+      "El Talar de Mendiolaza (Mendiolaza)"
     ],
     "zonas": [
       "Mendiolaza"
@@ -4094,16 +4098,16 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/05/multiples-cortes-de-luz-de-epec-para-este-martes-en-cordoba-localidades-afectadas/",
     "barrios": [
-      "BARRIO LA CERCANIA (Mendiolaza)"
+      "BARRIO LA CERCANIA (Mendiolaza)",
+      "Las Corzuelas (Mendiolaza)",
+      "Soles Serranos (Mendiolaza)"
     ],
     "zonas": [
       "Mendiolaza"
     ],
     "sinUbicar": [
       "talar este",
-      "las corzuelas",
-      "san francisco",
-      "soles serranos"
+      "san francisco"
     ],
     "parciales": [
       "Mendiolaza"
@@ -4287,16 +4291,16 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/05/multiples-cortes-de-luz-de-epec-para-este-martes-en-cordoba-localidades-afectadas/",
     "barrios": [
-      "BARRIO LA CERCANIA (Mendiolaza)"
+      "BARRIO LA CERCANIA (Mendiolaza)",
+      "Las Corzuelas (Mendiolaza)",
+      "Soles Serranos (Mendiolaza)"
     ],
     "zonas": [
       "Mendiolaza"
     ],
     "sinUbicar": [
       "talar este",
-      "las corzuelas",
-      "san francisco",
-      "soles serranos"
+      "san francisco"
     ],
     "parciales": [
       "Mendiolaza"
@@ -4315,7 +4319,11 @@
       "Ramenvil (Río Ceballos)",
       "Santa Fe (Río Ceballos)",
       "Villa Ñu Porá (Río Ceballos)",
-      "Bela Vista (Río Ceballos)",
+      "Altos de Luján (Río Ceballos)",
+      "Bella Vista (Río Ceballos)",
+      "San Francisco (Río Ceballos)",
+      "Pérez Taboada (Río Ceballos)",
+      "San Jorge (Río Ceballos)",
       "La Quebrada (Río Ceballos)",
       "Colanchanga (Río Ceballos)"
     ],
@@ -4333,18 +4341,15 @@
       "villa josefina",
       "terrazas rio ceballos",
       "don justo pietri",
-      "altos lujan",
       "sarmiento",
       "santa teresita",
       "san cayetano",
       "hipolito yrigoyen",
       "lumiere",
       "libertador san martin",
-      "san francisco",
       "maria cristina",
       "villa corema",
-      "perez taboada",
-      "san jorge",
+      "buena vista",
       "plan amuchastegui"
     ],
     "parciales": [
@@ -4834,12 +4839,12 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/06/multiples-cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Ciudad Villa Retiro",
+      "Villa de Emergencia El Terraplen",
       "Parque Liceo 3° Sección"
     ],
     "zonas": [],
     "sinUbicar": [
-      "sector comprendido por colectora norte zona rural",
-      "villa el terraplen"
+      "sector comprendido por colectora norte zona rural"
     ]
   },
   {
@@ -4947,15 +4952,15 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/09/multiples-cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Roque Sáenz Peña (San Francisco)"
+      "Sáenz Peña (San Francisco)",
+      "Dos Hermanos (San Francisco)"
     ],
     "zonas": [
       "San Francisco"
     ],
     "sinUbicar": [
       "manuel belgrano",
-      "chalet",
-      "2 hermanos"
+      "chalet"
     ],
     "parciales": [
       "San Francisco"
@@ -5343,7 +5348,14 @@
     "zona": "Cooperativa de Dean Funes, Paraje Santa Cruz, San Pedro Viejo, San Pedro Norte, San Pedro de Toyos, Suace Punco, Villa Alicia, Los Pozos, El Estanque, Inschilín, Copacabana, Villa Colimba y Museo Fader.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/11/cortes-de-luz-de-epec-para-este-lunes-feriado-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "San Pedro De Toyos (Deán Funes)",
+      "Villa Alicia (Deán Funes)",
+      "Los Pozos (Deán Funes)",
+      "El Estanque (Deán Funes)",
+      "Copacabana (Deán Funes)",
+      "Villa Colimba (Deán Funes)"
+    ],
     "zonas": [
       "Deán Funes"
     ],
@@ -5352,14 +5364,8 @@
       "paraje santa cruz",
       "san pedro viejo",
       "san pedro norte",
-      "san pedro toyos",
       "suace punco",
-      "villa alicia",
-      "los pozos",
-      "el estanque",
       "inschilin",
-      "copacabana",
-      "villa colimba",
       "museo fader"
     ],
     "parciales": [
@@ -5745,14 +5751,13 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/12/cortes-de-luz-de-epec-para-este-martes-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Dominguez (Villa Carlos Paz)",
-      "Los Eucaliptos (Villa Carlos Paz)"
+      "Los Eucaliptos (Villa Carlos Paz)",
+      "Santa Rita del Lago (Villa Carlos Paz)"
     ],
     "zonas": [
       "Villa Carlos Paz"
     ],
-    "sinUbicar": [
-      "santa rita"
-    ],
+    "sinUbicar": [],
     "sector": [
       [
         -64.49549,
@@ -6016,14 +6021,13 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/12/cortes-de-luz-de-epec-para-este-martes-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Dominguez (Villa Carlos Paz)",
-      "Los Eucaliptos (Villa Carlos Paz)"
+      "Los Eucaliptos (Villa Carlos Paz)",
+      "Santa Rita del Lago (Villa Carlos Paz)"
     ],
     "zonas": [
       "Villa Carlos Paz"
     ],
-    "sinUbicar": [
-      "santa rita"
-    ],
+    "sinUbicar": [],
     "sector": [
       [
         -64.49549,
@@ -6297,17 +6301,18 @@
     "zona": "barrios Los Chañares, El Parador y Villa Muñoz. Localidad de Santa Cruz del Lago: barrio Valle del Sol. Localidad de Cabalango en forma total.",
     "afectacion": "total",
     "fuente": "https://eldoce.tv/actualidad/2026/10/13/multiples-cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Los Chañares (Tanti)",
+      "El Parador (Tanti)",
+      "Valle Del Sol (Villa Santa Cruz del Lago)"
+    ],
     "zonas": [
       "Tanti",
       "Villa Santa Cruz del Lago",
       "Cabalango"
     ],
     "sinUbicar": [
-      "los chanares",
-      "el parador",
-      "villa munoz",
-      "valle sol"
+      "villa munoz"
     ],
     "parciales": [
       "Tanti",
@@ -6324,7 +6329,8 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/13/multiples-cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Piedra del Sapo (Alta Gracia)",
-      "Tiro Federal (Alta Gracia)"
+      "Tiro Federal (Alta Gracia)",
+      "Potrerillo de Larreta (Alta Gracia)"
     ],
     "zonas": [
       "Alta Gracia"
@@ -6332,7 +6338,6 @@
     "sinUbicar": [
       "fogon gaucho",
       "colonia jose maria paz",
-      "potrerillo larreta",
       "segundo paredon",
       "valle chico"
     ],
@@ -6790,7 +6795,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/13/multiples-cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Lomas Oeste (Villa Allende)",
+      "Lomas Este (Villa Allende)",
       "Morada (Villa Allende)"
     ],
     "zonas": [
@@ -6815,14 +6820,14 @@
     "barrios": [
       "Lomas Sur (Villa Allende)",
       "Pan de Azúcar (Villa Allende)",
-      "Antigua Estancia (Villa Allende)"
+      "Antigua Estancia (Villa Allende)",
+      "Villa Cornú (Villa Allende)"
     ],
     "zonas": [
       "Villa Allende"
     ],
     "sinUbicar": [
-      "comarcas allende",
-      "villa cornu"
+      "comarcas allende"
     ],
     "sector": [
       [
@@ -6994,15 +6999,14 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/13/multiples-cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
+      "La Salle",
       "El Refugio",
       "Villa Solferino",
       "Los Nogales",
       "Argüello"
     ],
     "zonas": [],
-    "sinUbicar": [
-      "lasalle"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Villa Santa Cruz del Lago",
@@ -7305,12 +7309,12 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/14/multiples-cortes-de-luz-de-epec-para-este-jueves-lluvioso-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Soles del Oeste"
+      "René Favaloro Sud",
+      "Soles del Oeste",
+      "Matienzo"
     ],
     "zonas": [],
     "sinUbicar": [
-      "matienzo",
-      "favaloro sur",
       "parque las rosas"
     ]
   },
@@ -7439,12 +7443,13 @@
     "zona": "barrio San Francisco y predio Club Atlético Belgrano.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/14/multiples-cortes-de-luz-de-epec-para-este-jueves-lluvioso-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "San Francisco (Saldán)"
+    ],
     "zonas": [
       "Saldán"
     ],
     "sinUbicar": [
-      "san francisco",
       "predio club atletico belgrano"
     ],
     "parciales": [
@@ -7774,12 +7779,13 @@
     "zona": "Barrios Cumbres del Golf y Terranova.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/14/multiples-cortes-de-luz-de-epec-para-este-jueves-lluvioso-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Barrio Privado Cumbres del Golf (Villa Allende)"
+    ],
     "zonas": [
       "Villa Allende"
     ],
     "sinUbicar": [
-      "cumbres golf",
       "terranova"
     ],
     "sector": [
@@ -9565,13 +9571,13 @@
     "zona": "Barrio Centro, entre calles Roque S. Peña y Costanera.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/19/cortes-de-luz-de-epec-para-este-martes-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Centro (Bialet Massé)"
+    ],
     "zonas": [
       "Bialet Massé"
     ],
-    "sinUbicar": [
-      "centro"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Bialet Massé"
     ]
@@ -9585,12 +9591,11 @@
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/10/19/cortes-de-luz-de-epec-para-este-martes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Güemes"
+      "Güemes",
+      "Las Americas"
     ],
     "zonas": [],
-    "sinUbicar": [
-      "las americas"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "General Cabrera",
@@ -9962,17 +9967,17 @@
     "barrios": [
       "Cóndor Bajo (Villa Allende)",
       "Cumbres (Villa Allende)",
+      "Barrio Privado Cumbres del Golf (Villa Allende)",
       "Barrio Industrial (Villa Allende)",
       "Villa Brizuela (Villa Allende)",
+      "Terrazas de Villa Allende (Villa Allende)",
       "Las Polinesias (Villa Allende)"
     ],
     "zonas": [
       "Villa Allende"
     ],
     "sinUbicar": [
-      "cumbres golf",
       "terranova",
-      "terrazas villa allende",
       "parque pymes",
       "cantera gran ombu",
       "frigorifico la superior"
@@ -10275,17 +10280,17 @@
     "barrios": [
       "Cóndor Bajo (Villa Allende)",
       "Cumbres (Villa Allende)",
+      "Barrio Privado Cumbres del Golf (Villa Allende)",
       "Barrio Industrial (Villa Allende)",
       "Villa Brizuela (Villa Allende)",
+      "Terrazas de Villa Allende (Villa Allende)",
       "Las Polinesias (Villa Allende)"
     ],
     "zonas": [
       "Villa Allende"
     ],
     "sinUbicar": [
-      "cumbres golf",
       "terranova",
-      "terrazas villa allende",
       "parque pymes",
       "cantera gran ombu",
       "frigorifico la superior"
@@ -11133,16 +11138,16 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/20/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "Minetti (La Calera)",
+      "Los Algarrobos (La Calera)",
       "Dumesnil (La Calera)",
-      "La Campana (La Calera)"
+      "La Campana (La Calera)",
+      "Matadero (La Calera)"
     ],
     "zonas": [
       "La Calera"
     ],
     "sinUbicar": [
-      "los algarrobos",
-      "calpivan",
-      "mataderos"
+      "calpivan"
     ],
     "parciales": [
       "La Calera"
@@ -11261,16 +11266,16 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/20/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "Minetti (La Calera)",
+      "Los Algarrobos (La Calera)",
       "Dumesnil (La Calera)",
-      "La Campana (La Calera)"
+      "La Campana (La Calera)",
+      "Matadero (La Calera)"
     ],
     "zonas": [
       "La Calera"
     ],
     "sinUbicar": [
-      "los algarrobos",
-      "calpivan",
-      "mataderos"
+      "calpivan"
     ],
     "parciales": [
       "La Calera"
@@ -11330,15 +11335,14 @@
       "Villa Aurora (Unquillo)",
       "Lomaz del Zupay (Unquillo)",
       "Quebrada Honda (Unquillo)",
+      "Los Quebrachitos (Unquillo)",
+      "Las Marías (Unquillo)",
       "Villa Cabana (Unquillo)"
     ],
     "zonas": [
       "Unquillo"
     ],
-    "sinUbicar": [
-      "los quebrachitos",
-      "las marias"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Unquillo"
     ]
@@ -11809,22 +11813,22 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/21/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
-      "El Potrerillo (Alta Gracia)"
+      "Los Espinillos (Alta Gracia)",
+      "El Potrerillo (Alta Gracia)",
+      "Villa Del Cóndor (Alta Gracia)",
+      "Paso De La Pampa (Alta Gracia)",
+      "Comuna San Clemente (Alta Gracia)"
     ],
     "zonas": [
       "Alta Gracia"
     ],
     "sinUbicar": [
-      "los espinillos",
       "14 leguas",
-      "villa condor",
       "grasso cremonini",
       "campo tagle",
       "la ernestina",
       "pampa alta",
-      "paso la pampa",
       "cerro la colmena",
-      "comuna san clemente",
       "san clemente",
       "dela mea",
       "la herradura",
@@ -11955,8 +11959,9 @@
     "barrios": [
       "San Remo (Saldán)",
       "Los Manantiales (Saldán)",
+      "Saldán Centro (Saldán)",
       "Lomas Sur (Villa Allende)",
-      "Lomas Oeste (Villa Allende)",
+      "Lomas Este (Villa Allende)",
       "Villa San Alfonso (Villa Allende)",
       "Solares de San Alfonso (Villa Allende)",
       "San Clemente (Villa Allende)",
@@ -11969,7 +11974,6 @@
       "Villa Allende"
     ],
     "sinUbicar": [
-      "centro",
       "campamento minetti"
     ],
     "parciales": [
@@ -12471,7 +12475,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/23/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Dr Cocca (La Calera)",
+      "Doctor Cocca (La Calera)",
       "Industrial (La Calera)",
       "La Estanzuela (La Calera)",
       "Terrazas de Estanzuela (La Calera)",
@@ -12698,7 +12702,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/23/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Dr Cocca (La Calera)",
+      "Doctor Cocca (La Calera)",
       "Industrial (La Calera)",
       "La Estanzuela (La Calera)",
       "Terrazas de Estanzuela (La Calera)",
@@ -13134,14 +13138,14 @@
     "zona": "barrios: Centro y Villa Saldan en forma parcial.",
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/10/26/cortes-de-luz-de-epec-para-este-martes-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Saldán Centro (Saldán)",
+      "Saldán"
+    ],
     "zonas": [
       "Saldán"
     ],
-    "sinUbicar": [
-      "centro",
-      "villa saldan"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Saldán"
     ]
@@ -13154,17 +13158,17 @@
     "zona": "barrios: Portón de Piedra, Luis de Tejeda, San Francisco y Ernesto Guevara, en forma total y barrio Centro, en forma parcial.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/26/cortes-de-luz-de-epec-para-este-martes-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Portón de Piedra (Saldán)",
+      "Luis de Tejeda (Saldán)",
+      "San Francisco (Saldán)",
+      "Ernesto Guevara (Saldán)",
+      "Saldán Centro (Saldán)"
+    ],
     "zonas": [
       "Saldán"
     ],
-    "sinUbicar": [
-      "porton piedra",
-      "luis tejeda",
-      "san francisco",
-      "ernesto guevara",
-      "centro"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Saldán"
     ]
@@ -13250,17 +13254,17 @@
     "zona": "barrios: Portón de Piedra, Luis de Tejeda, San Francisco y Ernesto Guevara, en forma total y barrio Centro, en forma parcial.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/26/cortes-de-luz-de-epec-para-este-martes-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Portón de Piedra (Saldán)",
+      "Luis de Tejeda (Saldán)",
+      "San Francisco (Saldán)",
+      "Ernesto Guevara (Saldán)",
+      "Saldán Centro (Saldán)"
+    ],
     "zonas": [
       "Saldán"
     ],
-    "sinUbicar": [
-      "porton piedra",
-      "luis tejeda",
-      "san francisco",
-      "ernesto guevara",
-      "centro"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Saldán"
     ]
@@ -13273,19 +13277,20 @@
     "zona": "Barrios El Cedro, Parque Atalaya, Sábato, La Amistad, Don Justo Pietri, Parque Guerrero, IPV Loza y Loza.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/27/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "El Cedro (Río Ceballos)",
+      "Loza (Río Ceballos)"
+    ],
     "zonas": [
       "Río Ceballos"
     ],
     "sinUbicar": [
-      "el cedro",
       "parque atalaya",
       "sabato",
       "la amistad",
       "don justo pietri",
       "parque guerrero",
-      "ipv loza",
-      "loza"
+      "ipv loza"
     ],
     "parciales": [
       "Río Ceballos"
@@ -13300,6 +13305,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/27/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
+      "El Cedro (Río Ceballos)",
       "Bela Vista (Río Ceballos)",
       "Villa Catalina (Río Ceballos)",
       "Aires Del Nordeste (Río Ceballos)",
@@ -13313,6 +13319,8 @@
       "Villa Aurora (Unquillo)",
       "Lomaz del Zupay (Unquillo)",
       "Quebrada Honda (Unquillo)",
+      "Los Quebrachitos (Unquillo)",
+      "Las Marías (Unquillo)",
       "Villa Cabana (Unquillo)"
     ],
     "zonas": [
@@ -13320,14 +13328,11 @@
       "Unquillo"
     ],
     "sinUbicar": [
-      "el cedro",
       "parque lujan",
       "los vascos",
       "sabato",
       "prosur",
-      "nuevo rio ceballos",
-      "los quebrachitos",
-      "las marias"
+      "nuevo rio ceballos"
     ],
     "parciales": [
       "Río Ceballos",
@@ -13379,6 +13384,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/27/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
+      "El Cedro (Río Ceballos)",
       "Bela Vista (Río Ceballos)",
       "Villa Catalina (Río Ceballos)",
       "Aires Del Nordeste (Río Ceballos)",
@@ -13392,6 +13398,8 @@
       "Villa Aurora (Unquillo)",
       "Lomaz del Zupay (Unquillo)",
       "Quebrada Honda (Unquillo)",
+      "Los Quebrachitos (Unquillo)",
+      "Las Marías (Unquillo)",
       "Villa Cabana (Unquillo)"
     ],
     "zonas": [
@@ -13399,14 +13407,11 @@
       "Unquillo"
     ],
     "sinUbicar": [
-      "el cedro",
       "parque lujan",
       "los vascos",
       "sabato",
       "prosur",
-      "nuevo rio ceballos",
-      "los quebrachitos",
-      "las marias"
+      "nuevo rio ceballos"
     ],
     "parciales": [
       "Río Ceballos",
@@ -13734,13 +13739,13 @@
       "Barrio Industrial (Villa Allende)",
       "Villa Brizuela (Villa Allende)",
       "Las Polinesias (Villa Allende)",
+      "Terrazas de Villa Allende (Villa Allende)",
       "La Cruz (Villa Allende)"
     ],
     "zonas": [
       "Villa Allende"
     ],
     "sinUbicar": [
-      "terrazas villa allende",
       "parque pymes",
       "cantera gran ombu",
       "frigorifico"
@@ -13830,14 +13835,13 @@
     "barrios": [
       "San Remo (Saldán)",
       "Los Manantiales (Saldán)",
+      "Saldán Centro (Saldán)",
       "Minetti (Saldán)"
     ],
     "zonas": [
       "Saldán"
     ],
-    "sinUbicar": [
-      "centro"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Saldán"
     ]
@@ -13886,9 +13890,10 @@
     "barrios": [
       "Las Rosas (Villa Allende)",
       "Español (Villa Allende)",
+      "Terrazas de Villa Allende (Villa Allende)",
       "La Cruz (Villa Allende)",
-      "Centro (Villa Allende)",
-      "Lomas Oeste (Villa Allende)",
+      "Villa Allende Centro (Villa Allende)",
+      "Lomas Este (Villa Allende)",
       "Cóndor Alto (Villa Allende)",
       "Cóndor Bajo (Villa Allende)"
     ],
@@ -13896,7 +13901,6 @@
       "Villa Allende"
     ],
     "sinUbicar": [
-      "terrazas villa allende",
       "golf"
     ],
     "sector": [
@@ -13988,14 +13992,13 @@
     "barrios": [
       "San Remo (Saldán)",
       "Los Manantiales (Saldán)",
+      "Saldán Centro (Saldán)",
       "Minetti (Saldán)"
     ],
     "zonas": [
       "Saldán"
     ],
-    "sinUbicar": [
-      "centro"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Saldán"
     ]
@@ -14194,7 +14197,10 @@
     "barrios": [
       "Don Bosco (Alta Gracia)",
       "Villa Oviedo (Alta Gracia)",
-      "La Paisanita (Alta Gracia)"
+      "La Paisanita (Alta Gracia)",
+      "La Paisanita (Villa Los Aromos)",
+      "La Isla (Alta Gracia)",
+      "La Isla (Villa Los Aromos)"
     ],
     "zonas": [
       "Alta Gracia",
@@ -14208,7 +14214,6 @@
       "la taimada",
       "dalvit",
       "colonia evita",
-      "la isla",
       "gomez",
       "estancia los nogales",
       "muscari",
@@ -14261,14 +14266,13 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/30/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Barrio las Ferias (Río Cuarto)"
+      "Barrio las Ferias (Río Cuarto)",
+      "Ingeniero Manuel Pizarro (Río Cuarto)"
     ],
     "zonas": [
       "Río Cuarto"
     ],
-    "sinUbicar": [
-      "pizarro"
-    ],
+    "sinUbicar": [],
     "sector": [
       [
         -64.37099,
@@ -14483,7 +14487,10 @@
     "barrios": [
       "Don Bosco (Alta Gracia)",
       "Villa Oviedo (Alta Gracia)",
-      "La Paisanita (Alta Gracia)"
+      "La Paisanita (Alta Gracia)",
+      "La Paisanita (Villa Los Aromos)",
+      "La Isla (Alta Gracia)",
+      "La Isla (Villa Los Aromos)"
     ],
     "zonas": [
       "Alta Gracia",
@@ -14497,7 +14504,6 @@
       "la taimada",
       "dalvit",
       "colonia evita",
-      "la isla",
       "gomez",
       "estancia los nogales",
       "muscari",
@@ -15439,14 +15445,13 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/11/02/cortes-de-luz-programados-en-cordoba-cuales-son-las-zonas-afectadas-para-este-martes/",
     "barrios": [
-      "El Pueblito (Salsipuedes)"
+      "El Pueblito (Salsipuedes)",
+      "Seccion M (Salsipuedes)"
     ],
     "zonas": [
       "Salsipuedes"
     ],
-    "sinUbicar": [
-      "secciones m"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Salsipuedes"
     ]
@@ -16005,7 +16010,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Dr Cocca (La Calera)",
+      "Doctor Cocca (La Calera)",
       "Industrial (La Calera)",
       "Las Flores (La Calera)",
       "La Estanzuela (La Calera)",
@@ -16102,7 +16107,7 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/11/04/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Dr Cocca (La Calera)",
+      "Doctor Cocca (La Calera)",
       "Industrial (La Calera)",
       "Las Flores (La Calera)",
       "La Estanzuela (La Calera)",
@@ -16201,7 +16206,9 @@
     "barrios": [
       "Sur (Alta Gracia)",
       "Poluyan (Alta Gracia)",
+      "Sierras Hotel (Alta Gracia)",
       "Liniers (Alta Gracia)",
+      "Barrio Liniers II de Horizonte (Alta Gracia)",
       "General Bustos (Alta Gracia)",
       "La Hornilla (Alta Gracia)",
       "Piedra del Sapo (Alta Gracia)",
@@ -16211,9 +16218,7 @@
       "Alta Gracia"
     ],
     "sinUbicar": [
-      "sierras hotel",
       "la cuyanita",
-      "liniers horizonte",
       "radio sonico"
     ],
     "parciales": [
@@ -16248,12 +16253,12 @@
     "barrios": [
       "Argüello Norte",
       "Quintas de Argüello",
+      "Villa Quisquisacate",
       "Los Nogales"
     ],
     "zonas": [],
     "sinUbicar": [
-      "el rincon",
-      "villa quizquisacate"
+      "el rincon"
     ]
   },
   {
@@ -16303,12 +16308,12 @@
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/11/06/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
+      "Villa Gran Parque",
       "Villa Retiro"
     ],
     "zonas": [],
     "sinUbicar": [
-      "zona rural",
-      "villas gran parque"
+      "zona rural"
     ]
   },
   {
@@ -16335,7 +16340,9 @@
     "zona": "barrios Centro, Noroeste, Noreste, Lavalle, Villa Argentina, Portal Oeste y Portal Este.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa Argentina (Marcos Juárez)"
+    ],
     "zonas": [
       "Marcos Juárez"
     ],
@@ -16344,7 +16351,6 @@
       "noroeste",
       "noreste",
       "lavalle",
-      "villa argentina",
       "portal oeste",
       "portal este"
     ],
@@ -16543,15 +16549,14 @@
     "fuente": "https://eldoce.tv/actualidad/2026/11/07/cortes-de-luz-de-epec-para-este-domingo-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "Barrio Industrial (Río Cuarto)",
+      "Doctor Carlos A. Mayer (Río Cuarto)",
       "Once de Noviembre (Río Cuarto)",
       "Barrio Fenix (Río Cuarto)"
     ],
     "zonas": [
       "Río Cuarto"
     ],
-    "sinUbicar": [
-      "carlos mayer"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Río Cuarto"
     ]
