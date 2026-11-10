@@ -20,7 +20,7 @@ import type { Position } from 'geojson';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';
 import {
   aliviar, aproximar, areaDe, consultarOverpass, diferencia, enTitulo, interseccion, km2, SERVIDORES, unir,
-  claveDeLugar, sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
+  claveDeLugar, esVariante, sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
 } from './barrios-interior.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio, crearBuscadorDeBarrios } from './nombres.ts';
@@ -202,17 +202,6 @@ const sinContorno: Semilla[] = [];
 // Carbó" y "Carbo", "Parque Liceo Primera Sección" y "Parque Liceo 1° Sección"). Nunca si sobra algo que describe una
 // parte ("Brisas de Manantiales" no es "Manantiales II", "Talleres Este" no es "Talleres") ni si cambia un número.
 const PARTE = /^(ampliaci[oó]n|anexo|bajo|alto|nuevo|nueva|sector|secci[oó]n|ipv|cooperativa|coop|country|barrio cerrado)\b/i;
-const ORDINALES: Record<string, string> = { primera: '1', primero: '1', segunda: '2', segundo: '2', tercera: '3', tercero: '3', cuarta: '4', cuarto: '4', quinta: '5', quinto: '5' };
-const GENERICAS = new Set(['barrio', 'residencial', 'ciudad', 'parque', 'estancia', 'villa', 'finca', 'tte', 'teniente', 'doctor', 'dr', 'general',
-  'presidente', 'ingeniero', 'alejandro', 'mariano', 'nicolas', 'benjamin', 'policarpio', 'rene', 'jose', 'juan', 'manuel', 'militar', 'seccion']);
-const palabras = (t: string) => claveDeLugar(t).split(' ').map((p) => ORDINALES[p] ?? p.replace(/^(\d+)[aoº°]?$/, '$1')).filter((p) => p.length > 0);
-const esVariante = (a: string, b: string) => {
-  const x = new Set(palabras(a)), y = new Set(palabras(b));
-  const comunes = [...x].filter((p) => y.has(p));
-  if (comunes.filter((p) => !GENERICAS.has(p) && !/^\d+$/.test(p)).length === 0) return false;
-  const sobran = [...x, ...y].filter((p) => !(x.has(p) && y.has(p)));
-  return sobran.every((p) => GENERICAS.has(p) || (p.length <= 2 && !/^\d+$/.test(p)));
-};
 const aliasNuevos: Record<string, string> = {};
 for (const s of semillas) {
   // "Country La Reserva" ya está en el mapa municipal como "La Reserva".

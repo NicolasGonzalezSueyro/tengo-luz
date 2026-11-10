@@ -33,6 +33,11 @@ test('mismaLocalidad: iguales o uno es el comienzo del otro, pero no cualquier p
   assert.equal(mismaLocalidad('Villa Yacanto de Calamuchita', 'VILLA YACANTO'), true);
   assert.equal(mismaLocalidad('Malagueño', 'MALAGUEÑO'), true);
   assert.equal(mismaLocalidad('Pampa Alta', 'La Pampa'), false);
+  assert.equal(mismaLocalidad('James Craik', 'JAMES CRAICK'), true);
+  assert.equal(mismaLocalidad('Icho Cruz', 'VILLA RIO ICHO CRUZ'), true);
+  assert.equal(mismaLocalidad('Cruz', 'La Cruz'), false); // una sola palabra: no
+  assert.equal(mismaLocalidad('Villa Quilino', 'QUILINO'), false); // el Villa cuenta: son dos pueblos
+  assert.equal(mismaLocalidad('La Paz', 'La Pez'), false); // cortos: no
 });
 test('sinRepetidos junta los que se escriben casi igual si están en el mismo lugar, no si están lejos', () => {
   const cuadrado = (x: number) => turf.bboxPolygon([x, -31.5, x + 0.01, -31.49]).geometry;
@@ -52,4 +57,10 @@ test('sinRepetidos entre localidades: el mismo barrio en el mismo lugar se va la
   assert.deepEqual(sinRepetidos([b('Córdoba', 'osm'), b('Saldán', 'osm')]).map((x) => x.properties.localidad), ['Saldán']);
   // Entre dos localidades del interior quedan los dos: EPEC puede nombrarlo en cualquiera.
   assert.deepEqual(sinRepetidos([b('Saldán', 'osm'), b('Villa Allende', 'municipio')]).map((x) => x.properties.localidad), ['Saldán', 'Villa Allende']);
+});
+test('sinRepetidos junta variantes de la misma localidad que se pisan ("Manuel Belgrano" y "Belgrano")', () => {
+  const cuadrado = turf.bboxPolygon([-64.50, -31.42, -64.49, -31.41]).geometry;
+  const b = (base: string) => ({ type: 'Feature', geometry: cuadrado, properties: { nombre: `${base} (Villa Carlos Paz)`, base, localidad: 'Villa Carlos Paz', tipo: 'poligono', fuente: 'osm' } });
+  assert.equal(sinRepetidos([b('Manuel Belgrano'), b('Belgrano')]).length, 1);
+  assert.equal(sinRepetidos([b('Costa Azul'), b('Villa Balnearia')]).length, 2); // nombres distintos: no
 });

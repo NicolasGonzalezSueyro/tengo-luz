@@ -473,7 +473,7 @@ export function claveDeLugar(base: string): string {
   // "Coop. La Unidad" y "Cooperativa La Unidad", "Ex Batallón 141" y "Batallon 141", "Greenville II" y "GreenVille 2",
   // "Villa de Emergencia El Chaparral" y "Villa El Chaparral".
   const limpio = base.replace(/\s*\([^)]*\)/g, '').replace(/^villa de emergencia\s+/i, 'villa ')
-    .replace(/^((country|barrio privado|barrio cerrado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo|privado|ex|coop\.?|cooperativa)\s+)+/i, '')
+    .replace(/^((country|barrio privado|barrio cerrado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo|privado|ex|coop\.?|cooperativa|vecinal)\s+)+/i, '')
     .replace(/\s*-?\s*barrio (cerrado|privado)\s*-?\s*$/i, ''); // "Las Cañitas Barrio Privado", "La Serena -Barrio Cerrado-"
   return claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? ROMANOS[p] ?? p).join(' ');
 }
@@ -557,7 +557,17 @@ export function sinRepetidos<F extends BarrioConFuente>(barrios: F[], centros?: 
       const kb = claveDeLugar(b.properties.base ?? b.properties.nombre);
       const largo = Math.min(ka.length, kb.length);
       const tolerancia = largo >= 14 ? 2 : largo >= 8 ? 1 : 0;
-      if (tolerancia === 0 || Math.abs(ka.length - kb.length) > tolerancia || distancia(ka, kb) > tolerancia) continue;
+      const casiIgual = tolerancia > 0 && Math.abs(ka.length - kb.length) <= tolerancia && distancia(ka, kb) <= tolerancia;
+      // "Manuel Belgrano" y "Belgrano" en Carlos Paz: variantes que además se pisan en más del 60 %.
+      const variante = !casiIgual && esVariante(a.properties.base ?? a.properties.nombre, b.properties.base ?? b.properties.nombre) && (() => {
+        try {
+          const comun = turf.intersect(turf.featureCollection([a as unknown as Area, b as unknown as Area]));
+          return Boolean(comun) && turf.area(comun!) > 0.6 * Math.min(turf.area(a as unknown as Area), turf.area(b as unknown as Area));
+        } catch {
+          return false;
+        }
+      })();
+      if (!casiIgual && !variante) continue;
       let cerca = false;
       try {
         const [ao, as, ae, an] = caja(a), [bo, bs, be, bn] = caja(b);
@@ -573,11 +583,32 @@ export function sinRepetidos<F extends BarrioConFuente>(barrios: F[], centros?: 
   return barrios.filter((b) => quedan.has(b));
 }
 
+// Variantes del mismo nombre ("Alejandro Carbó" y "Carbo", "Manuel Belgrano" y "Belgrano"): solo si lo que sobra son
+// palabras genéricas, títulos o nombres de pila, y los números coinciden. Nunca si sobra algo que describe una parte.
+const ORDINALES: Record<string, string> = { primera: '1', primero: '1', segunda: '2', segundo: '2', tercera: '3', tercero: '3', cuarta: '4', cuarto: '4', quinta: '5', quinto: '5' };
+const GENERICAS = new Set(['barrio', 'residencial', 'ciudad', 'parque', 'estancia', 'villa', 'finca', 'tte', 'teniente', 'doctor', 'dr', 'general', 'domingo', 'faustino', 'maria', 'roque',
+  'presidente', 'ingeniero', 'alejandro', 'mariano', 'nicolas', 'benjamin', 'policarpio', 'rene', 'jose', 'juan', 'manuel', 'militar', 'seccion']);
+const palabras = (t: string) => claveDeLugar(t).split(' ').map((p) => ORDINALES[p] ?? p.replace(/^(\d+)[aoº°]?$/, '$1')).filter((p) => p.length > 0);
+export const esVariante = (a: string, b: string) => {
+  const x = new Set(palabras(a)), y = new Set(palabras(b));
+  const comunes = [...x].filter((p) => y.has(p));
+  if (comunes.filter((p) => !GENERICAS.has(p) && !/^\d+$/.test(p)).length === 0) return false;
+  const sobran = [...x, ...y].filter((p) => !(x.has(p) && y.has(p)));
+  return sobran.every((p) => GENERICAS.has(p) || (p.length <= 2 && !/^\d+$/.test(p)));
+};
+
 /** Si dos nombres son la misma localidad: iguales, o uno es el comienzo del otro ("Villa Yacanto de Calamuchita"). */
 export function mismaLocalidad(a: string, b: string): boolean {
-  const x = claveDeLugar(a);
-  const y = claveDeLugar(b);
-  return x === y || x.startsWith(`${y} `) || y.startsWith(`${x} `);
+  // Sin claveDeLugar: esa borra el "Villa" del principio, y "Villa Quilino" no es Quilino (están a 2,6 km).
+  const x = normalizar(a);
+  const y = normalizar(b);
+  if (x === y || x.startsWith(`${y} `) || y.startsWith(`${x} `)) return true;
+  // "Icho Cruz" y "Villa Río Icho Cruz" (el radio oficial): uno termina con el otro, si el corto no es una sola palabra.
+  const corto = x.length < y.length ? x : y;
+  const largo = corto === x ? y : x;
+  if (corto.includes(' ') && largo.endsWith(` ${corto}`)) return true;
+  // Una letra de diferencia en nombres largos: "James Craik" y "James Craick".
+  return Math.min(x.length, y.length) >= 8 && Math.abs(x.length - y.length) <= 1 && distancia(x, y) <= 1;
 }
 
 /**
@@ -623,12 +654,19 @@ if (import.meta.main) {
   const radiosOficiales = await radiosUrbanos();
   const capitalJson = JSON.parse(await readFile('data/barrios.geojson', 'utf8')) as { features: { properties: { nombre: string | null } }[] };
   const barriosDeCapital = new Set(capitalJson.features.flatMap((f) => (f.properties.nombre ? [claveDeLugar(f.properties.nombre)] : [])));
+  // Las que se crearon de más en corridas anteriores (el mismo pueblo escrito distinto: "James Craick") se borran.
+  // A menos de 1,5 km del centro de otra localidad (u 800 m de la que la contiene) es esa misma.
+  const cercaDeOtra = (punto: Position, madre?: string) => zonas.features.some((o) => o.properties.tipo === 'localidad' && !o.properties.dentroDe
+    && turf.distance(turf.centroid(comoArea(o)), punto) < (o.properties.nombre === madre ? 0.8 : 1.5));
+  zonas.features = zonas.features.filter((z) => !z.properties.dentroDe || (!zonas.features.some((o) => o !== z
+    && !o.properties.dentroDe && o.properties.tipo === 'localidad' && mismaLocalidad(o.properties.nombre, z.properties.nombre))
+    && !cercaDeOtra(turf.centroid(comoArea(z)).geometry.coordinates, z.properties.dentroDe)));
   const nuestras = zonas.features.filter((z) => z.properties.tipo === 'localidad');
   const barriosAnteriores = (JSON.parse(await readFile('data/barrios-interior.geojson', 'utf8').catch(() => '{"features":[]}')) as { features: BarrioInterior[] }).features;
   for (const p of await parajesDeLaProvincia()) {
     if (nuestras.some((z) => mismaLocalidad(z.properties.nombre, p.nombre) && turf.distance(turf.centroid(comoArea(z)), p.punto) < 15)) continue;
     const madre = nuestras.find((z) => z.properties.contorno && turf.booleanPointInPolygon(p.punto, comoArea(z)));
-    if (!madre || barriosDeCapital.has(claveDeLugar(p.nombre))) continue;
+    if (!madre || barriosDeCapital.has(claveDeLugar(p.nombre)) || cercaDeOtra(p.punto, madre.properties.nombre)) continue;
     // Si la grande ya tiene un barrio que se llama así ("Country Cuatro Hojas" en Mendiolaza, "Colanchanga" en Río
     // Ceballos), es ese barrio: no se crea otra localidad encima.
     const clave = claveDeLugar(p.nombre);
@@ -711,7 +749,9 @@ if (import.meta.main) {
       // radio sea viejo y les quede chico (La Calera, Saldán). Una localidad que está adentro de otra, más acotada.
       const radio = radioDe(localidad);
       const centro = centroDe(localidad);
-      const alcance = localidad.properties.dentroDe ? 1.2 : radio.length > 0 ? 8 : 3;
+      const masCercana = Math.min(...zonas.features.filter((z) => z !== localidad && z.properties.tipo === 'localidad')
+        .map((z) => turf.distance(centro, centroDe(z))));
+      const alcance = localidad.properties.dentroDe ? 1.2 : radio.length > 0 ? 8 : Math.max(0.8, Math.min(3, 0.55 * masCercana));
       // Una localidad que está adentro de otra no toma barrios: los de alrededor son de la grande.
       if (localidad.properties.dentroDe) {
         areas.clear();
@@ -722,20 +762,23 @@ if (import.meta.main) {
       const crudo = alRadio(cascoUrbano(elementos, centro, alcance, propios), radio);
       // Las calles de dos pueblos pegados forman un solo pedazo: a una localidad que está adentro de otra se le corta en
       // un círculo alrededor de su centro (si no, Yocsina se quedaba con el centro de Malagueño).
-      const calles = crudo && localidad.properties.dentroDe ? interseccion(crudo, turf.circle(centro, alcance, { units: 'kilometers', steps: 48 })) : crudo;
+      // Lo mismo para las que no tienen radio oficial: Villa Quilino se comía Quilino, a 2,6 km.
+      const recortar = localidad.properties.dentroDe || radio.length === 0;
+      const calles = crudo && recortar ? interseccion(crudo, turf.circle(centro, alcance, { units: 'kilometers', steps: 48 })) : crudo;
       const casco = calles ? unir([calles, ...propios]) : null;
 
       // Lo que nombra EPEC y OSM no tiene: se busca en Nominatim dentro de la localidad.
       // Los nombres que son localidades no se buscan: ya tienen su casco.
       const conocidos = new Set([...areas.keys(), ...puntos.map((p) => claveDeBarrio(p.base)), ...clavesDeLocalidades]);
-      const semillas = [...puntos];
+      // "Centro": Nominatim a veces encuentra el de otro pueblo (Bialet Massé). Va en el centro oficial de la localidad.
+      const semillas = [...puntos].map((p) => (/^centro$/i.test(p.base.trim()) ? { ...p, punto: centro } : p));
       let encontrados = 0;
       for (const pedido of nombresEpec.get(nombre) ?? []) {
         if (conocidos.has(claveDeBarrio(pedido))) continue;
         const lugar = await buscarEnNominatim(pedido, localidad, cacheNominatim);
         if (lugar) {
           const base = pedido.replace(/(^|\s)\p{L}/gu, (l) => l.toUpperCase()); // con \b\w, "Cóndor" quedaba "CóNdor"
-          if (!tomarOficial(base, lugar)) semillas.push({ base, punto: lugar, fuente: 'nominatim' });
+          if (!tomarOficial(base, lugar)) semillas.push({ base, punto: /^centro$/i.test(base.trim()) ? centro : lugar, fuente: 'nominatim' });
           conocidos.add(claveDeBarrio(pedido));
           encontrados++;
         }
@@ -810,7 +853,9 @@ if (import.meta.main) {
     const hijas = conCasco.filter((h) => h.properties.dentroDe === z.properties.nombre).map(comoArea);
     // Cada localidad se queda con su centro: si el de otra cae adentro de esta (Saldán dentro de Villa Allende), se resta.
     const vecinas = conCasco.filter((v) => v !== z && v.properties.dentroDe !== z.properties.nombre && z.properties.dentroDe !== v.properties.nombre
-      && turf.booleanPointInPolygon(centros.get(v)!, originales.get(z)!)).map((v) => originales.get(v)!);
+      && turf.booleanPointInPolygon(centros.get(v)!, originales.get(z)!)
+      // Si las dos se contienen el centro una a la otra, no se restan las dos (Quilino quedaba en 0,1 km²).
+      && !turf.booleanPointInPolygon(centroZ, originales.get(v)!)).map((v) => originales.get(v)!);
     // Sus barrios no se tocan; y una localidad que está adentro de otra no se queda con los barrios de la grande.
     const poligonosDe = (localidad: string) => unir(barrios.filter((b) => b.properties.localidad === localidad && b.properties.tipo !== 'aproximado') as Area[]);
     const propios = poligonosDe(z.properties.nombre);

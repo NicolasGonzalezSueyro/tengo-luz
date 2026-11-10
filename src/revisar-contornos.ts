@@ -145,7 +145,21 @@ if (import.meta.main) {
   // Los de corridas anteriores se mantienen (la comparación de hoy ya los ve bien y no los vuelve a elegir).
   const anteriores = (JSON.parse(await readFile(ARCHIVO_REVISADOS, 'utf8').catch(() => '{"features":[]}')) as { features: ContornoManual[] }).features;
   const nuevos = new Set(revisados.map((r) => `${r.properties.localidad}|${r.properties.nombre}`));
-  const todos = [...anteriores.filter((a) => !nuevos.has(`${a.properties.localidad}|${a.properties.nombre}`)), ...revisados];
+  // Un contorno del interior a más de 3 km del contorno de su localidad se armó con el lugar equivocado ("Centro" de otro
+  // pueblo en Wikimapia): no se usa. Se mide contra el contorno, no contra el centro: Malagueño es muy extendido.
+  const zonasJson = JSON.parse(await readFile('data/zonas.geojson', 'utf8')) as { features: (Area & { properties: { nombre: string } })[] };
+  // "Centro" es más estricto (500 m): el de Villa Nueva salía del de Villa María, cruzando el río.
+  const zonaDe = new Map(zonasJson.features.map((z) => [z.properties.nombre, z]));
+  const cerca = (r: ContornoManual) => {
+    const zona = r.properties.localidad && r.properties.localidad !== CAPITAL ? zonaDe.get(r.properties.localidad) : undefined;
+    if (!zona) return true;
+    const margen = /^centro\b/i.test(r.properties.nombre) ? 0.5 : 3;
+    const area = turf.buffer(zona, margen, { units: 'kilometers' }) as Area | undefined;
+    return !area || turf.booleanPointInPolygon(turf.pointOnFeature(r as unknown as Area), area);
+  };
+  const lejos = [...anteriores, ...revisados].filter((r) => !cerca(r)).map((r) => r.properties.nombre);
+  if (lejos.length) console.log(`   ${lejos.length} descartados por quedar lejos de su localidad: ${lejos.join(', ')}`);
+  const todos = [...anteriores.filter((a) => !nuevos.has(`${a.properties.localidad}|${a.properties.nombre}`)), ...revisados].filter(cerca);
   await writeFile(ARCHIVO_REVISADOS, JSON.stringify({ type: 'FeatureCollection', features: todos }) + '\n');
   await writeFile(`${CACHE}/sin-piezas.txt`, sinPiezas.join('\n') + '\n');
   console.log(`📐 ${ARCHIVO_REVISADOS}: ${revisados.length} contornos rearmados con manzanas o parcelas oficiales.`);
