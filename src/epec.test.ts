@@ -46,7 +46,7 @@ test('/api/cortes-epec: pide la clave, valida, guarda la foto y el robot la lee'
   assert.equal((await cortesEpec.onRequestPost({ request: pedir('POST', 'clave', [{ ...corte, fecha: 'ayer' }]), env })).status, 400);
   assert.deepEqual(await (await cortesEpec.onRequestGet({ request: pedir('GET', 'clave'), env })).json(), { recibido: 0, cortes: [] });
 
-  assert.deepEqual(await (await cortesEpec.onRequestPost({ request: pedir('POST', 'clave', [corte]), env })).json(), { guardados: 1 });
+  assert.deepEqual(await (await cortesEpec.onRequestPost({ request: pedir('POST', 'clave', [corte]), env })).json(), { guardados: 1, robot: 'sin token' });
   const foto = await (await cortesEpec.onRequestGet({ request: pedir('GET', 'clave'), env })).json();
   assert.equal(foto.cortes[0].id, '88117');
   assert.ok(Date.now() - foto.recibido < 5000);
@@ -62,4 +62,22 @@ test('unir con fechasCubiertas: un corte cancelado por EPEC desaparece aunque es
   // EPEC hoy solo trae un corte del 11: el del 12 se canceló. El del 1 (pasado) queda en el historial.
   const resultado = unir(guardados, [m('2026-11-11', 'Barrio Alberdi.')], ['2026-11-11', '2026-11-12', '2026-11-13']);
   assert.deepEqual(resultado.map((x) => x.zona), ['Barrio Viejo.', 'Barrio Alberdi.']);
+});
+
+test('/api/cortes-epec: si la foto cambió, le pide a GitHub que corra el robot (no si es igual, ni dos veces en 10 minutos)', async (t) => {
+  const pedidos: string[] = [];
+  t.mock.method(globalThis, 'fetch', async (url: string, opciones: RequestInit) => {
+    pedidos.push(`${url} ${opciones.body}`);
+    return new Response(null, { status: 204 });
+  });
+  const env = { DB: baseLocal(), EPEC_OFICIAL_KEY: 'clave', GITHUB_TOKEN: 'token' };
+  const enviar = async (cortes: unknown[]) => (await (await cortesEpec.onRequestPost({
+    request: new Request('http://x/api/cortes-epec', { method: 'POST', headers: { Authorization: 'Bearer clave' }, body: JSON.stringify(cortes) }), env,
+  })).json()).robot;
+  assert.equal(await enviar([corte]), 'pedido');
+  assert.equal(await enviar([corte]), 'sin cambios'); // la misma foto: no hace falta
+  assert.equal(await enviar([]), 'hace poco'); // cambió, pero ya se pidió hace menos de 10 minutos
+  assert.equal(await enviar([]), 'hace poco'); // sigue pendiente: se va a pedir cuando pasen los 10 minutos
+  assert.equal(pedidos.length, 1);
+  assert.match(pedidos[0], /actualizar\.yml\/dispatches .*"ref":"main"/);
 });

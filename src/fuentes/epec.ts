@@ -65,6 +65,26 @@ export async function guardarFoto(db: BaseDeDatos, cortes: CorteEpec[], ahora: n
   await db.prepare('INSERT OR REPLACE INTO fuente_epec (clave, datos, recibido) VALUES (?, ?, ?)').bind('ultima', JSON.stringify(cortes), ahora).run();
 }
 
+/**
+ * El robot de GitHub corre cada media hora en teoría, pero GitHub posterga los horarios (en la práctica, cada 4 a 8
+ * horas). Cuando la foto de EPEC es distinta de la última con la que se pidió una corrida, se le pide que corra ya,
+ * como mucho una vez cada 10 minutos. Un cambio que llega antes de los 10 minutos se pide con el envío siguiente.
+ */
+export async function pedirQueCorraElRobot(db: BaseDeDatos, cortes: CorteEpec[], token: string, ahora: number): Promise<'pedido' | 'sin cambios' | 'hace poco' | 'fallo'> {
+  await prepararTabla(db);
+  const datos = JSON.stringify(cortes);
+  const ultimo = await db.prepare('SELECT datos, recibido FROM fuente_epec WHERE clave = ?').bind('disparo').first();
+  if (ultimo?.datos === datos) return 'sin cambios';
+  if (ultimo && ahora - Number(ultimo.recibido) < 10 * 60 * 1000) return 'hace poco';
+  await db.prepare('INSERT OR REPLACE INTO fuente_epec (clave, datos, recibido) VALUES (?, ?, ?)').bind('disparo', datos, ahora).run();
+  const respuesta = await fetch('https://api.github.com/repos/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml/dispatches', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'tengo-luz' },
+    body: JSON.stringify({ ref: 'main' }),
+  }).catch(() => null);
+  return respuesta?.ok ? 'pedido' : 'fallo';
+}
+
 export async function leerFoto(db: BaseDeDatos): Promise<{ recibido: number; cortes: CorteEpec[] } | null> {
   await prepararTabla(db);
   const fila = await db.prepare('SELECT datos, recibido FROM fuente_epec WHERE clave = ?').bind('ultima').first();

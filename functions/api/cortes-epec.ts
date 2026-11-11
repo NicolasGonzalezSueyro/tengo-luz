@@ -1,4 +1,4 @@
-import { cortesValidos, guardarFoto, leerFoto } from '../../src/fuentes/epec.ts';
+import { cortesValidos, guardarFoto, leerFoto, pedirQueCorraElRobot } from '../../src/fuentes/epec.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
 import { revisarClave } from '../../src/seguridad.ts';
 
@@ -7,8 +7,12 @@ import { revisarClave } from '../../src/seguridad.ts';
 //          o { "cortes": [ … ] }. Reemplaza la foto anterior.
 //   GET  → el robot de GitHub lee la última foto para armar data/mantenimientos.json.
 // Las dos piden "Authorization: Bearer <EPEC_OFICIAL_KEY>" (secreto de Cloudflare), con freno a los intentos fallidos.
+// Si la foto cambió y está el secreto GITHUB_TOKEN, se le pide a GitHub que corra el robot ya (sin esperar al horario).
 
-type Contexto = { request: Request; env: { DB: BaseDeDatos; EPEC_OFICIAL_KEY?: string } };
+type Contexto = {
+  request: Request;
+  env: { DB: BaseDeDatos; EPEC_OFICIAL_KEY?: string; GITHUB_TOKEN?: string };
+};
 
 async function rechazar({ request, env }: Contexto) {
   if (!env.EPEC_OFICIAL_KEY) return Response.json({ error: 'Falta configurar EPEC_OFICIAL_KEY en Cloudflare' }, { status: 503 });
@@ -33,7 +37,8 @@ export async function onRequestPost(contexto: Contexto) {
   const cortes = cortesValidos(datos);
   if (typeof cortes === 'string') return Response.json({ error: cortes }, { status: 400 });
   await guardarFoto(contexto.env.DB, cortes, Date.now());
-  return Response.json({ guardados: cortes.length });
+  const robot = contexto.env.GITHUB_TOKEN ? await pedirQueCorraElRobot(contexto.env.DB, cortes, contexto.env.GITHUB_TOKEN, Date.now()) : 'sin token';
+  return Response.json({ guardados: cortes.length, robot });
 }
 
 export async function onRequestGet(contexto: Contexto) {

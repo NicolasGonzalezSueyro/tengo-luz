@@ -431,13 +431,17 @@ a { color: var(--acento); }
 .barrio-link.falla:hover { background: var(--falla); color: #fff; }
 .estado.falla, .etiqueta.falla { background: var(--falla); color: #fff; }
 /* Falla confirmada por EPEC: en la portada y en la ficha, con el texto de la publicación. */
-.fallas { display: grid; gap: 10px; }
-.falla-epec { padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--falla) 50%, transparent); border-radius: 14px;
+/* Con aire entre el título, los barrios, el texto y el link: apretado costaba leerla en el celu. */
+.fallas { display: grid; gap: 14px; }
+.falla-epec { display: grid; gap: 12px; padding: 16px 18px; border: 1px solid color-mix(in srgb, var(--falla) 50%, transparent); border-radius: 16px;
   background: color-mix(in srgb, var(--falla) 9%, var(--superficie)); }
-.falla-epec h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; color: var(--falla); font-size: 0.95rem; }
-.falla-hace { margin-left: auto; color: var(--texto-suave); font-size: 0.78rem; font-weight: 500; }
-.falla-epec .barrios { margin: 0 0 8px; }
-.falla-epec p { margin: 0 0 8px; font-size: 0.88rem; white-space: pre-line; overflow-wrap: anywhere; }
+/* Con ".panel" adelante: si no, el margen de los títulos del panel en el celu (".panel h3") le gana. */
+.falla-epec h3, .panel .falla-epec h3 { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--falla); font-size: 1rem; }
+.falla-hace { margin-left: auto; color: var(--texto-suave); font-size: 0.8rem; font-weight: 500; }
+.falla-epec .barrios { gap: 8px; margin: 0; }
+.falla-epec .barrio-link { padding: 6px 12px; }
+.falla-epec p { margin: 0; font-size: 0.92rem; line-height: 1.6; white-space: pre-line; overflow-wrap: anywhere; }
+.falla-epec .fuente { justify-self: start; }
 
 
 /* ---------- Vecinos sin luz y reclamo ---------- */
