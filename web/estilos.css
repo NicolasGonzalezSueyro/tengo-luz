@@ -432,7 +432,7 @@ a { color: var(--acento); }
 .estado.falla, .etiqueta.falla { background: var(--falla); color: #fff; }
 /* Falla confirmada por EPEC: en la portada y en la ficha, con el texto de la publicación. */
 /* Con aire entre el título, los barrios, el texto y el link: apretado costaba leerla en el celu. */
-.fallas { display: grid; gap: 14px; }
+.fallas { display: grid; gap: 14px; margin-top: 16px; } /* separada de la tarjeta verde, como las demás secciones */
 .falla-epec { display: grid; gap: 12px; padding: 16px 18px; border: 1px solid color-mix(in srgb, var(--falla) 50%, transparent); border-radius: 16px;
   background: color-mix(in srgb, var(--falla) 9%, var(--superficie)); }
 /* Con ".panel" adelante: si no, el margen de los títulos del panel en el celu (".panel h3") le gana. */
