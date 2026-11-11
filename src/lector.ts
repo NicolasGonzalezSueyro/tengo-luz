@@ -5,6 +5,7 @@ import {
   centro, crearUbicador, esDescripcion, lugaresSeparados, normalizar, separarDeLocalidades, type Punto, type Ubicacion,
 } from './barrios.ts';
 import { buscarNotas, descargar, parsearNota } from './fuentes/eldoce.ts';
+import { aMantenimientos, leerCortesEpec } from './fuentes/epec.ts';
 import { aplicarManuales, crearUbicadorDeLocalidades, tramosDelCorte, type Candidato, type Localidad, localidadesComoBarrios } from './localidades.ts';
 import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
 import { escribirLugares } from './lugares.ts';
@@ -41,14 +42,27 @@ function cajaDe(features: { geometry: { coordinates: unknown } }[], margen: numb
 // Lo que haya que revisar a mano: al final se manda por Telegram al admin (src/alertar.ts).
 const alertas: { texto: string; detalle?: string }[] = [];
 
+// La fuente principal son los cortes que publica EPEC (hoy, mañana y pasado), que llegan a /api/cortes-epec. Si no
+// llegaron en las últimas 3 horas (o el robot no tiene la clave), se usan las notas de El Doce, como antes.
+const FRESCA = 3 * 60 * 60 * 1000;
+const deEpec = await leerCortesEpec();
+const epecAlDia = deEpec !== null && Date.now() - deEpec.recibido < FRESCA;
+const nuevos: Mantenimiento[] = epecAlDia ? aMantenimientos(deEpec.cortes) : [];
+const masDias = (fecha: string, dias: number) => new Date(Date.parse(`${fecha}T12:00:00Z`) + dias * 86_400_000).toISOString().slice(0, 10);
+const fechasCubiertas = epecAlDia ? [0, 1, 2].map((d) => masDias(momentoEnCordoba().fecha, d)) : [];
+if (epecAlDia) {
+  console.log(`${nuevos.length} cortes de EPEC (foto de hace ${Math.round((Date.now() - deEpec.recibido) / 60_000)} minutos)`);
+} else if (process.env.EPEC_OFICIAL_KEY) {
+  alertas.push({ texto: 'No llegan los cortes de EPEC hace más de 3 horas (o no se pudieron leer): uso las notas de El Doce.' });
+}
+
 // Si no se puede leer el sitemap, el lector se corta (no hay nada que hacer) y GitHub Actions avisa de la falla.
-const urls = (await buscarNotas()).slice(0, NOTAS_A_LEER);
-if (urls.length === 0) {
+const urls = epecAlDia ? [] : (await buscarNotas()).slice(0, NOTAS_A_LEER);
+if (!epecAlDia && urls.length === 0) {
   // El sitemap de noticias solo muestra los últimos ~2 días: sin notas, El Doce no publica hace 2 días o cambió el link.
   alertas.push({ texto: 'No encontré notas de cortes de El Doce en los últimos 2 días. ¿Dejaron de publicarlas o cambiaron el link?' });
 }
 
-const nuevos: Mantenimiento[] = [];
 for (const url of urls) {
   // Una nota rara no frena a las demás: se avisa y se sigue.
   try {
@@ -99,7 +113,7 @@ const buscarEnLocalidad = crearBuscadorDeBarrios([...interior.features.map((f) =
 // "Corte total en la localidad", "todos los barrios": se pinta el casco urbano entero.
 const TODA_LA_LOCALIDAD = /\b(corte total|toda la localidad|todas? las localidades|todos los barrios|ambas localidades|en forma total en la localidad)\b/i;
 
-const guardadosYNuevos = unir(await leerGuardados(), nuevos);
+const guardadosYNuevos = unir(await leerGuardados(), nuevos, fechasCubiertas);
 const ubicacionDe = new Map<string, Ubicacion>();
 const noEncontradas = new Set<string>();
 for (const m of guardadosYNuevos.filter((c) => c.localidad !== CAPITAL)) {

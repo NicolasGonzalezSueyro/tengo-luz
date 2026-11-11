@@ -32,6 +32,7 @@ jobs:
       - name: Leer los cortes
         env:
           SECRETO_BOT: ${{ secrets.SECRETO_BOT }} # para avisarte por Telegram si algo hay que revisar a mano
+          EPEC_OFICIAL_KEY: ${{ secrets.EPEC_OFICIAL_KEY }} # para leer los cortes de EPEC (sin ella, usa El Doce)
         run: npm run lector
       - name: Guardar los datos si cambiaron
         run: |

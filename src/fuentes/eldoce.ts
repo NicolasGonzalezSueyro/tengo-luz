@@ -97,7 +97,7 @@ function leerCorte(renglon: string): { rangos: [string, string][]; zona: string 
   return { rangos, zona: m[2].trim() };
 }
 
-function afectacion(zona: string): Mantenimiento['afectacion'] {
+export function afectacion(zona: string): Mantenimiento['afectacion'] {
   const parcial = /en forma parcial/i.test(zona);
   const total = /en forma total/i.test(zona);
   if (parcial === total) return null; // no lo dice, o dice las dos cosas para distintos barrios

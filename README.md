@@ -39,8 +39,9 @@
 
 ```mermaid
 flowchart LR
-  subgraph fuentes[Fuentes públicas]
-    doce[El Doce<br/>nota diaria de cortes]
+  subgraph fuentes[Fuentes]
+    epec[EPEC<br/>cortes de hoy, mañana y pasado]
+    doce[El Doce<br/>respaldo]
     muni[Municipalidad<br/>polígonos de barrios]
     osm[OpenStreetMap]
   end
@@ -49,10 +50,12 @@ flowchart LR
   end
   subgraph cf[Cloudflare · plan gratis]
     pages[Pages<br/>sitio + app instalable]
-    api["Functions<br/>/api/reportes · telegram · avisar · alerta · calendario · admin"]
+    api["Functions<br/>/api/cortes-epec · reportes · telegram · avisar · alerta · calendario · admin"]
     db[(D1<br/>SQLite)]
   end
-  doce --> lector
+  epec -- cada media hora --> api
+  api -- última foto --> lector
+  doce -. si EPEC no llega .-> lector
   muni --> pages
   osm --> pages
   lector -- commit con los datos --> pages
@@ -63,7 +66,7 @@ flowchart LR
   api <--> telegram[Telegram]
 ```
 
-1. **Leer.** Cada media hora, GitHub Actions busca en el sitemap de noticias de El Doce la nota diaria con los cortes de EPEC, lee todas sus secciones (capital y localidades de la provincia) y convierte cada renglón (`De 8 a 12:30: barrios La Favela y Villa Urquiza.`) en un dato ordenado.
+1. **Leer.** Un servicio externo manda cada media hora los cortes que publica EPEC (hoy, mañana y pasado) a `/api/cortes-epec`, que guarda la última foto en D1. El robot de GitHub Actions la lee y pasa cada corte a un dato ordenado; un corte que EPEC deja de publicar se da de baja. Si EPEC no manda nada en 3 horas, el robot vuelve a la nota diaria de El Doce (y le avisa al admin).
 2. **Ubicar.** Cada barrio del anuncio se busca en el mapa oficial de la Municipalidad, normalizando nombres ("Sud" = "Sur", sin tildes) y con una tabla de alias revisada a mano.
 3. **Publicar.** Si hay cortes nuevos, el robot hace un commit con los datos y Cloudflare Pages publica el sitio actualizado. No hay ninguna compu prendida.
 4. **Avisar.** El mismo robot le pasa los cortes al bot, que avisa a quienes siguen esos barrios. Si algo falla, el bot le escribe al admin.
@@ -83,7 +86,6 @@ flowchart LR
 ## Decisiones de diseño
 
 - **$0 y sin servidores.** Todo corre en planes gratuitos: no hay que pagar ni dejar nada prendido.
-- **Respetar a las fuentes.** El sitio de EPEC protege sus datos con una clave privada y un firewall contra programas automáticos, así que no se lee de ahí: sacar esa clave o esquivar el firewall sería saltarse una protección puesta a propósito. Se usan notas periodísticas públicas, con un `User-Agent` que identifica al proyecto, y se respetan los `robots.txt` (por eso se descartó Cba24n, que prohíbe los lectores automáticos).
 - **Privacidad.** El reclamo se arma en el navegador: el contrato y la dirección viajan solo dentro del link de WhatsApp y nunca pasan por un servidor. Los reportes de vecinos no guardan la IP, sino un hash SHA-256 de la IP con una clave secreta y la fecha, que cambia cada día y no permite volver a la IP. La ubicación GPS se usa solo en el navegador.
 - **No fallar en silencio.** Si el robot falla, si El Doce deja de publicar, aparece un barrio desconocido o los barrios de un mismo corte quedan a más de 8 km entre sí (señal de que un nombre repetido se ubicó mal), el bot avisa al admin (como mucho una vez por día por problema). Una nota rara no frena a las demás, y un aviso que falla nunca impide guardar los cortes.
 - **Accesible.** Navegable con teclado, buscador con el patrón ARIA *combobox*, textos alternativos y respeto por "reducir movimiento".
@@ -221,19 +223,18 @@ npm run simplificar   # vuelve a simplificar los contornos del mapa
 - **Rendimiento:** simplificar geometrías con Douglas-Peucker para que la página pese 4 veces menos.
 - **Tests de punta a punta** con Playwright: probar la página como la usa una persona, en compu y celular.
 - **Monitoreo:** que el sistema avise cuando algo falla en vez de romperse en silencio.
-- **Ética con los datos:** respetar `robots.txt` y las protecciones de los sitios, sin esquivarlas.
 
 ## Próximos pasos
 
 - [x] Mapa revisado zona por zona, de capital hasta los límites de la provincia: cada localidad con su contorno y sus barrios.
-- [ ] Cortes de hoy, mañana y pasado desde fuentes públicas que permitan leerse de forma automática.
+- [ ] Cortes de hoy, mañana y pasado con la información de EPEC.
 - [x] Avisos por Telegram cuando varios vecinos reportan que no tienen luz en tu barrio.
 - [x] Estadísticas: qué barrios tienen más cortes y en qué horarios.
 - [x] Fallas no programadas confirmadas por EPEC en sus redes.
 
 ## Fuentes y licencia
 
-- **Cortes:** notas públicas de [El Doce](https://eldoce.tv), que replican los anuncios de EPEC. Cada corte guarda el link a la nota de origen.
+- **Cortes:** los que publica [EPEC](https://www.epec.com.ar/actualidad/trabajos-mejoras); de respaldo, las notas de [El Doce](https://eldoce.tv), con el link a la nota de origen.
 - **Barrios:** capa pública de barrios de la [Municipalidad de Córdoba](https://cordoba.maps.arcgis.com/home/item.html?id=60f4e6cbb6ee47e88679a76a5b763326), complementada con datos © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL) y capas de [Mapas Córdoba](https://www.mapascordoba.gob.ar) (IDECOR, Provincia de Córdoba).
 - **Íconos:** estilo [Lucide](https://lucide.dev) (ISC).
 - **Tipografía:** [Outfit](https://github.com/Outfitio/Outfit-Fonts) (SIL Open Font License, en [`web/fuentes/OFL.txt`](web/fuentes/OFL.txt)).

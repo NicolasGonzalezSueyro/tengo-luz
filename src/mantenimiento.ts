@@ -15,9 +15,11 @@ export type Mantenimiento = {
 /**
  * Junta los mantenimientos ya guardados con los recién leídos.
  * Si llegó información nueva de un día, reemplaza la vieja de ese día (por si la nota se corrigió).
+ * `fechasCubiertas`: días que la fuente informa completos aunque no traigan cortes (EPEC publica hoy, mañana y pasado):
+ * lo guardado de esos días se reemplaza igual, así un corte cancelado desaparece.
  */
-export function unir(anteriores: Mantenimiento[], nuevos: Mantenimiento[]): Mantenimiento[] {
-  const fechasNuevas = new Set(nuevos.map((m) => m.fecha));
+export function unir(anteriores: Mantenimiento[], nuevos: Mantenimiento[], fechasCubiertas: string[] = []): Mantenimiento[] {
+  const fechasNuevas = new Set([...nuevos.map((m) => m.fecha), ...fechasCubiertas]);
   const porClave = new Map<string, Mantenimiento>();
   for (const m of [...anteriores.filter((m) => !fechasNuevas.has(m.fecha)), ...nuevos]) {
     porClave.set(`${m.localidad}|${m.fecha}|${m.desde}|${m.hasta}|${m.zona}`, m);

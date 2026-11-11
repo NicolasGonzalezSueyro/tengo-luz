@@ -490,7 +490,8 @@ function tarjetaCorte(corte, indice, { conBarrios = true, lugar = null } = {}) {
     lugaresDelCorte(corte).length === 0 &&
       h('p', { class: 'sin-mapa' }, icono('info'), 'No se pudo marcar en el mapa: la zona está descripta por calles.'),
     h('div', { class: 'pie-corte' },
-      h('a', { class: 'fuente', href: corte.fuente, target: '_blank', rel: 'noopener' }, 'Ver anuncio original', icono('enlace')),
+      h('a', { class: 'fuente', href: corte.fuente, target: '_blank', rel: 'noopener' },
+        corte.fuente.includes('epec.com.ar') ? 'Fuente: información oficial de EPEC' : 'Ver anuncio original', icono('enlace')),
       agendar(corte, lugar),
     ),
   );

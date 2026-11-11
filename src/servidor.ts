@@ -4,6 +4,7 @@ import { extname, join, normalize, sep } from 'node:path';
 import { text } from 'node:stream/consumers';
 import * as admin from '../functions/api/admin.ts';
 import * as calendario from '../functions/api/calendario.ts';
+import * as cortesEpec from '../functions/api/cortes-epec.ts';
 import * as fallas from '../functions/api/fallas.ts';
 import * as push from '../functions/api/push.ts';
 import * as reportes from '../functions/api/reportes.ts';
@@ -20,6 +21,7 @@ import { generarClave } from './push.ts';
 const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }> = {
   '/api/admin': admin,
   '/api/calendario': calendario,
+  '/api/cortes-epec': cortesEpec,
   '/api/fallas': fallas,
   '/api/push': push,
   '/api/reportes': reportes,
@@ -66,6 +68,7 @@ const entornoDePrueba = {
   SECRETO_BOT: 'solo-para-probar',
   TELEGRAM_ADMIN: '1',
   ADMIN_CLAVE: 'solo-para-probar',
+  EPEC_OFICIAL_KEY: 'solo-para-probar',
   // Una clave de notificaciones nueva cada vez que arranca: sirve para probar suscribirse en la compu.
   PUSH_CLAVE: JSON.stringify(await generarClave()),
   // Como en Cloudflare: los archivos del sitio. Las funciones solo piden cosas de /data.
