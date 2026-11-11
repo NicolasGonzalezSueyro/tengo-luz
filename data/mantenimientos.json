@@ -16894,6 +16894,25 @@
     ]
   },
   {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-12",
+    "desde": "08:00",
+    "hasta": "11:00",
+    "zona": "barrio Catedral, área comprendida por las calles Salta, Libertador Sur, Corrientes y Sáenz Peña.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Catedral (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-12",
     "desde": "08:30",
@@ -16906,5 +16925,360 @@
     ],
     "zonas": [],
     "sinUbicar": []
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-12",
+    "desde": "12:30",
+    "hasta": "15:30",
+    "zona": "barrio Roca, Edificio Modena Center.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [
+      "edificio modena center"
+    ],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "14:00",
+    "hasta": "14:15",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Playa Perelli (Villa Carlos Paz)"
+    ],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago",
+      "estancia vieja"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "14:15",
+    "hasta": "17:45",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "17:45",
+    "hasta": "18:00",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Playa Perelli (Villa Carlos Paz)"
+    ],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago",
+      "estancia vieja"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-13",
+    "desde": "06:30",
+    "hasta": "06:45",
+    "zona": "barrio Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente\nMaciel, Vélez Sarsfield, Patagones, Salta, Intendente De La Colina y San\nJuan. barrios: Felipe Botta, Solares del Norte y Francisco García.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Nicolas Avellaneda (Villa María)",
+      "Felipe Botta (Villa María)",
+      "Solares del Norte (Villa María)",
+      "Francisco García (Villa María)"
+    ],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-13",
+    "desde": "06:35",
+    "hasta": "06:45",
+    "zona": "barrios: San Nicolás, Portal de Buenos Aires, Malvinas Argentinas, San Martín y Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente Correa, San Juan, Monteagudo y Buenos Aires.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Nicolas (Villa María)",
+      "Malvinas Argentinas (Villa María)",
+      "General San Martin (Villa María)",
+      "Nicolas Avellaneda (Villa María)"
+    ],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [
+      "portal buenos aires"
+    ],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.23306,
+        -32.39733
+      ],
+      [
+        -63.23263,
+        -32.39868
+      ],
+      [
+        -63.22785,
+        -32.40613
+      ],
+      [
+        -63.22108,
+        -32.41376
+      ],
+      [
+        -63.21991,
+        -32.41474
+      ],
+      [
+        -63.21832,
+        -32.4151
+      ],
+      [
+        -63.21672,
+        -32.41474
+      ],
+      [
+        -63.21555,
+        -32.41376
+      ],
+      [
+        -63.20957,
+        -32.39652
+      ],
+      [
+        -63.20915,
+        -32.39517
+      ],
+      [
+        -63.20957,
+        -32.39382
+      ],
+      [
+        -63.21074,
+        -32.39284
+      ],
+      [
+        -63.21234,
+        -32.39247
+      ],
+      [
+        -63.22199,
+        -32.3925
+      ],
+      [
+        -63.22358,
+        -32.39286
+      ],
+      [
+        -63.23146,
+        -32.39499
+      ],
+      [
+        -63.23263,
+        -32.39598
+      ],
+      [
+        -63.23306,
+        -32.39733
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-13",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "area comprendida por las calles talleres elias yofre richieri y valparaiso de barrio jardin"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-13",
+    "desde": "08:00",
+    "hasta": "10:00",
+    "zona": "barrios Villa Cornú y Cerro Norte, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Cornú",
+      "Cerro Norte"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-13",
+    "desde": "12:30",
+    "hasta": "15:30",
+    "zona": "barrio Roca, área comprendida por las calles 25 de mayo, B. Roldán, Belgrano y A. del Valle.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "San Francisco del Chañar",
+    "fecha": "2026-11-13",
+    "desde": "15:00",
+    "hasta": "16:00",
+    "zona": "Localidades de San francisco del Chañar y Sobremonte.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "San Francisco del Chañar"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-14",
+    "desde": "06:00",
+    "hasta": "09:00",
+    "zona": "barrio Roca, área comprendida por las calles Iturraspe, Colón, Bv. Roca y España. Y área comprendida por las calles Bv. Roca, España, Castelli y Libertador Norte.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "localidades de Río Ceballos y Unquillo en los siguientes barrios y sectores: Ruta E53 desde E.T. Rio Ceballos, hasta Aires del Nordeste, El Cedro, Sábato, Porsur, Villa Catalina, Nuevo Río Ceballos,  San Cayetanop de la Divina Providencia y las Talitas en forma parcial. Barrios y sectores de: Parque Lujan, Los Vascos, Bella Vista, Aires del Nordeste, Avenida Sabattini desde Ruta E53, hasta avenida San Martin, Loteo La Bancaria, Camino a Estancia Santo Domingo y La Adelina, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "desde et rio ceballos hasta aires del nordeste el cedro sabato porsur villa catalina nuevo rio ceballos san cayetanop de la divina providencia y las talitas barrios y sectores de parque lujan los vascos bella vista aires del nordeste avenida sabattini desde ruta e53 hasta avenida san martin loteo la bancaria camino a estancia santo domingo y la adelina",
+      "localidades rio ceballos",
+      "unquillo en los siguientes barrios",
+      "sectores ruta e53"
+    ]
+  },
+  {
+    "localidad": "Marcos Juarez",
+    "fecha": "2026-11-14",
+    "desde": "13:00",
+    "hasta": "16:00",
+    "zona": "barrios Noreste en forma parcial, Lavalle, zona Industrial Sur, zona Industrial Norte, Villa Argentina en forma parcial y barrio Centro en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Marcos Juárez"
+    ],
+    "sinUbicar": [
+      "noreste",
+      "lavalle"
+    ],
+    "parciales": [
+      "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-15",
+    "desde": "06:30",
+    "hasta": "10:30",
+    "zona": "barrios: Villa Albertina, Parque Industrial, Ana Zumarán, Silvio Pellico y Alto Alegre.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Albertina (Villa María)"
+    ],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [
+      "parque industrial",
+      "ana zumaran",
+      "silvio pellico",
+      "alto alegre"
+    ],
+    "parciales": [
+      "Villa María"
+    ]
   }
 ]
