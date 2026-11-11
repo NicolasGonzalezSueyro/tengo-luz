@@ -16851,5 +16851,60 @@
     "parciales": [
       "Río Cuarto"
     ]
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-11",
+    "desde": "08:00",
+    "hasta": "11:00",
+    "zona": "barrio Hernández, en el perímetro comprendido por las calles: Güemes, Almafuerte, Roma y España.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [
+      "hernandez",
+      "en el"
+    ],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "Villa del Totoral",
+    "fecha": "2026-11-11",
+    "desde": "10:00",
+    "hasta": "13:00",
+    "zona": "El Pedacito y zona rural sobre Ruta 17.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa del Totoral"
+    ],
+    "sinUbicar": [
+      "el pedacito"
+    ],
+    "parciales": [
+      "Villa del Totoral"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-12",
+    "desde": "08:30",
+    "hasta": "12:30",
+    "zona": "Loteo Terranostra I y II en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Terranostra"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "ii"
+    ]
   }
 ]
