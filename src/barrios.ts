@@ -63,6 +63,22 @@ export function lugaresSeparados(lugares: string[], centros: Map<string, Punto>,
   return peor;
 }
 
+const SOLO_NUMERO = /^(\d+|[ivx]+)( ?(ra|da|ta|ma|a|o|°|º|ª))?( secci[oó]n)?$/i;
+const NUMERO_AL_FINAL = /\s+(\d+|[ivx]+)( ?(ra|da|ta|ma|a|o|°|º|ª))?( secci[oó]n)?$/i;
+/**
+ * "Loteo Terranostra I y II", "Parque Liceo 1ª, 2ª y 3ª sección": un número suelto es el mismo nombre que el pedazo
+ * anterior con otro número ("Loteo Terranostra II"). Sin esto, "II" quedaba como un barrio desconocido.
+ */
+export function completarNumeros(pedazos: string[]): string[] {
+  let anterior = '';
+  return pedazos.map((pedazo) => {
+    const texto = pedazo.trim();
+    if (anterior && SOLO_NUMERO.test(texto)) return `${anterior.replace(NUMERO_AL_FINAL, '')} ${texto}`;
+    if (texto) anterior = texto;
+    return pedazo;
+  });
+}
+
 /** Minúsculas, sin tildes ni símbolos y con espacios simples. */
 function limpiar(texto: string): string {
   return texto
@@ -149,7 +165,7 @@ export function crearUbicador(nombres: string[], alias: Record<string, string | 
       texto = texto.slice(0, corte);
     }
 
-    for (const pedazo of texto.split(/,| y | e (?=h?i)/)) {
+    for (const pedazo of completarNumeros(texto.split(/,| y | e (?=h?i)/))) {
       const nombre = normalizar(pedazo);
       if (!nombre) continue;
       const delMapa = indice.get(nombre);

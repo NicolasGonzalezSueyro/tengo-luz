@@ -3,7 +3,7 @@
 // las localidades del corte: un "Centro" de Villa María nunca es el de capital. Sin Turf ni nada pesado, así lo
 // usan también las funciones de Cloudflare.
 
-import { esDescripcion, normalizar } from './barrios.ts';
+import { esDescripcion, normalizar, completarNumeros } from './barrios.ts';
 
 /** Para comparar nombres de barrios: sin "barrio", "loteo", tildes ni mayúsculas. */
 export const claveDeBarrio = (nombre: string) => normalizar(nombre).replace(/^(barrios?|b|bo|loteo|villa)\s+/, '');
@@ -46,7 +46,7 @@ export function nombresDelTramo(texto: string): string[] {
     .split(/[.;]\s+|\.$/)
     // Desde que empieza una descripción por calles, el resto de la oración ya no son nombres de barrios.
     .map((oracion) => oracion.split(/\b(?:entre|comprendid\w*|sobre|desde|hasta|calles?|sector|zona|[aá]rea|frente|altura|per[ií]metro)\b/i)[0])
-    .flatMap((oracion) => oracion.replace(/\ben forma (parcial|total)\b/gi, '').split(/,|\s+y\s+|\s+e\s+(?=h?i)/i))
+    .flatMap((oracion) => completarNumeros(oracion.replace(/\ben forma (parcial|total)\b/gi, '').split(/,|\s+y\s+|\s+e\s+(?=h?i)/i)))
     // Lo que viene antes de "barrio(s)" no es parte del nombre ("La Calera: sin suministro en barrios Covicco").
     .map((p) => p.replace(/^.*\b(barrios?|b°|bº|loteos?)\s*:?\s+/i, '').replace(/[()]/g, '').trim())
     .filter((p) => p.length > 2 && p.split(/\s+/).length <= 6 && !/\d\s*hs\b/i.test(p) && !esDescripcion(normalizar(p)));

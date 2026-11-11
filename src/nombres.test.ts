@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { claveSimple, crearBuscadorDeBarrios, distancia, nombresDelTramo } from './nombres.ts';
 import { localidadesComoBarrios } from './localidades.ts';
+import { completarNumeros } from './barrios.ts';
 
 // Barrios reales de La Calera (OpenStreetMap) y de Villa María, y cómo los escribe EPEC en sus anuncios.
 const barrio = (base: string, localidad: string) => ({ nombre: `${base} (${localidad})`, base, localidad });
@@ -59,4 +60,10 @@ test('localidadesComoBarrios: la localidad nombrada como barrio de sí misma, y 
   assert.deepEqual(buscarCon(['Saldán'], 'barrio Villa Saldán.').barrios, ['Saldán']);
   assert.deepEqual(buscarCon(['Malagueño'], 'barrios Yocsina.').barrios, ['Yocsina']);
   assert.deepEqual(buscarCon(['Villa Carlos Paz'], 'barrio Carlos Paz 1.').barrios, []); // una línea, no la ciudad entera
+});
+test('un número suelto se completa con el nombre anterior ("Loteo Terranostra I y II")', () => {
+  assert.deepEqual(completarNumeros(['Loteo Terranostra I', 'II']), ['Loteo Terranostra I', 'Loteo Terranostra II']);
+  assert.deepEqual(completarNumeros(['Parque Liceo 1ª', ' 2ª', '3ª sección']), ['Parque Liceo 1ª', 'Parque Liceo 2ª', 'Parque Liceo 3ª sección']);
+  assert.deepEqual(completarNumeros(['Alberdi', 'Centro']), ['Alberdi', 'Centro']); // sin números: no cambia nada
+  assert.deepEqual(nombresDelTramo('Barrios Los Prados I y II, en forma parcial.'), ['Los Prados I', 'Los Prados II']);
 });
