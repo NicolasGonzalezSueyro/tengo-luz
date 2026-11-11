@@ -630,6 +630,27 @@ export function simplificar(a: Area, tolerancia: number): Area {
   }
 }
 
+/**
+ * Saca del contorno de una localidad los pedacitos (menos de 0,05 km²) y los pedazos lejos de la parte principal (a más
+ * de 1,5 km), salvo que sean grandes (0,3 km² o más) y estén dentro de su municipio (`permitido`: límite de OSM o radio
+ * oficial). Juárez Celman conserva Villa Los Llanos y Ciudad de los Niños; pierde la tira suelta sobre la ruta 9.
+ * Exportado para los tests.
+ */
+export function sinPedazosSueltos(area: Area, permitido: Area | null): Area {
+  const partes = (turf.flatten(area).features as Area[]).sort((a, b) => km2(b) - km2(a));
+  if (partes.length <= 1) return area;
+  const principal = partes[0];
+  const alrededor = turf.buffer(principal, 1.5, { units: 'kilometers' }) as Area | undefined;
+  const quedan = partes.filter((p, i) => {
+    if (i === 0) return true;
+    if (km2(p) < 0.05) return false;
+    const cerca = alrededor ? Boolean(interseccion(p, alrededor)) : true;
+    if (cerca) return true;
+    return km2(p) >= 0.3 && (!permitido || turf.booleanPointInPolygon(turf.pointOnFeature(p), permitido));
+  });
+  return unir(quedan) ?? principal;
+}
+
 /** Coordenadas con 5 decimales (~1 m) y contorno simplificado (~5 m): el archivo queda liviano. */
 export const aliviar = (a: Area): Area => {
   const simple = simplificar(a, 0.00005);
@@ -818,6 +839,18 @@ if (import.meta.main) {
   // Cada localidad termina donde empieza otra: se le restan los radios oficiales de las demás (salvo el que la
   // contiene, si es un enclave) y las localidades que tiene adentro.
   const conCasco = zonas.features.filter((z) => z.properties.tipo === 'localidad' && z.properties.contorno);
+  // Los límites municipales de OpenStreetMap (para las que tienen id de relación): un pedazo dentro del municipio de
+  // otra localidad es de esa otra (Juárez Celman tenía uno al lado de La Cercanía, que es de Mendiolaza).
+  const idDe = (z: Localidad) => (/^R(\d+)$/.exec(z.properties.osm ?? '') ?? [])[1];
+  const archivoLimites = `${CACHE}/osm-limites.json`;
+  let elementosLimites = JSON.parse(await readFile(archivoLimites, 'utf8').catch(() => 'null')) as ElementoOsm[] | null;
+  const ids = conCasco.map(idDe).filter(Boolean);
+  if (!elementosLimites && ids.length > 0) {
+    elementosLimites = await consultarOverpass(`[out:json][timeout:180];rel(id:${ids.join(',')});out geom;`, 'límites municipales', SERVIDORES[0]).catch(() => []);
+    if (elementosLimites.length > 0) await writeFile(archivoLimites, JSON.stringify(elementosLimites));
+  }
+  const limites = new Map((elementosLimites ?? []).map((e) => [String(e.id), areaDe(e)]));
+  const limiteDe = (z: Localidad) => limites.get(idDe(z) ?? '') ?? null;
   const centros = new Map(conCasco.map((z) => [z, centroDe(z)]));
   // Un barrio de OSM que quedó en la localidad equivocada (el contorno de Villa Allende cubría Saldán cuando se bajó):
   // si está fuera del radio oficial de la suya y más cerca del centro de otra, pasa a esa otra.
@@ -842,8 +875,9 @@ if (import.meta.main) {
   for (const z of conCasco) {
     // Sus barrios cercanos (también los aproximados: Dumesnil y Casa Bamba son de La Calera) son parte de lo urbano.
     const centroZ = centros.get(z)!;
+    // Los aproximados (círculos de parajes) solo si están a menos de 3 km: más lejos dejaban pedacitos sueltos.
     const cercanos = barrios.filter((b) => b.properties.localidad === z.properties.nombre
-      && turf.distance(turf.pointOnFeature(b as Area), centroZ) < (radioDe(z).length > 0 ? 11 : 6)) as Area[];
+      && turf.distance(turf.pointOnFeature(b as Area), centroZ) < (b.properties.tipo === 'aproximado' ? 3 : radioDe(z).length > 0 ? 11 : 6)) as Area[];
     const area = unir([comoArea(z), ...(z.properties.dentroDe ? [] : cercanos)]) ?? comoArea(z);
     const [o, s, e, n] = turf.bbox(area);
     const toca = (a: Area) => { const [ao, as, ae, an] = turf.bbox(a); return ao <= e && ae >= o && as <= n && an >= s; };
@@ -860,10 +894,15 @@ if (import.meta.main) {
     const poligonosDe = (localidad: string) => unir(barrios.filter((b) => b.properties.localidad === localidad && b.properties.tipo !== 'aproximado') as Area[]);
     const propios = poligonosDe(z.properties.nombre);
     const deLaMadre = z.properties.dentroDe ? poligonosDe(z.properties.dentroDe) : null;
-    const quitar = unir([...ajenos, ...hijas, ...vecinas, ...(deLaMadre ? [deLaMadre] : [])]);
+    const limitesAjenos = conCasco.filter((v) => v !== z && v.properties.dentroDe !== z.properties.nombre && z.properties.dentroDe !== v.properties.nombre)
+      .map(limiteDe).filter((l): l is Area => Boolean(l) && toca(l!) && !turf.booleanPointInPolygon(centroZ, l!));
+    const quitar = unir([...ajenos, ...hijas, ...vecinas, ...limitesAjenos, ...(deLaMadre ? [deLaMadre] : [])]);
     const resto = quitar && propios ? diferencia(quitar, propios) : quitar;
-    const queda = resto ? diferencia(area, resto) : null;
-    if (queda && km2(queda) > 0.05) z.geometry = aliviar(queda).geometry as never;
+    // Sin nada que restar, igual se guarda la unión con los barrios (antes se perdía).
+    const recortada = resto ? diferencia(area, resto) ?? area : area;
+    const permitido = unir([...(limiteDe(z) ? [limiteDe(z)!] : []), ...radioDe(z)]);
+    const queda = sinPedazosSueltos(recortada, permitido);
+    if (km2(queda) > 0.05) z.geometry = aliviar(queda).geometry as never;
   }
   // Un barrio que ahora es una localidad propia (El Pueblito en Salsipuedes) deja de estar como barrio.
   const reemplazados = new Set(zonas.features.filter((z) => z.properties.dentroDe).map((z) => `${z.properties.dentroDe}|${claveDeLugar(z.properties.nombre)}`));

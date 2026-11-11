@@ -67,3 +67,7 @@ test('un número suelto se completa con el nombre anterior ("Loteo Terranostra I
   assert.deepEqual(completarNumeros(['Alberdi', 'Centro']), ['Alberdi', 'Centro']); // sin números: no cambia nada
   assert.deepEqual(nombresDelTramo('Barrios Los Prados I y II, en forma parcial.'), ['Los Prados I', 'Los Prados II']);
 });
+
+test('un pedazo hecho solo de conectores no es un barrio ("en el" de "en el perímetro comprendido por…")', () => {
+  assert.deepEqual(nombresDelTramo('barrio Hernández, en el perímetro comprendido por las calles: Güemes, Almafuerte, Roma y España.'), ['Hernández']);
+});

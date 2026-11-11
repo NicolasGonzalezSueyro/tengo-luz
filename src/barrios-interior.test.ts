@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import * as turf from '@turf/turf';
-import { alRadio, claveDeLugar, claveSinLocalidad, enTitulo, km2, mismaLocalidad, sinRepetidos } from './barrios-interior.ts';
+import { alRadio, claveDeLugar, claveSinLocalidad, sinPedazosSueltos, enTitulo, km2, mismaLocalidad, sinRepetidos } from './barrios-interior.ts';
 
 test('enTitulo arregla los nombres en mayúsculas de las capas oficiales', () => {
   assert.equal(enTitulo('LAS MERCEDES (EX COLCAR)'), 'Las Mercedes');
@@ -63,4 +63,17 @@ test('sinRepetidos junta variantes de la misma localidad que se pisan ("Manuel B
   const b = (base: string) => ({ type: 'Feature', geometry: cuadrado, properties: { nombre: `${base} (Villa Carlos Paz)`, base, localidad: 'Villa Carlos Paz', tipo: 'poligono', fuente: 'osm' } });
   assert.equal(sinRepetidos([b('Manuel Belgrano'), b('Belgrano')]).length, 1);
   assert.equal(sinRepetidos([b('Costa Azul'), b('Villa Balnearia')]).length, 2); // nombres distintos: no
+});
+
+test('sinPedazosSueltos: saca pedacitos y pedazos lejanos fuera del municipio, deja los grandes de adentro', () => {
+  const cuadro = (o: number, s: number, lado: number) => turf.bboxPolygon([o, s, o + lado, s + lado]).geometry.coordinates;
+  const area = { type: 'Feature', properties: {}, geometry: { type: 'MultiPolygon', coordinates: [
+    cuadro(-64.20, -31.30, 0.02), // principal (~4 km²)
+    cuadro(-64.20, -31.25, 0.008), // lejos (5 km), grande (~0,6 km²) y dentro del municipio: queda
+    cuadro(-64.10, -31.30, 0.008), // lejos, grande, pero fuera del municipio: se va
+    cuadro(-64.175, -31.30, 0.001), // cerca, pero un pedacito (~0,01 km²): se va
+  ] } } as never;
+  const municipio = turf.bboxPolygon([-64.21, -31.31, -64.15, -31.20]);
+  const quedan = turf.flatten(sinPedazosSueltos(area, municipio)).features.length;
+  assert.equal(quedan, 2);
 });

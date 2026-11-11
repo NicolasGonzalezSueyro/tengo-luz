@@ -63,6 +63,8 @@ export function lugaresSeparados(lugares: string[], centros: Map<string, Punto>,
   return peor;
 }
 
+/** Pedazos hechos solo de conectores ("en el", que queda de "en el perímetro comprendido por…"): no son barrios. */
+export const SOLO_CONECTORES = /^((en|el|la|las|los|lo|de|del|y|e|a|al|con|por|para|sobre)\s*)+$/i;
 const SOLO_NUMERO = /^(\d+|[ivx]+)( ?(ra|da|ta|ma|a|o|°|º|ª))?( secci[oó]n)?$/i;
 const NUMERO_AL_FINAL = /\s+(\d+|[ivx]+)( ?(ra|da|ta|ma|a|o|°|º|ª))?( secci[oó]n)?$/i;
 /**
@@ -167,7 +169,7 @@ export function crearUbicador(nombres: string[], alias: Record<string, string | 
 
     for (const pedazo of completarNumeros(texto.split(/,| y | e (?=h?i)/))) {
       const nombre = normalizar(pedazo);
-      if (!nombre) continue;
+      if (!nombre || SOLO_CONECTORES.test(pedazo.trim())) continue;
       const delMapa = indice.get(nombre);
       if (delMapa) barrios.add(delMapa);
       else sinUbicar.push(nombre);

@@ -425,6 +425,11 @@
   "veces": 2
  },
  {
+  "nombre": "El Pedacito",
+  "localidad": "Villa del Totoral",
+  "veces": 2
+ },
+ {
   "nombre": "Parque Industrial",
   "localidad": "Villa María",
   "veces": 2
@@ -920,6 +925,11 @@
   "veces": 1
  },
  {
+  "nombre": "Hernández",
+  "localidad": "San Francisco",
+  "veces": 1
+ },
+ {
   "nombre": "Manuel Belgrano",
   "localidad": "San Francisco",
   "veces": 1
@@ -990,6 +1000,11 @@
   "veces": 1
  },
  {
+  "nombre": "Carlos Paz 2",
+  "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
   "nombre": "Edificio Leonardo",
   "localidad": "Villa Carlos Paz",
   "veces": 1
@@ -1027,11 +1042,6 @@
  {
   "nombre": "Sorrentino",
   "localidad": "Villa Carlos Paz",
-  "veces": 1
- },
- {
-  "nombre": "El Pedacito",
-  "localidad": "Villa del Totoral",
   "veces": 1
  },
  {
