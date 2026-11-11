@@ -1182,10 +1182,7 @@
       "Ampliacion Cerveceros"
     ],
     "zonas": [],
-    "sinUbicar": [
-      "2",
-      "3"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Villa Carlos Paz",
@@ -3519,6 +3516,7 @@
       "ferre",
       "pjes",
       "carlos paz 1",
+      "carlos paz 2",
       "pje",
       "sorrentino",
       "juan b justo"
@@ -8257,7 +8255,8 @@
     "fuente": "https://eldoce.tv/actualidad/2026/10/15/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-multiples-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Cristina (Bialet Massé)",
-      "Balcón del Lago I (Bialet Massé)"
+      "Balcón del Lago I (Bialet Massé)",
+      "Balcón del Lago II (Bialet Massé)"
     ],
     "zonas": [
       "Bialet Massé"
@@ -12480,6 +12479,7 @@
       "La Estanzuela (La Calera)",
       "Terrazas de Estanzuela (La Calera)",
       "Jardines de Estanzuela (La Calera)",
+      "Los Prados II (La Calera)",
       "Las Flores (La Calera)"
     ],
     "zonas": [
@@ -12707,6 +12707,7 @@
       "La Estanzuela (La Calera)",
       "Terrazas de Estanzuela (La Calera)",
       "Jardines de Estanzuela (La Calera)",
+      "Los Prados II (La Calera)",
       "Las Flores (La Calera)"
     ],
     "zonas": [
@@ -16015,6 +16016,7 @@
       "Las Flores (La Calera)",
       "La Estanzuela (La Calera)",
       "Jardines de Estanzuela (La Calera)",
+      "Los Prados II (La Calera)",
       "Terrazas de Estanzuela (La Calera)",
       "Stoecklin (La Calera)",
       "Calera Central (La Calera)"
@@ -16112,6 +16114,7 @@
       "Las Flores (La Calera)",
       "La Estanzuela (La Calera)",
       "Jardines de Estanzuela (La Calera)",
+      "Los Prados II (La Calera)",
       "Terrazas de Estanzuela (La Calera)",
       "Stoecklin (La Calera)",
       "Calera Central (La Calera)"
@@ -16903,8 +16906,6 @@
       "Terranostra"
     ],
     "zonas": [],
-    "sinUbicar": [
-      "ii"
-    ]
+    "sinUbicar": []
   }
 ]
