@@ -1329,5 +1329,18 @@
   }
  ],
  "pescanas": [],
- "sobremonte": []
+ "sobremonte": [],
+ "oncativo": [
+  {
+   "nombre": "Oncativo",
+   "osm": "R2317169",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.6817724,
+    -31.9133731
+   ],
+   "departamento": "Río Segundo"
+  }
+ ]
 }

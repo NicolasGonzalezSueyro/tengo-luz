@@ -16898,9 +16898,9 @@
     "fecha": "2026-11-12",
     "desde": "08:00",
     "hasta": "11:00",
-    "zona": "barrio Catedral, área comprendida por Salta, Libertador Sur, Corrientes y Sáenz Peña.–De 12:30 a 15:30 hs Sector: barrio Roca, área comprendida por Edificio Moderna Center.",
+    "zona": "barrio Catedral, área comprendida por las calles Salta, Libertador Sur, Corrientes y Sáenz Peña.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Catedral (San Francisco)"
     ],
@@ -16917,9 +16917,9 @@
     "fecha": "2026-11-12",
     "desde": "08:30",
     "hasta": "12:30",
-    "zona": "Loteo Terranostra I y II.",
-    "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "zona": "Loteo Terranostra I y II en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Terranostra"
     ],
@@ -16927,21 +16927,93 @@
     "sinUbicar": []
   },
   {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-12",
+    "desde": "12:30",
+    "hasta": "15:30",
+    "zona": "barrio Roca, Edificio Modena Center.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [
+      "edificio modena center"
+    ],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "14:00",
+    "hasta": "14:15",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Playa Perelli (Villa Carlos Paz)"
+    ],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago",
+      "estancia vieja"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
     "localidad": "Villa Carlos Paz",
     "fecha": "2026-11-12",
     "desde": "14:15",
     "hasta": "17:45",
-    "zona": "barrios Villa del Lago 1ra y 2da sección y Villa Santa Cruz del Lago.",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, en forma total.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [
       "Villa Carlos Paz"
     ],
     "sinUbicar": [
       "villa lago 1ra",
-      "villa lago 2da seccion",
+      "y 2da",
+      "seccion",
       "villa santa cruz lago"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "17:45",
+    "hasta": "18:00",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Playa Perelli (Villa Carlos Paz)"
+    ],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago",
+      "estancia vieja"
     ],
     "parciales": [
       "Villa Carlos Paz"
@@ -17084,6 +17156,41 @@
   {
     "localidad": "Córdoba",
     "fecha": "2026-11-13",
+    "desde": "07:30",
+    "hasta": "07:35",
+    "zona": "Localidades de Santa Catalina y Las Vertientes.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "localidades santa catalina",
+      "las vertientes"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-13",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "barrios Castelli 2 y 400 Viviendas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "castelli 2",
+      "400 viviendas"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-13",
     "desde": "08:00",
     "hasta": "10:00",
     "zona": "barrios Villa Cornú y Cerro Norte, en forma parcial.",
@@ -17166,6 +17273,34 @@
     ]
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "barrio Zepa \"C\", en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Zepa C"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Oncativo",
+    "fecha": "2026-11-14",
+    "desde": "09:00",
+    "hasta": "11:00",
+    "zona": "localidad de Oncativo.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Oncativo"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Marcos Juarez",
     "fecha": "2026-11-14",
     "desde": "13:00",
@@ -17183,6 +17318,109 @@
     ],
     "parciales": [
       "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Marcos Juarez",
+    "fecha": "2026-11-14",
+    "desde": "13:00",
+    "hasta": "14:00",
+    "zona": "barrios: Centro, Noroeste, Barrio Noreste, Lavalle y Villa Argentina, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Argentina (Marcos Juárez)"
+    ],
+    "zonas": [
+      "Marcos Juárez"
+    ],
+    "sinUbicar": [
+      "centro",
+      "noroeste",
+      "noreste",
+      "lavalle"
+    ],
+    "parciales": [
+      "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "zona rural y Con. Monte Cristo y camino De Las Quintas, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "zona rural y con monte cristo y camino de las quintas"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
+    "desde": "14:00",
+    "hasta": "16:00",
+    "zona": "barrio Cerro de las Rosas, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Cerro de las Rosas"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
+    "desde": "14:00",
+    "hasta": "16:00",
+    "zona": "calle Dean Funes al 400, números impares.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "calle dean funes al 400 numeros impares"
+    ]
+  },
+  {
+    "localidad": "Marcos Juarez",
+    "fecha": "2026-11-14",
+    "desde": "15:00",
+    "hasta": "16:00",
+    "zona": "barrios: Centro, Noreste, Suroeste y Sureste, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Marcos Juárez"
+    ],
+    "sinUbicar": [
+      "centro",
+      "noreste",
+      "suroeste",
+      "sureste"
+    ],
+    "parciales": [
+      "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
+    "desde": "16:00",
+    "hasta": "16:05",
+    "zona": "localidades de Santa Catalina y Las Vertientes.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "localidades santa catalina",
+      "las vertientes"
     ]
   },
   {
@@ -17207,6 +17445,571 @@
     ],
     "parciales": [
       "Villa María"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "barrio Viilla Cabrera, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "viilla cabrera"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "07:30",
+    "hasta": "10:30",
+    "zona": "barrios: Juan XXIII y Roque Sáenz Peña, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Juan XXIII"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "roque saenz pena"
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-16",
+    "desde": "10:00",
+    "hasta": "11:00",
+    "zona": "área comprendida por las calles: San Juan, Estados Unidos, La Rioja y Boulevard Italia.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.25473,
+        -32.41194
+      ],
+      [
+        -63.25464,
+        -32.41221
+      ],
+      [
+        -63.25441,
+        -32.41241
+      ],
+      [
+        -63.25409,
+        -32.41248
+      ],
+      [
+        -63.25377,
+        -32.41241
+      ],
+      [
+        -63.25152,
+        -32.41098
+      ],
+      [
+        -63.25128,
+        -32.41078
+      ],
+      [
+        -63.2512,
+        -32.41051
+      ],
+      [
+        -63.25128,
+        -32.41024
+      ],
+      [
+        -63.25152,
+        -32.41004
+      ],
+      [
+        -63.25184,
+        -32.40997
+      ],
+      [
+        -63.25215,
+        -32.41004
+      ],
+      [
+        -63.25441,
+        -32.41147
+      ],
+      [
+        -63.25464,
+        -32.41167
+      ],
+      [
+        -63.25473,
+        -32.41194
+      ]
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-16",
+    "desde": "11:00",
+    "hasta": "12:00",
+    "zona": "área comprendida por las calles: Remedios de Escalada, Aguirre Cámara, América y Mercedario.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.21495,
+        -32.41357
+      ],
+      [
+        -63.21487,
+        -32.41384
+      ],
+      [
+        -63.21463,
+        -32.41403
+      ],
+      [
+        -63.21432,
+        -32.41411
+      ],
+      [
+        -63.214,
+        -32.41403
+      ],
+      [
+        -63.21376,
+        -32.41384
+      ],
+      [
+        -63.21368,
+        -32.41357
+      ],
+      [
+        -63.21329,
+        -32.41082
+      ],
+      [
+        -63.21337,
+        -32.41055
+      ],
+      [
+        -63.21361,
+        -32.41035
+      ],
+      [
+        -63.21393,
+        -32.41028
+      ],
+      [
+        -63.21425,
+        -32.41035
+      ],
+      [
+        -63.21448,
+        -32.41055
+      ],
+      [
+        -63.21457,
+        -32.41082
+      ],
+      [
+        -63.21495,
+        -32.41357
+      ]
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-16",
+    "desde": "12:00",
+    "hasta": "13:00",
+    "zona": "área comprendida por las calles: Perón, Porfirio Seppey, Aconcagua y Tupungato.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.21583,
+        -32.41819
+      ],
+      [
+        -63.21575,
+        -32.41846
+      ],
+      [
+        -63.21551,
+        -32.41865
+      ],
+      [
+        -63.21366,
+        -32.41922
+      ],
+      [
+        -63.21334,
+        -32.41929
+      ],
+      [
+        -63.21302,
+        -32.41922
+      ],
+      [
+        -63.21279,
+        -32.41902
+      ],
+      [
+        -63.21271,
+        -32.41875
+      ],
+      [
+        -63.21279,
+        -32.41848
+      ],
+      [
+        -63.21302,
+        -32.41828
+      ],
+      [
+        -63.21487,
+        -32.41772
+      ],
+      [
+        -63.21519,
+        -32.41765
+      ],
+      [
+        -63.21551,
+        -32.41772
+      ],
+      [
+        -63.21575,
+        -32.41792
+      ],
+      [
+        -63.21583,
+        -32.41819
+      ]
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-16",
+    "desde": "13:00",
+    "hasta": "14:00",
+    "zona": "área comprendida por las calles: Perón, Paraguay, Porfirio Seppey y Antofalla.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.21189,
+        -32.41932
+      ],
+      [
+        -63.21183,
+        -32.4195
+      ],
+      [
+        -63.21168,
+        -32.41963
+      ],
+      [
+        -63.21117,
+        -32.41998
+      ],
+      [
+        -63.21096,
+        -32.42003
+      ],
+      [
+        -63.21075,
+        -32.41998
+      ],
+      [
+        -63.21059,
+        -32.41985
+      ],
+      [
+        -63.21053,
+        -32.41967
+      ],
+      [
+        -63.21063,
+        -32.41842
+      ],
+      [
+        -63.21068,
+        -32.41824
+      ],
+      [
+        -63.21084,
+        -32.41811
+      ],
+      [
+        -63.21105,
+        -32.41806
+      ],
+      [
+        -63.21127,
+        -32.41811
+      ],
+      [
+        -63.21142,
+        -32.41824
+      ],
+      [
+        -63.21183,
+        -32.41914
+      ],
+      [
+        -63.21189,
+        -32.41932
+      ]
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-17",
+    "desde": "08:00",
+    "hasta": "09:00",
+    "zona": "área comprendida por las calles: Jorge Newbery, 2 de Abril, Haití y Constituyentes.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.21509,
+        -32.42695
+      ],
+      [
+        -63.21501,
+        -32.42722
+      ],
+      [
+        -63.21477,
+        -32.42742
+      ],
+      [
+        -63.21446,
+        -32.42749
+      ],
+      [
+        -63.21213,
+        -32.42748
+      ],
+      [
+        -63.21181,
+        -32.42741
+      ],
+      [
+        -63.21157,
+        -32.42721
+      ],
+      [
+        -63.21149,
+        -32.42694
+      ],
+      [
+        -63.21157,
+        -32.42668
+      ],
+      [
+        -63.21181,
+        -32.42648
+      ],
+      [
+        -63.21213,
+        -32.42641
+      ],
+      [
+        -63.21446,
+        -32.42641
+      ],
+      [
+        -63.21477,
+        -32.42649
+      ],
+      [
+        -63.21501,
+        -32.42668
+      ],
+      [
+        -63.21509,
+        -32.42695
+      ]
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-17",
+    "desde": "09:00",
+    "hasta": "10:00",
+    "zona": "área comprendida por las calles: Entre Ríos, Mendoza, San Luis y Perazolo.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa María"
+    ],
+    "sector": [
+      [
+        -63.23513,
+        -32.40848
+      ],
+      [
+        -63.23505,
+        -32.40875
+      ],
+      [
+        -63.23255,
+        -32.41157
+      ],
+      [
+        -63.23232,
+        -32.41177
+      ],
+      [
+        -63.232,
+        -32.41184
+      ],
+      [
+        -63.23168,
+        -32.41177
+      ],
+      [
+        -63.23144,
+        -32.41157
+      ],
+      [
+        -63.23136,
+        -32.41131
+      ],
+      [
+        -63.23144,
+        -32.41104
+      ],
+      [
+        -63.23394,
+        -32.40821
+      ],
+      [
+        -63.23418,
+        -32.40801
+      ],
+      [
+        -63.2345,
+        -32.40794
+      ],
+      [
+        -63.23481,
+        -32.40801
+      ],
+      [
+        -63.23505,
+        -32.40821
+      ],
+      [
+        -63.23513,
+        -32.40848
+      ]
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-17",
+    "desde": "10:00",
+    "hasta": "11:00",
+    "zona": "Loteo Mariapolis Norte, entre las calles: Independencia, Torres y Leloir.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [
+      "mariapolis norte"
+    ],
+    "parciales": [
+      "Villa María"
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
+    "fecha": "2026-11-17",
+    "desde": "11:00",
+    "hasta": "12:00",
+    "zona": "Loteo Mariapolis Sur, entre las calles: Independencia y Jauretche.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa María"
+    ],
+    "sinUbicar": [
+      "mariapolis sur"
+    ],
+    "parciales": [
+      "Villa María"
+    ]
+  },
+  {
+    "localidad": "Salsipuedes",
+    "fecha": "2026-11-17",
+    "desde": "13:00",
+    "hasta": "16:00",
+    "zona": "barrio Villa Sol, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Sol (Salsipuedes)"
+    ],
+    "zonas": [
+      "Salsipuedes"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Salsipuedes"
     ]
   }
 ]
