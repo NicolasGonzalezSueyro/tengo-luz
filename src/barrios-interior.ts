@@ -468,6 +468,12 @@ export function aproximar(semillas: Semilla[], conContorno: Area[], casco: Area 
 
 const ROMANOS: Record<string, string> = { ii: '2', iii: '3', iv: '4', vi: '6', vii: '7', viii: '8' };
 const NUMEROS: Record<string, string> = { uno: '1', dos: '2', tres: '3', cuatro: '4', cinco: '5', seis: '6', siete: '7', ocho: '8', nueve: '9', diez: '10' };
+// "Bv Horizonte" y "Boulevares de Horizonte", "Las Corzuelas" y "Corzuelas": abreviaturas completas y sin artículos.
+const ABREVIATURAS: Record<string, string> = {
+  bv: 'boulevares', bvd: 'boulevares', boulevard: 'boulevares', bulevar: 'boulevares', bulevares: 'boulevares', pque: 'parque',
+  res: 'residencial', ampl: 'ampliacion', gral: 'general', sta: 'santa', sto: 'santo', cno: 'camino', ing: 'ingeniero', pte: 'presidente',
+};
+const ARTICULOS = new Set(['de', 'del', 'el', 'la', 'las', 'los']);
 /** "Country Tejas Cuatro", "Tejas 4" y "TEJAS 4 (Malagueño)" son el mismo lugar. Exportado para los tests. */
 export function claveDeLugar(base: string): string {
   // "Coop. La Unidad" y "Cooperativa La Unidad", "Ex Batallón 141" y "Batallon 141", "Greenville II" y "GreenVille 2",
@@ -475,7 +481,9 @@ export function claveDeLugar(base: string): string {
   const limpio = base.replace(/\s*\([^)]*\)/g, '').replace(/^villa de emergencia\s+/i, 'villa ')
     .replace(/^((country|barrio privado|barrio cerrado|barrio|b°|bº|complejo|urbanizaci[oó]n|loteo|privado|ex|coop\.?|cooperativa|vecinal)\s+)+/i, '')
     .replace(/\s*-?\s*barrio (cerrado|privado)\s*-?\s*$/i, ''); // "Las Cañitas Barrio Privado", "La Serena -Barrio Cerrado-"
-  return claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? ROMANOS[p] ?? p).join(' ');
+  const palabras = claveDeBarrio(limpio).split(' ').map((p) => NUMEROS[p] ?? ROMANOS[p] ?? ABREVIATURAS[p] ?? p);
+  const sinArticulos = palabras.filter((p) => !ARTICULOS.has(p));
+  return (sinArticulos.length > 0 ? sinArticulos : palabras).join(' ');
 }
 
 type BarrioConFuente = { properties: { nombre: string; base?: string; localidad: string; tipo?: string; fuente?: string; alias?: string[] } };
@@ -555,7 +563,8 @@ export function sinRepetidos<F extends BarrioConFuente>(barrios: F[], centros?: 
     for (const b of lista.slice(i + 1)) {
       if (!quedan.has(b) || b.properties.localidad !== a.properties.localidad) continue;
       const kb = claveDeLugar(b.properties.base ?? b.properties.nombre);
-      const largo = Math.min(ka.length, kb.length);
+      // El largo se mide con los artículos: "La Pakana" y "La Pankana" son el mismo aunque la clave quede corta.
+      const largo = Math.min(normalizar(a.properties.base ?? a.properties.nombre).length, normalizar(b.properties.base ?? b.properties.nombre).length);
       const tolerancia = largo >= 14 ? 2 : largo >= 8 ? 1 : 0;
       const casiIgual = tolerancia > 0 && Math.abs(ka.length - kb.length) <= tolerancia && distancia(ka, kb) <= tolerancia;
       // "Manuel Belgrano" y "Belgrano" en Carlos Paz: variantes que además se pisan en más del 60 %.
@@ -649,6 +658,44 @@ export function sinPedazosSueltos(area: Area, permitido: Area | null): Area {
     return km2(p) >= 0.3 && (!permitido || turf.booleanPointInPolygon(turf.pointOnFeature(p), permitido));
   });
   return unir(quedan) ?? principal;
+}
+
+/**
+ * Los pedazos con el mismo nombre quedan como un solo lugar (la Municipalidad parte "Villa El Libertador" en su parte
+ * oficial y su ampliación): un solo contorno, sin la línea del medio. Los sin nombre quedan como están.
+ */
+export function unirMismoNombre<F extends { properties: { nombre: string | null }; geometry: unknown }>(lista: F[]): F[] {
+  const grupos = new Map<string, F[]>();
+  for (const f of lista) if (f.properties.nombre) grupos.set(f.properties.nombre, [...(grupos.get(f.properties.nombre) ?? []), f]);
+  return lista.flatMap((f) => {
+    const grupo = f.properties.nombre ? grupos.get(f.properties.nombre)! : [f];
+    if (grupo.length === 1) return [f];
+    if (grupo[0] !== f) return [];
+    const junto = unir(grupo as unknown as Area[]);
+    return [junto ? { ...f, geometry: junto.geometry } : f];
+  });
+}
+
+/**
+ * Una forma prolija: se agranda y se achica (rellena entradas y huecos de hasta el doble de `cerrar`) y después se
+ * achica y se agranda (saca tiras y puntas más finas que el doble de `abrir`). Sin burbujas ni dientes. Si turf no
+ * puede con la geometría, queda como estaba. Exportado para los tests.
+ */
+export function suavizar(area: Area, cerrar = 350, abrir = 100): Area {
+  const mover = (a: Area | null, metros: number) => {
+    try {
+      return (turf.buffer(a!, metros, { units: 'meters', steps: 8 }) as Area | undefined) ?? null;
+    } catch {
+      return null;
+    }
+  };
+  const cerrada = mover(mover(area, cerrar), -cerrar);
+  const abierta = cerrada && mover(mover(cerrada, -abrir), abrir);
+  const forma = abierta && km2(abierta) > 0.5 * km2(area) ? abierta : cerrada ?? area;
+  // Sin agujeros: lo que queda rodeado es parte del pueblo (si es otra localidad, se resta después).
+  const g = forma.geometry;
+  const sinAgujeros = g.type === 'Polygon' ? { type: 'Polygon', coordinates: [g.coordinates[0]] } : { type: 'MultiPolygon', coordinates: g.coordinates.map((p) => [p[0]]) };
+  return { ...forma, geometry: sinAgujeros } as Area;
 }
 
 /** Coordenadas con 5 decimales (~1 m) y contorno simplificado (~5 m): el archivo queda liviano. */
@@ -900,8 +947,11 @@ if (import.meta.main) {
     const resto = quitar && propios ? diferencia(quitar, propios) : quitar;
     // Sin nada que restar, igual se guarda la unión con los barrios (antes se perdía).
     const recortada = resto ? diferencia(area, resto) ?? area : area;
+    // Forma prolija (sin burbujas de los aproximados ni dientes de las calles), y otra vez sin pisar a las demás.
+    const suave = suavizar(recortada);
+    const prolija = resto ? diferencia(suave, resto) ?? suave : suave;
     const permitido = unir([...(limiteDe(z) ? [limiteDe(z)!] : []), ...radioDe(z)]);
-    const queda = sinPedazosSueltos(recortada, permitido);
+    const queda = sinPedazosSueltos(prolija, permitido);
     if (km2(queda) > 0.05) z.geometry = aliviar(queda).geometry as never;
   }
   // Un barrio que ahora es una localidad propia (El Pueblito en Salsipuedes) deja de estar como barrio.

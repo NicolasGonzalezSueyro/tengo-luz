@@ -1254,19 +1254,9 @@ async function cargarInterior() {
       lugaresDelMapa.add(f.properties.nombre);
     }
     nombres = [...lugaresDelMapa].sort((a, b) => a.localeCompare(b, 'es'));
-    // Las divisiones de capital (countries y loteos dentro de un barrio, como los de Valle Escondido): líneas finas
-    // que se ven al acercarse, y se pueden tocar para ver su ficha.
+    // Las divisiones de capital (countries y loteos dentro de un barrio) no se dibujan siempre: encima del mapa
+    // municipal eran un mosaico de cuadraditos. Aparecen solo el día que tienen un corte (pintarMapa) y se buscan igual.
     const p = PALETAS[temaActual()];
-    capaDivisiones = L.geoJSON(
-      /** @type {GeoJSON.FeatureCollection} */ ({ type: 'FeatureCollection', features: interior.features.filter((/** @type {any} */ f) => f.properties.localidad === 'Córdoba') }),
-      {
-        style: (f) => ({ color: p.borde, weight: 1.2, opacity: 1, fillOpacity: 0, ...(f?.properties.tipo === 'aproximado' ? { dashArray: '3 3' } : {}) }),
-        onEachFeature: (f, capa) => {
-          capa.bindTooltip(comoTexto(f.properties.nombre), { sticky: true });
-          capa.on('click', () => elegirBarrio(f.properties.nombre));
-        },
-      },
-    );
     // Las localidades y los barrios del interior también se pueden tocar aunque ese día no tengan cortes (La Calera,
     // Carlos Paz…): contorno fino, sin relleno. Van en un "lienzo" (canvas): son unos mil y en el celu no lo traban.
     // En su propio "pane", debajo de los barrios pintados (SVG): si no, el lienzo los tapa y no se pueden tocar.
@@ -1292,8 +1282,6 @@ async function cargarInterior() {
   }
 }
 /** @type {L.GeoJSON | null} */
-let capaDivisiones = null;
-/** @type {L.GeoJSON | null} */
 let capaLocalidades = null;
 /** @type {L.GeoJSON | null} */
 let capaBarriosInterior = null;
@@ -1304,15 +1292,13 @@ function segunZoom(capa, va) {
   else if (!va && mapa.hasLayer(capa)) capa.remove();
 }
 /**
- * Las divisiones de capital y los barrios del interior, solo de cerca (de lejos serían una maraña de líneas); las
- * localidades, desde que se ve la provincia de cerca. Quedan debajo de los barrios pintados.
+ * Los barrios del interior, solo de cerca (de lejos serían una maraña de líneas); las localidades, desde que se ve
+ * la provincia de cerca. Quedan debajo de los barrios pintados.
  */
 function mostrarDivisiones() {
   const zoom = mapa.getZoom();
   segunZoom(capaLocalidades, zoom >= 10);
   segunZoom(capaBarriosInterior, zoom >= 13);
-  segunZoom(capaDivisiones, zoom >= 14);
-  capaDivisiones?.bringToBack();
   capaPoligonos.bringToBack();
 }
 mapa.on('zoomend', mostrarDivisiones);

@@ -42,7 +42,11 @@ const cache = JSON.parse(await readFile(`${CACHE}/nominatim-capital.json`, 'utf8
 
 const municipales = mapa.features.filter((f) => f.properties.tipo === 'poligono' && f.properties.nombre) as unknown as (Area & Barrio)[];
 const nombresMunicipales = municipales.map((f) => f.properties.nombre!);
-const esMunicipal = crearBuscadorDeBarrios(nombresMunicipales.map((n) => ({ nombre: n, base: n, localidad: CAPITAL })));
+const buscarMunicipal = crearBuscadorDeBarrios(nombresMunicipales.map((n) => ({ nombre: n, base: n, localidad: CAPITAL })));
+// "Cooperativa 16 de Noviembre" y "16 de Noviembre": con la misma clave es el mismo barrio, no se dibuja otro encima.
+const clavesMunicipales = new Set(nombresMunicipales.map(claveDeLugar));
+const esMunicipal = (localidades: string[], nombre: string) =>
+  (clavesMunicipales.has(claveDeLugar(nombre)) ? { barrios: [nombre] } : buscarMunicipal(localidades, nombre));
 const nombresDelMapa = mapa.features.flatMap((f) => f.properties.nombre ?? []);
 const ubicar = crearUbicador(nombresDelMapa, alias);
 const tolerante = crearBuscadorDeBarrios(nombresDelMapa.map((n) => ({ nombre: n, base: n, localidad: CAPITAL })));
@@ -185,12 +189,14 @@ for (const nombre of faltan) {
 const radiosProvincia = JSON.parse(await readFile('.cache/barrios-interior/idecor-radios_urbanos.json', 'utf8').catch(() => '{"features":[]}')) as { features: (Area & { properties: { nombre?: string } })[] };
 const radioCapital = radiosProvincia.features.filter((r) => r.geometry && /^c[oó]rdoba$/i.test(r.properties.nombre ?? ''));
 const enCapital = (a: Area) => radioCapital.length === 0 || radioCapital.some((r) => turf.booleanPointInPolygon(turf.pointOnFeature(a), r));
-const BASURA = /^(manzana|mz\.?|lote|parcela)\b|^asentamiento$/i;
+// Tampoco shoppings ("DUO - Distrito Córdoba Shopping"): OSM los marca como zona con nombre, pero no son barrios.
+const BASURA = /^(manzana|mz\.?|lote|parcela)\b|^asentamiento$|\bshopping\b/i;
 const nuevos: BarrioInterior[] = [];
 const vistos = new Set<string>();
 const agregar = (base: string, area: Area, tipo: 'poligono' | 'aproximado', fuente: 'osm' | 'nominatim' | 'municipio') => {
   const clave = claveDeBarrio(base);
-  if (vistos.has(clave) || BASURA.test(base.trim()) || !enCapital(area)) return;
+  // Menos de 500 m² (un aproximado que quedó en nada entre avenidas, como "Aguas Cordobesas") no es un lugar.
+  if (vistos.has(clave) || BASURA.test(base.trim()) || !enCapital(area) || km2(area) < 0.0005) return;
   vistos.add(clave);
   nuevos.push({ ...aliviar(area), properties: { nombre: base, base, localidad: CAPITAL, tipo, fuente } } as BarrioInterior);
 };

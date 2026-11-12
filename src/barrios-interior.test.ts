@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import * as turf from '@turf/turf';
-import { alRadio, claveDeLugar, claveSinLocalidad, sinPedazosSueltos, enTitulo, km2, mismaLocalidad, sinRepetidos } from './barrios-interior.ts';
+import { alRadio, claveDeLugar, claveSinLocalidad, sinPedazosSueltos, enTitulo, km2, mismaLocalidad, sinRepetidos, suavizar, unirMismoNombre } from './barrios-interior.ts';
 
 test('enTitulo arregla los nombres en mayúsculas de las capas oficiales', () => {
   assert.equal(enTitulo('LAS MERCEDES (EX COLCAR)'), 'Las Mercedes');
@@ -76,4 +76,40 @@ test('sinPedazosSueltos: saca pedacitos y pedazos lejanos fuera del municipio, d
   const municipio = turf.bboxPolygon([-64.21, -31.31, -64.15, -31.20]);
   const quedan = turf.flatten(sinPedazosSueltos(area, municipio)).features.length;
   assert.equal(quedan, 2);
+});
+
+test('claveDeLugar completa abreviaturas y saca artículos: "Bv Horizonte" es "Boulevares de Horizonte"', () => {
+  assert.equal(claveDeLugar('Bv Horizonte'), claveDeLugar('Boulevares de Horizonte'));
+  assert.equal(claveDeLugar('Las Corzuelas'), claveDeLugar('Corzuelas'));
+  assert.equal(claveDeLugar('Cooperativa 16 de Noviembre'), claveDeLugar('16 de Noviembre'));
+  assert.notEqual(claveDeLugar('Alberdi'), claveDeLugar('Alto Alberdi'));
+  assert.equal(claveDeLugar('La'), 'la'); // si todo son artículos, queda como está
+});
+
+test('suavizar rellena la entrada entre dos brazos y saca una tira fina', () => {
+  const u = turf.union(turf.featureCollection([
+    turf.bboxPolygon([-64.30, -31.40, -64.29, -31.37]), // brazo oeste
+    turf.bboxPolygon([-64.28, -31.40, -64.27, -31.37]), // brazo este, a ~950 m
+    turf.bboxPolygon([-64.30, -31.40, -64.27, -31.39]), // la base que los une
+    turf.bboxPolygon([-64.27, -31.385, -64.25, -31.3845]), // tira de 55 m de ancho
+  ]))!;
+  const suave = suavizar(u as never);
+  // La entrada de ~950 m de ancho no se rellena con 200 m (solo se redondean las esquinas)…
+  assert.equal(turf.booleanPointInPolygon(turf.point([-64.285, -31.38]), suave), false);
+  // …pero la tira fina desaparece.
+  assert.equal(turf.booleanPointInPolygon(turf.point([-64.26, -31.3848]), suave), false);
+  // Una entrada angosta (100 m) sí se rellena.
+  const angosta = turf.union(turf.featureCollection([
+    turf.bboxPolygon([-64.30, -31.40, -64.285, -31.37]),
+    turf.bboxPolygon([-64.284, -31.40, -64.27, -31.37]),
+    turf.bboxPolygon([-64.30, -31.40, -64.27, -31.39]),
+  ]))!;
+  assert.equal(turf.booleanPointInPolygon(turf.point([-64.2845, -31.38]), suavizar(angosta as never)), true);
+});
+
+test('unirMismoNombre junta los pedazos con el mismo nombre y deja los sin nombre', () => {
+  const f = (nombre: string | null, x: number) => ({ type: 'Feature', properties: { nombre }, geometry: turf.bboxPolygon([x, -31.5, x + 0.01, -31.49]).geometry });
+  const quedan = unirMismoNombre([f('Villa El Libertador', -64.2), f(null, -64.1), f('Villa El Libertador', -64.19), f(null, -64.0)]);
+  assert.deepEqual(quedan.map((x) => x.properties.nombre), ['Villa El Libertador', null, null]);
+  assert.ok(km2(quedan[0] as never) > 1.5 * km2(f('x', 0) as never));
 });

@@ -14,7 +14,7 @@ import type { Feature, MultiPolygon, Polygon } from 'geojson';
 import { ARCHIVO_REVISADOS, type ContornoManual } from './contornos.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio } from './nombres.ts';
-import { claveDeLugar } from './barrios-interior.ts';
+import { claveDeLugar, unir } from './barrios-interior.ts';
 
 type Area = Feature<Polygon | MultiPolygon>;
 const CACHE = '.cache/wikimapia';
@@ -36,18 +36,6 @@ async function piezas(capa: 'manzana' | 'parcelas', id: string, [o, s, e, n]: nu
   await writeFile(archivo, JSON.stringify(lista));
   return lista;
 }
-
-const unir = (areas: Area[]): Area | null => {
-  let total: Area | null = null;
-  for (const a of areas) {
-    try {
-      total = total ? (turf.union(turf.featureCollection([total, a])) as Area | null) : a;
-    } catch {
-      // geometría rota: se saltea
-    }
-  }
-  return total;
-};
 
 /**
  * El contorno armado con las piezas oficiales que caen dentro de la referencia, o null si no la cubren bien

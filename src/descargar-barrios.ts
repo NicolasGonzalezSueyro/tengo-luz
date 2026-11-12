@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { normalizar, separarDeLocalidades } from './barrios.ts';
 import { simplificarGeometria } from './simplificar.ts';
 import { aplicarContornos } from './contornos.ts';
+import { unirMismoNombre } from './barrios-interior.ts';
 
 // Arma data/barrios.geojson, el mapa de barrios de Córdoba capital. Se corre a mano de vez en cuando
 // (`npm run barrios`): los límites de los barrios casi no cambian.
@@ -82,7 +83,7 @@ if (municipales.length < 400) throw new Error(`Solo llegaron ${municipales.lengt
 const nombreOsm = new Map<string, string>();
 for (const e of osm) if (!nombreOsm.has(normalizar(e.tags.name))) nombreOsm.set(normalizar(e.tags.name), e.tags.name);
 
-const poligonos = municipales.map((b) => ({
+const poligonos = unirMismoNombre(municipales.map((b) => ({
   type: 'Feature' as const,
   properties: {
     id: `municipalidad/${b.id}`,
@@ -92,7 +93,7 @@ const poligonos = municipales.map((b) => ({
     fuente: 'municipalidad',
   },
   geometry: b.geometry,
-}));
+})));
 
 const yaEstan = new Set(municipales.map((b) => normalizar(b.nombre)));
 const puntos = osm.flatMap((e) => {
