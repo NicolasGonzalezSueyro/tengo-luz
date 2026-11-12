@@ -16898,9 +16898,9 @@
     "fecha": "2026-11-12",
     "desde": "08:00",
     "hasta": "11:00",
-    "zona": "barrio Catedral, área comprendida por Salta, Libertador Sur, Corrientes y Sáenz Peña.–De 12:30 a 15:30 hs Sector: barrio Roca, área comprendida por Edificio Moderna Center.",
+    "zona": "barrio Catedral, área comprendida por las calles Salta, Libertador Sur, Corrientes y Sáenz Peña.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Catedral (San Francisco)"
     ],
@@ -16917,9 +16917,9 @@
     "fecha": "2026-11-12",
     "desde": "08:30",
     "hasta": "12:30",
-    "zona": "Loteo Terranostra I y II.",
-    "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "zona": "Loteo Terranostra I y II en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Terranostra"
     ],
@@ -16927,21 +16927,93 @@
     "sinUbicar": []
   },
   {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-12",
+    "desde": "12:30",
+    "hasta": "15:30",
+    "zona": "barrio Roca, Edificio Modena Center.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [
+      "edificio modena center"
+    ],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "14:00",
+    "hasta": "14:15",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Playa Perelli (Villa Carlos Paz)"
+    ],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago",
+      "estancia vieja"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
     "localidad": "Villa Carlos Paz",
     "fecha": "2026-11-12",
     "desde": "14:15",
     "hasta": "17:45",
-    "zona": "barrios Villa del Lago 1ra y 2da sección y Villa Santa Cruz del Lago.",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, en forma total.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [
       "Villa Carlos Paz"
     ],
     "sinUbicar": [
       "villa lago 1ra",
-      "villa lago 2da seccion",
+      "y 2da",
+      "seccion",
       "villa santa cruz lago"
+    ],
+    "parciales": [
+      "Villa Carlos Paz"
+    ]
+  },
+  {
+    "localidad": "Villa Carlos Paz",
+    "fecha": "2026-11-12",
+    "desde": "17:45",
+    "hasta": "18:00",
+    "zona": "barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Playa Perelli (Villa Carlos Paz)"
+    ],
+    "zonas": [
+      "Villa Carlos Paz"
+    ],
+    "sinUbicar": [
+      "villa lago 1ra",
+      "y 2da",
+      "seccion",
+      "villa santa cruz lago",
+      "estancia vieja"
     ],
     "parciales": [
       "Villa Carlos Paz"
