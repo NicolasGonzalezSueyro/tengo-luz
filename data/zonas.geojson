@@ -57581,6 +57581,120 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Las Vertientes",
+    "tipo": "localidad",
+    "patron": "^las vertientes$",
+    "osm": "R15630843",
+    "descripcion": "El anuncio no detalla barrios de Las Vertientes: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.58245,
+       -33.27541
+      ],
+      [
+       -64.58201,
+       -33.28989
+      ],
+      [
+       -64.57239,
+       -33.2833
+      ],
+      [
+       -64.5732,
+       -33.2823
+      ],
+      [
+       -64.56275,
+       -33.27519
+      ],
+      [
+       -64.58245,
+       -33.27541
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Santa Catalina",
+    "tipo": "localidad",
+    "patron": "^santa catalina$",
+    "osm": "R5249819",
+    "descripcion": "El anuncio no detalla barrios de Santa Catalina: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.443,
+       -33.21265
+      ],
+      [
+       -64.4398,
+       -33.21255
+      ],
+      [
+       -64.43916,
+       -33.21342
+      ],
+      [
+       -64.43737,
+       -33.21247
+      ],
+      [
+       -64.4262,
+       -33.2123
+      ],
+      [
+       -64.42714,
+       -33.20973
+      ],
+      [
+       -64.4266,
+       -33.20732
+      ],
+      [
+       -64.42747,
+       -33.20049
+      ],
+      [
+       -64.42214,
+       -33.19753
+      ],
+      [
+       -64.42688,
+       -33.19686
+      ],
+      [
+       -64.43418,
+       -33.20083
+      ],
+      [
+       -64.43476,
+       -33.20037
+      ],
+      [
+       -64.44298,
+       -33.20522
+      ],
+      [
+       -64.443,
+       -33.21265
+      ]
+     ]
+    ]
+   }
   }
  ]
 }
