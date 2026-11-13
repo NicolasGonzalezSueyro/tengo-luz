@@ -1329,5 +1329,68 @@
   }
  ],
  "pescanas": [],
- "sobremonte": []
+ "sobremonte": [],
+ "oncativo": [
+  {
+   "nombre": "Oncativo",
+   "osm": "R2317169",
+   "tipo": "town",
+   "rango": 16,
+   "punto": [
+    -63.6817724,
+    -31.9133731
+   ],
+   "departamento": "Río Segundo"
+  }
+ ],
+ "santa catalina": [
+  {
+   "nombre": "Santa Catalina",
+   "osm": "R5249819",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.437917,
+    -33.2053017
+   ],
+   "departamento": "Río Cuarto"
+  },
+  {
+   "nombre": "Santa Catalina",
+   "osm": "N198423583",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.2351901,
+    -30.8714289
+   ],
+   "departamento": "Totoral"
+  }
+ ],
+ "las vertientes": [
+  {
+   "nombre": "Las Vertientes",
+   "osm": "R15630843",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.5778735,
+    -33.2833484
+   ],
+   "departamento": "Río Cuarto"
+  }
+ ],
+ "toledo": [
+  {
+   "nombre": "Toledo",
+   "osm": "R3918425",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.0088031,
+    -31.5528597
+   ],
+   "departamento": "Santa María"
+  }
+ ]
 }
