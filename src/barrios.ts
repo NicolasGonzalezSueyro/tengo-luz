@@ -162,6 +162,14 @@ export function crearUbicador(nombres: string[], alias: Record<string, string | 
 
     const corte = texto.search(DESCRIPCION);
     if (corte >= 0) {
+      // Un barrio nombrado adentro de la descripción ("…calles Talleres y Valparaíso, de barrio Jardín"): vale solo
+      // si está en el mapa (ahí también hay nombres de calles).
+      for (const m of texto.slice(corte).matchAll(/ barrios? (.+?)(?= barrios? |$)/g)) {
+        for (const pedazo of m[1].split(DESCRIPCION)[0].split(/,| y /)) {
+          const delMapa = indice.get(normalizar(pedazo));
+          if (delMapa) barrios.add(delMapa);
+        }
+      }
       const descripcion = texto.slice(corte).replace(/[ ,]+/g, ' ').trim();
       if (descripcion) sinUbicar.push(descripcion);
       texto = texto.slice(0, corte);

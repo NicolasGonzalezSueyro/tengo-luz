@@ -24,8 +24,21 @@ export type CorteEpec = {
 const MAXIMO = 300;
 const HORA = /^([01]\d|2[0-3]):[0-5]\d$/;
 
-/** Valida lo que llega: un array (o { cortes: [...] }) de hasta 300 cortes. Devuelve los cortes o el motivo del rechazo. */
-export function cortesValidos(datos: unknown): CorteEpec[] | string {
+const DIA = 24 * 60 * 60 * 1000;
+/** "13/11/2026" → milisegundos (al mediodía UTC), o NaN si ese día no existe ("99/99/2026", "31/02/2026"). */
+function momentoDe(fecha: string): number {
+  const [dia, mes, anio] = fecha.split('/').map(Number);
+  const momento = Date.UTC(anio, mes - 1, dia, 12);
+  const d = new Date(momento);
+  return d.getUTCFullYear() === anio && d.getUTCMonth() === mes - 1 && d.getUTCDate() === dia ? momento : NaN;
+}
+
+/**
+ * Valida lo que llega: un array (o { cortes: [...] }) de hasta 300 cortes, con fechas que existan y no estén a más de
+ * 60 días de hoy (una fecha del año 2099 quedaba para siempre como "un día que viene"). Devuelve los cortes o el motivo
+ * del rechazo.
+ */
+export function cortesValidos(datos: unknown, ahora = Date.now()): CorteEpec[] | string {
   const lista = Array.isArray(datos) ? datos : (datos as { cortes?: unknown } | null)?.cortes;
   if (!Array.isArray(lista)) return 'Se espera un array de cortes';
   if (lista.length > MAXIMO) return `Mandá como mucho ${MAXIMO} cortes`;
@@ -37,6 +50,7 @@ export function cortesValidos(datos: unknown): CorteEpec[] | string {
     const id = typeof c.id === 'number' ? String(c.id) : c.id;
     if (!texto(id, 40)) return `Corte ${i + 1}: falta el id`;
     if (typeof c.fecha !== 'string' || !/^\d{2}\/\d{2}\/\d{4}$/.test(c.fecha)) return `Corte ${i + 1}: la fecha tiene que ser DD/MM/AAAA`;
+    if (!(Math.abs(momentoDe(c.fecha) - ahora) <= 60 * DIA)) return `Corte ${i + 1}: la fecha ${c.fecha} no existe o está a más de 60 días de hoy`;
     if (typeof c.horaDesde !== 'string' || !HORA.test(c.horaDesde) || typeof c.horaHasta !== 'string' || !HORA.test(c.horaHasta)) {
       return `Corte ${i + 1}: el horario tiene que ser HH:MM`;
     }
@@ -63,6 +77,39 @@ async function prepararTabla(db: BaseDeDatos) {
 export async function guardarFoto(db: BaseDeDatos, cortes: CorteEpec[], ahora: number) {
   await prepararTabla(db);
   await db.prepare('INSERT OR REPLACE INTO fuente_epec (clave, datos, recibido) VALUES (?, ?, ?)').bind('ultima', JSON.stringify(cortes), ahora).run();
+}
+
+const MINUTOS_PARA_CONFIRMAR = 20;
+/**
+ * Guarda la foto que llegó, salvo que sea sospechosa: si se quedó sin más de la mitad de los cortes que todavía no
+ * terminaron y que tenía la anterior (o llegó vacía), lo más probable es que el servicio que la manda haya leído mal
+ * la página. Una foto así queda "en espera" y no reemplaza a la anterior; si la siguiente (al menos 20 minutos
+ * después) también viene así, se acepta: entonces sí, EPEC sacó esos cortes. Sin esto, una lista vacía borraba del
+ * mapa los cortes de tres días. `momento`: fecha (AAAA-MM-DD) y hora (HH:MM) de Córdoba.
+ * Devuelve qué hizo; "en espera" es la primera vez (para avisarle al admin una sola vez).
+ */
+export async function recibirFoto(
+  db: BaseDeDatos, cortes: CorteEpec[], ahora: number, momento: { fecha: string; hora: string },
+): Promise<'guardada' | 'en espera' | 'sigue en espera'> {
+  await prepararTabla(db);
+  const sinTerminar = (c: CorteEpec) => {
+    const fecha = c.fecha.split('/').reverse().join('-');
+    return fecha > momento.fecha || (fecha === momento.fecha && c.horaHasta > momento.hora);
+  };
+  const antes = ((await leerFoto(db))?.cortes ?? []).filter(sinTerminar);
+  const quedan = new Set(cortes.map((c) => c.id));
+  const sospechosa = antes.length >= 2 && antes.filter((c) => quedan.has(c.id)).length < antes.length / 2;
+  if (sospechosa) {
+    const espera = await db.prepare('SELECT recibido FROM fuente_epec WHERE clave = ?').bind('espera').first();
+    if (!espera) {
+      await db.prepare('INSERT OR REPLACE INTO fuente_epec (clave, datos, recibido) VALUES (?, ?, ?)').bind('espera', '', ahora).run();
+      return 'en espera';
+    }
+    if (ahora - Number(espera.recibido) < MINUTOS_PARA_CONFIRMAR * 60_000) return 'sigue en espera';
+  }
+  await db.prepare('DELETE FROM fuente_epec WHERE clave = ?').bind('espera').run();
+  await guardarFoto(db, cortes, ahora);
+  return 'guardada';
 }
 
 /**

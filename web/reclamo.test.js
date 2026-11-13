@@ -1,7 +1,7 @@
 // @ts-check
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { linkWhatsApp, textoDelReclamo } from './reclamo.js';
+import { linkWhatsApp, lugarDelReclamo, textoDelReclamo } from './reclamo.js';
 
 const datos = {
   problema: 'sin-luz', desde: 'Hace entre 1 y 3 horas', vecinos: true, contrato: ' 1234567 ', direccion: 'Duarte Quirós 1500',
@@ -29,4 +29,11 @@ test('textoDelReclamo saltea lo que no se completó', () => {
 
 test('linkWhatsApp codifica el texto para el link', () => {
   assert.equal(linkWhatsApp('5493512004343', 'Hola, ¿todo bien?\nSí'), 'https://wa.me/5493512004343?text=Hola%2C%20%C2%BFtodo%20bien%3F%0AS%C3%AD');
+});
+
+test('lugarDelReclamo: un barrio del interior o una localidad no son "Córdoba capital"', () => {
+  assert.equal(lugarDelReclamo('Alberdi'), 'barrio Alberdi, Córdoba capital');
+  assert.equal(lugarDelReclamo('Centro (Villa María)'), 'barrio Centro, Villa María');
+  assert.equal(lugarDelReclamo('San Francisco (Córdoba)'), 'barrio San Francisco, Córdoba capital');
+  assert.equal(lugarDelReclamo('La Calera', (n) => n === 'La Calera'), 'La Calera');
 });

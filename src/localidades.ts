@@ -5,6 +5,7 @@
 
 import { corredor, redondear } from './descargar-zonas.ts';
 import { centro, distanciaKm, esDescripcion, normalizar, type Punto } from './barrios.ts';
+import { claveDeBarrio } from './nombres.ts';
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
 const IDENTIFICACION = { 'User-Agent': 'tengo-luz/0.1 (+https://github.com/NicolasGonzalezSueyro/tengo-luz)' };
@@ -71,6 +72,8 @@ export function tramosDelCorte(seccion: string, zona: string): Tramo[] {
 function partir(lista: string): string[] {
   return lista
     .replace(/\ben forma (parcial|total)\b.*$/i, '')
+    // "Localidades de Río Ceballos y Unquillo en los siguientes barrios y sectores": ahí termina la lista.
+    .replace(/\s+en\s+(los|las|sus)\s+(siguientes\s+)?(barrios|sectores|zonas)\b.*$/i, '')
     .split(/,|\s+y\s+/)
     .map((n) => n.trim().replace(/^(comuna|paraje)\s+(de\s+)?/i, ''))
     .filter((n) =>
@@ -153,7 +156,15 @@ export async function geometriaDe(c: Candidato): Promise<Geometria> {
  * Las localidades que están adentro de otra (Yocsina en Malagueño), como si fueran sus barrios: si EPEC escribe
  * "Malagueño: barrio Yocsina", se pinta la localidad Yocsina.
  */
-export const localidadesComoBarrios = (zonas: Localidad[]) => [
+// EPEC anuncia por línea eléctrica: en un corte de una ciudad a veces nombra los pueblos vecinos como si fueran
+// barrios ("Villa Carlos Paz: … Villa Santa Cruz del Lago", "Villa María: … Silvio Pellico y Alto Alegre").
+const VECINAS_KM = 40;
+/**
+ * `barrios`: los barrios conocidos de cada localidad. Un pueblo vecino no se suma como "barrio" de una localidad que
+ * ya tiene un barrio con ese nombre: ahí manda el barrio.
+ */
+export const localidadesComoBarrios = (zonas: Localidad[], barrios: { base: string; localidad: string }[] = []) => [
+  ...vecinasComoBarrios(zonas, barrios),
   ...zonas
     .filter((z) => z.properties.tipo === 'localidad' && z.properties.dentroDe)
     .map((z) => ({ nombre: z.properties.nombre, base: z.properties.nombre, localidad: z.properties.dentroDe! })),
@@ -167,6 +178,14 @@ export const localidadesComoBarrios = (zonas: Localidad[]) => [
       return /^villa /i.test(nombre) ? [] : [{ nombre, base: nombre, localidad: nombre }];
     }),
 ];
+
+function vecinasComoBarrios(zonas: Localidad[], barrios: { base: string; localidad: string }[]) {
+  const ocupados = new Set(barrios.map((b) => `${b.localidad}|${claveDeBarrio(b.base)}`));
+  const conCentro = zonas.filter((z) => z.properties.tipo === 'localidad' && z.geometry).map((z) => ({ nombre: z.properties.nombre, punto: centro(z.geometry) }));
+  return conCentro.flatMap((a) => conCentro
+    .filter((b) => b !== a && distanciaKm(a.punto, b.punto) <= VECINAS_KM && !ocupados.has(`${a.nombre}|${claveDeBarrio(b.nombre)}`))
+    .map((b) => ({ nombre: b.nombre, base: b.nombre, localidad: a.nombre })));
+}
 
 export const escapar = (texto: string) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 

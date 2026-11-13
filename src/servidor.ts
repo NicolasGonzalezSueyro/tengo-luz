@@ -9,6 +9,7 @@ import * as fallas from '../functions/api/fallas.ts';
 import * as push from '../functions/api/push.ts';
 import * as reportes from '../functions/api/reportes.ts';
 import * as telegram from '../functions/api/telegram.ts';
+import * as vivo from '../functions/api/vivo.ts';
 import { baseLocal } from './base-local.ts';
 import { generarClave } from './push.ts';
 
@@ -26,6 +27,7 @@ const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }>
   '/api/push': push,
   '/api/reportes': reportes,
   '/api/telegram': telegram,
+  '/api/vivo': vivo,
 };
 
 const PUERTO = Number(process.env.PUERTO ?? 4321); // los tests de punta a punta usan otro, así arrancan siempre de cero

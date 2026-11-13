@@ -289,6 +289,7 @@ function clasesDeBarrio(/** @type {L.Path} */ capa, /** @type {string | null} */
   elemento?.classList.toggle('barrio-con-corte', Boolean(estado));
   elemento?.classList.toggle('barrio-en-curso', Boolean(estado?.enCurso));
   elemento?.classList.toggle('barrio-sin-luz', Boolean(fallaDe(nombre)));
+  elemento?.classList.toggle('barrio-elegido', nombre !== null && nombre === barrioElegido);
 }
 
 /** Dónde va el punto de los reportes de vecinos: el centro del barrio o del pueblo, o el punto mismo. @param {string} nombre */
@@ -435,8 +436,12 @@ leyenda.onAdd = () => {
 };
 leyenda.addTo(mapa);
 
+// Con el mapa lejos, los bordes de los barrios sin cortes se dibujan más suaves (estilos.css).
+const marcarLejos = () => mapa.getContainer().toggleAttribute('data-lejos', mapa.getZoom() <= 11);
+marcarLejos();
 // Al acercar o alejar, los puntos cambian de tamaño (ver radioPunto); los pueblos, un poco más grandes que los barrios.
 mapa.on('zoomend', () => {
+  marcarLejos();
   capaPuntos.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto()));
   capaZonas.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto() + 1));
   capaVecinos.eachLayer((c) => c instanceof L.CircleMarker && c.setRadius(radioPunto() + 3));
@@ -743,7 +748,7 @@ function enviarReclamo(formulario, como) {
     nombre: String(valores.nombre ?? ''), telefono: String(valores.telefono ?? ''), comentario: String(valores.comentario ?? ''),
   };
   guardarDatos('recordar' in valores ? datos : null);
-  const texto = textoDelReclamo(datos);
+  const texto = textoDelReclamo(datos, (nombre) => zonasPorNombre.get(nombre)?.properties.tipo === 'localidad');
   if (como === 'copiar') copiar(texto);
   else window.open(linkWhatsApp(WHATSAPP_EPEC, texto), '_blank', 'noopener');
 }
@@ -843,7 +848,7 @@ function avisoReclamo() {
 
 function pie() {
   return h('footer', { class: 'pie' },
-    'Sitio no oficial, sin relación con EPEC. Cortes: anuncios publicados por El Doce. ',
+    'Sitio no oficial, sin relación con EPEC. Cortes: información pública de EPEC (de respaldo, los anuncios que publica El Doce). ',
     'Barrios: Municipalidad de Córdoba, Mapas Córdoba (IDECOR) y © colaboradores de OpenStreetMap. ',
     h('a', { href: 'https://github.com/NicolasGonzalezSueyro/tengo-luz', target: '_blank', rel: 'noopener' }, icono('github'), 'Código'),
   );
@@ -1218,17 +1223,15 @@ function cuandoFue(iso) {
 function mostrarActualizado() {
   const etiqueta = $('actualizado');
   etiqueta.textContent = `Última actualización ${hora(ultimaRevision)}`;
-  etiqueta.title = `${cortesActualizados ? `Cortes de EPEC cargados ${cuandoFue(cortesActualizados)}. ` : ''}Las fallas y los reportes se revisan cada 30 segundos.`;
+  etiqueta.title = `${cortesActualizados ? `Cortes de EPEC cargados ${cuandoFue(cortesActualizados)}. ` : ''}Las fallas y los reportes se revisan cada minuto.`;
 }
 
 /** Trae los reportes de vecinos, las fallas confirmadas y, si el robot cargó cortes nuevos, también los cortes. */
 async function cargarReportes() {
   // Si alguna parte no responde, el mapa sigue andando igual, solo que sin datos nuevos de esa parte.
-  const [nuevosReportes, nuevasFallas, estado] = await Promise.allSettled([
-    pedir('api/reportes'), pedir('api/fallas'), pedir('data/actualizado.json', { cache: 'no-store' }),
-  ]);
-  if (nuevosReportes.status === 'fulfilled') reportes = nuevosReportes.value;
-  if (nuevasFallas.status === 'fulfilled') fallas = nuevasFallas.value;
+  // Reportes y fallas vienen juntos en un solo pedido (/api/vivo): cada pedido a una función gasta del cupo diario.
+  const [enVivo, estado] = await Promise.allSettled([pedir('api/vivo'), pedir('data/actualizado.json', { cache: 'no-store' })]);
+  if (enVivo.status === 'fulfilled') ({ reportes, fallas } = enVivo.value);
   const cortesNuevos = estado.status === 'fulfilled' ? estado.value?.cortes : null;
   if (cortesNuevos && cortesNuevos !== cortesActualizados) {
     try {
@@ -1238,7 +1241,7 @@ async function cargarReportes() {
       // Se vuelve a intentar en la próxima revisión.
     }
   }
-  if ([nuevosReportes, nuevasFallas, estado].some((r) => r.status === 'fulfilled')) ultimaRevision = Date.now();
+  if ([enVivo, estado].some((r) => r.status === 'fulfilled')) ultimaRevision = Date.now();
   mostrarActualizado();
   actualizar();
 }
@@ -1316,8 +1319,11 @@ else if (barrioDelLink) {
 }
 mostrarActualizado();
 cargarReportes();
-// Cada 30 segundos: trae fallas, reportes y cortes nuevos, y hace que "En curso" se prenda y se apague a tiempo.
-setInterval(cargarReportes, 30_000);
+// Cada minuto: trae fallas, reportes y cortes nuevos, y hace que "En curso" se prenda y se apague a tiempo.
+// Con la pestaña oculta no se pide nada (nadie la mira): al volver se revisa enseguida, acá abajo.
+setInterval(() => {
+  if (document.visibilityState === 'visible') cargarReportes();
+}, 60_000);
 // Al volver a la pestaña o a la app (el celu pausa los temporizadores), se revisa enseguida.
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') cargarReportes();

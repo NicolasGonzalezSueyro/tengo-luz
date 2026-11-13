@@ -1,6 +1,8 @@
-import { cortesValidos, guardarFoto, leerFoto, pedirQueCorraElRobot } from '../../src/fuentes/epec.ts';
+import { cortesValidos, leerFoto, pedirQueCorraElRobot, recibirFoto } from '../../src/fuentes/epec.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
 import { revisarClave } from '../../src/seguridad.ts';
+import { enviarMensaje } from '../../src/telegram.ts';
+import { momentoEnCordoba } from '../../web/estado.js';
 
 // /api/cortes-epec: los cortes programados de EPEC (src/fuentes/epec.ts).
 //   POST → un servicio externo manda la foto completa de lo publicado (hoy, mañana y pasado): un array de cortes,
@@ -11,7 +13,8 @@ import { revisarClave } from '../../src/seguridad.ts';
 
 type Contexto = {
   request: Request;
-  env: { DB: BaseDeDatos; EPEC_OFICIAL_KEY?: string; GITHUB_TOKEN?: string };
+  env: { DB: BaseDeDatos; EPEC_OFICIAL_KEY?: string; GITHUB_TOKEN?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string };
+  waitUntil?: (tarea: Promise<unknown>) => void;
 };
 
 async function rechazar({ request, env }: Contexto) {
@@ -36,8 +39,20 @@ export async function onRequestPost(contexto: Contexto) {
   })();
   const cortes = cortesValidos(datos);
   if (typeof cortes === 'string') return Response.json({ error: cortes }, { status: 400 });
-  await guardarFoto(contexto.env.DB, cortes, Date.now());
-  const robot = contexto.env.GITHUB_TOKEN ? await pedirQueCorraElRobot(contexto.env.DB, cortes, contexto.env.GITHUB_TOKEN, Date.now()) : 'sin token';
+  const { env } = contexto;
+  const foto = await recibirFoto(env.DB, cortes, Date.now(), momentoEnCordoba());
+  if (foto !== 'guardada') {
+    // La primera vez se le avisa al admin: puede ser que el servicio que lee a EPEC esté fallando.
+    if (foto === 'en espera' && env.TELEGRAM_TOKEN && env.TELEGRAM_ADMIN) {
+      const aviso = enviarMensaje(env.TELEGRAM_TOKEN, Number(env.TELEGRAM_ADMIN),
+        `🛠️ Llegó una foto de EPEC con ${cortes.length} cortes, y le faltan más de la mitad de los que estaban por venir. No la apliqué: si la próxima viene igual, la acepto. Revisá que el lector de EPEC ande bien.`)
+        .catch((e) => console.error('No se pudo avisar al admin', e));
+      if (contexto.waitUntil) contexto.waitUntil(aviso);
+      else await aviso; // en los tests no hay waitUntil
+    }
+    return Response.json({ guardados: 0, enEspera: cortes.length, robot: 'sin cambios' });
+  }
+  const robot = env.GITHUB_TOKEN ? await pedirQueCorraElRobot(env.DB, cortes, env.GITHUB_TOKEN, Date.now()) : 'sin token';
   return Response.json({ guardados: cortes.length, robot });
 }
 

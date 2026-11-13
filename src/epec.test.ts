@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { baseLocal } from './base-local.ts';
-import { aMantenimientos, cortesValidos, FUENTE_EPEC, nombreDeLocalidad } from './fuentes/epec.ts';
+import { aMantenimientos, cortesValidos, FUENTE_EPEC, leerFoto, nombreDeLocalidad, recibirFoto } from './fuentes/epec.ts';
 import { unir, type Mantenimiento } from './mantenimiento.ts';
 import * as cortesEpec from '../functions/api/cortes-epec.ts';
 
@@ -80,4 +80,42 @@ test('/api/cortes-epec: si la foto cambió, le pide a GitHub que corra el robot 
   assert.equal(await enviar([]), 'hace poco'); // sigue pendiente: se va a pedir cuando pasen los 10 minutos
   assert.equal(pedidos.length, 1);
   assert.match(pedidos[0], /actualizar\.yml\/dispatches .*"ref":"main"/);
+});
+
+test('cortesValidos: rechaza fechas que no existen o están lejísimo de hoy', () => {
+  const hoy = Date.UTC(2026, 10, 13);
+  const c = { id: '1', horaDesde: '08:00', horaHasta: '12:00', zona: 'Barrio Alberdi', localidad: 'CORDOBA' };
+  assert.equal((cortesValidos([{ ...c, fecha: '13/11/2026' }], hoy) as unknown[]).length, 1);
+  assert.match(cortesValidos([{ ...c, fecha: '99/99/2026' }], hoy) as string, /no existe/);
+  assert.match(cortesValidos([{ ...c, fecha: '31/02/2026' }], hoy) as string, /no existe/);
+  assert.match(cortesValidos([{ ...c, fecha: '01/01/2099' }], hoy) as string, /60 días/);
+});
+
+test('recibirFoto: una foto que pierde más de la mitad de los cortes que venían queda en espera hasta que se repite', async () => {
+  const db = baseLocal();
+  const c = (id: string, fecha: string, horaHasta = '12:00') => ({ id, fecha, horaDesde: '08:00', horaHasta, zona: 'Barrio Alberdi', localidad: 'CORDOBA' });
+  const momento = { fecha: '2026-11-13', hora: '10:00' };
+  const completa = [c('1', '13/11/2026'), c('2', '14/11/2026'), c('3', '14/11/2026'), c('4', '15/11/2026')];
+  const t0 = Date.UTC(2026, 10, 13, 13);
+  assert.equal(await recibirFoto(db, completa, t0, momento), 'guardada');
+  // Llega vacía: no reemplaza a la anterior.
+  assert.equal(await recibirFoto(db, [], t0 + 60_000, momento), 'en espera');
+  assert.equal((await leerFoto(db))!.cortes.length, 4);
+  // Otra vez, a los 5 minutos: sigue esperando (sin avisar de nuevo).
+  assert.equal(await recibirFoto(db, [], t0 + 5 * 60_000, momento), 'sigue en espera');
+  // Si después llega una buena, la espera se olvida.
+  assert.equal(await recibirFoto(db, completa, t0 + 10 * 60_000, momento), 'guardada');
+  assert.equal(await recibirFoto(db, [c('1', '13/11/2026')], t0 + 11 * 60_000, momento), 'en espera');
+  // Media hora después sigue viniendo así: EPEC sacó esos cortes de verdad.
+  assert.equal(await recibirFoto(db, [c('1', '13/11/2026')], t0 + 45 * 60_000, momento), 'guardada');
+  assert.equal((await leerFoto(db))!.cortes.length, 1);
+});
+
+test('recibirFoto: que desaparezcan los cortes que ya terminaron no es sospechoso', async () => {
+  const db = baseLocal();
+  const c = (id: string, fecha: string, horaHasta = '12:00') => ({ id, fecha, horaDesde: '08:00', horaHasta, zona: 'Barrio Alberdi', localidad: 'CORDOBA' });
+  const t0 = Date.UTC(2026, 10, 13, 13);
+  await recibirFoto(db, [c('1', '13/11/2026'), c('2', '13/11/2026'), c('3', '13/11/2026'), c('4', '14/11/2026')], t0, { fecha: '2026-11-13', hora: '07:00' });
+  // A las 15 h los tres de hoy ya terminaron (12:00): que no estén es normal.
+  assert.equal(await recibirFoto(db, [c('4', '14/11/2026')], t0 + 60_000, { fecha: '2026-11-13', hora: '15:00' }), 'guardada');
 });

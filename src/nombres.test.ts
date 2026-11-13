@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { claveSimple, crearBuscadorDeBarrios, distancia, nombresDelTramo } from './nombres.ts';
+import { barriosEnDescripcion, claveSimple, crearBuscadorDeBarrios, distancia, nombresDelTramo } from './nombres.ts';
 import { localidadesComoBarrios } from './localidades.ts';
 import { completarNumeros } from './barrios.ts';
 
@@ -70,4 +70,29 @@ test('un número suelto se completa con el nombre anterior ("Loteo Terranostra I
 
 test('un pedazo hecho solo de conectores no es un barrio ("en el" de "en el perímetro comprendido por…")', () => {
   assert.deepEqual(nombresDelTramo('barrio Hernández, en el perímetro comprendido por las calles: Güemes, Almafuerte, Roma y España.'), ['Hernández']);
+});
+
+test('un barrio nombrado después de la descripción por calles ("…de barrio Jardín") vale si está en el mapa', () => {
+  assert.deepEqual(barriosEnDescripcion('área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.'), ['Jardín']);
+  assert.deepEqual(barriosEnDescripcion('Barrios Centro y Covico.'), []); // sin descripción: eso lo ve nombresDelTramo
+  assert.deepEqual(buscar(['La Calera'], 'Sector comprendido por calles Alberdi y Caseros, de barrio Matadero.'), { barrios: ['Matadero (La Calera)'], sinUbicar: [] });
+  // Lo que no está en el mapa no queda como "sin ubicar": ahí puede haber cualquier cosa.
+  assert.deepEqual(buscar(['La Calera'], 'Sector entre calles Alberdi y Caseros, de barrio Inventado.'), { barrios: [], sinUbicar: [] });
+});
+
+test('"1ra. y 2da. sección": los ordinales con punto no cortan la oración y son el número a secas', () => {
+  const carlosPaz = crearBuscadorDeBarrios([barrio('Villa del Lago', 'Villa Carlos Paz'), barrio('Villa del Lago Azul', 'Villa Carlos Paz'), barrio('Playa Perelli', 'Villa Carlos Paz')]);
+  const texto = 'barrio Villa del Lago 1ra. y 2da. sección, en forma parcial y Villa Santa Cruz del Lago, Estancia Vieja y Playa Perelli, en forma total.';
+  assert.deepEqual(nombresDelTramo(texto), ['Villa del Lago 1ra', 'Villa del Lago 2da sección', 'Villa Santa Cruz del Lago', 'Estancia Vieja', 'Playa Perelli']);
+  assert.deepEqual(carlosPaz(['Villa Carlos Paz'], texto).barrios, ['Villa del Lago (Villa Carlos Paz)', 'Playa Perelli (Villa Carlos Paz)']);
+  assert.equal(claveSimple('Parque Liceo 1ra Sección'), claveSimple('Parque Liceo 1ª Sección'));
+});
+
+test('localidadesComoBarrios: un pueblo vecino nombrado como barrio pinta ese pueblo, salvo que haya un barrio con ese nombre', () => {
+  const punto = (nombre: string, lon: number, lat: number) => ({ type: 'Feature', properties: { nombre, tipo: 'localidad', patron: '', descripcion: '' }, geometry: { type: 'Point', coordinates: [lon, lat] } }) as never;
+  const zonas = [punto('Villa Carlos Paz', -64.50, -31.42), punto('Villa Santa Cruz del Lago', -64.52, -31.37), punto('San Francisco', -62.08, -31.43), punto('Bella Vista', -64.48, -31.40)];
+  const propios = [barrio('Bella Vista', 'Villa Carlos Paz')];
+  const buscarCon = crearBuscadorDeBarrios([...propios, ...localidadesComoBarrios(zonas, propios)]);
+  assert.deepEqual(buscarCon(['Villa Carlos Paz'], 'barrios Villa Santa Cruz del Lago y Bella Vista.').barrios, ['Villa Santa Cruz del Lago', 'Bella Vista (Villa Carlos Paz)']);
+  assert.deepEqual(buscarCon(['Villa Carlos Paz'], 'barrio San Francisco.').barrios, []); // a 230 km: no es vecino
 });

@@ -19,15 +19,27 @@ export const PROBLEMAS = {
 
 export const DESDE = ['Recién', 'Hace menos de 1 hora', 'Hace entre 1 y 3 horas', 'Hace más de 3 horas', 'Desde ayer o antes'];
 
-/** @param {DatosReclamo} d */
-export function textoDelReclamo(d) {
+/**
+ * Dónde queda el lugar del reclamo: "barrio Alberdi, Córdoba capital", "barrio Centro, Villa María" (los barrios del
+ * interior se llaman "Centro (Villa María)") o "La Calera" si lo elegido es la localidad entera.
+ * @param {string} barrio @param {(nombre: string) => boolean} [esLocalidad]
+ */
+export function lugarDelReclamo(barrio, esLocalidad = () => false) {
+  const nombre = barrio.trim();
+  const delInterior = nombre.match(/^(.+) \((.+)\)$/);
+  if (delInterior) return delInterior[2] === 'Córdoba' ? `barrio ${delInterior[1]}, Córdoba capital` : `barrio ${delInterior[1]}, ${delInterior[2]}`;
+  return esLocalidad(nombre) ? nombre : `barrio ${nombre}, Córdoba capital`;
+}
+
+/** @param {DatosReclamo} d @param {(nombre: string) => boolean} [esLocalidad] */
+export function textoDelReclamo(d, esLocalidad) {
   const desde = d.desde ? ` (${d.desde.toLowerCase()})` : '';
   return [
     'Hola, quiero hacer un reclamo técnico.',
     `Problema: ${PROBLEMAS[d.problema] ?? d.problema}${desde}.`,
     d.vecinos && 'Mis vecinos tampoco tienen luz.',
     `N° de contrato: ${d.contrato.trim()}`,
-    `Dirección: ${d.direccion.trim()}, barrio ${d.barrio.trim()}, Córdoba capital`,
+    `Dirección: ${d.direccion.trim()}, ${lugarDelReclamo(d.barrio, esLocalidad)}`,
     d.nombre.trim() && `Nombre: ${d.nombre.trim()}`,
     d.telefono.trim() && `Teléfono de contacto: ${d.telefono.trim()}`,
     d.comentario.trim() && `Comentario: ${d.comentario.trim()}`,

@@ -43,8 +43,10 @@ function cajaDe(features: { geometry: { coordinates: unknown } }[], margen: numb
 const alertas: { texto: string; detalle?: string }[] = [];
 
 // La fuente principal son los cortes que publica EPEC (hoy, mañana y pasado), que llegan a /api/cortes-epec. Si no
-// llegaron en las últimas 3 horas (o el robot no tiene la clave), se usan las notas de El Doce, como antes.
-const FRESCA = 3 * 60 * 60 * 1000;
+// llegaron en las últimas 12 horas (o el robot no tiene la clave), se usan las notas de El Doce, como antes.
+// 12 y no 3: el servicio que las manda corre desde GitHub, que lo atrasa (medido: una foto cada 7 horas). Con 3 horas,
+// casi todas las corridas caían en El Doce y pisaban lo de EPEC.
+const FRESCA = 12 * 60 * 60 * 1000;
 const deEpec = await leerCortesEpec();
 const epecAlDia = deEpec !== null && Date.now() - deEpec.recibido < FRESCA;
 const nuevos: Mantenimiento[] = epecAlDia ? aMantenimientos(deEpec.cortes) : [];
@@ -53,7 +55,7 @@ const fechasCubiertas = epecAlDia ? [0, 1, 2].map((d) => masDias(momentoEnCordob
 if (epecAlDia) {
   console.log(`${nuevos.length} cortes de EPEC (foto de hace ${Math.round((Date.now() - deEpec.recibido) / 60_000)} minutos)`);
 } else if (process.env.EPEC_OFICIAL_KEY) {
-  alertas.push({ texto: 'No llegan los cortes de EPEC hace más de 3 horas (o no se pudieron leer): uso las notas de El Doce.' });
+  alertas.push({ texto: 'No llegan los cortes de EPEC hace más de 12 horas (o no se pudieron leer): uso las notas de El Doce.' });
 }
 
 // Si no se puede leer el sitemap, el lector se corta (no hay nada que hacer) y GitHub Actions avisa de la falla.
@@ -109,11 +111,16 @@ const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
 const interior = await leerJson<{ features: { properties: BarrioConocido & { tipo: string } }[] }>('data/barrios-interior.geojson')
   .catch(() => ({ features: [] }));
 const aliasInterior = await leerJson<Record<string, string | null>>('data/alias-interior.json').catch(() => ({}));
-const buscarEnLocalidad = crearBuscadorDeBarrios([...interior.features.map((f) => f.properties), ...localidadesComoBarrios(zonas.features)], aliasInterior);
+const buscarEnLocalidad = crearBuscadorDeBarrios([...interior.features.map((f) => f.properties), ...localidadesComoBarrios(zonas.features, interior.features.map((f) => f.properties))], aliasInterior);
 // "Corte total en la localidad", "todos los barrios": se pinta el casco urbano entero.
 const TODA_LA_LOCALIDAD = /\b(corte total|toda la localidad|todas? las localidades|todos los barrios|ambas localidades|en forma total en la localidad)\b/i;
 
-const guardadosYNuevos = unir(await leerGuardados(), nuevos, fechasCubiertas);
+// EPEC a veces carga como de capital un corte que es de otras localidades ("localidades de Río Ceballos y Unquillo
+// en los siguientes barrios…"): se trata como los de "Otras localidades", que dicen en el texto de dónde son.
+const DE_OTRAS_LOCALIDADES = /^\s*(?:en\s+)?(?:las?\s+)?localidad(?:es)?\s+de\s/i;
+const conSuSeccion = (m: Mantenimiento): Mantenimiento =>
+  (m.localidad === CAPITAL && DE_OTRAS_LOCALIDADES.test(m.zona) ? { ...m, localidad: 'Otras localidades' } : m);
+const guardadosYNuevos = unir((await leerGuardados()).map(conSuSeccion), nuevos.map(conSuSeccion), fechasCubiertas);
 const ubicacionDe = new Map<string, Ubicacion>();
 const noEncontradas = new Set<string>();
 for (const m of guardadosYNuevos.filter((c) => c.localidad !== CAPITAL)) {

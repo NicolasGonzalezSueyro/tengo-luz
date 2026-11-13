@@ -16,7 +16,8 @@ export function claveSimple(nombre: string): string {
     .split(' ')
     // Sin artículos ni "sección"/"etapa": "Santa Isabel 2ª Sección" es "Santa Isabel 2".
     .filter((p) => !/^(el|la|los|las|y|seccion|secc|sec|etapa)$/.test(p))
-    .map((p) => ROMANOS[p] ?? p)
+    // "1ra", "2da", "3er" son el número a secas: "Villa del Lago 1ra. sección" es "Villa del Lago 1".
+    .map((p) => ROMANOS[p] ?? p.replace(/^(\d+)(ra|da|ta|ma|er|ro|do|to|mo|a|o)$/, '$1'))
     .map((p) => (/^\d+$/.test(p) ? p : p.replace(/(.)\1+/g, '$1').replace(/(?<=..)s$/, '')))
     .join(' ');
 }
@@ -39,13 +40,35 @@ export function distancia(a: string, b: string): number {
  * "Barrios Villa Corema, Buena Vista y La Quebrada, en forma parcial." → Villa Corema, Buena Vista, La Quebrada.
  * Las descripciones por calles ("entre calles…", "sector comprendido…") no cuentan.
  */
+// Palabras que marcan que empieza una descripción por calles.
+const DESCRIPTIVAS = /\b(?:entre|comprendid\w*|sobre|desde|hasta|calles?|sector(?:es)?|zona|[aá]rea|frente|altura|per[ií]metro)\b/i;
+// Las abreviaturas ("Dr. Cocca", "Bv. Sarmiento") y los ordinales ("1ra. y 2da. sección") no cortan la oración.
+const sinPuntosDeAbreviaturas = (texto: string) => texto
+  .replace(/\b(Dr|Gral|Ing|Pte|Cnel|Sta|Sto|Bv|Av|[A-Z])\.\s*/g, '$1 ')
+  .replace(/\b(\d+)\s?(ra|da|ta|ma|er|ro|do|to|mo)\.\s*/gi, '$1$2 ');
+
+/**
+ * Los barrios que se nombran DESPUÉS de una descripción por calles ("área comprendida por las calles Talleres y
+ * Valparaíso, de barrio Jardín"). Ahí puede haber de todo, así que solo valen si después se encuentran en el mapa:
+ * nunca quedan como "sin ubicar".
+ */
+export function barriosEnDescripcion(texto: string): string[] {
+  const nombres: string[] = [];
+  for (const oracion of sinPuntosDeAbreviaturas(texto).split(/[.;]\s+|\.$/)) {
+    const inicio = oracion.search(DESCRIPTIVAS);
+    if (inicio < 0) continue;
+    for (const m of oracion.slice(inicio).matchAll(/\b(?:barrios?|b°|bº)\s*:?\s+(.+?)(?=\s+barrios?\b|$)/gi)) {
+      nombres.push(...m[1].split(DESCRIPTIVAS)[0].split(/,|\s+y\s+/).map((p) => p.trim()).filter((p) => p.length > 2));
+    }
+  }
+  return nombres;
+}
+
 export function nombresDelTramo(texto: string): string[] {
-  return texto
-    // Las abreviaturas ("Dr. Cocca", "Bv. Sarmiento") no cortan la oración.
-    .replace(/\b(Dr|Gral|Ing|Pte|Cnel|Sta|Sto|Bv|Av|[A-Z])\.\s*/g, '$1 ')
+  return sinPuntosDeAbreviaturas(texto)
     .split(/[.;]\s+|\.$/)
     // Desde que empieza una descripción por calles, el resto de la oración ya no son nombres de barrios.
-    .map((oracion) => oracion.split(/\b(?:entre|comprendid\w*|sobre|desde|hasta|calles?|sector|zona|[aá]rea|frente|altura|per[ií]metro)\b/i)[0])
+    .map((oracion) => oracion.split(DESCRIPTIVAS)[0])
     .flatMap((oracion) => completarNumeros(oracion.replace(/\ben forma (parcial|total)\b/gi, '').split(/,|\s+y\s+|\s+e\s+(?=h?i)/i)))
     // Lo que viene antes de "barrio(s)" no es parte del nombre ("La Calera: sin suministro en barrios Covicco").
     .map((p) => p.replace(/^.*\b(barrios?|b°|bº|loteos?)\s*:?\s+/i, '').replace(/[()]/g, '').trim())
@@ -114,6 +137,7 @@ export function crearBuscadorDeBarrios(conocidos: BarrioConocido[], alias: Recor
       if (barrios) barrios.forEach((b) => encontrados.add(b));
       else sinUbicar.push(nombre);
     }
+    for (const nombre of barriosEnDescripcion(texto)) buscarUno(candidatos, nombre)?.forEach((b) => encontrados.add(b));
     return { barrios: [...encontrados], sinUbicar };
   };
 }

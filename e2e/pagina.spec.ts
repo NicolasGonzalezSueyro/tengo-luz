@@ -44,10 +44,12 @@ test('un link compartido abre directo el barrio, aunque no tenga tildes', async 
 
 test('una falla confirmada por EPEC se ve en la portada, en el mapa y en la ficha', async ({ page }) => {
   const errores = vigilarErrores(page);
-  await page.route('**/api/fallas', (ruta) => ruta.fulfill({
-    json: [{ lugares: ['Alberdi'], texto: 'Por una falla, sin suministro en barrio Alberdi.', fuente: 'https://x.com/EPEC/status/1', creado: Date.now(), hasta: Date.now() + 3_600_000 }],
+  await page.route('**/api/vivo', (ruta) => ruta.fulfill({
+    json: {
+      fallas: [{ lugares: ['Alberdi'], texto: 'Por una falla, sin suministro en barrio Alberdi.', fuente: 'https://x.com/EPEC/status/1', creado: Date.now(), hasta: Date.now() + 3_600_000 }],
+      reportes: { Alberdi: { cantidad: 2, ultimo: Date.now() } },
+    },
   }));
-  await page.route('**/api/reportes', (ruta) => ruta.fulfill({ json: { Alberdi: { cantidad: 2, ultimo: Date.now() } } }));
   await page.goto('/');
   // Los reportes de vecinos son un punto aparte, encima del barrio con la falla.
   await expect(page.locator('path.punto-vecinos')).toHaveCount(1);
@@ -63,13 +65,13 @@ test('una falla confirmada por EPEC se ve en la portada, en el mapa y en la fich
 
 test('una falla publicada con la página abierta aparece sola, sin recargar, y arriba dice la hora de actualización', async ({ page }) => {
   let fallas: object[] = [];
-  await page.route('**/api/fallas', (ruta) => ruta.fulfill({ json: fallas }));
+  await page.route('**/api/vivo', (ruta) => ruta.fulfill({ json: { fallas, reportes: {} } }));
   await page.goto('/');
   await expect(page.locator('#actualizado')).toHaveText(/^Última actualización \d{2}:\d{2}$/);
   await expect(page.locator('.fallas')).toHaveCount(0);
 
   fallas = [{ lugares: ['Centro'], texto: 'Sin suministro en barrio Centro.', fuente: null, creado: Date.now(), hasta: Date.now() + 3_600_000 }];
-  // Lo mismo que pasa al volver a la app en el celu (o a los 30 segundos solo).
+  // Lo mismo que pasa al volver a la app en el celu (o al minuto solo).
   await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   await expect(page.locator('.fallas').getByText('Sin suministro en barrio Centro.')).toBeVisible();
 });

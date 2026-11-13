@@ -10,6 +10,7 @@ import type { BaseDeDatos } from './reportes.ts';
 
 const HORA = 60 * 60 * 1000;
 export const DURACION = 6 * HORA; // si nadie avisa que volvió la luz (/fin_falla), se saca sola
+export const HISTORIAL = 90 * 24 * HORA; // lo que muestran las estadísticas de cortes repentinos: lo más viejo se borra
 
 export type Falla = {
   id: number;
@@ -141,8 +142,8 @@ export async function prepararFalla(db: BaseDeDatos, f: Pick<Falla, 'lugares' | 
     .prepare('INSERT INTO fallas (lugares, texto, fuente, creado, hasta, confirmada) VALUES (?, ?, ?, ?, ?, 0)')
     .bind(JSON.stringify(f.lugares), f.texto, f.fuente ?? '', ahora, ahora)
     .run();
-  // Las viejas no sirven más: no se guardan datos de más.
-  await db.prepare('DELETE FROM fallas WHERE hasta < ?').bind(ahora - 30 * 24 * HORA).run();
+  // Las más viejas que el historial de las estadísticas no sirven más: no se guardan datos de más.
+  await db.prepare('DELETE FROM fallas WHERE hasta < ?').bind(ahora - HISTORIAL).run();
 }
 
 /** Las fallas esperando /confirmar, en el orden en que llegaron (el bot las numera 1, 2, 3…). */
@@ -167,6 +168,15 @@ export async function confirmarFallas(db: BaseDeDatos, ahora: number): Promise<F
     await db.prepare('UPDATE fallas SET confirmada = 1, creado = ?, hasta = ? WHERE id = ?').bind(ahora, ahora + DURACION, f.id).run();
   }
   return listas.map((f) => ({ ...f, creado: ahora, hasta: ahora + DURACION }));
+}
+
+/**
+ * Las fallas como las recibe la página. El sector va solo si la falla nombra calles: las que solo nombran barrios se
+ * pintan por barrio (algunas viejas tienen un sector armado por error, por el "se trabaja en el sector" del final).
+ */
+export async function fallasParaElMapa(db: BaseDeDatos, ahora: number) {
+  return (await fallasActivas(db, ahora))
+    .map(({ lugares, texto, fuente, creado, hasta, sector }) => ({ lugares, texto, fuente, creado, hasta, ...(sector && nombraCalles(texto) ? { sector } : {}) }));
 }
 
 /** Las fallas publicadas que todavía se muestran, la más nueva primero. */

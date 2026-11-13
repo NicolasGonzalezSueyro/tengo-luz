@@ -148,3 +148,12 @@ test('lugaresSeparados avisa cuando un nombre repetido cae lejos del resto del c
   // Los lugares sin posición conocida no cuentan.
   assert.equal(lugaresSeparados(['SMATA', 'Desconocido'], centros), null);
 });
+
+test('un barrio nombrado adentro de la descripción por calles se reconoce si está en el mapa', () => {
+  const ubicar = crearUbicador(['Jardín', 'Nueva Córdoba', 'Alberdi'], {});
+  assert.deepEqual(ubicar('área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.').barrios, ['Jardín']);
+  assert.deepEqual(ubicar('Sector: barrio Nueva Córdoba, entre calles Buenos Aires, Crisol y Estrada.').barrios, ['Nueva Córdoba']);
+  assert.deepEqual(ubicar('30 hs Sector: barrios Alberdi, Jardín y Otro, en forma parcial.').barrios, ['Alberdi', 'Jardín']);
+  // Una calle que se llama como un barrio no cuenta: tiene que decir "barrio".
+  assert.deepEqual(ubicar('Sector comprendido por calles Alberdi y Caseros.').barrios, []);
+});

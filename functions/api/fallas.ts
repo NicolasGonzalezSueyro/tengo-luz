@@ -1,7 +1,7 @@
 import lugares, { localidades } from '../../data/lugares.js';
 import { resumenPublicadas, revisarFallas, textoRestablecida } from '../../src/bot.ts';
 import {
-  fallasActivas, fallasPendientes, fallasSinSector, guardarSector, historialDeFallas, nombraCalles, publicacionValida, recibirPublicaciones, type Publicacion,
+  fallasParaElMapa, fallasPendientes, fallasSinSector, guardarSector, HISTORIAL, historialDeFallas, publicacionValida, recibirPublicaciones, type Publicacion,
 } from '../../src/fallas.ts';
 import { avisosDeFalla, mandarAvisos } from '../../src/notificaciones.ts';
 import type { BaseDeDatos } from '../../src/reportes.ts';
@@ -34,7 +34,7 @@ export async function onRequestGet({ request, env }: Contexto) {
     const clave = new Request(new URL('/api/fallas?historial', request.url));
     const guardada = await cache?.match(clave);
     if (guardada) return new Response(guardada.body, { headers: { 'Content-Type': 'application/json' } });
-    const historial = await historialDeFallas(env.DB, Date.now() - 90 * 24 * 60 * 60 * 1000);
+    const historial = await historialDeFallas(env.DB, Date.now() - HISTORIAL);
     await cache?.put(clave, Response.json(historial, { headers: { 'Cache-Control': 'max-age=600' } }));
     return Response.json(historial, { headers: { 'Cache-Control': 'max-age=60' } });
   }
@@ -49,10 +49,7 @@ export async function onRequestGet({ request, env }: Contexto) {
   const clave = new Request(new URL('/api/fallas', request.url));
   const guardada = await cache?.match(clave);
   if (guardada) return new Response(guardada.body, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
-  const fallas = (await fallasActivas(env.DB, Date.now()))
-    // El sector va solo si la falla nombra calles: las que solo nombran barrios se pintan por barrio (algunas
-    // viejas tienen un sector armado por error, por el "se trabaja en el sector" del final).
-    .map(({ lugares, texto, fuente, creado, hasta, sector }) => ({ lugares, texto, fuente, creado, hasta, ...(sector && nombraCalles(texto) ? { sector } : {}) }));
+  const fallas = await fallasParaElMapa(env.DB, Date.now());
   await cache?.put(clave, Response.json(fallas, { headers: { 'Cache-Control': `max-age=${SEGUNDOS_EN_CACHE}` } }));
   return Response.json(fallas, { headers: { 'Cache-Control': 'no-store' } });
 }

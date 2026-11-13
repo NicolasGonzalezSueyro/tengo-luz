@@ -134,3 +134,10 @@ test('crearUbicadorDeLocalidades: una localidad a más de 80 km de las demás de
   const ubicar = crearUbicadorDeLocalidades([], {}, red);
   assert.deepEqual((await ubicar(['Uno', 'Dos', 'Lejana'])).localidades, ['Uno', 'Dos']);
 });
+
+test('tramosDelCorte: "Localidades de A y B en los siguientes barrios y sectores: …" termina la lista de localidades ahí', () => {
+  assert.deepEqual(
+    tramosDelCorte('Otras localidades', 'localidades de Río Ceballos y Unquillo en los siguientes barrios y sectores: El Cedro, Sábato y Villa Catalina.'),
+    [{ nombres: ['Río Ceballos', 'Unquillo'], texto: 'El Cedro, Sábato y Villa Catalina.' }],
+  );
+});
