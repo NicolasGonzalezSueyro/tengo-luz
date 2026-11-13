@@ -1392,5 +1392,111 @@
    ],
    "departamento": "Santa María"
   }
- ]
+ ],
+ "ballesteros": [
+  {
+   "nombre": "Ballesteros",
+   "osm": "R3914809",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -62.9811138,
+    -32.5453242
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "carcano": [],
+ "general levalle": [
+  {
+   "nombre": "General Levalle",
+   "osm": "R3938323",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.923389,
+    -34.0074973
+   ],
+   "departamento": "Presidente Roque Sáenz Peña"
+  }
+ ],
+ "adelia maria": [
+  {
+   "nombre": "Adelia María",
+   "osm": "R9395479",
+   "tipo": "village",
+   "rango": 14,
+   "punto": [
+    -64.0215623,
+    -33.6320991
+   ],
+   "departamento": "Río Cuarto"
+  }
+ ],
+ "san basilio": [
+  {
+   "nombre": "San Basilio",
+   "osm": "R7328760",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.3146681,
+    -33.4985129
+   ],
+   "departamento": "Río Cuarto"
+  }
+ ],
+ "huanchilla": [
+  {
+   "nombre": "Huanchilla",
+   "osm": "N198452304",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -63.6364869,
+    -33.6683505
+   ],
+   "departamento": "Juárez Celman"
+  }
+ ],
+ "molinos canuelas": [],
+ "punta agua": [
+  {
+   "nombre": "Punta del Agua",
+   "osm": "R6964802",
+   "tipo": "city",
+   "rango": 16,
+   "punto": [
+    -65.1415959,
+    -33.202795
+   ],
+   "departamento": "Río Cuarto"
+  },
+  {
+   "nombre": "Punta del Agua",
+   "osm": "N198414794",
+   "tipo": "hamlet",
+   "rango": 20,
+   "punto": [
+    -63.7011874,
+    -31.0509807
+   ],
+   "departamento": "Río Primero"
+  }
+ ],
+ "monte los gauchos": [
+  {
+   "nombre": "Monte de los Gauchos",
+   "osm": "R7328758",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.8894972,
+    -33.6391139
+   ],
+   "departamento": "Río Cuarto"
+  }
+ ],
+ "la carolina": [],
+ "villa ciudad america cv": []
 }

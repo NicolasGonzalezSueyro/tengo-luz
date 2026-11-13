@@ -206,9 +206,7 @@
     "zonas": [
       "Ballesteros Sud"
     ],
-    "sinUbicar": [
-      "corte total en toda la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "La Calera",
@@ -703,9 +701,7 @@
       "Arroyo Algodón",
       "Los Zorros"
     ],
-    "sinUbicar": [
-      "corte total en ambas localidades"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -1456,9 +1452,7 @@
     "zonas": [
       "Villa Yacanto de Calamuchita"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Villa Ascasubi",
@@ -1472,9 +1466,7 @@
     "zonas": [
       "Villa Ascasubi"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Río Ceballos",
@@ -2411,9 +2403,7 @@
     "zonas": [
       "Tanti"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -3923,9 +3913,7 @@
     "zonas": [
       "Ballesteros Sud"
     ],
-    "sinUbicar": [
-      "la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "San Francisco",
@@ -14159,9 +14147,7 @@
     "zonas": [
       "Las Perdices"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -15682,9 +15668,7 @@
       "Ampliación Poeta Lugones"
     ],
     "zonas": [],
-    "sinUbicar": [
-      "manera parcial"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -15699,9 +15683,7 @@
       "O.s.n."
     ],
     "zonas": [],
-    "sinUbicar": [
-      "manera parcial"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -15730,8 +15712,7 @@
       "Villa Carlos Paz"
     ],
     "sinUbicar": [
-      "edificio venetto 8",
-      "algunos usuarios las"
+      "edificio venetto 8"
     ],
     "sector": [
       [
@@ -15930,8 +15911,7 @@
       "Villa Carlos Paz"
     ],
     "sinUbicar": [
-      "edificio leonardo",
-      "ademas algunos usuarios"
+      "edificio leonardo"
     ],
     "parciales": [
       "Villa Carlos Paz"
@@ -16334,9 +16314,7 @@
     "zonas": [
       "Cuesta Blanca"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Alta Gracia",
@@ -16435,9 +16413,7 @@
     "zonas": [
       "Ballesteros Sud"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -16468,9 +16444,7 @@
     "zonas": [
       "Ballesteros Sud"
     ],
-    "sinUbicar": [
-      "corte total en la localidad"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Marcos Juarez",
@@ -17104,6 +17078,76 @@
     "sinUbicar": [],
     "parciales": [
       "San Francisco"
+    ],
+    "sector": [
+      [
+        -62.08947,
+        -31.42789
+      ],
+      [
+        -62.08941,
+        -31.42807
+      ],
+      [
+        -62.08926,
+        -31.4282
+      ],
+      [
+        -62.08904,
+        -31.42825
+      ],
+      [
+        -62.08797,
+        -31.42843
+      ],
+      [
+        -62.08776,
+        -31.42838
+      ],
+      [
+        -62.0876,
+        -31.42825
+      ],
+      [
+        -62.08754,
+        -31.42807
+      ],
+      [
+        -62.08735,
+        -31.42716
+      ],
+      [
+        -62.08741,
+        -31.42698
+      ],
+      [
+        -62.08756,
+        -31.42685
+      ],
+      [
+        -62.08777,
+        -31.4268
+      ],
+      [
+        -62.08885,
+        -31.42663
+      ],
+      [
+        -62.08906,
+        -31.42668
+      ],
+      [
+        -62.08921,
+        -31.42681
+      ],
+      [
+        -62.08927,
+        -31.42699
+      ],
+      [
+        -62.08947,
+        -31.42789
+      ]
     ]
   },
   {
@@ -17126,6 +17170,88 @@
     "sinUbicar": [],
     "parciales": [
       "Villa María"
+    ],
+    "sector": [
+      [
+        -63.23696,
+        -32.39604
+      ],
+      [
+        -63.2369,
+        -32.39622
+      ],
+      [
+        -63.23324,
+        -32.40009
+      ],
+      [
+        -63.23308,
+        -32.40022
+      ],
+      [
+        -63.23287,
+        -32.40027
+      ],
+      [
+        -63.23266,
+        -32.40022
+      ],
+      [
+        -63.2281,
+        -32.39733
+      ],
+      [
+        -63.22665,
+        -32.39639
+      ],
+      [
+        -63.2265,
+        -32.39626
+      ],
+      [
+        -63.22644,
+        -32.39608
+      ],
+      [
+        -63.2265,
+        -32.3959
+      ],
+      [
+        -63.22817,
+        -32.39398
+      ],
+      [
+        -63.23001,
+        -32.39189
+      ],
+      [
+        -63.23016,
+        -32.39176
+      ],
+      [
+        -63.23038,
+        -32.39171
+      ],
+      [
+        -63.23059,
+        -32.39176
+      ],
+      [
+        -63.2318,
+        -32.39254
+      ],
+      [
+        -63.23674,
+        -32.39573
+      ],
+      [
+        -63.2369,
+        -32.39586
+      ],
+      [
+        -63.23696,
+        -32.39604
+      ]
     ]
   },
   {
@@ -17297,7 +17423,7 @@
     ]
   },
   {
-    "localidad": "Otras localidades",
+    "localidad": "Córdoba",
     "fecha": "2026-11-13",
     "desde": "07:30",
     "hasta": "07:35",
@@ -17363,6 +17489,76 @@
     "sinUbicar": [],
     "parciales": [
       "San Francisco"
+    ],
+    "sector": [
+      [
+        -62.09523,
+        -31.4279
+      ],
+      [
+        -62.09518,
+        -31.42808
+      ],
+      [
+        -62.09502,
+        -31.42821
+      ],
+      [
+        -62.09481,
+        -31.42826
+      ],
+      [
+        -62.09272,
+        -31.4286
+      ],
+      [
+        -62.09251,
+        -31.42855
+      ],
+      [
+        -62.09236,
+        -31.42842
+      ],
+      [
+        -62.0923,
+        -31.42824
+      ],
+      [
+        -62.09191,
+        -31.42642
+      ],
+      [
+        -62.09196,
+        -31.42624
+      ],
+      [
+        -62.09212,
+        -31.42611
+      ],
+      [
+        -62.09233,
+        -31.42606
+      ],
+      [
+        -62.09442,
+        -31.42572
+      ],
+      [
+        -62.09463,
+        -31.42576
+      ],
+      [
+        -62.09478,
+        -31.4259
+      ],
+      [
+        -62.09484,
+        -31.42608
+      ],
+      [
+        -62.09523,
+        -31.4279
+      ]
     ]
   },
   {
@@ -17396,10 +17592,88 @@
     "sinUbicar": [],
     "parciales": [
       "San Francisco"
+    ],
+    "sector": [
+      [
+        -62.08947,
+        -31.42789
+      ],
+      [
+        -62.08941,
+        -31.42807
+      ],
+      [
+        -62.08926,
+        -31.4282
+      ],
+      [
+        -62.08904,
+        -31.42825
+      ],
+      [
+        -62.08474,
+        -31.42896
+      ],
+      [
+        -62.08453,
+        -31.42892
+      ],
+      [
+        -62.08437,
+        -31.42878
+      ],
+      [
+        -62.08432,
+        -31.4286
+      ],
+      [
+        -62.08318,
+        -31.42305
+      ],
+      [
+        -62.08323,
+        -31.42287
+      ],
+      [
+        -62.08339,
+        -31.42274
+      ],
+      [
+        -62.0836,
+        -31.42269
+      ],
+      [
+        -62.08678,
+        -31.42216
+      ],
+      [
+        -62.08783,
+        -31.42199
+      ],
+      [
+        -62.08804,
+        -31.42204
+      ],
+      [
+        -62.0882,
+        -31.42217
+      ],
+      [
+        -62.08825,
+        -31.42235
+      ],
+      [
+        -62.08867,
+        -31.42426
+      ],
+      [
+        -62.08947,
+        -31.42789
+      ]
     ]
   },
   {
-    "localidad": "Otras localidades",
+    "localidad": "Córdoba",
     "fecha": "2026-11-14",
     "desde": "06:30",
     "hasta": "09:30",
@@ -17429,13 +17703,12 @@
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
-    "zonas": [],
-    "sinUbicar": [
-      "localidades campillo",
-      "villa valeria",
-      "mattaldi",
-      "bruzone"
-    ]
+    "zonas": [
+      "Del Campillo",
+      "Villa Valeria",
+      "Mattaldi"
+    ],
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -17588,7 +17861,7 @@
     ]
   },
   {
-    "localidad": "Otras localidades",
+    "localidad": "Córdoba",
     "fecha": "2026-11-14",
     "desde": "16:00",
     "hasta": "16:05",
@@ -17603,6 +17876,42 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "06:00",
+    "hasta": "08:00",
+    "zona": "Afectación en forma parcial de las siguientes localidades: Santa María de Punilla, Bialet Massé, Comuna San Roque, Villa Parque Siquiman, Cabalango, Tanti y Villa Santa Cruz\ndel Lago.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Bialet Massé (Córdoba)"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "afectacion las siguientes localidades santa maria punilla",
+      "comuna san roque",
+      "villa parque siquiman",
+      "cabalango",
+      "tanti",
+      "villa santa cruz lago"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "06:00",
+    "hasta": "06:10",
+    "zona": "Localidades de Ballesteros, Ballesteros Sur y Cárcano.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros",
+      "Ballesteros Sud"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Villa Maria",
     "fecha": "2026-11-15",
     "desde": "06:30",
@@ -17611,15 +17920,15 @@
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
-      "Villa Albertina (Villa María)"
+      "Villa Albertina (Villa María)",
+      "Ana Zumarán (Villa María)",
+      "Silvio Pellico (Villa María)"
     ],
     "zonas": [
       "Villa María"
     ],
     "sinUbicar": [
       "parque industrial",
-      "ana zumaran",
-      "silvio pellico",
       "alto alegre"
     ],
     "parciales": [
@@ -17638,6 +17947,20 @@
     "zonas": [
       "Toledo"
     ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "Barrio Jorge Newbery en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Parque Jorge Newbery"
+    ],
+    "zonas": [],
     "sinUbicar": []
   },
   {
@@ -17668,6 +17991,190 @@
     "zonas": [],
     "sinUbicar": [
       "roque saenz pena"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "07:30",
+    "hasta": "12:00",
+    "zona": "localidades de: General Levalle, Adelia María, San Basilio, Huanchilla, Molinos Cañuelas, Punta del Agua, Monte de los Gauchos y La Carolina.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "General Levalle",
+      "Adelia María",
+      "San Basilio",
+      "Huanchilla",
+      "Monte de los Gauchos"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Tanti",
+    "fecha": "2026-11-15",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "barrios Tanti Centro, Valle Verde, Los Chañares, Parador de Tanti, Flor Serrana, Mallin, El Duranzo, Tanti Nuevo, El Condor, Villa Garcia, Los Alpes, Villa Bender y Lomas de Tanti.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Los Chañares (Tanti)",
+      "El Parador (Tanti)",
+      "Flor Serrana (Tanti)",
+      "Mallin (Tanti)",
+      "Tanti Nuevo (Tanti)",
+      "Villa García (Tanti)"
+    ],
+    "zonas": [
+      "Tanti"
+    ],
+    "sinUbicar": [
+      "tanti centro",
+      "valle verde",
+      "el duranzo",
+      "el condor",
+      "los alpes",
+      "villa bender",
+      "lomas tanti"
+    ],
+    "parciales": [
+      "Tanti"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "08:00",
+    "hasta": "10:30",
+    "zona": "Manzanas 95, 96, 97 y 98, de barrio Docta, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Docta"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "manzanas 95",
+      "manzanas 96",
+      "manzanas 97",
+      "manzanas 98"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "08:30",
+    "hasta": "11:30",
+    "zona": "Comprende al cuadrante entre las calles Av. Colón, Av. Gral. Paz y Santa Rosa de barrio Centro en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Centro"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "entre las calles av colon av gral paz y santa rosa de barrio centro",
+      "comprende al cuadrante"
+    ],
+    "sector": [
+      [
+        -64.18637,
+        -31.41285
+      ],
+      [
+        -64.18629,
+        -31.41312
+      ],
+      [
+        -64.18605,
+        -31.41332
+      ],
+      [
+        -64.18574,
+        -31.41339
+      ],
+      [
+        -64.18542,
+        -31.41332
+      ],
+      [
+        -64.18519,
+        -31.41312
+      ],
+      [
+        -64.18474,
+        -31.41208
+      ],
+      [
+        -64.18465,
+        -31.41181
+      ],
+      [
+        -64.18474,
+        -31.41154
+      ],
+      [
+        -64.18497,
+        -31.41134
+      ],
+      [
+        -64.18528,
+        -31.41127
+      ],
+      [
+        -64.1856,
+        -31.41134
+      ],
+      [
+        -64.18583,
+        -31.41154
+      ],
+      [
+        -64.18629,
+        -31.41258
+      ],
+      [
+        -64.18637,
+        -31.41285
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "11:50",
+    "hasta": "12:00",
+    "zona": "Localidades de Ballesteros, Ballesteros Sur y Cárcano.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros",
+      "Ballesteros Sud"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-15",
+    "desde": "12:00",
+    "hasta": "14:00",
+    "zona": "Afectación en forma parcial de las siguientes localidades: Santa María de Punilla, Bialet Massé, Comuna San Roque, Villa Parque Siquiman, Cabalango, Tanti y Villa Santa Cruz\ndel Lago.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Bialet Massé (Córdoba)"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "afectacion las siguientes localidades santa maria punilla",
+      "comuna san roque",
+      "villa parque siquiman",
+      "cabalango",
+      "tanti",
+      "villa santa cruz lago"
     ]
   },
   {
@@ -18165,6 +18672,60 @@
     ],
     "parciales": [
       "Villa María"
+    ],
+    "sector": [
+      [
+        -63.25519,
+        -32.3842
+      ],
+      [
+        -63.25502,
+        -32.38474
+      ],
+      [
+        -63.25455,
+        -32.38513
+      ],
+      [
+        -63.25391,
+        -32.38528
+      ],
+      [
+        -63.25327,
+        -32.38513
+      ],
+      [
+        -63.25281,
+        -32.38474
+      ],
+      [
+        -63.25264,
+        -32.3842
+      ],
+      [
+        -63.25281,
+        -32.38366
+      ],
+      [
+        -63.25327,
+        -32.38327
+      ],
+      [
+        -63.25391,
+        -32.38312
+      ],
+      [
+        -63.25455,
+        -32.38327
+      ],
+      [
+        -63.25502,
+        -32.38366
+      ],
+      [
+        -63.25519,
+        -32.3842
+      ]
     ]
   },
   {
@@ -18184,6 +18745,60 @@
     ],
     "parciales": [
       "Villa María"
+    ],
+    "sector": [
+      [
+        -63.25717,
+        -32.38201
+      ],
+      [
+        -63.257,
+        -32.38255
+      ],
+      [
+        -63.25654,
+        -32.38295
+      ],
+      [
+        -63.2559,
+        -32.38309
+      ],
+      [
+        -63.25526,
+        -32.38295
+      ],
+      [
+        -63.25479,
+        -32.38255
+      ],
+      [
+        -63.25462,
+        -32.38201
+      ],
+      [
+        -63.25479,
+        -32.38148
+      ],
+      [
+        -63.25526,
+        -32.38108
+      ],
+      [
+        -63.2559,
+        -32.38094
+      ],
+      [
+        -63.25654,
+        -32.38108
+      ],
+      [
+        -63.257,
+        -32.38148
+      ],
+      [
+        -63.25717,
+        -32.38201
+      ]
     ]
   },
   {
@@ -18214,12 +18829,11 @@
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
-    "zonas": [],
-    "sinUbicar": [
-      "localidades campillo",
-      "villa valeria",
-      "mattaldi",
-      "bruzone"
-    ]
+    "zonas": [
+      "Del Campillo",
+      "Villa Valeria",
+      "Mattaldi"
+    ],
+    "sinUbicar": []
   }
 ]

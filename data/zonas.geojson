@@ -58736,6 +58736,336 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Ballesteros",
+    "tipo": "localidad",
+    "patron": "^ballesteros$",
+    "osm": "R3914809",
+    "descripcion": "El anuncio no detalla barrios de Ballesteros: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.99597,
+       -32.54506
+      ],
+      [
+       -62.99507,
+       -32.5525
+      ],
+      [
+       -62.97765,
+       -32.55789
+      ],
+      [
+       -62.97489,
+       -32.55134
+      ],
+      [
+       -62.96685,
+       -32.55378
+      ],
+      [
+       -62.96188,
+       -32.54262
+      ],
+      [
+       -62.98358,
+       -32.53613
+      ],
+      [
+       -62.98508,
+       -32.54195
+      ],
+      [
+       -62.99335,
+       -32.53949
+      ],
+      [
+       -62.99597,
+       -32.54506
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "General Levalle",
+    "tipo": "localidad",
+    "patron": "^general levalle$",
+    "osm": "R3938323",
+    "descripcion": "El anuncio no detalla barrios de General Levalle: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.9372,
+       -34.02072
+      ],
+      [
+       -63.91979,
+       -34.0208
+      ],
+      [
+       -63.91743,
+       -34.01241
+      ],
+      [
+       -63.91267,
+       -34.01337
+      ],
+      [
+       -63.90992,
+       -34.00422
+      ],
+      [
+       -63.93221,
+       -33.99952
+      ],
+      [
+       -63.9372,
+       -34.02072
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Adelia María",
+    "tipo": "localidad",
+    "patron": "^adelia maria$",
+    "osm": "R9395479",
+    "descripcion": "El anuncio no detalla barrios de Adelia María: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.03401,
+       -33.64322
+      ],
+      [
+       -64.00882,
+       -33.64317
+      ],
+      [
+       -64.00893,
+       -33.63071
+      ],
+      [
+       -64.01209,
+       -33.62954
+      ],
+      [
+       -64.01213,
+       -33.62308
+      ],
+      [
+       -64.02964,
+       -33.62323
+      ],
+      [
+       -64.02971,
+       -33.62649
+      ],
+      [
+       -64.03144,
+       -33.62613
+      ],
+      [
+       -64.03267,
+       -33.63041
+      ],
+      [
+       -64.03335,
+       -33.63025
+      ],
+      [
+       -64.03401,
+       -33.64322
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "San Basilio",
+    "tipo": "localidad",
+    "patron": "^san basilio$",
+    "osm": "R7328760",
+    "descripcion": "El anuncio no detalla barrios de San Basilio: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.32491,
+       -33.491
+      ],
+      [
+       -64.32508,
+       -33.50199
+      ],
+      [
+       -64.3083,
+       -33.50157
+      ],
+      [
+       -64.30613,
+       -33.49624
+      ],
+      [
+       -64.30772,
+       -33.49574
+      ],
+      [
+       -64.30726,
+       -33.49472
+      ],
+      [
+       -64.30991,
+       -33.49403
+      ],
+      [
+       -64.31004,
+       -33.49175
+      ],
+      [
+       -64.32077,
+       -33.49107
+      ],
+      [
+       -64.32122,
+       -33.49205
+      ],
+      [
+       -64.32491,
+       -33.491
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Huanchilla",
+    "tipo": "localidad",
+    "patron": "^huanchilla$",
+    "osm": "N198452304",
+    "descripcion": "La ubicación de Huanchilla es una referencia aproximada."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.64512,
+       -33.66835
+      ],
+      [
+       -63.64396,
+       -33.67194
+      ],
+      [
+       -63.6408,
+       -33.67457
+      ],
+      [
+       -63.63649,
+       -33.67554
+      ],
+      [
+       -63.63217,
+       -33.67457
+      ],
+      [
+       -63.62901,
+       -33.67194
+      ],
+      [
+       -63.62785,
+       -33.66835
+      ],
+      [
+       -63.62901,
+       -33.66476
+      ],
+      [
+       -63.63217,
+       -33.66213
+      ],
+      [
+       -63.63649,
+       -33.66116
+      ],
+      [
+       -63.6408,
+       -33.66213
+      ],
+      [
+       -63.64396,
+       -33.66476
+      ],
+      [
+       -63.64512,
+       -33.66835
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Monte de los Gauchos",
+    "tipo": "localidad",
+    "patron": "^monte los gauchos$",
+    "osm": "R7328758",
+    "descripcion": "El anuncio no detalla barrios de Monte de los Gauchos: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.89696,
+       -33.63506
+      ],
+      [
+       -63.89292,
+       -33.64431
+      ],
+      [
+       -63.88511,
+       -33.64413
+      ],
+      [
+       -63.88533,
+       -33.63152
+      ],
+      [
+       -63.89696,
+       -33.63506
+      ]
+     ]
+    ]
+   }
   }
  ]
 }
