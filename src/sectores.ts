@@ -9,6 +9,7 @@
 // entera. Si no se puede armar, se devuelve null y el mapa marca la localidad completa como antes.
 
 import { corredor, envolventeConvexa } from './descargar-zonas.ts';
+import { distancia } from './nombres.ts';
 
 type Punto = [number, number]; // [longitud, latitud]
 export type Piezas = { calles: string[]; lugares: string[]; barrios: string[] };
@@ -31,17 +32,23 @@ export function piezasDelTexto(zona: string): Piezas {
   // "corte total en la localidad": no hay sector, es la localidad entera.
   if (/\b(en|toda) la localidad\b/i.test(zona)) return { calles: [], lugares: [], barrios: [] };
   const texto = zona
-    .replace(/,?\s*en forma (parcial|total)\.?/gi, '')
+    .replace(/\s*\n\s*/g, ' ') // EPEC a veces parte un renglón por la mitad
+    .replace(/,?\s*(?:en|de) (?:forma|manera) (parcial|total)\.?/gi, '')
     .replace(/^localidades? de [^:]*:\s*/i, '') // "Localidades de Alta Gracia, Los Aromos: barrios …"
-    .replace(/\b(sector|[áa]rea|zona)\s+comprendid[oa]s?\s+(por|entre)\s+(las\s+)?/gi, '')
+    // "área comprendida por las", "en el perímetro comprendido entre", "sector comprendido por"… (sin \b: no anda con "á")
+    .replace(/(?<![\p{L}])(?:en\s+)?(?:(?:el|la)\s+)?(?:sector|[áa]rea|zona|per[ií]metro)\s+comprendid[oa]s?\s+(?:por+r*|entre)\s+(?:las\s+)?/giu, '')
     .replace(/\bcomprendid[oa]s?\s+(por|entre)\s+(las\s+)?/gi, '')
-    .replace(/\.$/, '');
+    .replace(/\.\s*$/, '');
 
   const piezas: Piezas = { calles: [], lugares: [], barrios: [] };
   let grupo: keyof Piezas = 'lugares';
-  for (let pedazo of texto.split(/,\s*|\s+y\s+|\s+e\s+|\s+entre\s+/i)) {
-    pedazo = pedazo.trim().replace(/^entre\s+/i, ''); // "calle X, entre A y B": el "entre" queda pegado después de la coma
-    const cambio = pedazo.match(/^(calles?|barrios?:?)\s+(.*)$/i);
+  // También corta el punto antes de "barrios" o "calles" ("…y San Juan. barrios: Felipe Botta…"); los demás puntos son
+  // de abreviaturas ("Bv. Roca").
+  // "Entre Ríos" es una calle: ahí no se corta.
+  for (let pedazo of texto.split(/,\s*|\s+y\s+|\s+e\s+|\s+entre\s+(?!r[ií]os\b)|\.\s+(?=(?:barrios?|calles?)\b)/i)) {
+    // "calle X, entre A y B": el "entre" queda pegado después de la coma. "…, de barrio Jardín": el "de" también.
+    pedazo = pedazo.trim().replace(/^entre\s+(?!r[ií]os\b)/i, '').replace(/^(?:de|del|en)\s+(?=barrios?\b)/i, '');
+    const cambio = pedazo.match(/^(?:las\s+|los\s+)?(calles?|barrios?)\b\s*:?\s*(.*)$/i);
     if (cambio) {
       grupo = /^calle/i.test(cambio[1]) ? 'calles' : 'barrios';
       pedazo = cambio[2].replace(/^:\s*/, '');
@@ -69,6 +76,49 @@ export function nucleoDeCalle(nombre: string): string {
       .replace(/\b[A-ZÁÉÍÓÚ]\.\s*/g, '')
       .replace(/^(de|del)\s+/i, ''),
   );
+}
+
+/**
+ * Si un nombre de calle de OpenStreetMap es la calle del anuncio: la contiene como palabras enteras ("Colón" no es
+ * "Colonia"), o cada palabra importante aparece con a lo sumo una letra de diferencia (EPEC escribe "Richieri" y
+ * la calle es "Pablo Ricchieri"). Exportado para los tests.
+ */
+export function esLaCalle(nombreOsm: string, nucleo: string): boolean {
+  const deOsm = simple(nombreOsm);
+  if (` ${deOsm} `.includes(` ${nucleo} `)) return true;
+  // Todas las palabras del anuncio (menos "de", "la"…) tienen que estar: "San Martín" no es "Martín Fierro".
+  const delAnuncio = nucleo.split(' ').filter((p) => !/^(de|del|la|las|los|el|y)$/.test(p));
+  const palabras = deOsm.split(' ');
+  return delAnuncio.length > 0 && delAnuncio.every((p) => palabras.some((q) =>
+    q === p || (p.length >= 6 && Math.abs(q.length - p.length) <= 1 && distancia(p, q) <= 1)));
+}
+
+/** Lo que se le pide a Overpass por cada calle: las tres primeras letras de su palabra más larga (después se elige acá). */
+const pistaDeCalle = (nucleo: string) => {
+  const larga = nucleo.split(' ').sort((a, b) => b.length - a.length)[0] ?? nucleo;
+  return larga.length >= 6 ? larga.slice(0, 3) : nucleo;
+};
+
+const GEOREF = 'https://apis.datos.gob.ar/georef/api/direcciones';
+/**
+ * Las esquinas según Georef, la API oficial de direcciones (datos.gob.ar): se le pregunta por cada par de calles
+ * ("Belgrano y Achával Rodríguez") dentro de la localidad. Es el segundo intento, para cuando OpenStreetMap no tiene
+ * la calle o la llama distinto. Si no responde, simplemente no suma nada.
+ */
+async function esquinasDeGeoref(calles: string[], localidad: string): Promise<Punto[]> {
+  const puntos: Punto[] = [];
+  const lista = calles.slice(0, 6); // 6 calles son 15 pares: alcanza y no abusa del servicio
+  for (const [i, a] of lista.entries()) {
+    for (const b of lista.slice(i + 1)) {
+      const url = new URL(GEOREF);
+      url.search = new URLSearchParams({ direccion: `${a} y ${b}`, provincia: 'cordoba', localidad_censal: localidad, max: '3', campos: 'ubicacion.lat,ubicacion.lon' }).toString();
+      const res = await fetch(url, { headers: IDENTIFICACION, signal: AbortSignal.timeout(20_000) }).catch(() => null);
+      if (!res?.ok) continue;
+      const { direcciones = [] } = (await res.json().catch(() => ({}))) as { direcciones?: { ubicacion?: { lat?: number | null; lon?: number | null } }[] };
+      for (const d of direcciones) if (typeof d.ubicacion?.lat === 'number' && typeof d.ubicacion.lon === 'number') puntos.push([d.ubicacion.lon, d.ubicacion.lat]);
+    }
+  }
+  return puntos;
 }
 
 /** Una expresión regular para Overpass que no distingue tildes ni mayúsculas ("Ómnibus" = "omnibus"). */
@@ -146,8 +196,31 @@ export function sinPuntosSueltos(puntos: Punto[]): Punto[] {
   const mediana = (valores: number[]) => [...valores].sort((a, b) => a - b)[Math.floor(valores.length / 2)];
   const centro: Punto = [mediana(puntos.map((p) => p[0])), mediana(puntos.map((p) => p[1]))];
   const distancias = puntos.map((p) => metrosEntre(p, centro));
-  const limite = Math.max(800, 2.5 * mediana(distancias));
+  // 1500 m de piso: un área entre dos avenidas mide fácil un kilómetro (y la búsqueda ya se hace dentro del barrio).
+  const limite = Math.max(1500, 2.5 * mediana(distancias));
   return puntos.filter((_, i) => distancias[i] <= limite);
+}
+
+/**
+ * Con cuatro calles y solo tres esquinas encontradas, la cuarta se deduce: es la que cierra el rectángulo (en una
+ * cuadrícula, la esquina opuesta a la del ángulo recto). Si las tres no forman algo parecido a un ángulo recto, no se
+ * inventa nada. Exportado para los tests.
+ */
+export function cuartaEsquina(tres: Punto[]): Punto | null {
+  if (tres.length !== 3) return null;
+  const escala = Math.cos((tres[0][1] * Math.PI) / 180);
+  const plano = tres.map(([lon, lat]): Punto => [lon * escala, lat]);
+  // El coseno del ángulo en cada esquina: la del ángulo recto es la que lo tiene más cerca de cero. (En un rectángulo
+  // largo, otra esquina también anda cerca de los 90°: por eso se elige la mejor y no la primera que pase.)
+  const cosenos = [0, 1, 2].map((i) => {
+    const [b, a, c] = [plano[i], plano[(i + 1) % 3], plano[(i + 2) % 3]];
+    const [u, v] = [[a[0] - b[0], a[1] - b[1]], [c[0] - b[0], c[1] - b[1]]];
+    return Math.abs((u[0] * v[0] + u[1] * v[1]) / (Math.hypot(u[0], u[1]) * Math.hypot(v[0], v[1])));
+  });
+  const i = cosenos.indexOf(Math.min(...cosenos));
+  // Entre 75° y 105°: la que falta está enfrente de esa esquina.
+  if (!(cosenos[i] < 0.26)) return null;
+  return [tres[(i + 1) % 3][0] + tres[(i + 2) % 3][0] - tres[i][0], tres[(i + 1) % 3][1] + tres[(i + 2) % 3][1] - tres[i][1]];
 }
 
 /** Superficie aproximada de un contorno, en grados² (solo para comparar tamaños). */
@@ -184,7 +257,7 @@ async function buscarEnOsm(piezas: Piezas, [sur, oeste, norte, este]: Caja) {
   const caja = `(${sur},${oeste},${norte},${este})`;
   const patron = (nombres: string[]) => nombres.map(sinTildes).join('|');
   const consultas = [
-    piezas.calles.length > 0 && `way["highway"]["name"~"${patron(piezas.calles.map(nucleoDeCalle))}"]${caja}->.calles; .calles out geom;`,
+    piezas.calles.length > 0 && `way["highway"]["name"~"${patron(piezas.calles.map((c) => pistaDeCalle(nucleoDeCalle(c))))}"]${caja}->.calles; .calles out geom;`,
     piezas.lugares.length + piezas.barrios.length > 0 && `nwr["name"~"${patron([...piezas.lugares, ...piezas.barrios])}"]${caja}->.lugares; .lugares out center;`,
   ].filter(Boolean);
   // Overpass es gratuito y compartido: si está ocupado o nos pide esperar, reintentamos con calma.
@@ -212,7 +285,7 @@ export async function sectorDelCorte(
   zona: string,
   caja: Caja,
   dentro: (p: Punto) => boolean = () => true,
-  { conBarrios = true } = {},
+  { conBarrios = true, localidad = '' } = {},
 ): Promise<Punto[] | null> {
   // En capital los barrios ya se ubican con el mapa oficial: del texto solo interesan las calles y lugares.
   const piezas = { ...piezasDelTexto(zona), ...(conBarrios ? {} : { barrios: [] }) };
@@ -224,7 +297,7 @@ export async function sectorDelCorte(
   for (const calle of piezas.calles) {
     const nucleo = nucleoDeCalle(calle);
     const tramos = elementos
-      .filter((e) => e.tags?.highway && e.geometry && simple(e.tags.name ?? '').includes(nucleo))
+      .filter((e) => e.tags?.highway && e.geometry && esLaCalle(e.tags.name ?? '', nucleo))
       .map((e) => e.geometry!.map((p): Punto => [p.lon, p.lat]));
     if (tramos.length > 0) calles.set(nucleo, tramos);
   }
@@ -241,10 +314,24 @@ export async function sectorDelCorte(
   });
   const esBarrio = (t: NonNullable<Elemento['tags']>) => Boolean(t.place) || t.landuse === 'residential'; // "barrio Los Aromos" ≠ calle Los Aromos
   const esLugar = (t: NonNullable<Elemento['tags']>) => !t.highway; // "Teatro del Lago" nunca es una calle
-  const [e, l, b] = [esquinas(calles).filter(dentro), encontrados(piezas.lugares, esLugar), encontrados(piezas.barrios, esBarrio)];
+  const [sur, oeste, norte, este] = caja;
+  const enLaCaja = ([lon, lat]: Punto) => lat >= sur && lat <= norte && lon >= oeste && lon <= este;
+  let e = esquinas(calles).filter(dentro);
+  // Con menos de 3 esquinas no hay área: se le pregunta a Georef por las esquinas que falten.
+  if (e.length < 3 && piezas.calles.length >= 2 && localidad) {
+    const deGeoref = (await esquinasDeGeoref(piezas.calles, localidad)).filter((p) => enLaCaja(p) && dentro(p));
+    e = [...e, ...deGeoref.filter((p) => !e.some((q) => metrosEntre(p, q) < 30))];
+  }
+  const l = encontrados(piezas.lugares, esLugar);
+  // Si las calles ya encierran un área (3 esquinas o más), el sector es esa área: el barrio que nombra el anuncio
+  // ("barrio Roca, área comprendida por las calles…") solo dice dónde queda, no la agranda.
+  const b = e.length >= 3 ? [] : encontrados(piezas.barrios, esBarrio);
   // Si el anuncio nombra barrios y encontramos menos de la mitad, un sector chico sería engañoso
   // (los vecinos de los barrios que faltan creerían que no les cortan): mejor marcar la localidad entera.
-  if (piezas.barrios.length > 0 && b.length < piezas.barrios.length / 2) return null;
+  if (e.length < 3 && piezas.barrios.length > 0 && b.length < piezas.barrios.length / 2) return null;
+  // "Área comprendida por las calles A, B, C y D" con una esquina sin encontrar: se cierra el rectángulo.
+  const cuarta = piezas.calles.length === 4 ? cuartaEsquina(sinPuntosSueltos(e)) : null;
+  if (cuarta && enLaCaja(cuarta)) e = [...sinPuntosSueltos(e), cuarta];
   const quedan = new Set(sinPuntosSueltos([...e, ...l, ...b]));
   const filtrar = (ps: Punto[]) => ps.filter((p) => quedan.has(p));
   return armarSector(filtrar(e), filtrar(l), filtrar(b), caja);

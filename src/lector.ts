@@ -108,22 +108,25 @@ if (invalidas.length > 0) {
 }
 const ubicarLocalidades = crearUbicadorDeLocalidades(zonas.features, buscadas);
 // Los barrios de las localidades del interior (npm run barrios-interior): con contorno de OSM o aproximado.
-const interior = await leerJson<{ features: { properties: BarrioConocido & { tipo: string } }[] }>('data/barrios-interior.geojson')
+const interior = await leerJson<{ features: { properties: BarrioConocido & { tipo: string }; geometry: Geometria }[] }>('data/barrios-interior.geojson')
   .catch(() => ({ features: [] }));
 const aliasInterior = await leerJson<Record<string, string | null>>('data/alias-interior.json').catch(() => ({}));
 const buscarEnLocalidad = crearBuscadorDeBarrios([...interior.features.map((f) => f.properties), ...localidadesComoBarrios(zonas.features, interior.features.map((f) => f.properties))], aliasInterior);
 // "Corte total en la localidad", "todos los barrios": se pinta el casco urbano entero.
 const TODA_LA_LOCALIDAD = /\b(corte total|toda la localidad|todas? las localidades|todos los barrios|ambas localidades|en forma total en la localidad)\b/i;
 
-// EPEC a veces carga como de capital un corte que es de otras localidades ("localidades de Río Ceballos y Unquillo
-// en los siguientes barrios…"): se trata como los de "Otras localidades", que dicen en el texto de dónde son.
-const DE_OTRAS_LOCALIDADES = /^\s*(?:en\s+)?(?:las?\s+)?localidad(?:es)?\s+de\s/i;
-const conSuSeccion = (m: Mantenimiento): Mantenimiento =>
-  (m.localidad === CAPITAL && DE_OTRAS_LOCALIDADES.test(m.zona) ? { ...m, localidad: 'Otras localidades' } : m);
-const guardadosYNuevos = unir((await leerGuardados()).map(conSuSeccion), nuevos.map(conSuSeccion), fechasCubiertas);
+// EPEC a veces pone en un corte de capital lo que es de otras localidades ("localidades de Río Ceballos y Unquillo
+// en los siguientes barrios…", o "barrio X. Localidades de Santa Catalina y Las Vertientes"): desde donde dice
+// "Localidad(es) de…" se ubica en esas localidades, y lo de antes en capital.
+const NOMBRA_LOCALIDADES = /(?:^|[.;:]\s*)(?:en\s+)?(?:las?\s+)?localidad(?:es)?\s+de\b/i;
+const conOtrasLocalidades = (m: Mantenimiento) => m.localidad === CAPITAL && NOMBRA_LOCALIDADES.test(m.zona);
+// Los que una versión anterior guardó como "Otras localidades" vuelven a ser de capital (así los manda EPEC).
+const deCapitalOtraVez = (m: Mantenimiento): Mantenimiento =>
+  (m.localidad === 'Otras localidades' && m.fuente.includes('epec.com.ar') && /^\s*localidad(?:es)?\s+de\b/i.test(m.zona) ? { ...m, localidad: CAPITAL } : m);
+const guardadosYNuevos = unir((await leerGuardados()).map(deCapitalOtraVez), nuevos, fechasCubiertas);
 const ubicacionDe = new Map<string, Ubicacion>();
 const noEncontradas = new Set<string>();
-for (const m of guardadosYNuevos.filter((c) => c.localidad !== CAPITAL)) {
+for (const m of guardadosYNuevos.filter((c) => c.localidad !== CAPITAL || conOtrasLocalidades(c))) {
   const clave = `${m.localidad}|${m.zona}`;
   if (ubicacionDe.has(clave)) continue;
   try {
@@ -164,8 +167,19 @@ if (noEncontradas.size > 0) {
  * Capital se ubica por barrios (y rutas). Fuera de capital, por localidad y por los barrios de esa localidad:
  * nunca barrios de capital, así un "barrio Don Bosco" de Alta Gracia no pinta el de capital.
  */
-const ubicarCorte = (m: Mantenimiento): Ubicacion =>
-  m.localidad === CAPITAL ? ubicarEnCapital(m.zona) : ubicacionDe.get(`${m.localidad}|${m.zona}`) ?? { barrios: [], zonas: [], sinUbicar: [] };
+const ubicarCorte = (m: Mantenimiento): Ubicacion => {
+  const delInterior = ubicacionDe.get(`${m.localidad}|${m.zona}`);
+  if (m.localidad !== CAPITAL) return delInterior ?? { barrios: [], zonas: [], sinUbicar: [] };
+  if (!delInterior) return ubicarEnCapital(m.zona);
+  // Capital y otras localidades en el mismo corte: cada parte en su mapa.
+  const capital = ubicarEnCapital(m.zona.slice(0, m.zona.search(NOMBRA_LOCALIDADES)));
+  return {
+    barrios: [...new Set([...capital.barrios, ...delInterior.barrios])],
+    zonas: [...new Set([...capital.zonas, ...delInterior.zonas])],
+    sinUbicar: [...capital.sinUbicar, ...delInterior.sinUbicar],
+    ...(delInterior.parciales ? { parciales: delInterior.parciales } : {}),
+  };
+};
 
 // Capital: lo que no se encuentra a la primera se busca con la comparación tolerante ("Santa Isabel 2" es
 // "Santa Isabel 2ª Sección"), entre los barrios de capital y los que se agregaron con contorno aproximado.
@@ -191,18 +205,26 @@ const todos: (Mantenimiento & Ubicacion & { sector?: Punto[] })[] = guardadosYNu
   .filter((m) => m.localidad === CAPITAL || m.zonas.length > 0);
 
 // Sectores exactos (src/sectores.ts) para los cortes descriptos por calles o lugares. Cada uno se busca en
-// OpenStreetMap una sola vez y queda guardado en data/sectores.json (null = no se pudo armar: se marca la zona entera).
+// OpenStreetMap una sola vez y queda guardado en data/sectores.json. Si no se pudo armar queda [] y se marca la zona
+// entera. Los null son de antes de noviembre de 2026 (el método entendía menos textos): si el corte todavía no pasó,
+// se vuelven a intentar una vez.
 const SECTORES = 'data/sectores.json';
 const sectoresGuardados = await leerJson<Record<string, Punto[] | null>>(SECTORES).catch(() => ({}) as Record<string, Punto[] | null>);
 const sectores: Record<string, Punto[] | null> = {};
 const porNombre = (features: { properties: { nombre: string | null }; geometry: Geometria }[], nombres: string[]) =>
   features.filter((f) => f.properties.nombre && nombres.includes(f.properties.nombre));
 
-/** Dónde buscar el sector: la localidad (si es una sola), o los barrios del corte en capital si el texto nombra calles. */
-function zonaDeBusqueda(m: Mantenimiento & Ubicacion) {
+/**
+ * Dónde buscar el sector, si el texto describe calles: en los barrios del corte que ya están en el mapa (así dos calles
+ * que se repiten en otra punta de la ciudad no confunden), o en la localidad entera si el anuncio no nombra un barrio
+ * conocido. `enBarrios`: la zona son barrios, y se busca con un margen (las calles nombradas suelen ser su borde).
+ */
+function zonaDeBusqueda(m: Mantenimiento & Ubicacion): { zona: { properties: { nombre: string | null }; geometry: Geometria }[]; enBarrios: boolean } {
+  if (m.localidad === CAPITAL) return { zona: m.barrios.length > 0 && m.sinUbicar.some(esDescripcion) ? porNombre(mapa.features, m.barrios) : [], enBarrios: true };
   // En el interior, el sector se arma solo si el anuncio describe calles (los barrios ya tienen su contorno).
-  if (m.localidad !== CAPITAL) return m.zonas.length === 1 && esDescripcion(normalizar(m.zona)) ? porNombre(zonas.features, m.zonas) : [];
-  return m.barrios.length > 0 && m.sinUbicar.some(esDescripcion) ? porNombre(mapa.features, m.barrios) : [];
+  if (m.zonas.length !== 1 || !esDescripcion(normalizar(m.zona))) return { zona: [], enBarrios: false };
+  const barrios = interior.features.filter((f) => m.barrios.includes(f.properties.nombre)) as unknown as { properties: { nombre: string | null }; geometry: Geometria }[];
+  return barrios.length > 0 ? { zona: barrios, enBarrios: true } : { zona: porNombre(zonas.features, m.zonas), enBarrios: false };
 }
 
 // Overpass puede tardar ~30 s por sector: como mucho 8 nuevos por corrida, así el robot no pasa su límite de tiempo.
@@ -210,28 +232,34 @@ function zonaDeBusqueda(m: Mantenimiento & Ubicacion) {
 const SECTORES_POR_CORRIDA = 8;
 let sectoresNuevos = 0;
 // Primero los cortes más nuevos (los que vienen), que son los que la gente mira.
+const hoyEnCordoba = momentoEnCordoba().fecha;
 for (const m of [...todos].sort((a, b) => b.fecha.localeCompare(a.fecha))) {
-  const zona = zonaDeBusqueda(m);
+  const { zona, enBarrios } = zonaDeBusqueda(m);
   if (zona.length === 0) continue;
   const clave = `${m.localidad}|${m.zona}`;
   if (!(clave in sectores)) {
-    if (clave in sectoresGuardados) {
-      sectores[clave] = sectoresGuardados[clave];
+    const guardado = sectoresGuardados[clave];
+    const vieneOEsHoy = m.fecha >= hoyEnCordoba;
+    if (clave in sectoresGuardados && !(guardado === null && vieneOEsHoy)) {
+      sectores[clave] = guardado;
     } else {
-      if (sectoresNuevos === SECTORES_POR_CORRIDA) continue;
+      // Solo para los cortes de hoy en adelante: el sector de un corte que ya pasó no se muestra en ningún lado.
+      if (!vieneOEsHoy || sectoresNuevos === SECTORES_POR_CORRIDA) continue;
       sectoresNuevos++;
       try {
-        // En capital las calles nombradas suelen ser el borde del barrio, así que sus esquinas caen justo en el límite:
-        // se busca en la caja del barrio agrandada (~400 m). En las localidades sí se exige estar dentro del municipio,
-        // porque un mismo corte puede nombrar barrios de pueblos vecinos.
+        // Las calles nombradas suelen ser el borde del barrio, así que sus esquinas caen justo en el límite: se busca
+        // en la caja de los barrios agrandada (~400 m). Si la zona es la localidad entera, sí se exige estar dentro
+        // del municipio, porque un mismo corte puede nombrar barrios de pueblos vecinos.
         const enCapital = m.localidad === CAPITAL;
-        sectores[clave] = await sectorDelCorte(
+        const localidadDeGeoref = enCapital ? CAPITAL : m.zonas[0];
+        sectores[clave] = (await sectorDelCorte(
           m.zona,
-          cajaDe(zona, enCapital ? 0.004 : 0),
-          enCapital ? undefined : (p) => barrioEnPunto(zona, p) !== null,
-          { conBarrios: !enCapital },
-        );
-        console.log(`🧭 Sector de "${m.zona.slice(0, 60)}…": ${sectores[clave] ? 'armado' : 'no se pudo, se marca la zona entera'}`);
+          cajaDe(zona, enBarrios ? 0.004 : 0),
+          enBarrios ? undefined : (p) => barrioEnPunto(zona, p) !== null,
+          // Los barrios que ya ubicó el mapa no se buscan de nuevo en OpenStreetMap.
+          { conBarrios: !enBarrios, localidad: localidadDeGeoref },
+        )) ?? [];
+        console.log(`🧭 Sector de "${m.zona.slice(0, 60)}…": ${sectores[clave]?.length ? 'armado' : 'no se pudo, se marca la zona entera'}`);
         await new Promise((listo) => setTimeout(listo, 2000)); // sin apurar a Overpass, que es gratuito y compartido
       } catch (error) {
         // Sin conexión con OpenStreetMap: no se guarda nada y se vuelve a intentar en la próxima corrida.
@@ -241,7 +269,7 @@ for (const m of [...todos].sort((a, b) => b.fecha.localeCompare(a.fecha))) {
     }
   }
   const sector = sectores[clave];
-  if (sector) m.sector = sector;
+  if (sector?.length) m.sector = sector;
 }
 
 await mkdir('data', { recursive: true });
@@ -275,7 +303,7 @@ if (sinUbicar.length) console.log(`❓ Sin ubicar (se pueden agregar a data/alia
 const ignorados = new Set(Object.keys(alias).filter((nombre) => alias[nombre] === null).map(normalizar));
 const queVienen = todos.filter((m) => m.fecha >= momentoEnCordoba().fecha);
 // Solo capital: los barrios del interior que no se encuentran quedan en el informe del robot, sin alertas.
-const desconocidos = [...new Set(queVienen.filter((m) => m.localidad === CAPITAL).flatMap((m) => m.sinUbicar))].filter((texto) => !esDescripcion(texto) && !ignorados.has(texto));
+const desconocidos = [...new Set(queVienen.filter((m) => m.localidad === CAPITAL && !conOtrasLocalidades(m)).flatMap((m) => m.sinUbicar))].filter((texto) => !esDescripcion(texto) && !ignorados.has(texto));
 if (desconocidos.length > 0) {
   alertas.push({
     texto: `Hay barrios de cortes que vienen que no pude ubicar en el mapa:\n${desconocidos.map((d) => `• ${d}`).join('\n')}`,
@@ -288,7 +316,7 @@ const centros = new Map(
   [...mapa.features, ...zonas.features].flatMap((f): [string, Punto][] => (f.properties.nombre ? [[f.properties.nombre, centro(f.geometry)]] : [])),
 );
 // Solo en capital: un renglón de "Otras localidades" puede nombrar pueblos lejanos entre sí, y está bien.
-for (const m of queVienen.filter((c) => c.localidad === CAPITAL)) {
+for (const m of queVienen.filter((c) => c.localidad === CAPITAL && !conOtrasLocalidades(c))) {
   const separados = lugaresSeparados([...m.barrios, ...m.zonas], centros);
   if (separados) {
     alertas.push({

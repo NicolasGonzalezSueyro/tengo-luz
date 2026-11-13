@@ -151,7 +151,7 @@ export function crearUbicador(nombres: string[], alias: Record<string, string | 
     const sinUbicar: string[] = [];
 
     // Limpiamos cada pedazo entre comas por separado para no perder las comas.
-    let texto = ` ${zona.replace(/en forma (parcial|total)/gi, '').split(',').map(limpiar).join(' , ')} `;
+    let texto = ` ${zona.replace(/(?:en|de) (?:forma|manera) (parcial|total)/gi, '').split(',').map(limpiar).join(' , ')} `;
 
     for (const [enElTexto, nombreDelMapa] of especiales) {
       if (texto.includes(` ${enElTexto} `)) {

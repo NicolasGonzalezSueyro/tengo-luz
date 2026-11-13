@@ -307,3 +307,8 @@ test('reconocerLugares usa los alias del interior (como escribe EPEC un barrio q
   const alias = { '2 Hermanos (San Francisco)': 'Dos Hermanos (San Francisco)' };
   assert.deepEqual(reconocerLugares(lugares, new Set(['San Francisco']), 'Falla en San Francisco, barrio 2 Hermanos.', alias), ['Dos Hermanos (San Francisco)']);
 });
+test('clasificar: una respuesta a un usuario o un retuit no es una falla', () => {
+  assert.equal(clasificar('@juanperez Lamentamos que estés sin servicio en barrio Alberdi. ¿Nos pasás tu contrato?'), 'otra');
+  assert.equal(clasificar('RT @Otro: sin suministro en barrio Centro por una falla'), 'otra');
+  assert.equal(clasificar('Por una falla, sin suministro en barrio Alberdi.'), 'falla');
+});

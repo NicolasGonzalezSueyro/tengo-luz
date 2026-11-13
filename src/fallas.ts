@@ -221,6 +221,9 @@ const HABLA_DE_REGRESO = /\b(restablec|normalizad|normalizo|volvio (el servicio|
 
 /** Qué es una publicación: una falla, el aviso de que volvió la luz, u otra cosa (cortes programados, campañas…). */
 export function clasificar(texto: string): 'falla' | 'restablecida' | 'otra' {
+  // Una respuesta a un usuario ("@juan lamentamos que estés sin servicio en Alberdi") o un retuit no es un anuncio:
+  // publicarla sola pintaría un barrio por la queja de una persona.
+  if (/^\s*(@\w+|RT\s+@)/.test(texto)) return 'otra';
   const t = texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
   if (HABLA_DE_REGRESO.test(t) && !/\bsin (suministro|servicio|energia|luz)\b/.test(t)) return 'restablecida';
   return HABLA_DE_FALLA.test(t) ? 'falla' : 'otra';

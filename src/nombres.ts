@@ -69,10 +69,12 @@ export function nombresDelTramo(texto: string): string[] {
     .split(/[.;]\s+|\.$/)
     // Desde que empieza una descripción por calles, el resto de la oración ya no son nombres de barrios.
     .map((oracion) => oracion.split(DESCRIPTIVAS)[0])
-    .flatMap((oracion) => completarNumeros(oracion.replace(/\ben forma (parcial|total)\b/gi, '').split(/,|\s+y\s+|\s+e\s+(?=h?i)/i)))
+    .flatMap((oracion) => completarNumeros(oracion.replace(/\b(?:en|de) (?:forma|manera) (parcial|total)\b/gi, '').split(/,|\s+y\s+|\s+e\s+(?=h?i)/i)))
     // Lo que viene antes de "barrio(s)" no es parte del nombre ("La Calera: sin suministro en barrios Covicco").
     .map((p) => p.replace(/^.*\b(barrios?|b°|bº|loteos?)\s*:?\s+/i, '').replace(/[()]/g, '').trim())
-    .filter((p) => p.length > 2 && p.split(/\s+/).length <= 6 && !/\d\s*hs\b/i.test(p) && !esDescripcion(normalizar(p)) && !SOLO_CONECTORES.test(p));
+    .filter((p) => p.length > 2 && p.split(/\s+/).length <= 6 && !/\d\s*hs\b/i.test(p) && !esDescripcion(normalizar(p)) && !SOLO_CONECTORES.test(p)
+      // Frases que no son nombres de lugares ("corte total en la localidad", "además algunos usuarios de…").
+      && !/\b(corte total|usuarios?|localidad(es)?)\b/i.test(p));
 }
 
 // alias: otros nombres del mismo barrio (de los repetidos que se juntaron, ver sinRepetidos en barrios-interior).

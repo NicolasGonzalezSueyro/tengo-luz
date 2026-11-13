@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import * as turf from '@turf/turf';
-import { alRadio, claveDeLugar, claveSinLocalidad, sinPedazosSueltos, enTitulo, km2, mismaLocalidad, sinRepetidos, suavizar, unirMismoNombre } from './barrios-interior.ts';
+import { alRadio, claveDeLugar, claveSinLocalidad, sinPedazosSueltos, enTitulo, km2, mismaLocalidad, sinEncimar, sinRepetidos, suavizar, unirMismoNombre } from './barrios-interior.ts';
 
 test('enTitulo arregla los nombres en mayúsculas de las capas oficiales', () => {
   assert.equal(enTitulo('LAS MERCEDES (EX COLCAR)'), 'Las Mercedes');
@@ -112,4 +112,20 @@ test('unirMismoNombre junta los pedazos con el mismo nombre y deja los sin nombr
   const quedan = unirMismoNombre([f('Villa El Libertador', -64.2), f(null, -64.1), f('Villa El Libertador', -64.19), f(null, -64.0)]);
   assert.deepEqual(quedan.map((x) => x.properties.nombre), ['Villa El Libertador', null, null]);
   assert.ok(km2(quedan[0] as never) > 1.5 * km2(f('x', 0) as never));
+});
+
+test('sinEncimar: dos barrios que se pisan a medias dejan de pisarse; uno adentro de otro queda igual', () => {
+  const b = (base: string, caja: [number, number, number, number], fuente: string, tipo = 'poligono') =>
+    ({ type: 'Feature', geometry: turf.bboxPolygon(caja).geometry, properties: { nombre: base, base, localidad: 'La Calera', tipo, fuente } });
+  // El oficial (oeste) y uno de OSM corrido al este, que lo pisa en un cuarto.
+  const oficial = b('Centro', [-64.340, -31.350, -64.330, -31.340], 'municipio');
+  const deOsm = b('Industrial', [-64.3325, -31.350, -64.3225, -31.340], 'osm');
+  // Una parte del oficial, bien adentro.
+  const parte = b('Centro Norte', [-64.338, -31.344, -64.334, -31.341], 'osm');
+  const antes = km2(deOsm as never);
+  sinEncimar([deOsm, oficial, parte]);
+  assert.ok(Math.abs(km2(oficial as never) - 1.057) < 0.05); // el oficial no se toca
+  assert.ok(km2(deOsm as never) < 0.8 * antes && km2(deOsm as never) > 0.7 * antes); // perdió el cuarto pisado
+  assert.equal(turf.booleanIntersects(turf.point([-64.3315, -31.345]), deOsm as never), false);
+  assert.ok(Math.abs(km2(parte as never) - 0.127) < 0.02); // la parte de adentro queda como estaba
 });

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { armarSector, esquinas, nucleoDeCalle, piezasDelTexto, sinPuntosSueltos, type Caja } from './sectores.ts';
+import { armarSector, cuartaEsquina, esLaCalle, esquinas, nucleoDeCalle, piezasDelTexto, sinPuntosSueltos, type Caja } from './sectores.ts';
 
 test('sinPuntosSueltos descarta una esquina lejana con el mismo nombre de calles', () => {
   // Cuatro esquinas del centro (a ~100 m entre sí) y una "Belgrano y Florida" a 4 km.
@@ -75,4 +75,50 @@ test('armarSector dibuja el área de las esquinas, o null si no aporta', () => {
   assert.equal(armarSector([], [], [], caja), null);
   // Puntos en las cuatro puntas de la zona: el área sería casi toda la localidad, así que no sirve.
   assert.equal(armarSector([[-64.52, -31.45], [-64.45, -31.45], [-64.45, -31.38], [-64.52, -31.38]], [], [], caja), null);
+});
+
+test('piezasDelTexto entiende cómo escribe EPEC en su página: "área comprendida por las calles", "entre las calles:", "en el perímetro"', () => {
+  assert.deepEqual(piezasDelTexto('barrio Roca, área comprendida por las calles 25 de mayo, B. Roldán, Belgrano y A. del Valle.'), {
+    calles: ['25 de mayo', 'B. Roldán', 'Belgrano', 'A. del Valle'], lugares: [], barrios: ['Roca'],
+  });
+  assert.deepEqual(piezasDelTexto('barrio: Rivadavia, entre las calles: Sarmiento, Yrigoyen, 9 de Julio y Las Heras.'), {
+    calles: ['Sarmiento', 'Yrigoyen', '9 de Julio', 'Las Heras'], lugares: [], barrios: ['Rivadavia'],
+  });
+  assert.deepEqual(piezasDelTexto('área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.'), {
+    calles: ['Talleres', 'Elias Yofre', 'Richieri', 'Valparaiso'], lugares: [], barrios: ['Jardín'],
+  });
+  // Con un renglón partido por la mitad y otra lista de barrios después del punto.
+  assert.deepEqual(
+    piezasDelTexto('barrio Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente\nMaciel, Salta y San\nJuan. barrios: Felipe Botta y Francisco García.'),
+    { calles: ['Intendente Maciel', 'Salta', 'San Juan'], lugares: [], barrios: ['Nicolás Avellaneda', 'Felipe Botta', 'Francisco García'] },
+  );
+  assert.deepEqual(piezasDelTexto('barrio Hernández, en el perímetro comprendido por las calles: Güemes, Almafuerte, Roma y España.').calles, ['Güemes', 'Almafuerte', 'Roma', 'España']);
+  assert.deepEqual(piezasDelTexto('área comprendida por las calles: Entre Ríos, Mendoza, San Luis y Perazolo.').calles, ['Entre Ríos', 'Mendoza', 'San Luis', 'Perazolo']);
+  assert.deepEqual(piezasDelTexto('barrio Roca, área comprendida porr las calles Iturraspe, Colón, Belgrano y España.').calles, ['Iturraspe', 'Colón', 'Belgrano', 'España']);
+});
+
+test('esLaCalle: palabras enteras, y una letra de diferencia en las palabras largas', () => {
+  assert.equal(esLaCalle('Avenida Pablo Ricchieri', 'richieri'), true); // EPEC lo escribe con una sola c
+  assert.equal(esLaCalle('Juan Bautista Alberdi', 'alberdi'), true);
+  assert.equal(esLaCalle('Colonia Tirolesa', 'colon'), false); // antes "Colón" encontraba también "Colonia…"
+  assert.equal(esLaCalle('Avenida Colón', 'colon'), true);
+  assert.equal(esLaCalle('25 de Mayo', '25 de mayo'), true);
+  assert.equal(esLaCalle('Salta', 'salto'), false); // corta: no se tolera la diferencia
+  assert.equal(esLaCalle('Martín Fierro', 'san martin'), false);
+  assert.equal(esLaCalle('1 de Mayo', '25 de mayo'), false);
+  assert.equal(esLaCalle('Avenida General José de San Martín', 'san martin'), true);
+});
+
+test('cuartaEsquina cierra el rectángulo cuando de cuatro calles se encontraron tres esquinas', () => {
+  // El corte real de barrio Jardín: Talleres y Ricchieri, Elías Yofre y Ricchieri, Elías Yofre y Valparaíso.
+  const cuarta = cuartaEsquina([[-64.17661, -31.44933], [-64.17664, -31.45086], [-64.18671, -31.45087]])!;
+  assert.ok(Math.abs(cuarta[0] - -64.18668) < 0.0002 && Math.abs(cuarta[1] - -31.44934) < 0.0002); // Talleres y Valparaíso
+  // Tres puntos casi en línea no tienen ángulo recto: no se inventa nada.
+  assert.equal(cuartaEsquina([[-64.17, -31.44], [-64.18, -31.44], [-64.19, -31.4401]]), null);
+  assert.equal(cuartaEsquina([[-64.17, -31.44], [-64.18, -31.44]]), null);
+});
+
+test('sinPuntosSueltos deja un área de un kilómetro entre dos avenidas', () => {
+  const jardin: [number, number][] = [[-64.17661, -31.44933], [-64.17664, -31.45086], [-64.18671, -31.45087]];
+  assert.equal(sinPuntosSueltos(jardin).length, 3);
 });

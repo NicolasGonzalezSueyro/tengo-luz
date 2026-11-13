@@ -141,3 +141,11 @@ test('tramosDelCorte: "Localidades de A y B en los siguientes barrios y sectores
     [{ nombres: ['Río Ceballos', 'Unquillo'], texto: 'El Cedro, Sábato y Villa Catalina.' }],
   );
 });
+
+test('tramosDelCorte: "localidades de: A, B y C" con dos puntos después del "de"', () => {
+  assert.deepEqual(tramosDelCorte('Córdoba', 'localidades de: Del Campillo, Villa Valeria, Mattaldi y Bruzone.'),
+    [{ nombres: ['Del Campillo', 'Villa Valeria', 'Mattaldi', 'Bruzone'], texto: '' }]);
+  // Un corte de capital que además nombra localidades: el tramo de capital no cuenta acá (lo ubica el mapa de capital).
+  assert.deepEqual(tramosDelCorte('Córdoba', 'Barrio Alberdi. Localidades de Santa Catalina y Las Vertientes.'),
+    [{ nombres: ['Santa Catalina', 'Las Vertientes'], texto: '' }]);
+});

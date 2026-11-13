@@ -123,6 +123,7 @@ export default [
  "Ampliación Vélez Sársfield",
  "Amuoyep II",
  "Ana María Zumarán",
+ "Ana Zumarán (Villa María)",
  "Anexo Las Palmas",
  "Anglo Viejo Country (Alta Gracia)",
  "Antigua Cervecería",
@@ -190,6 +191,7 @@ export default [
  "Barrancas del Río (Villa Nueva)",
  "Barrancas del Sol Este (Malagueño)",
  "Barrancas del Sol Norte (Malagueño)",
+ "Barrancas del Sol Norte (Villa Carlos Paz)",
  "Barrancas del Sol Oeste (Malagueño)",
  "Barrancas del Sol Sur (Malagueño)",
  "Barrancas del Sur",
@@ -256,6 +258,7 @@ export default [
  "Barrio Moons (Río Segundo)",
  "Barrio Municipalidad (Río Segundo)",
  "Barrio Norte  (Juárez Celmán) (Estación Juárez Celman)",
+ "Barrio Norte (Oncativo)",
  "Barrio NORTE 2 GAMA",
  "Barrio Nueva Esperanza",
  "Barrio Paraiso (Río Cuarto)",
@@ -1228,7 +1231,6 @@ export default [
  "Parque Vélez Sarsfield",
  "Pascanas",
  "Pasco",
- "Paso Colorado (La Granja)",
  "Paso De La Pampa (Alta Gracia)",
  "Paso De La Pampa (Pampa Alta)",
  "Paso De La Pampa (San Clemente)",
@@ -1287,6 +1289,7 @@ export default [
  "Progreso (Unquillo)",
  "Prohas I Jardín Estancia (Alta Gracia)",
  "Prohas II (Alta Gracia)",
+ "Prohas IV (Alta Gracia)",
  "Providencia",
  "Pueblo Alberdi (Río Cuarto)",
  "Pueblo Nuevo (Río Cuarto)",
@@ -1505,6 +1508,7 @@ export default [
  "Sierras Hotel (Alta Gracia)",
  "Siete Soles",
  "Siete Soles (Malagueño)",
+ "Silvio Pellico (Villa María)",
  "Sintonía (La Cumbre)",
  "Sirio Libanés (Río Cuarto)",
  "SMATA",
@@ -1824,7 +1828,8 @@ export default [
  "Zepa C",
  "Zona A (Villa Parque Santa Ana)",
  "Zona B (Villa Parque Santa Ana)",
- "Zona rural Ruta 9 Norte"
+ "Zona rural Ruta 9 Norte",
+ "Zona Sur (Oncativo)"
 ];
 
 // Las que son localidades del interior (el resto son barrios y zonas de capital).

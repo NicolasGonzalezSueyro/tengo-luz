@@ -35,7 +35,8 @@ const MAXIMO_KM = 80;
 const CERCA_KM = 40;
 
 // "Localidad de X", "Localidades de A, B y C", "En las localidades de…", "Localidad X en forma parcial", hasta ":" o ".".
-const ENCABEZADO = /(?:^|[.;:]\s*)(?:en\s+)?(?:las?\s+)?localidad(?:es)?\s+(?:de\s+)?([^:.]+)/gi;
+// También "localidades de: Del Campillo, Villa Valeria…" (con dos puntos después del "de").
+const ENCABEZADO = /(?:^|[.;:]\s*)(?:en\s+)?(?:las?\s+)?localidad(?:es)?\s+(?:de\b\s*:?\s*)?([^:.]+)/gi;
 
 /**
  * Los nombres de localidades de un corte de fuera de capital: el título de la sección de la nota ("Villa María",
@@ -71,7 +72,7 @@ export function tramosDelCorte(seccion: string, zona: string): Tramo[] {
 
 function partir(lista: string): string[] {
   return lista
-    .replace(/\ben forma (parcial|total)\b.*$/i, '')
+    .replace(/\b(?:en|de) (?:forma|manera) (parcial|total)\b.*$/i, '')
     // "Localidades de Río Ceballos y Unquillo en los siguientes barrios y sectores": ahí termina la lista.
     .replace(/\s+en\s+(los|las|sus)\s+(siguientes\s+)?(barrios|sectores|zonas)\b.*$/i, '')
     .split(/,|\s+y\s+/)

@@ -592,6 +592,41 @@ export function sinRepetidos<F extends BarrioConFuente>(barrios: F[], centros?: 
   return barrios.filter((b) => quedan.has(b));
 }
 
+/** Lo que queda de un área después de un recorte, sin las astillas (pedazos de menos del 5 % del total). */
+function sinAstillas(area: Area): Area {
+  const partes = turf.flatten(area).features as Area[];
+  const total = km2(area);
+  return unir(partes.filter((p) => km2(p) >= 0.05 * total)) ?? area;
+}
+
+/**
+ * Dos barrios de la misma localidad no se pisan a medias: al de menos confianza (o, si empatan, al más grande) se le
+ * resta el otro. Si uno está casi entero adentro del otro (más del 60 % del más chico), quedan como están: es un
+ * barrio con una parte suya, no un borde mal puesto. Cambia las geometrías ahí mismo. Exportado para los tests.
+ */
+export function sinEncimar<F extends BarrioConFuente & { geometry: unknown }>(barrios: F[]): F[] {
+  const rango = (b: F) => (b.properties.tipo === 'aproximado' ? 10 : 0) + (CONFIANZA[b.properties.fuente ?? ''] ?? 5);
+  const porLocalidad = new Map<string, F[]>();
+  for (const b of barrios) if (b.geometry) porLocalidad.set(b.properties.localidad, [...(porLocalidad.get(b.properties.localidad) ?? []), b]);
+  for (const lista of porLocalidad.values()) {
+    const orden = lista.map((b) => ({ b, m2: turf.area(b as unknown as Area) })).sort((x, y) => rango(x.b) - rango(y.b) || x.m2 - y.m2).map((x) => x.b);
+    for (const [i, firme] of orden.entries()) {
+      for (const otro of orden.slice(i + 1)) {
+        const [a, b] = [firme as unknown as Area, otro as unknown as Area];
+        const [ao, as, ae, an] = turf.bbox(a), [bo, bs, be, bn] = turf.bbox(b);
+        if (ao > be || bo > ae || as > bn || bs > an) continue;
+        const comun = interseccion(a, b);
+        if (!comun) continue;
+        const pisado = turf.area(comun);
+        if (pisado < 2000 || pisado > 0.6 * Math.min(turf.area(a), turf.area(b))) continue;
+        const resto = diferencia(b, a);
+        if (resto && km2(resto) > 0.3 * km2(b)) otro.geometry = aliviar(sinAstillas(resto)).geometry;
+      }
+    }
+  }
+  return barrios;
+}
+
 // Variantes del mismo nombre ("Alejandro Carbó" y "Carbo", "Manuel Belgrano" y "Belgrano"): solo si lo que sobra son
 // palabras genéricas, títulos o nombres de pila, y los números coinciden. Nunca si sobra algo que describe una parte.
 const ORDINALES: Record<string, string> = { primera: '1', primero: '1', segunda: '2', segundo: '2', tercera: '3', tercero: '3', cuarta: '4', cuarto: '4', quinta: '5', quinto: '5' };
@@ -960,7 +995,7 @@ if (import.meta.main) {
   if (!soloEsta) {
     // Los contornos corregidos a mano con el editor (src/contornos.ts) mandan. Después, un barrio por lugar.
     const conManuales = aplicarContornos({ type: 'FeatureCollection', features: sinReemplazados }, 'interior');
-    const unicos = sinRepetidos(conManuales.features, centrosPorNombre);
+    const unicos = sinEncimar(sinRepetidos(conManuales.features, centrosPorNombre));
     await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: unicos }) + '\n');
     await writeFile('data/zonas.geojson', JSON.stringify(aplicarContornos(zonas, 'zonas'), null, 1) + '\n');
   } else {

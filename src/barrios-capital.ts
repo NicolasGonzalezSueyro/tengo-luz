@@ -20,7 +20,7 @@ import type { Position } from 'geojson';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';
 import {
   aliviar, aproximar, areaDe, consultarOverpass, diferencia, enTitulo, interseccion, km2, SERVIDORES, unir,
-  claveDeLugar, esVariante, sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
+  claveDeLugar, esVariante, sinEncimar, sinRepetidos, type Area, type BarrioInterior, type ElementoOsm, type Semilla,
 } from './barrios-interior.ts';
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio, crearBuscadorDeBarrios } from './nombres.ts';
@@ -263,6 +263,26 @@ if (Object.keys(aliasNuevos).length > 0) {
 }
 const resto = interior.features.filter((f) => f.properties.localidad !== CAPITAL);
 const conManuales = aplicarContornos({ type: 'FeatureCollection', features: [...resto, ...nuevos] }, 'interior');
-await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: sinRepetidos(conManuales.features, undefined, nombradosEnCapital) }) + '\n');
+const finales = sinRepetidos(conManuales.features, undefined, nombradosEnCapital);
+// Una división de capital que está casi toda (60 % o más) adentro de un barrio oficial se recorta a ese barrio: lo que
+// se sale es un borde mal puesto. Las que cruzan varios barrios quedan como están. Y entre ellas no se pisan a medias.
+const deCapital = finales.filter((f) => f.properties.localidad === CAPITAL);
+let recortadas = 0;
+for (const f of deCapital) {
+  const area = f as Area;
+  const total = km2(area);
+  for (const padre of municipales) {
+    const adentro = interseccion(area, padre);
+    if (!adentro || km2(adentro) < 0.6 * total) continue;
+    if (km2(adentro) < 0.98 * total) {
+      f.geometry = aliviar(adentro).geometry as never;
+      recortadas++;
+    }
+    break;
+  }
+}
+sinEncimar(deCapital);
+console.log(`✂️  ${recortadas} divisiones de capital recortadas a su barrio oficial.`);
+await writeFile('data/barrios-interior.geojson', JSON.stringify({ type: 'FeatureCollection', features: finales }) + '\n');
 const cuenta = (tipo: string) => nuevos.filter((f) => f.properties.tipo === tipo).length;
 console.log(`Capital: ${cuenta('poligono')} lugares con contorno (oficial u OSM) y ${cuenta('aproximado')} aproximados.`);
