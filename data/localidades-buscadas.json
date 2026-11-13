@@ -1379,5 +1379,18 @@
    ],
    "departamento": "Río Cuarto"
   }
+ ],
+ "toledo": [
+  {
+   "nombre": "Toledo",
+   "osm": "R3918425",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -64.0088031,
+    -31.5528597
+   ],
+   "departamento": "Santa María"
+  }
  ]
 }

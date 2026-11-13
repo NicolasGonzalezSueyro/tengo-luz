@@ -57695,6 +57695,51 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Toledo",
+    "tipo": "localidad",
+    "patron": "^toledo$",
+    "osm": "R3918425",
+    "descripcion": "El anuncio no detalla barrios de Toledo: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -64.01935,
+       -31.55596
+      ],
+      [
+       -64.00794,
+       -31.56694
+      ],
+      [
+       -64.00302,
+       -31.56313
+      ],
+      [
+       -63.99838,
+       -31.56748
+      ],
+      [
+       -63.99289,
+       -31.56309
+      ],
+      [
+       -64.00929,
+       -31.54715
+      ],
+      [
+       -64.01935,
+       -31.55596
+      ]
+     ]
+    ]
+   }
   }
  ]
 }

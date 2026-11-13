@@ -16948,13 +16948,32 @@
     ]
   },
   {
-    "localidad": "Villa María",
+    "localidad": "San Francisco",
+    "fecha": "2026-11-13",
+    "desde": "06:00",
+    "hasta": "09:00",
+    "zona": "barrio Roca, área comprendida porr las calles Iturraspe, Colón, Belgrano y España.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
+    "localidad": "Villa Maria",
     "fecha": "2026-11-13",
     "desde": "06:30",
     "hasta": "06:45",
-    "zona": "barrio Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente Maciel, Vélez Sarsfield, Patagones, Salta, Intendente De La Colina y San Juan. barrios: Felipe Botta, Solares del Norte y Francisco García.",
+    "zona": "barrio Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente\nMaciel, Vélez Sarsfield, Patagones, Salta, Intendente De La Colina y San\nJuan. barrios: Felipe Botta, Solares del Norte y Francisco García.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Nicolas Avellaneda (Villa María)",
       "Felipe Botta (Villa María)",
@@ -16970,13 +16989,13 @@
     ]
   },
   {
-    "localidad": "Villa María",
+    "localidad": "Villa Maria",
     "fecha": "2026-11-13",
     "desde": "06:35",
     "hasta": "06:45",
     "zona": "barrios: San Nicolás, Portal de Buenos Aires, Malvinas Argentinas, San Martín y Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente Correa, San Juan, Monteagudo y Buenos Aires.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "San Nicolas (Villa María)",
       "Malvinas Argentinas (Villa María)",
@@ -17074,7 +17093,7 @@
     "hasta": "11:30",
     "zona": "área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [],
     "sinUbicar": [
@@ -17082,28 +17101,28 @@
     ]
   },
   {
-    "localidad": "Otras localidades",
+    "localidad": "Córdoba",
     "fecha": "2026-11-13",
     "desde": "07:30",
     "hasta": "07:35",
     "zona": "Localidades de Santa Catalina y Las Vertientes.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
-    "zonas": [
-      "Las Vertientes",
-      "Santa Catalina"
-    ],
-    "sinUbicar": []
+    "zonas": [],
+    "sinUbicar": [
+      "localidades santa catalina",
+      "las vertientes"
+    ]
   },
   {
-    "localidad": "Río Cuarto",
+    "localidad": "Rio Cuarto",
     "fecha": "2026-11-13",
     "desde": "08:00",
     "hasta": "12:00",
     "zona": "barrios Castelli 2 y 400 Viviendas.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [
       "Río Cuarto"
@@ -17123,7 +17142,7 @@
     "hasta": "10:00",
     "zona": "barrios Villa Cornú y Cerro Norte, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Villa Cornú",
       "Cerro Norte"
@@ -17138,7 +17157,7 @@
     "hasta": "15:30",
     "zona": "barrio Roca, área comprendida por las calles 25 de mayo, B. Roldán, Belgrano y A. del Valle.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Roca (San Francisco)"
     ],
@@ -17157,7 +17176,7 @@
     "hasta": "16:00",
     "zona": "Localidades de San francisco del Chañar y Sobremonte.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [
       "San Francisco del Chañar"
@@ -17203,6 +17222,23 @@
   {
     "localidad": "Córdoba",
     "fecha": "2026-11-14",
+    "desde": "07:00",
+    "hasta": "07:05",
+    "zona": "localidades de: Del Campillo, Villa Valeria, Mattaldi y Bruzone.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "localidades campillo",
+      "villa valeria",
+      "mattaldi",
+      "bruzone"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-14",
     "desde": "08:00",
     "hasta": "11:30",
     "zona": "barrio Zepa \"C\", en forma parcial.",
@@ -17220,6 +17256,20 @@
     "desde": "09:00",
     "hasta": "11:00",
     "zona": "localidad de Oncativo.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Oncativo"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Oncativo",
+    "fecha": "2026-11-14",
+    "desde": "09:00",
+    "hasta": "11:00",
+    "zona": "Localidad de Oncativo.",
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
@@ -17374,6 +17424,20 @@
     "parciales": [
       "Villa María"
     ]
+  },
+  {
+    "localidad": "Toledo",
+    "fecha": "2026-11-15",
+    "desde": "07:00",
+    "hasta": "10:00",
+    "zona": "localidad de Toledo.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Toledo"
+    ],
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -17938,6 +18002,23 @@
     "sinUbicar": [],
     "parciales": [
       "Salsipuedes"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-17",
+    "desde": "18:00",
+    "hasta": "18:05",
+    "zona": "localidades de: Del Campillo, Villa Valeria, Mattaldi y Bruzone.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "localidades campillo",
+      "villa valeria",
+      "mattaldi",
+      "bruzone"
     ]
   }
 ]
