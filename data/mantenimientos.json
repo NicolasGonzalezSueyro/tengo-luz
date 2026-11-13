@@ -16948,13 +16948,13 @@
     ]
   },
   {
-    "localidad": "Villa Maria",
+    "localidad": "Villa María",
     "fecha": "2026-11-13",
     "desde": "06:30",
     "hasta": "06:45",
-    "zona": "barrio Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente\nMaciel, Vélez Sarsfield, Patagones, Salta, Intendente De La Colina y San\nJuan. barrios: Felipe Botta, Solares del Norte y Francisco García.",
+    "zona": "barrio Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente Maciel, Vélez Sarsfield, Patagones, Salta, Intendente De La Colina y San Juan. barrios: Felipe Botta, Solares del Norte y Francisco García.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "Nicolas Avellaneda (Villa María)",
       "Felipe Botta (Villa María)",
@@ -16970,13 +16970,13 @@
     ]
   },
   {
-    "localidad": "Villa Maria",
+    "localidad": "Villa María",
     "fecha": "2026-11-13",
     "desde": "06:35",
     "hasta": "06:45",
     "zona": "barrios: San Nicolás, Portal de Buenos Aires, Malvinas Argentinas, San Martín y Nicolás Avellaneda, en el perímetro comprendido entre calles: Intendente Correa, San Juan, Monteagudo y Buenos Aires.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "San Nicolas (Villa María)",
       "Malvinas Argentinas (Villa María)",
@@ -17074,7 +17074,7 @@
     "hasta": "11:30",
     "zona": "área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [],
     "zonas": [],
     "sinUbicar": [
@@ -17082,28 +17082,28 @@
     ]
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "Otras localidades",
     "fecha": "2026-11-13",
     "desde": "07:30",
     "hasta": "07:35",
     "zona": "Localidades de Santa Catalina y Las Vertientes.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [],
-    "zonas": [],
-    "sinUbicar": [
-      "localidades santa catalina",
-      "las vertientes"
-    ]
+    "zonas": [
+      "Las Vertientes",
+      "Santa Catalina"
+    ],
+    "sinUbicar": []
   },
   {
-    "localidad": "Rio Cuarto",
+    "localidad": "Río Cuarto",
     "fecha": "2026-11-13",
     "desde": "08:00",
     "hasta": "12:00",
     "zona": "barrios Castelli 2 y 400 Viviendas.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [],
     "zonas": [
       "Río Cuarto"
@@ -17123,7 +17123,7 @@
     "hasta": "10:00",
     "zona": "barrios Villa Cornú y Cerro Norte, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Cornú",
       "Cerro Norte"
@@ -17138,7 +17138,7 @@
     "hasta": "15:30",
     "zona": "barrio Roca, área comprendida por las calles 25 de mayo, B. Roldán, Belgrano y A. del Valle.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
       "Roca (San Francisco)"
     ],
@@ -17157,7 +17157,7 @@
     "hasta": "16:00",
     "zona": "Localidades de San francisco del Chañar y Sobremonte.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/12/cortes-de-luz-de-epec-para-este-viernes-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [],
     "zonas": [
       "San Francisco del Chañar"
