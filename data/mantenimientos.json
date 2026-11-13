@@ -283,7 +283,9 @@
     "zona": "30hs Sector: barrio Autódromo",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/04/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-lugares-afectados/",
-    "barrios": [],
+    "barrios": [
+      "Autódromo"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector barrio autodromo",
@@ -298,7 +300,10 @@
     "zona": "30hs Sector: barrios Primero de Julio, General Arenales, Ampliación Malvinas, Malvinas I, Malvinas 2 y zona rural.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/04/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-lugares-afectados/",
-    "barrios": [],
+    "barrios": [
+      "1 de Julio",
+      "General Arenales"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector barrios primero de julio general arenales ampliacion malvinas malvinas i malvinas 2 y zona rural",
@@ -1160,7 +1165,9 @@
     "zona": "Sector comprendido por Complejo Habitacional “Mil Nueve Diez”, ubicado en Juan Nepper 5000 de barrio Villa Belgrano, en forma total.",
     "afectacion": "total",
     "fuente": "https://eldoce.tv/actualidad/2026/09/15/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa Belgrano"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector comprendido por complejo habitacional mil nueve diez ubicado en juan nepper 5000 de barrio villa belgrano"
@@ -2340,7 +2347,10 @@
     "zona": "zona rural, Camino a Chacra de la Merced, Planta de Tratamiento de Líquidos Cloacales Bajo Grande, barrios Villa La Merced, Parque 9 de Julio, Ciudad Mi Esperanza y Cantera Tegli.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/18/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa La Merced",
+      "Ciudad Mi Esperanza"
+    ],
     "zonas": [],
     "sinUbicar": [
       "zona rural camino a chacra de la merced planta de tratamiento de liquidos cloacales bajo grande barrios villa la merced parque 9 de julio ciudad mi esperanza y cantera tegli"
@@ -8948,7 +8958,9 @@
     "zona": "30 hs Sector: barrios Ivetta, 20 de Junio, Italia, San Roque, Centro Norte, Zona Rural Norte y Zona Industrial Norte.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/16/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "San Roque (Río Segundo)"
+    ],
     "zonas": [
       "Río Segundo"
     ],
@@ -8980,7 +8992,12 @@
     "zona": "30 hs Sector: barrios Villa Alicia Risler, Villa El Chaparral, Villa Pastora, Guiñazú y Recreo del Norte, en forma parcial.",
     "afectacion": "parcial",
     "fuente": "https://eldoce.tv/actualidad/2026/10/16/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa Alicia Risler",
+      "Villa El Chaparral",
+      "Guiñazú",
+      "Recreo del Norte"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector barrios villa alicia risler villa el chaparral villa pastora guinazu y recreo del norte",
@@ -8995,7 +9012,9 @@
     "zona": "30 hs Sector: barrio Centro, entre calles Mendoza, 9 de Julio, Corrientes y 25 de Mayo.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/16/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Centro (Villa María)"
+    ],
     "zonas": [
       "Villa María"
     ],
@@ -9082,7 +9101,9 @@
     "zona": "30 hs Sector: Barrio Villa Gran Parque.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/16/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa Gran Parque"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector barrio villa gran parque",
@@ -9097,11 +9118,67 @@
     "zona": "30 hs Sector: Barrio Centro, entre calles Pasaje Santa Catalina, Dean Funes, 27 de Abril y Rivera Indarte.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/16/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Centro"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector barrio centro entre calles pasaje santa catalina dean funes 27 de abril y rivera indarte",
       "30 hs"
+    ],
+    "sector": [
+      [
+        -64.18659,
+        -31.41561
+      ],
+      [
+        -64.18642,
+        -31.41615
+      ],
+      [
+        -64.18596,
+        -31.41654
+      ],
+      [
+        -64.18533,
+        -31.41669
+      ],
+      [
+        -64.1847,
+        -31.41654
+      ],
+      [
+        -64.18423,
+        -31.41615
+      ],
+      [
+        -64.18407,
+        -31.41561
+      ],
+      [
+        -64.18423,
+        -31.41507
+      ],
+      [
+        -64.1847,
+        -31.41468
+      ],
+      [
+        -64.18533,
+        -31.41453
+      ],
+      [
+        -64.18596,
+        -31.41468
+      ],
+      [
+        -64.18642,
+        -31.41507
+      ],
+      [
+        -64.18659,
+        -31.41561
+      ]
     ]
   },
   {
@@ -11789,15 +11866,16 @@
     "zona": "Barrios La Gruta, Derivación Grunaut, Derivación Valle Fantástico y Potrero Garay.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/21/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Potrero de Garay"
+    ],
     "zonas": [
       "Villa Ciudad de América"
     ],
     "sinUbicar": [
       "la gruta",
       "derivacion grunaut",
-      "derivacion valle fantastico",
-      "potrero garay"
+      "derivacion valle fantastico"
     ],
     "parciales": [
       "Villa Ciudad de América"
@@ -11815,8 +11893,10 @@
       "Los Espinillos (Alta Gracia)",
       "El Potrerillo (Alta Gracia)",
       "Villa Del Cóndor (Alta Gracia)",
+      "Pampa Alta",
       "Paso De La Pampa (Alta Gracia)",
-      "Comuna San Clemente (Alta Gracia)"
+      "Comuna San Clemente (Alta Gracia)",
+      "San Clemente"
     ],
     "zonas": [
       "Alta Gracia"
@@ -11826,9 +11906,7 @@
       "grasso cremonini",
       "campo tagle",
       "la ernestina",
-      "pampa alta",
       "cerro la colmena",
-      "san clemente",
       "dela mea",
       "la herradura",
       "estancia la granadilla",
@@ -11933,15 +12011,16 @@
     "zona": "Barrios La Gruta, Derivación Grunaut, Derivación Valle Fantástico y Potrero Garay.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/21/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Potrero de Garay"
+    ],
     "zonas": [
       "Villa Ciudad de América"
     ],
     "sinUbicar": [
       "la gruta",
       "derivacion grunaut",
-      "derivacion valle fantastico",
-      "potrero garay"
+      "derivacion valle fantastico"
     ],
     "parciales": [
       "Villa Ciudad de América"
@@ -12728,11 +12807,75 @@
     "zona": "30 hs Sector: barrio Nueva Córdoba, entre calles Buenos Aires, Crisol y Estrada.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/10/23/cortes-de-luz-de-epec-para-este-sabado-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Nueva Córdoba"
+    ],
     "zonas": [],
     "sinUbicar": [
       "sector barrio nueva cordoba entre calles buenos aires crisol y estrada",
       "30 hs"
+    ],
+    "sector": [
+      [
+        -64.18862,
+        -31.42899
+      ],
+      [
+        -64.18854,
+        -31.42926
+      ],
+      [
+        -64.18831,
+        -31.42945
+      ],
+      [
+        -64.18799,
+        -31.42953
+      ],
+      [
+        -64.18767,
+        -31.42945
+      ],
+      [
+        -64.18744,
+        -31.42926
+      ],
+      [
+        -64.18692,
+        -31.42801
+      ],
+      [
+        -64.18684,
+        -31.42774
+      ],
+      [
+        -64.18692,
+        -31.42748
+      ],
+      [
+        -64.18715,
+        -31.42728
+      ],
+      [
+        -64.18747,
+        -31.42721
+      ],
+      [
+        -64.18778,
+        -31.42728
+      ],
+      [
+        -64.18801,
+        -31.42748
+      ],
+      [
+        -64.18854,
+        -31.42872
+      ],
+      [
+        -64.18862,
+        -31.42899
+      ]
     ]
   },
   {
@@ -15148,10 +15291,7 @@
     "zonas": [
       "Río Cuarto"
     ],
-    "sinUbicar": [
-      "sectores camino a tres acequias",
-      "toma agua emos"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Río Cuarto"
     ]
@@ -16278,10 +16418,7 @@
     "zonas": [
       "Villa María"
     ],
-    "sinUbicar": [
-      "en sectores instituto rosario",
-      "edificio jacaranda 19"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Villa María"
     ]
@@ -16575,7 +16712,10 @@
     "barrios": [
       "Valacco (Río Cuarto)",
       "Residencial Norte (Río Cuarto)",
-      "Banda Norte (Río Cuarto)"
+      "Banda Norte (Río Cuarto)",
+      "Alberdi Norte (Río Cuarto)",
+      "Guemes (Río Cuarto)",
+      "Barrio Peirano (Río Cuarto)"
     ],
     "zonas": [
       "Río Cuarto"
@@ -16902,7 +17042,8 @@
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
     "barrios": [
-      "Catedral (San Francisco)"
+      "Catedral (San Francisco)",
+      "Roca (San Francisco)"
     ],
     "zonas": [
       "San Francisco"
@@ -16934,15 +17075,14 @@
     "zona": "barrios Villa del Lago 1ra y 2da sección y Villa Santa Cruz del Lago.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/11/11/cortes-de-luz-de-epec-para-este-jueves-en-cordoba-los-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Villa del Lago (Villa Carlos Paz)",
+      "Villa Santa Cruz del Lago"
+    ],
     "zonas": [
       "Villa Carlos Paz"
     ],
-    "sinUbicar": [
-      "villa lago 1ra",
-      "villa lago 2da seccion",
-      "villa santa cruz lago"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Villa Carlos Paz"
     ]
@@ -17094,14 +17234,70 @@
     "zona": "área comprendida por las calles: Talleres, Elias Yofre, Richieri y Valparaiso, de barrio Jardín.",
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
-    "barrios": [],
+    "barrios": [
+      "Jardín"
+    ],
     "zonas": [],
     "sinUbicar": [
       "area comprendida por las calles talleres elias yofre richieri y valparaiso de barrio jardin"
+    ],
+    "sector": [
+      [
+        -64.18801,
+        -31.45089
+      ],
+      [
+        -64.18784,
+        -31.45143
+      ],
+      [
+        -64.18738,
+        -31.45182
+      ],
+      [
+        -64.18675,
+        -31.45197
+      ],
+      [
+        -64.18612,
+        -31.45182
+      ],
+      [
+        -64.18565,
+        -31.45143
+      ],
+      [
+        -64.18548,
+        -31.45089
+      ],
+      [
+        -64.18565,
+        -31.45035
+      ],
+      [
+        -64.18612,
+        -31.44996
+      ],
+      [
+        -64.18675,
+        -31.44981
+      ],
+      [
+        -64.18738,
+        -31.44996
+      ],
+      [
+        -64.18784,
+        -31.45035
+      ],
+      [
+        -64.18801,
+        -31.45089
+      ]
     ]
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "Otras localidades",
     "fecha": "2026-11-13",
     "desde": "07:30",
     "hasta": "07:35",
@@ -17109,11 +17305,11 @@
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
-    "zonas": [],
-    "sinUbicar": [
-      "localidades santa catalina",
-      "las vertientes"
-    ]
+    "zonas": [
+      "Las Vertientes",
+      "Santa Catalina"
+    ],
+    "sinUbicar": []
   },
   {
     "localidad": "Rio Cuarto",
@@ -17203,7 +17399,7 @@
     ]
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "Otras localidades",
     "fecha": "2026-11-14",
     "desde": "06:30",
     "hasta": "09:30",
@@ -17211,12 +17407,17 @@
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
-    "zonas": [],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
     "sinUbicar": [
-      "desde et rio ceballos hasta aires del nordeste el cedro sabato porsur villa catalina nuevo rio ceballos san cayetanop de la divina providencia y las talitas barrios y sectores de parque lujan los vascos bella vista aires del nordeste avenida sabattini desde ruta e53 hasta avenida san martin loteo la bancaria camino a estancia santo domingo y la adelina",
-      "localidades rio ceballos",
-      "unquillo en los siguientes barrios",
-      "sectores ruta e53"
+      "ruta e53",
+      ""
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
     ]
   },
   {
@@ -17387,7 +17588,7 @@
     ]
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "Otras localidades",
     "fecha": "2026-11-14",
     "desde": "16:00",
     "hasta": "16:05",
@@ -17395,11 +17596,11 @@
     "afectacion": null,
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
-    "zonas": [],
-    "sinUbicar": [
-      "localidades santa catalina",
-      "las vertientes"
-    ]
+    "zonas": [
+      "Las Vertientes",
+      "Santa Catalina"
+    ],
+    "sinUbicar": []
   },
   {
     "localidad": "Villa Maria",
