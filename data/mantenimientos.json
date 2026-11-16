@@ -18415,6 +18415,21 @@
     ]
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-16",
+    "desde": "12:30",
+    "hasta": "13:30",
+    "zona": "Localidades de Ballesteros, Ballesteros Sur y Cárcano.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros",
+      "Ballesteros Sud"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Villa Maria",
     "fecha": "2026-11-16",
     "desde": "13:00",
@@ -18656,6 +18671,21 @@
     ]
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-17",
+    "desde": "09:00",
+    "hasta": "12:15",
+    "zona": "Localidades de Cuesta Blanca, Ichu Cruz y Mayu Sumaj.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Cuesta Blanca",
+      "Mayu Sumaj"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Villa Maria",
     "fecha": "2026-11-17",
     "desde": "10:00",
@@ -18835,5 +18865,62 @@
       "Mattaldi"
     ],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-18",
+    "desde": "14:00",
+    "hasta": "14:20",
+    "zona": "Barrio Cuatro Hojas en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [
+      "cuatro hojas"
+    ],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-18",
+    "desde": "14:00",
+    "hasta": "17:00",
+    "zona": "Barrio Los Cigarrales en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Los Cigarrales (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-18",
+    "desde": "17:00",
+    "hasta": "17:20",
+    "zona": "Barrio Cuatro Hojas en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [
+      "cuatro hojas"
+    ],
+    "parciales": [
+      "Mendiolaza"
+    ]
   }
 ]

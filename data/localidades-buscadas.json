@@ -1498,5 +1498,19 @@
   }
  ],
  "la carolina": [],
- "villa ciudad america cv": []
+ "villa ciudad america cv": [],
+ "ichu cruz": [],
+ "mayu sumaj": [
+  {
+   "nombre": "Mayu Sumaj",
+   "osm": "N2000233496",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.5439668,
+    -31.4702161
+   ],
+   "departamento": "Punilla"
+  }
+ ]
 }
