@@ -18867,6 +18867,29 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Villa Nueva",
+    "fecha": "2026-11-18",
+    "desde": "06:30",
+    "hasta": "07:00",
+    "zona": "barrios Del Rosario, M.T. Cabanillas, Centro y Residencial América.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Centro (Villa Nueva)",
+      "Residencial América (Villa Nueva)"
+    ],
+    "zonas": [
+      "Villa Nueva"
+    ],
+    "sinUbicar": [
+      "rosario",
+      "m t cabanillas"
+    ],
+    "parciales": [
+      "Villa Nueva"
+    ]
+  },
+  {
     "localidad": "Mendiolaza",
     "fecha": "2026-11-18",
     "desde": "14:00",
@@ -18921,6 +18944,29 @@
     ],
     "parciales": [
       "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "La Cumbre",
+    "fecha": "2026-11-19",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "barrios  San Gerónimo, El Pungo, El Rosario y Aeródromo en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Jerónimo (La Cumbre)"
+    ],
+    "zonas": [
+      "La Cumbre"
+    ],
+    "sinUbicar": [
+      "el pungo",
+      "el rosario",
+      "aerodromo"
+    ],
+    "parciales": [
+      "La Cumbre"
     ]
   }
 ]
