@@ -18947,6 +18947,33 @@
     ]
   },
   {
+    "localidad": "Rio Ceballos",
+    "fecha": "2026-11-19",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "En las localidades de Río Ceballos y Unquillo: barrios Ruta E53 desde ET Rio Ceballos hasta Aires del Nordeste, El Cedro en forma parcial, Parque Lujan, Los Vascos, Sábato en forma parcial, Prosur en forma parcial, Nuevo Rio Ceballos en forma parcial, Bela Vista, Villa Catalina en forma parcial, Aires del Nordeste. Av. Sabattini de Ruta E53 a Av. San Martin, Loteo La Bancaria, San Cayetano de La Divina Providencia en forma parcial, Los Talitas en forma parcial, Camino Estancia Santo Domingo y La Adelina.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "La Bancaria (Unquillo)",
+      "San Cayetano de la Divina Providencia (Unquillo)",
+      "Los Talitas (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "ruta e53",
+      "camino estancia santo domingo",
+      "la adelina"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
+  },
+  {
     "localidad": "La Cumbre",
     "fecha": "2026-11-19",
     "desde": "08:00",
@@ -18967,6 +18994,88 @@
     ],
     "parciales": [
       "La Cumbre"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-19",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "barrios Valle Cercano, Cabildo y SMATA 3, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Valle Cercano",
+      "Cabildo",
+      "SMATA"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-19",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "barrios 12 de Julio, Policial Anexo, FONAVI, 16 de Noviembre y Policial, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Barrio 12 de Julio",
+      "Policial Anexo",
+      "16 de Noviembre",
+      "Policial"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "fonavi"
+    ]
+  },
+  {
+    "localidad": "La Calera",
+    "fecha": "2026-11-20",
+    "desde": "06:30",
+    "hasta": "07:30",
+    "zona": "barrios Rumy, Dumesnil, Minetti y La Otra Banda.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Dumesnil (La Calera)",
+      "Minetti (La Calera)"
+    ],
+    "zonas": [
+      "La Calera"
+    ],
+    "sinUbicar": [
+      "rumy",
+      "la otra banda"
+    ],
+    "parciales": [
+      "La Calera"
+    ]
+  },
+  {
+    "localidad": "La Calera",
+    "fecha": "2026-11-20",
+    "desde": "12:00",
+    "hasta": "13:30",
+    "zona": "barrios La Pankana, El Rodeo, El Calicanto, Altos Warcalde y Cinco Lomas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "La Pankana (La Calera)"
+    ],
+    "zonas": [
+      "La Calera"
+    ],
+    "sinUbicar": [
+      "el rodeo",
+      "el calicanto",
+      "altos warcalde",
+      "cinco lomas"
+    ],
+    "parciales": [
+      "La Calera"
     ]
   }
 ]
