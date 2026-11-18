@@ -19013,6 +19013,36 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-19",
+    "desde": "08:00",
+    "hasta": "18:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante una hora, dentro del horario consignado: barrios Int. Mojica, Macrocentro, Buena Vista, San Antonio de Padua, Calasanz, Las Quintas, Industrial, Las Ferias, Mayer, 11 de Noviembre, Santa Teodora, Zona rural Autódromo y sector comprendido por Ruta Nº 36 y UNRC.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Macrocentro (Río Cuarto)",
+      "Buena Vista (Río Cuarto)",
+      "San Antonio de Padua (Río Cuarto)",
+      "Las Quintas (Río Cuarto)",
+      "Barrio Industrial (Río Cuarto)",
+      "Barrio las Ferias (Río Cuarto)",
+      "Santa Teodora (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "int mojica",
+      "calasanz",
+      "mayer",
+      "11 noviembre"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-19",
     "desde": "13:30",
@@ -19029,6 +19059,29 @@
     "zonas": [],
     "sinUbicar": [
       "fonavi"
+    ]
+  },
+  {
+    "localidad": "Cruz del Eje",
+    "fecha": "2026-11-19",
+    "desde": "14:00",
+    "hasta": "17:00",
+    "zona": "Barrios La Toma, La Cartuja, Residencial El Sol, Dique Cruz del Eje y Cooperativa de San Marcos Sierras.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Cruz del Eje"
+    ],
+    "sinUbicar": [
+      "la toma",
+      "la cartuja",
+      "residencial el sol",
+      "dique cruz eje",
+      "cooperativa san marcos sierras"
+    ],
+    "parciales": [
+      "Cruz del Eje"
     ]
   },
   {
@@ -19055,6 +19108,70 @@
     ]
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-20",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "Zona Rural de Ruta Nacional 9 y Estación Juárez Celman, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "zona rural de ruta nacional 9 y estacion juarez celman"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-20",
+    "desde": "08:00",
+    "hasta": "14:00",
+    "zona": "Zona Rural de Camino a Capilla de Los Remedios.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "zona rural de camino a capilla de los remedios"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-20",
+    "desde": "09:00",
+    "hasta": "14:00",
+    "zona": "Barrios Villa La Merced, Parque 9 de Julio y Ciudad Mi Esperanza, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa La Merced",
+      "Ciudad Mi Esperanza"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "parque 9 julio"
+    ]
+  },
+  {
+    "localidad": "Potrero de Garay",
+    "fecha": "2026-11-20",
+    "desde": "10:00",
+    "hasta": "13:00",
+    "zona": "Derivación D.U.A.R. y sector comprendido desde Iglesia de Potrero hasta Gaucho Urbano.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Potrero de Garay"
+    ],
+    "sinUbicar": [
+      "derivacion d u a r"
+    ],
+    "parciales": [
+      "Potrero de Garay"
+    ]
+  },
+  {
     "localidad": "La Calera",
     "fecha": "2026-11-20",
     "desde": "12:00",
@@ -19076,6 +19193,103 @@
     ],
     "parciales": [
       "La Calera"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-21",
+    "desde": "16:30",
+    "hasta": "16:45",
+    "zona": "Localidades de Villa Valeria, Del Campillo, Mattaldi y Bruzone.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa Valeria",
+      "Del Campillo",
+      "Mattaldi"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Bell Ville",
+    "fecha": "2026-11-22",
+    "desde": "06:00",
+    "hasta": "09:00",
+    "zona": "Barrios Altos del Molino y Solares del Tercero.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Altos del Molino (Bell Ville)"
+    ],
+    "zonas": [
+      "Bell Ville"
+    ],
+    "sinUbicar": [
+      "solares tercero"
+    ],
+    "parciales": [
+      "Bell Ville"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-25",
+    "desde": "07:00",
+    "hasta": "10:00",
+    "zona": "Barrio Villa Allende Parque.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Allende Parque"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-25",
+    "desde": "07:00",
+    "hasta": "07:20",
+    "zona": "Localidad de Saldán: barrio San Francisco y sector comprendido por Club Banco Nación y Predio Club Atlético Belgrano, en forma parcial. Localidad de Villa Allende: barrio Lomas Sur, en forma parcial. Localidad de Córdoba capital: barrios La Catalina, Villa Rivera Indarte, Rincón Bonito y Barrancas de la Rivera.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Francisco (Saldán)",
+      "Lomas Sur (Villa Allende)"
+    ],
+    "zonas": [
+      "Saldán",
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Saldán",
+      "Villa Allende"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-25",
+    "desde": "10:00",
+    "hasta": "10:30",
+    "zona": "Localidad de Saldán: barrio San Francisco y sector comprendido por Club Banco Nación y Predio Club Atlético Belgrano, en forma parcial. Localida de Córdoba capital: barrios La Catalina, Villa Rivera Indarte, Rincón Bonito y Barrancas de La Rivera, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Francisco (Saldán)"
+    ],
+    "zonas": [
+      "Saldán"
+    ],
+    "sinUbicar": [
+      "la catalina",
+      "villa rivera indarte",
+      "rincon bonito",
+      "barrancas la rivera"
+    ],
+    "parciales": [
+      "Saldán"
     ]
   }
 ]
