@@ -162,3 +162,28 @@ test('el sitio manda las cabeceras de seguridad', async ({ request }) => {
   expect(cabeceras['x-frame-options']).toBe('DENY');
   expect(cabeceras['x-content-type-options']).toBe('nosniff');
 });
+
+test('el editor de contornos se abre desde el panel de admin, carga el mapa y deja buscar un lugar', async ({ page }) => {
+  const errores = vigilarErrores(page);
+  await page.goto('/admin.html');
+  await page.locator('#clave').fill('solo-para-probar');
+  await page.getByRole('button', { name: 'Entrar' }).click();
+  await page.getByRole('link', { name: 'Editar contornos de barrios y localidades' }).click();
+  await expect(page.getByRole('heading', { name: 'Contornos' })).toBeVisible();
+  await expect(page.locator('#sin-clave')).toBeHidden(); // la clave del panel sirve en esta pestaña
+  await expect.poll(() => page.locator('#nombres option').count()).toBeGreaterThan(500);
+  await page.locator('#buscar').fill('Alberdi');
+  await page.locator('#buscar').dispatchEvent('change');
+  await expect(page.locator('#elegido')).toHaveText('Alberdi');
+  await expect(page.getByRole('button', { name: 'Borrar del mapa' })).toBeEnabled();
+  expect(errores).toEqual([]);
+});
+
+test('el panel de admin tiene su propia política de seguridad (satélite, guías y buscadores), el resto del sitio no', async ({ request }) => {
+  const admin = (await request.get('/admin-contornos')).headers()['content-security-policy'];
+  expect(admin).toContain('https://nominatim.openstreetmap.org');
+  expect(admin).toContain('https://server.arcgisonline.com');
+  expect(admin).toContain("frame-ancestors 'none'");
+  const sitio = (await request.get('/')).headers()['content-security-policy'];
+  expect(sitio).not.toContain('nominatim');
+});

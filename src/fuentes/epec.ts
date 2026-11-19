@@ -5,6 +5,7 @@
 import { afectacion } from './eldoce.ts';
 import { CAPITAL, type Mantenimiento } from '../mantenimiento.ts';
 import type { BaseDeDatos } from '../reportes.ts';
+import { correrRobot } from '../github.ts';
 
 /** El link que se muestra como fuente de estos cortes. */
 export const FUENTE_EPEC = 'https://www.epec.com.ar/actualidad/trabajos-mejoras';
@@ -124,12 +125,7 @@ export async function pedirQueCorraElRobot(db: BaseDeDatos, cortes: CorteEpec[],
   if (ultimo?.datos === datos) return 'sin cambios';
   if (ultimo && ahora - Number(ultimo.recibido) < 10 * 60 * 1000) return 'hace poco';
   await db.prepare('INSERT OR REPLACE INTO fuente_epec (clave, datos, recibido) VALUES (?, ?, ?)').bind('disparo', datos, ahora).run();
-  const respuesta = await fetch('https://api.github.com/repos/NicolasGonzalezSueyro/tengo-luz/actions/workflows/actualizar.yml/dispatches', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'tengo-luz' },
-    body: JSON.stringify({ ref: 'main' }),
-  }).catch(() => null);
-  return respuesta?.ok ? 'pedido' : 'fallo';
+  return (await correrRobot(token, 'actualizar.yml')) ? 'pedido' : 'fallo';
 }
 
 export async function leerFoto(db: BaseDeDatos): Promise<{ recibido: number; cortes: CorteEpec[] } | null> {

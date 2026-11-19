@@ -5,16 +5,24 @@ import { enviarPush, type ClavePush } from '../../src/push.ts';
 import { barrioValido, type BaseDeDatos } from '../../src/reportes.ts';
 import { revisarClave } from '../../src/seguridad.ts';
 import { enviarMensaje } from '../../src/telegram.ts';
+import { pedidoValido } from '../../src/contornos.ts';
+import { guardarPedido, pedidosPendientes, sacarPedidos } from '../../src/contornos-admin.ts';
+import { correrRobot } from '../../src/github.ts';
 
 // La API del panel de admin (web/admin.html). Pide la clave ADMIN_CLAVE, que se configura en Cloudflare.
 //   GET  /api/admin → números del sitio, reportes vigentes y barrios más seguidos.
 //   POST /api/admin { "accion": "limpiar", "barrio": "Alberdi" } → borra reportes (de un barrio, o todos sin "barrio").
 //   POST /api/admin { "accion": "probar-notificaciones" } → manda una notificación de prueba a los celulares suscriptos.
 //   POST /api/admin { "accion": "probar-telegram" } → revisa que el bot esté conectado y te manda un mensaje de prueba.
+//   GET  /api/admin?contornos → los cambios de contornos que esperan que el robot los publique.
+//   POST /api/admin { "accion": "contorno" | "borrar" | "restaurar", "nombre", "destino", "localidad"?, "geometria"? }
+//        → un cambio del editor de contornos (/admin-contornos). Queda esperando y se le pide al robot de GitHub que
+//          lo aplique y publique el sitio (contornos.yml, con el secreto GITHUB_TOKEN).
+//   POST /api/admin { "accion": "cancelar-contorno", "id": 3 } → descarta un cambio que todavía no se publicó.
 
 type Contexto = {
   request: Request;
-  env: { DB: BaseDeDatos; ADMIN_CLAVE?: string; PUSH_CLAVE?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string };
+  env: { DB: BaseDeDatos; ADMIN_CLAVE?: string; PUSH_CLAVE?: string; TELEGRAM_TOKEN?: string; TELEGRAM_ADMIN?: string; GITHUB_TOKEN?: string };
 };
 
 /** Revisa la clave antes de cualquier cosa. Devuelve la respuesta de error, o null si está todo bien. */
@@ -27,7 +35,21 @@ async function rechazar({ request, env }: Contexto) {
 }
 
 export async function onRequestGet(contexto: Contexto) {
-  return (await rechazar(contexto)) ?? Response.json(await estadisticas(contexto.env.DB, Date.now()), { headers: { 'Cache-Control': 'no-store' } });
+  const error = await rechazar(contexto);
+  if (error) return error;
+  const datos = new URL(contexto.request.url).searchParams.has('contornos')
+    ? await pedidosPendientes(contexto.env.DB)
+    : await estadisticas(contexto.env.DB, Date.now());
+  return Response.json(datos, { headers: { 'Cache-Control': 'no-store' } });
+}
+
+/** Un cambio del editor de contornos: se guarda en la lista de espera y se le pide al robot que lo publique. */
+async function cambiarContorno({ env }: Contexto, datos: unknown) {
+  const pedido = pedidoValido(datos);
+  if (typeof pedido === 'string') return Response.json({ error: pedido }, { status: 400 });
+  await guardarPedido(env.DB, pedido, Date.now());
+  const robot = env.GITHUB_TOKEN ? ((await correrRobot(env.GITHUB_TOKEN, 'contornos.yml')) ? 'pedido' : 'fallo') : 'sin token';
+  return Response.json({ guardado: true, robot });
 }
 
 /** Manda una notificación de prueba a todos los celulares suscriptos (para comprobar que llegan de verdad). */
@@ -69,7 +91,20 @@ async function probarTelegram({ env }: Contexto) {
 export async function onRequestPost(contexto: Contexto) {
   const error = await rechazar(contexto);
   if (error) return error;
-  const datos = (await contexto.request.json().catch(() => null)) as { accion?: unknown; barrio?: unknown } | null;
+  // Un contorno puede tener hasta 5000 puntos (~250 KB): más que eso no se lee.
+  const cuerpo = await contexto.request.text();
+  if (cuerpo.length > 400_000) return Response.json({ error: 'Pedido demasiado grande' }, { status: 413 });
+  const datos = (() => {
+    try {
+      return JSON.parse(cuerpo) as { accion?: unknown; barrio?: unknown; id?: unknown };
+    } catch {
+      return null;
+    }
+  })();
+  if (['contorno', 'borrar', 'restaurar'].includes(datos?.accion as string)) return cambiarContorno(contexto, datos);
+  if (datos?.accion === 'cancelar-contorno') {
+    return Number.isInteger(datos.id) ? Response.json({ sacados: await sacarPedidos(contexto.env.DB, [datos.id as number]) }) : Response.json({ error: 'Falta el id' }, { status: 400 });
+  }
   if (datos?.accion === 'probar-notificaciones') return probarNotificaciones(contexto);
   if (datos?.accion === 'probar-telegram') return probarTelegram(contexto);
   if (datos?.accion !== 'limpiar') return Response.json({ error: 'Acción desconocida' }, { status: 400 });

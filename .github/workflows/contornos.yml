@@ -1,0 +1,54 @@
+# Cuando el admin cambia un contorno desde /admin-contornos, el sitio le pide a GitHub que corra este robot: trae los
+# cambios pendientes, los aplica a los mapas de data/ y los publica con un commit (Cloudflare vuelve a publicar solo).
+name: Aplicar contornos
+
+on:
+  workflow_dispatch: # lo dispara el sitio (functions/api/admin.ts); también se puede correr a mano
+
+permissions:
+  contents: write # para el commit con los mapas nuevos
+
+concurrency:
+  group: aplicar-contornos # una corrida a la vez; si llegan más cambios mientras corre, queda una esperando
+  cancel-in-progress: false
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Aplicar los cambios del editor
+        env:
+          SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
+        run: node src/aplicar-contornos.ts
+      - name: Publicar si cambió algo
+        run: |
+          if git diff --quiet -- data/; then
+            echo "Sin cambios en los mapas."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Contornos: cambios del editor del panel de admin"
+          # El robot de los cortes también hace commits: si subió algo mientras tanto, se junta y se reintenta.
+          for intento in 1 2 3; do
+            git push && exit 0
+            git pull --rebase --quiet
+          done
+          exit 1
+      - name: Marcar los cambios como publicados
+        env:
+          SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
+        run: node src/aplicar-contornos.ts confirmar
+      - name: Avisarte si algo falló
+        if: failure()
+        env:
+          SECRETO_BOT: ${{ secrets.SECRETO_BOT }}
+        run: node src/alertar.ts "❌ No se pudieron publicar los cambios de contornos." "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

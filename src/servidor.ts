@@ -4,6 +4,7 @@ import { extname, join, normalize, sep } from 'node:path';
 import { text } from 'node:stream/consumers';
 import * as admin from '../functions/api/admin.ts';
 import * as calendario from '../functions/api/calendario.ts';
+import * as contornos from '../functions/api/contornos.ts';
 import * as cortesEpec from '../functions/api/cortes-epec.ts';
 import * as fallas from '../functions/api/fallas.ts';
 import * as push from '../functions/api/push.ts';
@@ -22,6 +23,7 @@ import { generarClave } from './push.ts';
 const API: Record<string, { onRequestGet?: Function; onRequestPost?: Function }> = {
   '/api/admin': admin,
   '/api/calendario': calendario,
+  '/api/contornos': contornos,
   '/api/cortes-epec': cortesEpec,
   '/api/fallas': fallas,
   '/api/push': push,
@@ -50,18 +52,28 @@ const TIPOS: Record<string, string> = {
  * El formato: una ruta (con * como comodín) y abajo, con sangría, sus cabeceras "Nombre: valor".
  */
 function leerCabeceras(texto: string) {
-  const reglas: { patron: RegExp; cabeceras: [string, string][] }[] = [];
+  const reglas: { patron: RegExp; cabeceras: [string, string | null][] }[] = [];
   for (const renglon of texto.split('\n')) {
     if (!renglon.trim() || renglon.startsWith('#')) continue;
     if (!/^\s/.test(renglon)) {
       const patron = renglon.trim().replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
       reglas.push({ patron: new RegExp(`^${patron}$`), cabeceras: [] });
+    } else if (renglon.trim().startsWith('!')) {
+      // "! Nombre": saca esa cabecera de las reglas anteriores (como en Cloudflare).
+      reglas.at(-1)?.cabeceras.push([renglon.trim().slice(1).trim(), null]);
     } else {
       const [nombre, ...valor] = renglon.trim().split(':');
       reglas.at(-1)?.cabeceras.push([nombre.trim(), valor.join(':').trim()]);
     }
   }
-  return (ruta: string) => Object.fromEntries(reglas.filter((r) => r.patron.test(ruta)).flatMap((r) => r.cabeceras));
+  return (ruta: string) => {
+    const cabeceras: Record<string, string> = {};
+    for (const [nombre, valor] of reglas.filter((r) => r.patron.test(ruta)).flatMap((r) => r.cabeceras)) {
+      if (valor === null) delete cabeceras[nombre];
+      else cabeceras[nombre] = valor;
+    }
+    return cabeceras;
+  };
 }
 const cabecerasPara = leerCabeceras(await readFile(join(process.cwd(), 'web', '_headers'), 'utf8'));
 const entornoDePrueba = {
@@ -106,10 +118,11 @@ createServer(async (req, res) => {
     return;
   }
   try {
-    const contenido = await readFile(archivo);
+    // Como Cloudflare: /admin-contornos es admin-contornos.html.
+    const contenido = await readFile(archivo).catch((e) => (extname(archivo) ? Promise.reject(e) : readFile(`${archivo}.html`)));
     res.writeHead(200, {
       ...cabecerasPara(ruta),
-      'Content-Type': TIPOS[extname(archivo)] ?? 'application/octet-stream',
+      'Content-Type': TIPOS[extname(archivo) || '.html'] ?? 'application/octet-stream',
       'Cache-Control': 'no-store',
     });
     res.end(contenido);

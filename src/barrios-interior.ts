@@ -192,23 +192,7 @@ export const km2 = (a: Area) => turf.area(a) / 1_000_000;
 // El geoportal de la Provincia publica, para algunos municipios, su capa oficial de barrios (servicio WFS, sin
 // costo ni restricciones de acceso). Capa y campo del nombre de cada una.
 const IDECOR = 'https://idecor-ws.mapascordoba.gob.ar/geoserver/idecor/wfs';
-export const BARRIOS_OFICIALES: Record<string, { capa: string; campo: string }> = {
-  'Anisacate': { capa: 'anisacate_barrios', campo: 'nombre' },
-  'Colonia Caroya': { capa: 'ccaroya_barrios', campo: 'nombre' },
-  'Corralito': { capa: 'corralito_barrios', campo: 'nombre' },
-  'Cosquín': { capa: 'cosquin_barrios', campo: 'nombre' },
-  'Cruz Alta': { capa: 'cruzalta_barrios', campo: 'name' },
-  'Hernando': { capa: 'hernando_barrios', campo: 'nombre' },
-  'Jesús María': { capa: 'Jesus_Maria_Barrios', campo: 'barrios' },
-  'La Falda': { capa: 'barrios_lf', campo: 'nombre_bar' },
-  'Morteros': { capa: 'mteros_barrios', campo: 'name' },
-  'Río Cuarto': { capa: 'riocuarto_vecinales', campo: 'nombre' },
-  'Salsipuedes': { capa: 'barrios_salsipuedes', campo: 'nombre' },
-  'Unquillo': { capa: 'unq_barrios', campo: 'nombre' },
-  'Villa Allende': { capa: 'va_barrios', campo: 'nombre' },
-  'Villa Giardino': { capa: 'Villa_Giardino_Barrios', campo: 'nombre' },
-  'Villa María': { capa: 'vm_barrios', campo: 'nombre' },
-};
+import { BARRIOS_OFICIALES } from '../web/capas-oficiales.js';
 
 const CONECTORES = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y']);
 /** "VILLA DEL LAGO (EX LOTEO)" → "Villa del Lago": las capas vienen en mayúsculas y con aclaraciones entre paréntesis. */

@@ -151,3 +151,9 @@ vite.config.ts.timestamp-*
 # Resultados de los tests de punta a punta (Playwright)
 test-results/
 playwright-report/
+
+# Entre los dos pasos del robot de contornos (src/aplicar-contornos.ts)
+.contornos-aplicados.json
+
+# Restos de archivos temporales que deja Windows al editar por la red
+.msys*

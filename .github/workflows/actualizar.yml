@@ -34,6 +34,8 @@ jobs:
           SECRETO_BOT: ${{ secrets.SECRETO_BOT }} # para avisarte por Telegram si algo hay que revisar a mano
           EPEC_OFICIAL_KEY: ${{ secrets.EPEC_OFICIAL_KEY }} # para leer los cortes de EPEC (sin ella, usa El Doce)
         run: npm run lector
+      # La lista de lugares que nombra EPEC y faltan en el mapa (la usa el editor de contornos del panel de admin).
+      - run: npm run faltantes
       - name: Guardar los datos si cambiaron
         run: |
           if git diff --quiet -- data/; then
@@ -44,7 +46,12 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/
           git commit -m "Datos: actualización automática de cortes"
-          git push
+          # El robot de los contornos también hace commits: si subió algo mientras tanto, se junta y se reintenta.
+          for intento in 1 2 3; do
+            git push && exit 0
+            git pull --rebase --quiet
+          done
+          exit 1
       # Le pasa los cortes al bot de Telegram para que avise a quienes siguen esos barrios.
       # Corre siempre (haya cambios o no): nunca repite un aviso, y así manda los que hayan quedado pendientes.
       - name: Avisar por Telegram

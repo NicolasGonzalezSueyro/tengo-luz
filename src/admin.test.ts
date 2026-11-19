@@ -5,6 +5,7 @@ import { guardarReporte } from './reportes.ts';
 import { responder } from './bot.ts';
 import * as admin from '../functions/api/admin.ts';
 import * as calendario from '../functions/api/calendario.ts';
+import * as contornos from '../functions/api/contornos.ts';
 
 const T = Date.now();
 
@@ -95,4 +96,29 @@ test('/api/admin: después de 10 claves mal puestas desde la misma conexión, fr
   assert.equal((await admin.onRequestGet({ request: pedido('secreta'), env })).status, 429);
   // Otra conexión entra normal.
   assert.equal((await admin.onRequestGet({ request: pedido('secreta', '5.6.7.8'), env })).status, 200);
+});
+test('/api/admin: el editor de contornos guarda cambios que esperan al robot, y el robot los saca con /api/contornos', async () => {
+  const env = { DB: baseLocal(), ADMIN_CLAVE: 'secreta', SECRETO_BOT: 'del-bot' };
+  const pedir = (cuerpo?: object, ruta = 'http://x/api/admin', clave = 'secreta') => new Request(ruta, {
+    method: cuerpo ? 'POST' : 'GET', headers: { Authorization: `Bearer ${clave}` }, body: cuerpo ? JSON.stringify(cuerpo) : undefined,
+  });
+  const contorno = { type: 'Polygon', coordinates: [[[-64.2, -31.4], [-64.19, -31.4], [-64.19, -31.39], [-64.2, -31.4]]] };
+  // Sin GITHUB_TOKEN se guarda igual (lo aplica la próxima corrida del robot).
+  assert.deepEqual(await (await admin.onRequestPost({ request: pedir({ accion: 'contorno', nombre: 'Los Cielos', destino: 'interior', localidad: 'Córdoba', geometria: contorno }), env })).json(),
+    { guardado: true, robot: 'sin token' });
+  await admin.onRequestPost({ request: pedir({ accion: 'borrar', nombre: 'Kilómetro 8', destino: 'interior' }), env });
+  assert.equal((await admin.onRequestPost({ request: pedir({ accion: 'contorno', nombre: 'X', destino: 'interior' }), env })).status, 400);
+  assert.equal((await admin.onRequestPost({ request: pedir({ accion: 'borrar', nombre: 'X', destino: 'interior' }, 'http://x/api/admin', 'otra'), env })).status, 401);
+
+  const pendientes = await (await admin.onRequestGet({ request: pedir(undefined, 'http://x/api/admin?contornos'), env })).json();
+  assert.deepEqual(pendientes.map((p: { accion: string; nombre: string }) => [p.accion, p.nombre]), [['contorno', 'Los Cielos'], ['borrar', 'Kilómetro 8']]);
+  // El admin cancela uno.
+  assert.deepEqual(await (await admin.onRequestPost({ request: pedir({ accion: 'cancelar-contorno', id: pendientes[1].id }), env })).json(), { sacados: 1 });
+
+  // El robot: sin el secreto del bot, nada.
+  assert.equal((await contornos.onRequestGet({ request: pedir(undefined, 'http://x/api/contornos', 'secreta'), env })).status, 401);
+  const delRobot = await (await contornos.onRequestGet({ request: pedir(undefined, 'http://x/api/contornos', 'del-bot'), env })).json();
+  assert.deepEqual(delRobot.map((p: { nombre: string }) => p.nombre), ['Los Cielos']);
+  assert.deepEqual(await (await contornos.onRequestPost({ request: pedir({ aplicados: [delRobot[0].id] }, 'http://x/api/contornos', 'del-bot'), env })).json(), { sacados: 1 });
+  assert.deepEqual(await (await contornos.onRequestGet({ request: pedir(undefined, 'http://x/api/contornos', 'del-bot'), env })).json(), []);
 });

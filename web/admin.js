@@ -169,6 +169,7 @@ function mostrarPanel(e) {
         h('li', {}, h('a', { href: `${REPOSITORIO}/actions`, target: '_blank', rel: 'noopener' }, 'Robot que actualiza los cortes (GitHub Actions)')),
         h('li', {}, h('a', { href: 'data/mantenimientos.json', target: '_blank' }, 'Datos de cortes publicados')),
         h('li', {}, h('a', { href: 'https://dash.cloudflare.com', target: '_blank', rel: 'noopener' }, 'Cloudflare (hosting, base de datos y variables)')),
+        h('li', {}, h('a', { href: 'admin-contornos' }, 'Editar contornos de barrios y localidades')),
         h('li', {}, h('a', { href: './' }, 'Ir al mapa')),
       ),
     ),

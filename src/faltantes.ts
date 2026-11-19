@@ -1,6 +1,6 @@
-// Los lugares que nombra EPEC y el mapa no encuentra (npm run faltantes; lo corre solo `npm run editor`).
-// Escribe data/lugares-faltantes.json, que el editor muestra como lista para dibujarlos a mano, empezando por los
-// que más se repiten. No busca nada en internet: usa los mapas y las localidades ya guardadas.
+// Los lugares que nombra EPEC y el mapa no encuentra (npm run faltantes; lo corre el robot después del lector).
+// Escribe data/lugares-faltantes.json, que el editor del panel de admin muestra como lista para ubicarlos, empezando
+// por los que más se repiten. No busca nada en internet: usa los mapas y las localidades ya guardadas.
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { crearUbicador, esDescripcion, normalizar } from './barrios.ts';

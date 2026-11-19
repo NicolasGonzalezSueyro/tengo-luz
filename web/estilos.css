@@ -846,3 +846,32 @@ a.barra-nombre:hover { text-decoration: underline; }
 
 /* Con el mapa lejos, los bordes de los barrios sin cortes van más suaves: eran una maraña de líneas. */
 #mapa[data-lejos] path.leaflet-interactive:not(.barrio-con-corte, .barrio-sin-luz, .barrio-elegido, .punto-vecinos, .yo) { stroke-opacity: 0.4; }
+
+/* ---------- Editor de contornos del panel de admin (/admin-contornos) ---------- */
+.pagina-editor { display: grid; grid-template-columns: 360px 1fr; height: 100vh; height: 100dvh; margin: 0; overflow: hidden; }
+.panel-editor { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; overflow-y: auto; border-right: 1px solid var(--borde); background: var(--superficie); }
+.panel-editor > * { flex-shrink: 0; }
+.editor-cabecera { display: flex; align-items: center; gap: 10px; }
+.editor-cabecera h1 { margin: 0; font-size: 1.3rem; }
+.mapa-editor { height: 100%; }
+.bloque-editor { display: grid; gap: 8px; padding-top: 10px; border-top: 1px solid var(--borde); }
+.bloque-editor h2 { margin: 0; font-size: 1rem; }
+.bloque-editor summary { cursor: pointer; font-weight: 700; }
+.elegido { margin: 0; font-weight: 700; }
+.botones-editor { display: flex; flex-wrap: wrap; gap: 6px; }
+.botones-editor .boton { padding: 7px 12px; font-size: 0.85rem; }
+.boton:disabled { opacity: 0.45; cursor: default; filter: none; }
+.mensaje-editor { min-height: 1.3em; margin: 0; font-size: 0.85rem; }
+.mensaje-editor.ok { color: var(--terminado); }
+.mensaje-editor.error { color: var(--sin-luz); }
+.aviso-editor { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--luz-suave); color: var(--luz-texto); font-size: 0.9rem; }
+.lista-editor { display: grid; gap: 4px; margin: 0; padding-left: 18px; font-size: 0.85rem; }
+.lista-editor li { line-height: 1.5; }
+.lista-editor li.activo { font-weight: 700; }
+.lista-editor .enlace-boton { margin-left: 6px; }
+@media (max-width: 860px) {
+  .pagina-editor { grid-template-columns: 1fr; grid-template-rows: 55vh 1fr; overflow: auto; height: auto; }
+  .mapa-editor { order: -1; height: 55vh; }
+  .panel-editor { border-right: 0; }
+}
+.editor-cabecera .boton-icono { color: var(--texto); background: var(--superficie-2); border: 1px solid var(--borde); }

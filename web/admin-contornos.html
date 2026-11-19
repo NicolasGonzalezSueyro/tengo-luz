@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Contornos · Admin · ¿Tengo luz?</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <script src="tema.js"></script>
+  <link rel="preload" href="fuentes/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css"
+        integrity="sha384-nfYqa/3Xh7kCl9/bO8fCcmqGuhuVWAle+CQgdE/LdgaQiO6fSkKh8C0fLdCVrrQJ" crossorigin="">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="pagina-editor">
+  <aside id="panel-editor" class="panel-editor">
+    <header class="editor-cabecera">
+      <a class="boton-icono" href="admin" aria-label="Volver al panel de admin"><span data-icono="volver"></span></a>
+      <h1>Contornos</h1>
+    </header>
+    <p id="sin-clave" class="aviso-editor" hidden>Para editar, primero entrá al <a href="admin">panel de admin</a> con tu clave (en esta misma pestaña).</p>
+
+    <section class="bloque-editor">
+      <label class="campo">Lugar del mapa
+        <input id="buscar" list="nombres" placeholder="Valle Escondido, Centro (Villa María)…" autocomplete="off">
+      </label>
+      <datalist id="nombres"></datalist>
+      <p id="elegido" class="elegido">Ningún lugar elegido</p>
+      <p id="detalle" class="nota"></p>
+      <div class="botones-editor">
+        <button id="guardar" class="boton boton-primario" type="button" disabled>Guardar</button>
+        <button id="descartar" class="boton boton-secundario" type="button" disabled>Descartar cambios</button>
+        <button id="dibujar" class="boton boton-secundario" type="button" disabled>Dibujar de cero</button>
+        <button id="mejor" class="boton boton-secundario" type="button" disabled>Buscar un contorno mejor</button>
+        <button id="restaurar" class="boton boton-secundario" type="button" disabled>Volver al original</button>
+        <button id="borrar" class="boton boton-peligro" type="button" disabled>Borrar del mapa</button>
+      </div>
+      <p id="mensaje" class="mensaje-editor" role="status" aria-live="polite"></p>
+    </section>
+
+    <details class="bloque-editor" id="bloque-nuevo">
+      <summary>Agregar un lugar (busca y ubica solo)</summary>
+      <p class="nota">Escribí el nombre como lo escribe EPEC y su localidad. Se busca en la Provincia, la Municipalidad, OpenStreetMap y Georef, y si lo encuentra lo dibuja solo para que lo revises antes de guardar. Si no, lo dibujás a mano.</p>
+      <label class="campo">Nombre <input id="nuevo-nombre" placeholder="Villa Corema"></label>
+      <label class="campo">Localidad <input id="nuevo-localidad" list="localidades" value="Córdoba"></label>
+      <datalist id="localidades"></datalist>
+      <div class="botones-editor">
+        <button id="ubicar" class="boton boton-primario" type="button">Buscar y ubicar</button>
+        <button id="nuevo" class="boton boton-secundario" type="button">Dibujar a mano</button>
+      </div>
+    </details>
+
+    <section id="bloque-candidatos" class="bloque-editor" hidden>
+      <h2>Lo que encontré</h2>
+      <p class="nota">Tocá uno para verlo y editarlo. Revisalo contra el satélite antes de guardar.</p>
+      <ol id="candidatos" class="lista-editor"></ol>
+    </section>
+
+    <details class="bloque-editor" open>
+      <summary>Esperando publicarse (<span id="cuantos-pendientes">0</span>)</summary>
+      <p class="nota">Cada cambio que guardás lo aplica un robot de GitHub y publica el sitio solo, en 2 o 3 minutos.</p>
+      <ul id="pendientes" class="lista-editor"></ul>
+    </details>
+
+    <details class="bloque-editor">
+      <summary>Lugares que nombra EPEC y faltan (<span id="cuantos-faltan">0</span>)</summary>
+      <p class="nota">Primero los que más se repiten. "Ubicar" los busca en todas las fuentes.</p>
+      <ul id="faltantes" class="lista-editor"></ul>
+    </details>
+
+    <details class="bloque-editor">
+      <summary>Cambiados a mano (<span id="cuantos">0</span>)</summary>
+      <ul id="manuales" class="lista-editor"></ul>
+    </details>
+
+    <p class="nota">Arriba a la derecha del mapa (capas) podés poner satélite y prender guías de la Provincia: manzanas, parcelas, radios urbanos y barrios oficiales. Arrastrá los puntos del borde para moverlos, los puntitos del medio para agregar uno, y clic derecho sobre un punto para borrarlo. Alt + clic en el mapa arma un contorno con las manzanas de alrededor. <a id="google" href="https://www.google.com/maps" target="_blank" rel="noopener">Ver esta zona en Google Maps ↗</a> (solo para comparar: no se copian contornos de ahí).</p>
+  </aside>
+  <div id="mapa-editor" class="mapa-editor" role="region" aria-label="Mapa del editor"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.js"
+          integrity="sha384-7CTDkMmRSjHvjl8ftuwzLq/ogrEnsuNoi3825eH06KuMNWWwcfaNIHol5+I3EAzO" crossorigin=""></script>
+  <script src="https://unpkg.com/@turf/turf@7.2.0/turf.min.js"
+          integrity="sha384-ll8qH0IE3im19Dtlr1jtv5fdy+gm+0bx8T4+OYxPeJpc6PO1XLNFnyvdzaKJ78bU" crossorigin=""></script>
+  <script type="module" src="admin-contornos.js"></script>
+</body>
+</html>

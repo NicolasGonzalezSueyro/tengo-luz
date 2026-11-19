@@ -25,6 +25,7 @@ import {
 import { CAPITAL } from './mantenimiento.ts';
 import { claveDeBarrio, crearBuscadorDeBarrios } from './nombres.ts';
 import { aplicarContornos } from './contornos.ts';
+import { LOTEOS_CAPITAL } from '../web/capas-oficiales.js';
 
 const IDENTIFICACION = { 'User-Agent': 'tengo-luz/0.1 (+https://github.com/NicolasGonzalezSueyro/tengo-luz)' };
 // La ciudad de Córdoba entra en este rectángulo (oeste, norte, este, sur para Nominatim; sur, oeste, norte, este para Overpass).
@@ -99,7 +100,7 @@ async function bajarIdecor(capa: string, extra: Record<string, string> = {}, arc
 }
 const sinPrefijoOficial = (n: string) => sinPrefijo(enTitulo(n).replace(/^(urbanizaci[oó]n|loteo|barrio|complejo habitacional)\s+/i, ''));
 const loteos = new Map<string, { base: string; area: Area }>();
-for (const capa of ['loteos_muni_aprobados', 'loteos_muni_autorizados']) {
+for (const { capa } of LOTEOS_CAPITAL) {
   for (const f of (await bajarIdecor(capa)).features) {
     if (!f.geometry) continue;
     const area = { type: 'Feature', properties: {}, geometry: f.geometry } as Area;
