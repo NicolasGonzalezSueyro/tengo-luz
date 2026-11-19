@@ -19108,6 +19108,28 @@
     ]
   },
   {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-20",
+    "desde": "06:30",
+    "hasta": "10:00",
+    "zona": "Barrios Timbues, Maipú y Magdalena 2.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Maipú (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [
+      "timbues",
+      "magdalena 2"
+    ],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-20",
     "desde": "07:30",
@@ -19119,6 +19141,43 @@
     "zonas": [],
     "sinUbicar": [
       "zona rural de ruta nacional 9 y estacion juarez celman"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-20",
+    "desde": "08:00",
+    "hasta": "18:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante una hora, dentro del horario consignado: barrios Bimaco, Macrocentro, Casasnovas, Indio F. Rosas, Pizarro, Roque S. Peña, San Eduardo, Tiro Federal, General Paz, Pueyrredón, Buena Vista, Golf, Las Quintas, Lomitas de Oro, Quintitas Golf, San Antonio de Padua, San Pablo, Villa Dalcar, Villa Golf y Zona Rural Oeste.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Macrocentro (Río Cuarto)",
+      "Barrio Casanovas (Río Cuarto)",
+      "Ingeniero Manuel Pizarro (Río Cuarto)",
+      "San Eduardo (Río Cuarto)",
+      "Tiro Federal (Río Cuarto)",
+      "General Paz (Río Cuarto)",
+      "Buena Vista (Río Cuarto)",
+      "Villa Golf (Río Cuarto)",
+      "Las Quintas (Río Cuarto)",
+      "Lomitas de Oro (Río Cuarto)",
+      "Quintitas Golf (Río Cuarto)",
+      "San Antonio de Padua (Río Cuarto)",
+      "San Pablo (Río Cuarto)",
+      "Villa Dalcar (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "bimaco",
+      "indio f rosas",
+      "roque s pena",
+      "pueyrredon"
+    ],
+    "parciales": [
+      "Río Cuarto"
     ]
   },
   {
@@ -19196,6 +19255,25 @@
     ]
   },
   {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-21",
+    "desde": "06:30",
+    "hasta": "10:00",
+    "zona": "Barrio Roca, entre calles Urquiza, Av. Rosario de Santa Fe, Mitre y J. Hernández.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Roca (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "San Francisco"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-21",
     "desde": "16:30",
@@ -19230,6 +19308,162 @@
     ],
     "parciales": [
       "Bell Ville"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "10:00",
+    "zona": "Sector comprendido por calles Bv. Ameghino, San Lorenzo, Alsina y V. Sársfield.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por Estación de servicio Axxion Malvinas, Complejo El Águila, Cola de Pato, Malvinas Norte y Malvinas Sur.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por Ex Ruta 36, Ruta A005, Canal Trece, Rotonda Witouck y Sindicato de Camioneros.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "07:15",
+    "zona": "Sector comprendido por Loteo El Reparo, Planta de Horm. Lunardi, Loteo Siempre Verde, Villa Dalcar, Complejo el Águila, Cola de Pato, Malvinas Norte y Sur y Estación de servicio Axxion Malvinas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Dalcar (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "lunardi",
+      "siempre verde",
+      "complejo el aguila",
+      "cola pato",
+      "malvinas norte",
+      "sur",
+      "estacion servicio axxion malvinas"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-22",
+    "desde": "08:00",
+    "hasta": "13:00",
+    "zona": "Localidades de Villa del Totoral, Cañada de Luque, Atahona, Las Peñas, Los Mistoles, Capilla de Sitón, La Posta, Sarmiento, Mula Muerta, Cañada de Río Pinto, Agua de Las Piedras, Villa Gutiérrez, Los Manzanos, Villa Albertina, Villa Cerro Negro, La Tuna, Avellaneda y Macha.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa del Totoral",
+      "Cañada de Luque",
+      "Atahona",
+      "Las Peñas",
+      "Los Mistoles",
+      "Capilla de Sitón",
+      "La Posta",
+      "Sarmiento",
+      "Mula Muerta",
+      "Cañada de Río Pinto",
+      "Agua de las Piedras",
+      "Villa Gutiérrez",
+      "Villa Albertina",
+      "La Tuna",
+      "Avellaneda",
+      "Macha"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "11:00",
+    "hasta": "11:15",
+    "zona": "Sector comprendido por Loteo El Reparo, Planta de Horm. Lunardi, Loteo Siempre Verde, Villa Dalcar, Complejo el Águila, Cola de Pato, Malvinas Norte y Sur y Estación de servicio Axxion Malvinas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Dalcar (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "lunardi",
+      "siempre verde",
+      "complejo el aguila",
+      "cola pato",
+      "malvinas norte",
+      "sur",
+      "estacion servicio axxion malvinas"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "San Francisco",
+    "fecha": "2026-11-23",
+    "desde": "06:30",
+    "hasta": "10:00",
+    "zona": "Barrios La Milka, Loteo Alameda y Loteo Lo Tengo.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "La Milka (San Francisco)"
+    ],
+    "zonas": [
+      "San Francisco"
+    ],
+    "sinUbicar": [
+      "alameda",
+      "lo tengo"
+    ],
+    "parciales": [
+      "San Francisco"
     ]
   },
   {
