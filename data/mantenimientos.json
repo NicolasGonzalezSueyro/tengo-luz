@@ -19266,6 +19266,45 @@
     ]
   },
   {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-20",
+    "desde": "10:00",
+    "hasta": "14:00",
+    "zona": "Barrio San Isidro.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Isidro (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-20",
+    "desde": "10:00",
+    "hasta": "10:20",
+    "zona": "Barrios Lomas Oeste, La Morada y sector comprendido por VAS Shopping.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Lomas Este (Villa Allende)",
+      "Morada (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
     "localidad": "Potrero de Garay",
     "fecha": "2026-11-20",
     "desde": "10:00",
