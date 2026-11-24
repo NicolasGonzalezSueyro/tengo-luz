@@ -695,7 +695,17 @@
   "veces": 1
  },
  {
+  "nombre": "Colectora Norte",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "El Rincon",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "El Terraplen",
   "localidad": "Córdoba",
   "veces": 1
  },

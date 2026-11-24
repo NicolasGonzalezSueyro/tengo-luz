@@ -20107,5 +20107,97 @@
     "parciales": [
       "Villa Allende"
     ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-26",
+    "desde": "07:00",
+    "hasta": "10:00",
+    "zona": "barrios: Villa Belgrano y Parque Modelo, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Belgrano",
+      "Parque Modelo"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Dalmacio Velez",
+    "fecha": "2026-11-26",
+    "desde": "07:00",
+    "hasta": "12:00",
+    "zona": "Localidad Dalmacio Vélez Sarsfield.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Dalmacio Vélez Sarsfield"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Ticino",
+    "fecha": "2026-11-26",
+    "desde": "07:00",
+    "hasta": "07:10",
+    "zona": "Localidad de Ticino.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ticino"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-26",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "barrios: Villa Alberdi, Villa Urquiza y San Ignacio, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Alberdi",
+      "Villa General Urquiza",
+      "San Ignacio"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Ticino",
+    "fecha": "2026-11-26",
+    "desde": "11:50",
+    "hasta": "12:00",
+    "zona": "Localidad de Ticino.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ticino"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-26",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "barrios: Ciudad Villa retiro, El Terraplén, Parque Liceo III y colectora norte de zona rural, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Ciudad Villa Retiro",
+      "Parque Liceo 3° Sección"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "zona rural",
+      "el terraplen",
+      "colectora norte"
+    ]
   }
 ]
