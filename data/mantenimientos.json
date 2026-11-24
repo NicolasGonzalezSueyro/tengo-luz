@@ -563,7 +563,6 @@
       "la colonial",
       "las tejas",
       "reconquista",
-      "camino al cuadrado",
       "potrero alto",
       "cooperativa agua oro"
     ],
@@ -643,7 +642,6 @@
       "sabato",
       "prosur",
       "nuevo rio ceballos",
-      "camino estancia santo domingo",
       "la adelina"
     ],
     "parciales": [
@@ -746,11 +744,15 @@
     "zona": "Zona Rural Camino a 60 Cuadras, desde km 12, 5 hasta km 18,5.",
     "afectacion": null,
     "fuente": "https://eldoce.tv/actualidad/2026/09/09/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
-    "barrios": [],
+    "barrios": [
+      "Camino A 60 Cuadras"
+    ],
     "zonas": [
       "Camino a 60 Cuadras (desde el Km 13)"
     ],
-    "sinUbicar": []
+    "sinUbicar": [
+      "zona rural desde km 12 5 hasta km 18 5"
+    ]
   },
   {
     "localidad": "Villa Allende",
@@ -1045,7 +1047,6 @@
       "la colonial",
       "las tejas",
       "reconquista",
-      "camino al cuadrado",
       "potrero alto",
       "cooperativa agua oro"
     ],
@@ -1125,7 +1126,6 @@
       "sabato",
       "prosur",
       "nuevo rio ceballos",
-      "camino estancia santo domingo",
       "la adelina"
     ],
     "parciales": [
@@ -1534,7 +1534,6 @@
       "el pueblito secciones m",
       "las tejas",
       "reconquista",
-      "camino al cuadrado",
       "potrero alto",
       "cooperativa agua oro"
     ],
@@ -16777,9 +16776,7 @@
     "zonas": [
       "Río Cuarto"
     ],
-    "sinUbicar": [
-      "cuadrante"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Río Cuarto"
     ],
@@ -17971,11 +17968,11 @@
     "zona": "barrio Viilla Cabrera, en forma parcial.",
     "afectacion": "parcial",
     "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
-    "barrios": [],
+    "barrios": [
+      "Villa Cabrera"
+    ],
     "zonas": [],
-    "sinUbicar": [
-      "viilla cabrera"
-    ]
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",
@@ -18056,10 +18053,7 @@
     ],
     "zonas": [],
     "sinUbicar": [
-      "manzanas 95",
-      "manzanas 96",
-      "manzanas 97",
-      "manzanas 98"
+      "manzanas 95 96 97 y 98 de barrio docta"
     ]
   },
   {
@@ -18075,8 +18069,7 @@
     ],
     "zonas": [],
     "sinUbicar": [
-      "entre las calles av colon av gral paz y santa rosa de barrio centro",
-      "comprende al cuadrante"
+      "comprende al cuadrante entre las calles av colon av gral paz y santa rosa de barrio centro"
     ],
     "sector": [
       [
@@ -18965,7 +18958,6 @@
     ],
     "sinUbicar": [
       "ruta e53",
-      "camino estancia santo domingo",
       "la adelina"
     ],
     "parciales": [
