@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { centro } from './barrios.ts';
 
 // Arma data/lugares.js: la lista de nombres de barrios y zonas del mapa. La usa el bot de Telegram
 // para reconocer el barrio que le escriben, sin tener que cargar el mapa entero (1,3 MB).
@@ -36,8 +37,13 @@ export function escribirLugares() {
   for (const f of interior.features as { properties: { nombre: string; localidad?: string; alias?: string[] } }[]) {
     for (const a of f.properties.alias ?? []) alias[`${a} (${f.properties.localidad})`] ??= f.properties.nombre;
   }
+  // El centro aproximado de cada localidad ([longitud, latitud], con 3 decimales: ~100 m), para saber cuáles están cerca.
+  const centros = Object.fromEntries((leer('zonas.geojson').features as unknown as { properties: { nombre: string; tipo?: string }; geometry: { type: string; coordinates: unknown } }[])
+    .filter((f) => f.properties.tipo === 'localidad')
+    .map((f) => [f.properties.nombre, centro(f.geometry).map((n) => Math.round(n * 1000) / 1000)]));
   const codigo = `// Generado por \`npm run lugares\` a partir de los mapas: no editar a mano.\nexport default ${JSON.stringify(lugares, null, 1)};\n`
     + `\n// Las que son localidades del interior (el resto son barrios y zonas de capital).\nexport const localidades = ${JSON.stringify(localidades, null, 1)};\n`
+    + `\n// El centro aproximado de cada localidad, [longitud, latitud].\n/** @type {Record<string, [number, number]>} */\nexport const centros = ${JSON.stringify(centros)};\n`
     + `\n// Cómo escribe EPEC algunos barrios del interior que en el mapa tienen otro nombre (data/alias-interior.json).\n`
     + `/** @type {Record<string, string | null>} */\nexport const alias = ${JSON.stringify(alias, null, 1)};\n`;
   writeFileSync(new URL('../data/lugares.js', import.meta.url), codigo);

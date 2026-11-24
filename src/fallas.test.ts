@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { baseLocal } from './base-local.ts';
 import { responder } from './bot.ts';
-import { clasificar, esConfiable, fallasActivas, fallasPendientes, lugaresEnTexto, reconocerLugares, textoDePublicacion } from './fallas.ts';
+import { clasificar, esConfiable, localidadesDichas, fallasActivas, fallasPendientes, lugaresEnTexto, reconocerLugares, textoDePublicacion } from './fallas.ts';
 import { onRequestGet as verFallas, onRequestPost as recibir } from '../functions/api/fallas.ts';
 import { onRequestPost as webhook } from '../functions/api/telegram.ts';
 
@@ -311,4 +311,41 @@ test('clasificar: una respuesta a un usuario o un retuit no es una falla', () =>
   assert.equal(clasificar('@juanperez Lamentamos que estés sin servicio en barrio Alberdi. ¿Nos pasás tu contrato?'), 'otra');
   assert.equal(clasificar('RT @Otro: sin suministro en barrio Centro por una falla'), 'otra');
   assert.equal(clasificar('Por una falla, sin suministro en barrio Alberdi.'), 'falla');
+});
+
+test('localidadesDichas: las localidades que el texto nombra con todas las letras', () => {
+  assert.deepEqual(localidadesDichas('Localidades de Cruz Alta y Los Surgentes➡️ restricción del servicio por falla.'), ['Cruz Alta', 'Los Surgentes']);
+  assert.deepEqual(localidadesDichas('Cooperativas de Justiniano Posse y Monte Buey➡️restricción del servicio.'), ['Justiniano Posse', 'Monte Buey']);
+  assert.deepEqual(localidadesDichas('Localidad de Calera: barrios Calera Centro y Maipú ➡️ restricción.'), ['Calera']);
+  assert.deepEqual(localidadesDichas('Localidades Los Aromos y La Serranita ➡️ restricción del servicio.'), ['Los Aromos', 'La Serranita']);
+  assert.deepEqual(localidadesDichas('Barrio Alta Córdoba ➡️ restricción del servicio.'), []);
+  assert.deepEqual(localidadesDichas('Localidad del Totoral: barrios Las Flores y Cavisacate➡️restricción.'), ['del Totoral']);
+  assert.deepEqual(localidadesDichas('Localidad de Unquillo, barrios La Florida, San Francisco y Las Corzuelas ➡️ restricción.'), ['Unquillo']);
+  assert.deepEqual(localidadesDichas('Localidades de Corral de Bustos, Camilo Aldao e Isla Verde ➡️ restricción.'), ['Corral de Bustos', 'Camilo Aldao', 'Isla Verde']);
+});
+
+test('reconocerLugares: "Localidad de Calera" es La Calera, y una localidad que no se conoce no pinta barrios de capital', () => {
+  const lugares = ['Centro', 'Maipú', 'Centro (La Calera)', 'Maipú (La Calera)', 'La Calera'];
+  const localidades = new Set(['La Calera']);
+  assert.deepEqual(reconocerLugares(lugares, localidades, 'Localidad de Calera: barrios Calera Centro y Maipú ➡️ restricción de servicio.', {}).sort(),
+    ['Centro (La Calera)', 'Maipú (La Calera)']);
+  // Morrison no está en el mapa: antes se pintaba el Centro de capital.
+  assert.deepEqual(reconocerLugares(lugares, localidades, 'Localidad de Morrison: barrio Centro ➡️ restricción de servicio.', {}), []);
+  // Sin localidades, sigue siendo capital.
+  assert.deepEqual(reconocerLugares(lugares, localidades, 'Barrios Centro y Maipú ➡️ restricción de servicio.', {}).sort(), ['Centro', 'Maipú']);
+});
+
+test('reconocerLugares: un barrio que se llama como otra localidad ("San Francisco" de Unquillo) no pinta esa localidad', () => {
+  const lugares = ['Unquillo', 'San Francisco', 'La Florida (Unquillo)', 'La Florida (San Francisco)', 'Corzuelas (Unquillo)', 'Villa del Totoral', 'Mula Muerta'];
+  const localidades = new Set(['Unquillo', 'San Francisco', 'Villa del Totoral', 'Mula Muerta']);
+  const centros: Record<string, [number, number]> = {
+    Unquillo: [-64.31, -31.23], 'San Francisco': [-62.08, -31.43], 'Villa del Totoral': [-64.07, -30.70], 'Mula Muerta': [-64.03, -30.75],
+  };
+  assert.deepEqual(
+    reconocerLugares(lugares, localidades, 'Localidad de Unquillo, barrios La Florida, San Francisco y Las Corzuelas ➡️ restricción del servicio.', {}, centros).sort(),
+    ['Corzuelas (Unquillo)', 'La Florida (Unquillo)'],
+  );
+  // Un pueblo vecino que EPEC llama "barrio" sí cuenta.
+  assert.deepEqual(reconocerLugares(lugares, localidades, 'Localidad de Villa Totoral: barrios Mula Muerta ➡️ restricción del servicio.', {}, centros).sort(),
+    ['Mula Muerta', 'Villa del Totoral']);
 });

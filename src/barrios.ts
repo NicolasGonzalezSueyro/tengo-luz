@@ -23,7 +23,7 @@ export type Ubicacion = {
 export type ZonaAproximada = { nombre: string; patron: string; tipo?: 'ruta' | 'localidad' };
 
 // Palabras que marcan que empieza una descripción por calles o sectores, no un nombre de barrio.
-const DESCRIPCION = /\b(comprendid[oa]s?|entre|sobre|desde|hasta|calles?|area|sector|zona|frente|altura)\b/;
+const DESCRIPCION = /\b(comprendid[oa]s?|comprende|entre|sobre|desde|hasta|calles?|area|sector|zona|frente|altura|manzanas?|cuadrante|camino)\b/;
 
 /** Si un texto sin ubicar es una descripción de calles ("entre calles X y Y") y no el nombre de un barrio. */
 export const esDescripcion = (texto: string) => DESCRIPCION.test(texto);

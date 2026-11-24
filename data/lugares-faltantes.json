@@ -140,6 +140,26 @@
   "veces": 3
  },
  {
+  "nombre": "Ballesteros Sur",
+  "localidad": "Córdoba",
+  "veces": 3
+ },
+ {
+  "nombre": "Bruzone",
+  "localidad": "Córdoba",
+  "veces": 3
+ },
+ {
+  "nombre": "Localidades Ballesteros",
+  "localidad": "Córdoba",
+  "veces": 3
+ },
+ {
+  "nombre": "Mattaldi",
+  "localidad": "Córdoba",
+  "veces": 3
+ },
+ {
   "nombre": "Centro",
   "localidad": "Marcos Juárez",
   "veces": 3
@@ -171,6 +191,11 @@
  },
  {
   "nombre": "Isquitipe",
+  "localidad": "Río Ceballos",
+  "veces": 3
+ },
+ {
+  "nombre": "La Adelina",
   "localidad": "Río Ceballos",
   "veces": 3
  },
@@ -222,11 +247,6 @@
  {
   "nombre": "Villa Josefina",
   "localidad": "Río Ceballos",
-  "veces": 3
- },
- {
-  "nombre": "Camino al Cuadrado",
-  "localidad": "Salsipuedes",
   "veces": 3
  },
  {
@@ -345,12 +365,22 @@
   "veces": 2
  },
  {
-  "nombre": "Bruzone",
+  "nombre": "Cabalango",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Comuna San Roque",
   "localidad": "Córdoba",
   "veces": 2
  },
  {
   "nombre": "Las Vertientes",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Localidad Saldan Barrio San Francisco",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -365,13 +395,28 @@
   "veces": 2
  },
  {
-  "nombre": "Mattaldi",
+  "nombre": "Tanti",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Villa Parque Siquiman",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Villa Santa Cruz Lago",
   "localidad": "Córdoba",
   "veces": 2
  },
  {
   "nombre": "Villa Valeria",
   "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "La Toma",
+  "localidad": "Cruz del Eje",
   "veces": 2
  },
  {
@@ -400,6 +445,11 @@
   "veces": 2
  },
  {
+  "nombre": "Cuatro Hojas",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
   "nombre": "San Francisco",
   "localidad": "Mendiolaza",
   "veces": 2
@@ -411,16 +461,6 @@
  },
  {
   "nombre": "Bella Vista Libertador San Martín",
-  "localidad": "Río Ceballos",
-  "veces": 2
- },
- {
-  "nombre": "Camino Estancia Santo Domingo",
-  "localidad": "Río Ceballos",
-  "veces": 2
- },
- {
-  "nombre": "La Adelina",
   "localidad": "Río Ceballos",
   "veces": 2
  },
@@ -560,12 +600,22 @@
   "veces": 1
  },
  {
+  "nombre": "Solares del Tercero",
+  "localidad": "Bell Ville",
+  "veces": 1
+ },
+ {
+  "nombre": "Adelia Maria",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Barrancas La Rivera",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
-  "nombre": "Camino A La Carbonada",
+  "nombre": "Campillo",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -595,7 +645,32 @@
   "veces": 1
  },
  {
+  "nombre": "Fonavi",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Huanchilla",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Ichu Cruz",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Jardin Boulevard",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Localidades Cuesta Blanca",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Localidades General Levalle",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -605,7 +680,32 @@
   "veces": 1
  },
  {
+  "nombre": "Localidades Villa Valeria",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Mayu Sumaj",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Mirador Serranas",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Molinos Canuelas",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Monte Los Gauchos",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Parque 9 Julio",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -620,7 +720,17 @@
   "veces": 1
  },
  {
+  "nombre": "Punta Agua",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Roque Saenz Pena",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "San Basilio",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -635,17 +745,22 @@
   "veces": 1
  },
  {
-  "nombre": "Viilla Cabrera",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Aeródromo",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
  {
   "nombre": "Altos del Sol",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Cooperativa de San Marcos Sierras",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Dique Cruz del Eje",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
@@ -665,12 +780,12 @@
   "veces": 1
  },
  {
-  "nombre": "La Curva",
+  "nombre": "La Cartuja",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
  {
-  "nombre": "La Toma",
+  "nombre": "La Curva",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
@@ -696,6 +811,11 @@
  },
  {
   "nombre": "Pozo Cavado",
+  "localidad": "Cruz del Eje",
+  "veces": 1
+ },
+ {
+  "nombre": "Residencial El Sol",
   "localidad": "Cruz del Eje",
   "veces": 1
  },
@@ -770,7 +890,32 @@
   "veces": 1
  },
  {
+  "nombre": "Altos Warcalde",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "Cinco Lomas",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "El Calicanto",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "El Rodeo",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
   "nombre": "IPV",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "La Otra Banda",
   "localidad": "La Calera",
   "veces": 1
  },
@@ -782,6 +927,26 @@
  {
   "nombre": "Rumi Huasy",
   "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "Rumy",
+  "localidad": "La Calera",
+  "veces": 1
+ },
+ {
+  "nombre": "Aeródromo",
+  "localidad": "La Cumbre",
+  "veces": 1
+ },
+ {
+  "nombre": "El Pungo",
+  "localidad": "La Cumbre",
+  "veces": 1
+ },
+ {
+  "nombre": "El Rosario",
+  "localidad": "La Cumbre",
   "veces": 1
  },
  {
@@ -885,6 +1050,11 @@
   "veces": 1
  },
  {
+  "nombre": "Derivación D U A R",
+  "localidad": "Potrero de Garay",
+  "veces": 1
+ },
+ {
   "nombre": "IPV Loza",
   "localidad": "Río Ceballos",
   "veces": 1
@@ -915,12 +1085,22 @@
   "veces": 1
  },
  {
+  "nombre": "Calasanz",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
   "nombre": "Castelli 2",
   "localidad": "Río Cuarto",
   "veces": 1
  },
  {
-  "nombre": "Cuadrante",
+  "nombre": "Int Mojica",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Mayer",
   "localidad": "Río Cuarto",
   "veces": 1
  },
@@ -980,7 +1160,42 @@
   "veces": 1
  },
  {
+  "nombre": "El Condor",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "El Duranzo",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Lomas de Tanti",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Alpes",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Tanti Centro",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
   "nombre": "Tanti Viejo",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Valle Verde",
+  "localidad": "Tanti",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Bender",
   "localidad": "Tanti",
   "veces": 1
  },
@@ -1160,7 +1375,17 @@
   "veces": 1
  },
  {
+  "nombre": "Del Rosario",
+  "localidad": "Villa Nueva",
+  "veces": 1
+ },
+ {
   "nombre": "Jardín del Golf",
+  "localidad": "Villa Nueva",
+  "veces": 1
+ },
+ {
+  "nombre": "M T Cabanillas",
   "localidad": "Villa Nueva",
   "veces": 1
  },

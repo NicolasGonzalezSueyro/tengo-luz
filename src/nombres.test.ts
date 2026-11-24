@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { barriosEnDescripcion, claveSimple, crearBuscadorDeBarrios, distancia, nombresDelTramo } from './nombres.ts';
+import { barriosEnDescripcion, claveSimple, crearBuscadorDeBarrios, distancia, localidadParecida, nombresDelTramo } from './nombres.ts';
 import { localidadesComoBarrios } from './localidades.ts';
 import { completarNumeros } from './barrios.ts';
 
@@ -95,4 +95,20 @@ test('localidadesComoBarrios: un pueblo vecino nombrado como barrio pinta ese pu
   const buscarCon = crearBuscadorDeBarrios([...propios, ...localidadesComoBarrios(zonas, propios)]);
   assert.deepEqual(buscarCon(['Villa Carlos Paz'], 'barrios Villa Santa Cruz del Lago y Bella Vista.').barrios, ['Villa Santa Cruz del Lago', 'Bella Vista (Villa Carlos Paz)']);
   assert.deepEqual(buscarCon(['Villa Carlos Paz'], 'barrio San Francisco.').barrios, []); // a 230 km: no es vecino
+});
+
+test('localidadParecida: como la escribe EPEC, con artículo de menos o una letra cambiada', () => {
+  const localidades = ['La Calera', 'Pascanas', 'Altos de Chipión', 'Icho Cruz', 'Villa Carlos Paz', 'Tanti', 'Oliva', 'La Paz', 'Las Paz'];
+  assert.equal(localidadParecida('Calera', localidades), 'La Calera');
+  assert.equal(localidadParecida('Pescanas', localidades), 'Pascanas');
+  assert.equal(localidadParecida('Chipón', localidades), 'Altos de Chipión');
+  assert.equal(localidadParecida('Ichu Cruz', localidades), 'Icho Cruz');
+  assert.equal(localidadParecida('Carlos Paz', localidades), 'Villa Carlos Paz');
+  assert.equal(localidadParecida('Tanto', localidades), null); // corta: no se tolera
+  assert.equal(localidadParecida('Paz', localidades), null); // dos posibles: ninguna
+  assert.equal(localidadParecida('Morrison', localidades), null);
+});
+
+test('nombresDelTramo: la flecha de EPEC termina la lista de lugares', () => {
+  assert.deepEqual(nombresDelTramo('Barrios Angelelli y Nuestro Hogar 3➡️restricción de servicio en forma parcial por falla.'), ['Angelelli', 'Nuestro Hogar 3']);
 });

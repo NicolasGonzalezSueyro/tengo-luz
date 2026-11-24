@@ -157,3 +157,11 @@ test('un barrio nombrado adentro de la descripción por calles se reconoce si es
   // Una calle que se llama como un barrio no cuenta: tiene que decir "barrio".
   assert.deepEqual(ubicar('Sector comprendido por calles Alberdi y Caseros.').barrios, []);
 });
+
+test('"Manzanas 95, 96…", "comprende al cuadrante" y "camino a…" son descripciones; "Camino a San Carlos" sigue siendo un barrio', () => {
+  const ubicar = crearUbicador(['Docta', 'Centro', 'Camino a San Carlos', 'José Ignacio Rucci'], {});
+  assert.deepEqual(ubicar('Manzanas 95, 96, 97 y 98, de barrio Docta, en forma parcial.').barrios, ['Docta']);
+  assert.deepEqual(ubicar('barrio José Ignacio Rucci y camino a La Carbonada.').barrios, ['José Ignacio Rucci']);
+  assert.deepEqual(ubicar('barrio Camino a San Carlos, en forma parcial.').barrios, ['Camino a San Carlos']);
+  assert.ok(ubicar('Comprende al cuadrante entre las calles Av. Colón y Santa Rosa de barrio Centro.').barrios.includes('Centro'));
+});

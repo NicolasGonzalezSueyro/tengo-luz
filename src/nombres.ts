@@ -65,7 +65,8 @@ export function barriosEnDescripcion(texto: string): string[] {
 }
 
 export function nombresDelTramo(texto: string): string[] {
-  return sinPuntosDeAbreviaturas(texto)
+  // En las publicaciones de EPEC, lo que viene después de la flecha ("Barrios A y B➡️restricción…") ya no son lugares.
+  return sinPuntosDeAbreviaturas(texto.split('➡')[0])
     .split(/[.;]\s+|\.$/)
     // Desde que empieza una descripción por calles, el resto de la oración ya no son nombres de barrios.
     .map((oracion) => oracion.split(DESCRIPTIVAS)[0])
@@ -142,4 +143,25 @@ export function crearBuscadorDeBarrios(conocidos: BarrioConocido[], alias: Recor
     for (const nombre of barriosEnDescripcion(texto)) buscarUno(candidatos, nombre)?.forEach((b) => encontrados.add(b));
     return { barrios: [...encontrados], sinUbicar };
   };
+}
+
+/** El nombre de una localidad sin el artículo, el "Villa" o el "Altos de" del principio ("La Calera" → "calera"). */
+const nucleoDeLocalidad = (nombre: string) => normalizar(nombre).replace(/^(la|el|los|las|villa|altos) /, '');
+
+/**
+ * La localidad del mapa que corresponde a un nombre como lo escribe EPEC: igual, sin el artículo o el "Villa" ("Calera"
+ * es La Calera, "Chipión" es Altos de Chipión), o con una letra de diferencia en nombres de 6 letras o más ("Pescanas"
+ * es Pascanas, "Ichu Cruz" es Icho Cruz). Si hay más de una posible, ninguna. Exportado para los tests.
+ */
+export function localidadParecida(dicha: string, localidades: Iterable<string>): string | null {
+  const buscado = normalizar(dicha);
+  const lista = [...localidades];
+  const exacta = lista.find((l) => normalizar(l) === buscado);
+  if (exacta) return exacta;
+  const nucleo = nucleoDeLocalidad(dicha);
+  const unica = (candidatas: string[]) => (candidatas.length === 1 ? candidatas[0] : null);
+  const sinArticulo = lista.filter((l) => nucleoDeLocalidad(l) === nucleo);
+  if (sinArticulo.length > 0) return unica(sinArticulo);
+  if (nucleo.length < 6) return null;
+  return unica(lista.filter((l) => { const n = nucleoDeLocalidad(l); return Math.abs(n.length - nucleo.length) <= 1 && distancia(n, nucleo) <= 1; }));
 }

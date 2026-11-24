@@ -5,7 +5,7 @@
 
 import { corredor, redondear } from './descargar-zonas.ts';
 import { centro, distanciaKm, esDescripcion, normalizar, type Punto } from './barrios.ts';
-import { claveDeBarrio } from './nombres.ts';
+import { claveDeBarrio, localidadParecida } from './nombres.ts';
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
 const IDENTIFICACION = { 'User-Agent': 'tengo-luz/0.1 (+https://github.com/NicolasGonzalezSueyro/tengo-luz)' };
@@ -76,7 +76,8 @@ function partir(lista: string): string[] {
     // "Localidades de Río Ceballos y Unquillo en los siguientes barrios y sectores": ahí termina la lista.
     .replace(/\s+en\s+(los|las|sus)\s+(siguientes\s+)?(barrios|sectores|zonas)\b.*$/i, '')
     .split(/,|\s+y\s+/)
-    .map((n) => n.trim().replace(/^(comuna|paraje)\s+(de\s+)?/i, ''))
+    // "Villa Ciudad de América (c.v.)": la aclaración entre paréntesis no es parte del nombre.
+    .map((n) => n.replace(/\s*\([^)]*\)/g, '').trim().replace(/^(comuna|paraje)\s+(de\s+)?/i, ''))
     .filter((n) =>
       n.length >= 3 && n.split(/\s+/).length <= 6
       && !/^(coop|cooperativa|zona|sector|barrios?|todos?|corte)\b/i.test(n)
@@ -250,8 +251,14 @@ export function crearUbicadorDeLocalidades(
   buscadas: Record<string, Candidato[]>,
   red = { buscar: buscarCandidatos, geometria: geometriaDe },
 ) {
-  const conocida = (nombre: string) =>
-    zonas.find((z) => z.properties.tipo === 'localidad' && new RegExp(z.properties.patron).test(normalizar(nombre)));
+  const conocida = (nombre: string) => {
+    const deLocalidades = zonas.filter((z) => z.properties.tipo === 'localidad');
+    const porPatron = deLocalidades.find((z) => new RegExp(z.properties.patron).test(normalizar(nombre)));
+    if (porPatron) return porPatron;
+    // Escrita distinto ("Pescanas", "Ichu Cruz"): la del mapa, si hay una sola parecida.
+    const parecida = localidadParecida(nombre, deLocalidades.map((z) => z.properties.nombre));
+    return parecida ? deLocalidades.find((z) => z.properties.nombre === parecida) : undefined;
+  };
 
   return async function ubicar(nombres: string[]): Promise<{ localidades: string[]; noEncontradas: string[] }> {
     const noEncontradas: string[] = [];

@@ -2,10 +2,10 @@
 // No se leen solas: el admin se las pasa al bot de Telegram (el link de la publicación de X, o el texto
 // pegado), el bot reconoce los lugares y, con /confirmar, se muestran en el mapa unas horas.
 
-import { alias as aliasInterior } from '../data/lugares.js';
-import { esDescripcion, normalizar } from './barrios.ts';
+import { alias as aliasInterior, centros as centrosDeLocalidades } from '../data/lugares.js';
+import { distanciaKm, esDescripcion, normalizar } from './barrios.ts';
 import { CAPITAL } from './mantenimiento.ts';
-import { crearBuscadorDeBarrios, type BarrioConocido } from './nombres.ts';
+import { crearBuscadorDeBarrios, localidadParecida, type BarrioConocido } from './nombres.ts';
 import type { BaseDeDatos } from './reportes.ts';
 
 const HORA = 60 * 60 * 1000;
@@ -50,12 +50,27 @@ export function lugaresEnTexto(lugares: string[], texto: string): string[] {
 }
 
 /**
+ * Las localidades que el texto dice con todas las letras: "Localidad de Calera: …", "Localidades de Cruz Alta y Los
+ * Surgentes ➡️ …", "Cooperativas de Justiniano Posse y Monte Buey", "Paraje La Rinconada". Exportado para los tests.
+ */
+export function localidadesDichas(texto: string): string[] {
+  return [...texto.matchAll(/\b(?:localidad(?:es)?|cooperativas?|comunas?|parajes?)\s+(?:de\b\s*:?\s*)?([^➡:.;\n]+)/gi)]
+    .flatMap((m) => m[1]
+      .split(/\b(?:barrios?|b°|bº|zonas?|sector(?:es)?|loteos?|en los siguientes)\b/i)[0]
+      .replace(/\s+(?:en forma|restricci[oó]n|sin (?:suministro|servicio)|por falla)\b.*$/i, '').split(/,\s*|\s+[ye]\s+/))
+    .map((n) => n.trim()).filter((n) => n.length >= 3);
+}
+
+/**
  * Los lugares del mapa que nombra una publicación de EPEC, con el mapa ampliado. Si nombra localidades del interior,
  * se buscan sus barrios ("Villa María: barrio Centro" → "Centro (Villa María)"), y la localidad entera solo si no
  * nombra ninguno; si no nombra ninguna localidad, son barrios de capital, también con la comparación tolerante
  * ("Arguello Lourdes", "Santa Isabel 2"). Así un "Centro" del interior nunca pinta el de capital.
  */
-export function reconocerLugares(lugares: string[], localidades: Set<string>, texto: string, alias: Record<string, string | null> = aliasInterior): string[] {
+export function reconocerLugares(
+  lugares: string[], localidades: Set<string>, texto: string, alias: Record<string, string | null> = aliasInterior,
+  centros: Record<string, [number, number]> = centrosDeLocalidades,
+): string[] {
   const interior: BarrioConocido[] = [];
   const capital: BarrioConocido[] = [];
   for (const lugar of lugares) {
@@ -65,8 +80,20 @@ export function reconocerLugares(lugares: string[], localidades: Set<string>, te
   }
   const buscar = crearBuscadorDeBarrios([...interior, ...capital], alias);
   const directos = lugaresEnTexto([...capital.map((c) => c.nombre), ...localidades], texto);
-  const nombradas = directos.filter((l) => localidades.has(l));
-  if (nombradas.length === 0) return [...new Set([...directos, ...buscar([CAPITAL], texto).barrios])];
+  const dichas = localidadesDichas(texto);
+  const resueltas = dichas.map((d) => localidadParecida(d, localidades)).filter((l): l is string => l !== null);
+  // Si el texto dice cuáles son sus localidades ("Localidad de Unquillo, barrios La Florida, San Francisco…"), otra que
+  // aparezca en el texto cuenta solo si queda cerca de ellas: EPEC llama "barrios" a los pueblos vecinos ("Localidad de
+  // Villa Totoral: barrios Mula Muerta, Cañada de Río Pinto"), pero ese San Francisco es un barrio de Unquillo, no la
+  // ciudad de San Francisco (a 200 km).
+  const cerca = (l: string) => resueltas.some((r) => !centros[r] || !centros[l] || distanciaKm(centros[r], centros[l]) <= 40);
+  const nombradas = [...new Set([...resueltas, ...directos.filter((l) => localidades.has(l) && (resueltas.length === 0 || cerca(l)))])];
+  if (nombradas.length === 0) {
+    // Dice "Localidad de X" con una que el mapa no tiene: sus barrios no son los de capital ("Calera Centro" no es el
+    // Centro de capital). Mejor nada, y que lo revise el admin.
+    if (dichas.length > 0) return [];
+    return [...new Set([...directos, ...buscar([CAPITAL], texto).barrios])];
+  }
   const resultado = new Set<string>();
   for (const localidad of nombradas) {
     // Sus barrios: los que aparecen tal cual en el texto, y los de las listas aunque estén escritos distinto.
