@@ -19122,6 +19122,97 @@
     ]
   },
   {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-20",
+    "desde": "08:00",
+    "hasta": "18:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante una hora, dentro del horario consignado: barrios Bimaco, Macrocentro, Casasnovas, Indio F. Rosas, Pizarro, Roque S. Peña, San Eduardo, Tiro Federal, General Paz, Pueyrredón, Buena Vista, Golf, Las Quintas, Lomitas de Oro, Quintitas Golf, San Antonio de Padua, San Pablo, Villa Dalcar, Villa Golf y Zona Rural Oeste.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Macrocentro (Río Cuarto)",
+      "Barrio Casanovas (Río Cuarto)",
+      "Ingeniero Manuel Pizarro (Río Cuarto)",
+      "San Eduardo (Río Cuarto)",
+      "Tiro Federal (Río Cuarto)",
+      "General Paz (Río Cuarto)",
+      "Buena Vista (Río Cuarto)",
+      "Villa Golf (Río Cuarto)",
+      "Las Quintas (Río Cuarto)",
+      "Lomitas de Oro (Río Cuarto)",
+      "Quintitas Golf (Río Cuarto)",
+      "San Antonio de Padua (Río Cuarto)",
+      "San Pablo (Río Cuarto)",
+      "Villa Dalcar (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "bimaco",
+      "indio f rosas",
+      "roque s pena",
+      "pueyrredon"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ],
+    "sector": [
+      [
+        -64.36373,
+        -33.14937
+      ],
+      [
+        -64.36355,
+        -33.14991
+      ],
+      [
+        -64.36308,
+        -33.1503
+      ],
+      [
+        -64.36244,
+        -33.15045
+      ],
+      [
+        -64.3618,
+        -33.1503
+      ],
+      [
+        -64.36132,
+        -33.14991
+      ],
+      [
+        -64.36115,
+        -33.14937
+      ],
+      [
+        -64.36132,
+        -33.14883
+      ],
+      [
+        -64.3618,
+        -33.14844
+      ],
+      [
+        -64.36244,
+        -33.14829
+      ],
+      [
+        -64.36308,
+        -33.14844
+      ],
+      [
+        -64.36355,
+        -33.14883
+      ],
+      [
+        -64.36373,
+        -33.14937
+      ]
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-20",
     "desde": "08:00",
@@ -19150,6 +19241,45 @@
     "zonas": [],
     "sinUbicar": [
       "parque 9 julio"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-20",
+    "desde": "10:00",
+    "hasta": "14:00",
+    "zona": "Barrio San Isidro.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Isidro (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-20",
+    "desde": "10:00",
+    "hasta": "10:20",
+    "zona": "Barrios Lomas Oeste, La Morada y sector comprendido por VAS Shopping.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Lomas Este (Villa Allende)",
+      "Morada (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
     ]
   },
   {
@@ -19198,6 +19328,78 @@
   {
     "localidad": "Córdoba",
     "fecha": "2026-11-21",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "Barrios Quintas Santa Isabel, Parque Capital Sud, Cerro del Moro, Ferrer, V. Achával, Suárez y Bella Vista, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Parque Capital Sur",
+      "Ferrer",
+      "Barrio Suárez",
+      "Bella Vista"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "quintas santa isabel",
+      "cerro moro",
+      "v achaval"
+    ]
+  },
+  {
+    "localidad": "La Cumbre",
+    "fecha": "2026-11-21",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "Sector comprendido por Zona Aeródromo y Campamento de Vialidad.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "La Cumbre"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "La Cumbre"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-21",
+    "desde": "08:30",
+    "hasta": "12:30",
+    "zona": "Parque Industrial Mi Granja.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "parque industrial mi granja"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-21",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "Barrios El Tachito, Cabo Farina, Parque Latino, Parque Horizonte, Irupe y General Artigas, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Cabo Farina",
+      "Parque Latino",
+      "Horizonte",
+      "Irupé",
+      "General Artigas"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "el tachito"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-21",
     "desde": "16:30",
     "hasta": "16:45",
     "zona": "Localidades de Villa Valeria, Del Campillo, Mattaldi y Bruzone.",
@@ -19230,6 +19432,588 @@
     ],
     "parciales": [
       "Bell Ville"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "10:00",
+    "zona": "Sector comprendido por calles Bv. Ameghino, San Lorenzo, Alsina y V. Sársfield.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ],
+    "sector": [
+      [
+        -64.34332,
+        -33.12942
+      ],
+      [
+        -64.34326,
+        -33.1296
+      ],
+      [
+        -64.3431,
+        -33.12973
+      ],
+      [
+        -64.33806,
+        -33.1309
+      ],
+      [
+        -64.33784,
+        -33.13095
+      ],
+      [
+        -64.33763,
+        -33.1309
+      ],
+      [
+        -64.33747,
+        -33.13077
+      ],
+      [
+        -64.33624,
+        -33.1274
+      ],
+      [
+        -64.33618,
+        -33.12722
+      ],
+      [
+        -64.33624,
+        -33.12704
+      ],
+      [
+        -64.3364,
+        -33.12691
+      ],
+      [
+        -64.34144,
+        -33.12573
+      ],
+      [
+        -64.34166,
+        -33.12568
+      ],
+      [
+        -64.34187,
+        -33.12573
+      ],
+      [
+        -64.34203,
+        -33.12586
+      ],
+      [
+        -64.34326,
+        -33.12924
+      ],
+      [
+        -64.34332,
+        -33.12942
+      ]
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por Estación de servicio Axxion Malvinas, Complejo El Águila, Cola de Pato, Malvinas Norte y Malvinas Sur.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por Ex Ruta 36, Ruta A005, Canal Trece, Rotonda Witouck y Sindicato de Camioneros.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "07:00",
+    "hasta": "07:15",
+    "zona": "Sector comprendido por Loteo El Reparo, Planta de Horm. Lunardi, Loteo Siempre Verde, Villa Dalcar, Complejo el Águila, Cola de Pato, Malvinas Norte y Sur y Estación de servicio Axxion Malvinas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Dalcar (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "lunardi",
+      "siempre verde",
+      "complejo el aguila",
+      "cola pato",
+      "malvinas norte",
+      "sur",
+      "estacion servicio axxion malvinas"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-22",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "Barrio Centro, entre calles 9 de Julio, Rivera Indarte y Rivadavia, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Centro"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "entre calles 9 de julio rivera indarte y rivadavia"
+    ],
+    "sector": [
+      [
+        -64.18611,
+        -31.41448
+      ],
+      [
+        -64.18594,
+        -31.41502
+      ],
+      [
+        -64.18548,
+        -31.41541
+      ],
+      [
+        -64.18485,
+        -31.41556
+      ],
+      [
+        -64.18422,
+        -31.41541
+      ],
+      [
+        -64.18376,
+        -31.41502
+      ],
+      [
+        -64.18359,
+        -31.41448
+      ],
+      [
+        -64.18376,
+        -31.41394
+      ],
+      [
+        -64.18422,
+        -31.41354
+      ],
+      [
+        -64.18485,
+        -31.4134
+      ],
+      [
+        -64.18548,
+        -31.41354
+      ],
+      [
+        -64.18594,
+        -31.41394
+      ],
+      [
+        -64.18611,
+        -31.41448
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-22",
+    "desde": "08:00",
+    "hasta": "12:30",
+    "zona": "Barrio Cerro de las Rosas, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Cerro de las Rosas"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-22",
+    "desde": "08:00",
+    "hasta": "13:00",
+    "zona": "Localidades de Villa del Totoral, Cañada de Luque, Atahona, Las Peñas, Los Mistoles, Capilla de Sitón, La Posta, Sarmiento, Mula Muerta, Cañada de Río Pinto, Agua de Las Piedras, Villa Gutiérrez, Los Manzanos, Villa Albertina, Villa Cerro Negro, La Tuna, Avellaneda y Macha.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa del Totoral",
+      "Cañada de Luque",
+      "Atahona",
+      "Las Peñas",
+      "Los Mistoles",
+      "Capilla de Sitón",
+      "La Posta",
+      "Sarmiento",
+      "Mula Muerta",
+      "Cañada de Río Pinto",
+      "Agua de las Piedras",
+      "Villa Gutiérrez",
+      "Villa Albertina",
+      "La Tuna",
+      "Avellaneda",
+      "Macha"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-22",
+    "desde": "08:30",
+    "hasta": "11:30",
+    "zona": "Barrio Centro, entre calles Av. Colón, Av. General Paz y Santa Rosa.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Centro"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "entre calles av colon av general paz y santa rosa"
+    ],
+    "sector": [
+      [
+        -64.18637,
+        -31.41288
+      ],
+      [
+        -64.18628,
+        -31.41315
+      ],
+      [
+        -64.18605,
+        -31.41335
+      ],
+      [
+        -64.18574,
+        -31.41342
+      ],
+      [
+        -64.18542,
+        -31.41335
+      ],
+      [
+        -64.18519,
+        -31.41315
+      ],
+      [
+        -64.18474,
+        -31.41208
+      ],
+      [
+        -64.18466,
+        -31.41181
+      ],
+      [
+        -64.18474,
+        -31.41154
+      ],
+      [
+        -64.18498,
+        -31.41134
+      ],
+      [
+        -64.18529,
+        -31.41127
+      ],
+      [
+        -64.18561,
+        -31.41134
+      ],
+      [
+        -64.18584,
+        -31.41154
+      ],
+      [
+        -64.18628,
+        -31.41261
+      ],
+      [
+        -64.18637,
+        -31.41288
+      ]
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-22",
+    "desde": "11:00",
+    "hasta": "11:15",
+    "zona": "Sector comprendido por Loteo El Reparo, Planta de Horm. Lunardi, Loteo Siempre Verde, Villa Dalcar, Complejo el Águila, Cola de Pato, Malvinas Norte y Sur y Estación de servicio Axxion Malvinas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Dalcar (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "lunardi",
+      "siempre verde",
+      "complejo el aguila",
+      "cola pato",
+      "malvinas norte",
+      "sur",
+      "estacion servicio axxion malvinas"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Marcos Juarez",
+    "fecha": "2026-11-23",
+    "desde": "05:30",
+    "hasta": "08:30",
+    "zona": "Sector comprendido por calles Bv. Hipólito Yrigoyen, 25 de Mayo, Av. Santa Fe y Urquiza.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Marcos Juárez"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Marcos Juárez"
+    ],
+    "sector": [
+      [
+        -62.11084,
+        -32.69326
+      ],
+      [
+        -62.11078,
+        -32.69344
+      ],
+      [
+        -62.11063,
+        -32.69357
+      ],
+      [
+        -62.11041,
+        -32.69362
+      ],
+      [
+        -62.10091,
+        -32.69529
+      ],
+      [
+        -62.10069,
+        -32.69524
+      ],
+      [
+        -62.10054,
+        -32.69511
+      ],
+      [
+        -62.10048,
+        -32.69493
+      ],
+      [
+        -62.0995,
+        -32.69088
+      ],
+      [
+        -62.09956,
+        -32.6907
+      ],
+      [
+        -62.09971,
+        -32.69056
+      ],
+      [
+        -62.09993,
+        -32.69052
+      ],
+      [
+        -62.10264,
+        -32.69003
+      ],
+      [
+        -62.10285,
+        -32.69008
+      ],
+      [
+        -62.11063,
+        -32.69295
+      ],
+      [
+        -62.11078,
+        -32.69308
+      ],
+      [
+        -62.11084,
+        -32.69326
+      ]
+    ]
+  },
+  {
+    "localidad": "Capilla del Monte",
+    "fecha": "2026-11-23",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por Centro de Los Cocos y Cerro la Rosilla, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Capilla del Monte"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Capilla del Monte"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-23",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "Barrios Jardín Espinosa, Ampliación Jardín Espinosa, Jockey Club y Jardín en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Jardín Espinosa",
+      "Ampliación Jardín Espinosa",
+      "Jockey Club",
+      "Jardín"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-23",
+    "desde": "08:00",
+    "hasta": "11:00",
+    "zona": "Barrio Pueyrredón, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "General Pueyrredon"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-23",
+    "desde": "08:00",
+    "hasta": "10:00",
+    "zona": "Sector comprendido por calle Dean Funes al 400.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "sector comprendido por calle dean funes al 400"
+    ]
+  },
+  {
+    "localidad": "Villa Nueva",
+    "fecha": "2026-11-24",
+    "desde": "06:30",
+    "hasta": "07:30",
+    "zona": "Localidad de Villa Nueva.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa Nueva"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Anisacate",
+    "fecha": "2026-11-24",
+    "desde": "06:30",
+    "hasta": "06:45",
+    "zona": "Sector comprendido por Curva de la S, Campo Becerra y Almacenes Becerra.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Anisacate"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Anisacate"
+    ]
+  },
+  {
+    "localidad": "Anisacate",
+    "fecha": "2026-11-24",
+    "desde": "09:00",
+    "hasta": "09:15",
+    "zona": "Sector comprendido por Curva de la S, Campo Becerra y Almacenes Becerra.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Anisacate"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Anisacate"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-24",
+    "desde": "10:00",
+    "hasta": "14:00",
+    "zona": "Barrio San Isidro.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Isidro (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
     ]
   },
   {
@@ -19269,6 +20053,25 @@
     ]
   },
   {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-25",
+    "desde": "08:30",
+    "hasta": "12:00",
+    "zona": "Barrio San Isidro.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Isidro (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-25",
     "desde": "10:00",
@@ -19290,6 +20093,27 @@
     ],
     "parciales": [
       "Saldán"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-25",
+    "desde": "12:00",
+    "hasta": "12:20",
+    "zona": "Barrios Lomas Oeste, La Morada y San Isidro.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Lomas Este (Villa Allende)",
+      "Morada (Villa Allende)",
+      "San Isidro (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
     ]
   }
 ]

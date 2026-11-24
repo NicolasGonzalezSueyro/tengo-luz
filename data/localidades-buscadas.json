@@ -1512,5 +1512,18 @@
    ],
    "departamento": "Punilla"
   }
+ ],
+ "anisacate": [
+  {
+   "nombre": "Anisacate",
+   "osm": "R9397239",
+   "tipo": "municipality",
+   "rango": 14,
+   "punto": [
+    -64.3981329,
+    -31.7315848
+   ],
+   "departamento": "Santa María"
+  }
  ]
 }
