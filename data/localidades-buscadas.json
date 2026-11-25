@@ -1525,5 +1525,20 @@
    ],
    "departamento": "Santa María"
   }
- ]
+ ],
+ "cerro colmena": [],
+ "paso la pampa": [
+  {
+   "nombre": "Paso de la pampa",
+   "osm": "N12239925146",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.625883,
+    -31.7540748
+   ],
+   "departamento": "Santa María"
+  }
+ ],
+ "los espinillos": []
 }

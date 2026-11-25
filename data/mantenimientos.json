@@ -20109,6 +20109,67 @@
     ]
   },
   {
+    "localidad": "Pilar",
+    "fecha": "2026-11-26",
+    "desde": "06:00",
+    "hasta": "07:00",
+    "zona": "Barrio Malvinas y Zona Norte de la localidad.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pilar"
+    ],
+    "sinUbicar": [
+      "malvinas"
+    ],
+    "parciales": [
+      "Pilar"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-26",
+    "desde": "06:00",
+    "hasta": "07:00",
+    "zona": "Localidades de Villa Ciudad de América, Potrero Garay, San Clemente, Cerro Colmena, Paso La Pampa y Los Espinillos: barrios La Gruta, Derivación Grunaut, Derivación Valle Fantástico, Loteo 14 Leguas, Potrerillo, Villa del Cóndor, Grasso Cremonini, Campo Tagle, La Ernestina, Pampa Alta, Escuela 24 de Septiembre, Loteo Dela Mea, La Herradura, Río San José, Estancia La Granadilla, Antena de Claro y Derivación de Forbes.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Del Cóndor (San Clemente)",
+      "Pampa Alta"
+    ],
+    "zonas": [
+      "Villa Ciudad de América",
+      "Potrero de Garay",
+      "San Clemente",
+      "Paso de la pampa"
+    ],
+    "sinUbicar": [
+      "la gruta",
+      "derivacion grunaut",
+      "derivacion valle fantastico",
+      "14 leguas",
+      "potrerillo",
+      "grasso cremonini",
+      "campo tagle",
+      "la ernestina",
+      "escuela 24 septiembre",
+      "dela mea",
+      "la herradura",
+      "rio san jose",
+      "estancia la granadilla",
+      "antena claro",
+      "derivacion forbes"
+    ],
+    "parciales": [
+      "Villa Ciudad de América",
+      "Potrero de Garay",
+      "San Clemente",
+      "Paso de la pampa"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-26",
     "desde": "07:00",
@@ -20168,6 +20229,23 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-26",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "Barrios:Villa Playas Lago San Roque de la localidad de Parque Siquiman, Villa\nParque Lago San Roque de la localidad de Tanti y Lago Azul, de la localidad de Santa Cruz del Lago.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "villa playas lago san roque la localidad parque siquiman",
+      "villa parque lago san roque la localidad tanti",
+      "lago azul",
+      "la localidad santa cruz lago"
+    ]
+  },
+  {
     "localidad": "Ticino",
     "fecha": "2026-11-26",
     "desde": "11:50",
@@ -20198,6 +20276,94 @@
       "zona rural",
       "el terraplen",
       "colectora norte"
+    ]
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-27",
+    "desde": "13:00",
+    "hasta": "13:20",
+    "zona": "Barrios El Talar, La Pampeana, Finca del Sol, Talar del Este, Soles Serranos, San Francisco, Las Corzuelas y Estación YPF.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "El Talar de Mendiolaza (Mendiolaza)",
+      "Soles Serranos (Mendiolaza)",
+      "Las Corzuelas (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [
+      "la pampeana",
+      "finca sol",
+      "talar este",
+      "san francisco",
+      "estacion ypf"
+    ],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-27",
+    "desde": "13:00",
+    "hasta": "16:00",
+    "zona": "barrios: La Cercanía, en forma total y El Talar, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "BARRIO LA CERCANIA (Mendiolaza)",
+      "El Talar de Mendiolaza (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-27",
+    "desde": "13:00",
+    "hasta": "16:00",
+    "zona": "sectores de: Loteo IMD, Colegio El Torreón y Estación de Peaje Juarez Celman, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-27",
+    "desde": "16:00",
+    "hasta": "16:20",
+    "zona": "Barrios El Talar, La Pampeana, Finca del Sol, Talar del Este, Soles Serranos, San Francisco, Las Corzuelas y Estación YPF.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "El Talar de Mendiolaza (Mendiolaza)",
+      "Soles Serranos (Mendiolaza)",
+      "Las Corzuelas (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [
+      "la pampeana",
+      "finca sol",
+      "talar este",
+      "san francisco",
+      "estacion ypf"
+    ],
+    "parciales": [
+      "Mendiolaza"
     ]
   }
 ]

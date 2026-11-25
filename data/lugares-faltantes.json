@@ -35,6 +35,16 @@
   "veces": 4
  },
  {
+  "nombre": "San Francisco",
+  "localidad": "Mendiolaza",
+  "veces": 4
+ },
+ {
+  "nombre": "Talar del Este",
+  "localidad": "Mendiolaza",
+  "veces": 4
+ },
+ {
   "nombre": "Buena Vista",
   "localidad": "Río Ceballos",
   "veces": 4
@@ -465,12 +475,17 @@
   "veces": 2
  },
  {
-  "nombre": "San Francisco",
+  "nombre": "Estación YPF",
   "localidad": "Mendiolaza",
   "veces": 2
  },
  {
-  "nombre": "Talar del Este",
+  "nombre": "Finca del Sol",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
+  "nombre": "La Pampeana",
   "localidad": "Mendiolaza",
   "veces": 2
  },
@@ -665,6 +680,11 @@
   "veces": 1
  },
  {
+  "nombre": "Antena Claro",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Atahona",
   "localidad": "Córdoba",
   "veces": 1
@@ -676,6 +696,11 @@
  },
  {
   "nombre": "Campillo",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Campo Tagle",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -695,7 +720,32 @@
   "veces": 1
  },
  {
+  "nombre": "Cerro Colmena",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Colectora Norte",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Dela Mea",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Derivacion Forbes",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Derivacion Grunaut",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Derivacion Valle Fantastico",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -715,12 +765,22 @@
   "veces": 1
  },
  {
+  "nombre": "Estancia La Granadilla",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Eva Peron",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Fonavi",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Grasso Cremonini",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -740,12 +800,32 @@
   "veces": 1
  },
  {
+  "nombre": "La Ernestina",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "La Herradura",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "La Localidad Santa Cruz Lago",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "La Posta",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "La Tuna",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Lago Azul",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -770,12 +850,22 @@
   "veces": 1
  },
  {
+  "nombre": "Localidades Villa Ciudad America",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Localidades Villa Totoral",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Localidades Villa Valeria",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Los Espinillos Barrios La Gruta",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -820,6 +910,11 @@
   "veces": 1
  },
  {
+  "nombre": "Pampa Alta",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Parque 9 Julio",
   "localidad": "Córdoba",
   "veces": 1
@@ -840,6 +935,21 @@
   "veces": 1
  },
  {
+  "nombre": "Paso La Pampa",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Potrerillo",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Potrero Garay",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Punta Agua",
   "localidad": "Córdoba",
   "veces": 1
@@ -850,12 +960,22 @@
   "veces": 1
  },
  {
+  "nombre": "Rio San Jose",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Roque Saenz Pena",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "San Basilio",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "San Clemente",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -871,6 +991,11 @@
  },
  {
   "nombre": "Villa Cerro Negro",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Condor",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -1182,6 +1307,11 @@
  {
   "nombre": "Río San José",
   "localidad": "Pampa Alta",
+  "veces": 1
+ },
+ {
+  "nombre": "Malvinas",
+  "localidad": "Pilar",
   "veces": 1
  },
  {
