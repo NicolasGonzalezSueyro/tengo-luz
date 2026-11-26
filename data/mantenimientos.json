@@ -20142,7 +20142,7 @@
     "hasta": "07:00",
     "zona": "Barrio Malvinas y Zona Norte de la localidad.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [
       "Pilar"
@@ -20155,13 +20155,13 @@
     ]
   },
   {
-    "localidad": "La Falda",
+    "localidad": "Córdoba",
     "fecha": "2026-11-26",
     "desde": "06:00",
     "hasta": "07:00",
     "zona": "Localidades de Villa Ciudad de América, Potrero Garay, San Clemente, Cerro Colmena, Paso La Pampa y Los Espinillos: barrios La Gruta, Derivación Grunaut, Derivación Valle Fantástico, Loteo 14 Leguas, Potrerillo, Villa del Cóndor, Grasso Cremonini, Campo Tagle, La Ernestina, Pampa Alta, Escuela 24 de Septiembre, Loteo Dela Mea, La Herradura, Río San José, Estancia La Granadilla, Antena de Claro y Derivación de Forbes.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Villa Del Cóndor (San Clemente)",
       "Pampa Alta"
@@ -20201,9 +20201,9 @@
     "fecha": "2026-11-26",
     "desde": "07:00",
     "hasta": "10:00",
-    "zona": "barrios Villa Belgrano y Parque Modelo, en forma parcial.",
+    "zona": "barrios: Villa Belgrano y Parque Modelo, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Villa Belgrano",
       "Parque Modelo"
@@ -20212,16 +20212,30 @@
     "sinUbicar": []
   },
   {
-    "localidad": "Localidad de Ticino: de 7 a 7.10 y de 11.50 a 12.",
+    "localidad": "Dalmacio Velez",
     "fecha": "2026-11-26",
     "desde": "07:00",
     "hasta": "12:00",
     "zona": "Localidad Dalmacio Vélez Sarsfield.",
     "afectacion": null,
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [],
     "zonas": [
       "Dalmacio Vélez Sarsfield"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Ticino",
+    "fecha": "2026-11-26",
+    "desde": "07:00",
+    "hasta": "07:10",
+    "zona": "Localidad de Ticino.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ticino"
     ],
     "sinUbicar": []
   },
@@ -20230,9 +20244,9 @@
     "fecha": "2026-11-26",
     "desde": "08:00",
     "hasta": "11:30",
-    "zona": "barrios Villa Alberdi, Villa Urquiza y San Ignacio, en forma parcial.",
+    "zona": "barrios: Villa Alberdi, Villa Urquiza y San Ignacio, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Villa Alberdi",
       "Villa General Urquiza",
@@ -20242,13 +20256,30 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-26",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "Barrios: Villa Playas Lago San Roque de la localidad de Parque Siquiman, Villa\nParque Lago San Roque de la localidad de Tanti y Lago Azul, de la localidad de Santa Cruz del Lago.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "villa playas lago san roque la localidad parque siquiman",
+      "villa parque lago san roque la localidad tanti",
+      "lago azul",
+      "la localidad santa cruz lago"
+    ]
+  },
+  {
     "localidad": "La Falda",
     "fecha": "2026-11-26",
     "desde": "09:00",
     "hasta": "10:00",
     "zona": "barrio Centro, en forma total.",
     "afectacion": "total",
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Centro (La Falda)"
     ],
@@ -20261,13 +20292,27 @@
     ]
   },
   {
+    "localidad": "Ticino",
+    "fecha": "2026-11-26",
+    "desde": "11:50",
+    "hasta": "12:00",
+    "zona": "Localidad de Ticino.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ticino"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-26",
     "desde": "13:30",
     "hasta": "17:30",
-    "zona": "barrios Ciudad Villa retiro, El Terraplén, Parque Liceo III y colectora norte de zona rural, en forma parcial.",
+    "zona": "barrios: Ciudad Villa retiro, El Terraplén, Parque Liceo III y colectora norte de zona rural, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
     "barrios": [
       "Ciudad Villa Retiro",
       "Parque Liceo 3° Sección"
@@ -20277,6 +20322,49 @@
       "zona rural",
       "el terraplen",
       "colectora norte"
+    ]
+  },
+  {
+    "localidad": "Villa Nueva",
+    "fecha": "2026-11-27",
+    "desde": "06:30",
+    "hasta": "07:30",
+    "zona": "localidad de Villa Nueva en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Villa Nueva"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-27",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "Barrios Autódromo y Argüello Lourdes, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Autódromo",
+      "Argüello Lourdes"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-27",
+    "desde": "09:00",
+    "hasta": "14:00",
+    "zona": "Sector comprendido por Zona Rural de Camino a Chacra de la Merced.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "sector comprendido por zona rural de camino a chacra de la merced"
     ]
   },
   {
