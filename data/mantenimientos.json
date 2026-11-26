@@ -20009,40 +20009,56 @@
     ]
   },
   {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-25",
+    "desde": "07:00",
+    "hasta": "07:20",
+    "zona": "barrio Lomas Sur, en forma parcial. Localidad de Córdoba capital: barrios La Catalina, Villa Rivera Indarte, Rincón Bonito y Barrancas de la Rivera.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
+    "barrios": [
+      "Lomas Sur (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
+    "localidad": "Saldán",
+    "fecha": "2026-11-25",
+    "desde": "07:00",
+    "hasta": "07:20",
+    "zona": "barrio San Francisco y sector comprendido por Club Banco Nación y Predio Club Atlético Belgrano, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
+    "barrios": [
+      "San Francisco (Saldán)"
+    ],
+    "zonas": [
+      "Saldán"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Saldán"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-25",
     "desde": "07:00",
     "hasta": "10:00",
     "zona": "Barrio Villa Allende Parque.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
     "barrios": [
       "Villa Allende Parque"
     ],
     "zonas": [],
     "sinUbicar": []
-  },
-  {
-    "localidad": "Córdoba",
-    "fecha": "2026-11-25",
-    "desde": "07:00",
-    "hasta": "07:20",
-    "zona": "Localidad de Saldán: barrio San Francisco y sector comprendido por Club Banco Nación y Predio Club Atlético Belgrano, en forma parcial. Localidad de Villa Allende: barrio Lomas Sur, en forma parcial. Localidad de Córdoba capital: barrios La Catalina, Villa Rivera Indarte, Rincón Bonito y Barrancas de la Rivera.",
-    "afectacion": "parcial",
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
-    "barrios": [
-      "San Francisco (Saldán)",
-      "Lomas Sur (Villa Allende)"
-    ],
-    "zonas": [
-      "Saldán",
-      "Villa Allende"
-    ],
-    "sinUbicar": [],
-    "parciales": [
-      "Saldán",
-      "Villa Allende"
-    ]
   },
   {
     "localidad": "Villa Allende",
@@ -20051,7 +20067,7 @@
     "hasta": "12:00",
     "zona": "Barrio San Isidro.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
     "barrios": [
       "San Isidro (Villa Allende)"
     ],
@@ -20064,28 +20080,39 @@
     ]
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "Saldán",
     "fecha": "2026-11-25",
     "desde": "10:00",
     "hasta": "10:30",
-    "zona": "Localidad de Saldán: barrio San Francisco y sector comprendido por Club Banco Nación y Predio Club Atlético Belgrano, en forma parcial. Localida de Córdoba capital: barrios La Catalina, Villa Rivera Indarte, Rincón Bonito y Barrancas de La Rivera, en forma parcial.",
+    "zona": "barrio San Francisco y sector comprendido por Club Banco Nación y Predio Club Atlético Belgrano, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
     "barrios": [
       "San Francisco (Saldán)"
     ],
     "zonas": [
       "Saldán"
     ],
-    "sinUbicar": [
-      "la catalina",
-      "villa rivera indarte",
-      "rincon bonito",
-      "barrancas la rivera"
-    ],
+    "sinUbicar": [],
     "parciales": [
       "Saldán"
     ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-25",
+    "desde": "10:00",
+    "hasta": "10:30",
+    "zona": "barrios La Catalina, Villa Rivera Indarte, Rincón Bonito, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
+    "barrios": [
+      "La Catalina",
+      "Villa Rivera Indarte",
+      "Rincón Bonito"
+    ],
+    "zonas": [],
+    "sinUbicar": []
   },
   {
     "localidad": "Villa Allende",
@@ -20094,7 +20121,7 @@
     "hasta": "12:20",
     "zona": "Barrios Lomas Oeste, La Morada y San Isidro.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/24/cortes-de-luz-de-epec-para-este-miercoles-en-cordoba-los-lugares-afectados/",
     "barrios": [
       "Lomas Este (Villa Allende)",
       "Morada (Villa Allende)",
@@ -20115,7 +20142,7 @@
     "hasta": "07:00",
     "zona": "Barrio Malvinas y Zona Norte de la localidad.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [],
     "zonas": [
       "Pilar"
@@ -20128,13 +20155,13 @@
     ]
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "La Falda",
     "fecha": "2026-11-26",
     "desde": "06:00",
     "hasta": "07:00",
     "zona": "Localidades de Villa Ciudad de América, Potrero Garay, San Clemente, Cerro Colmena, Paso La Pampa y Los Espinillos: barrios La Gruta, Derivación Grunaut, Derivación Valle Fantástico, Loteo 14 Leguas, Potrerillo, Villa del Cóndor, Grasso Cremonini, Campo Tagle, La Ernestina, Pampa Alta, Escuela 24 de Septiembre, Loteo Dela Mea, La Herradura, Río San José, Estancia La Granadilla, Antena de Claro y Derivación de Forbes.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Del Cóndor (San Clemente)",
       "Pampa Alta"
@@ -20174,9 +20201,9 @@
     "fecha": "2026-11-26",
     "desde": "07:00",
     "hasta": "10:00",
-    "zona": "barrios: Villa Belgrano y Parque Modelo, en forma parcial.",
+    "zona": "barrios Villa Belgrano y Parque Modelo, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Belgrano",
       "Parque Modelo"
@@ -20185,30 +20212,16 @@
     "sinUbicar": []
   },
   {
-    "localidad": "Dalmacio Velez",
+    "localidad": "Localidad de Ticino: de 7 a 7.10 y de 11.50 a 12.",
     "fecha": "2026-11-26",
     "desde": "07:00",
     "hasta": "12:00",
     "zona": "Localidad Dalmacio Vélez Sarsfield.",
     "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [],
     "zonas": [
       "Dalmacio Vélez Sarsfield"
-    ],
-    "sinUbicar": []
-  },
-  {
-    "localidad": "Ticino",
-    "fecha": "2026-11-26",
-    "desde": "07:00",
-    "hasta": "07:10",
-    "zona": "Localidad de Ticino.",
-    "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
-    "barrios": [],
-    "zonas": [
-      "Ticino"
     ],
     "sinUbicar": []
   },
@@ -20217,9 +20230,9 @@
     "fecha": "2026-11-26",
     "desde": "08:00",
     "hasta": "11:30",
-    "zona": "barrios: Villa Alberdi, Villa Urquiza y San Ignacio, en forma parcial.",
+    "zona": "barrios Villa Alberdi, Villa Urquiza y San Ignacio, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Villa Alberdi",
       "Villa General Urquiza",
@@ -20229,44 +20242,32 @@
     "sinUbicar": []
   },
   {
-    "localidad": "Córdoba",
+    "localidad": "La Falda",
     "fecha": "2026-11-26",
-    "desde": "08:00",
-    "hasta": "12:00",
-    "zona": "Barrios:Villa Playas Lago San Roque de la localidad de Parque Siquiman, Villa\nParque Lago San Roque de la localidad de Tanti y Lago Azul, de la localidad de Santa Cruz del Lago.",
-    "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
-    "barrios": [],
-    "zonas": [],
-    "sinUbicar": [
-      "villa playas lago san roque la localidad parque siquiman",
-      "villa parque lago san roque la localidad tanti",
-      "lago azul",
-      "la localidad santa cruz lago"
-    ]
-  },
-  {
-    "localidad": "Ticino",
-    "fecha": "2026-11-26",
-    "desde": "11:50",
-    "hasta": "12:00",
-    "zona": "Localidad de Ticino.",
-    "afectacion": null,
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
-    "barrios": [],
-    "zonas": [
-      "Ticino"
+    "desde": "09:00",
+    "hasta": "10:00",
+    "zona": "barrio Centro, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
+    "barrios": [
+      "Centro (La Falda)"
     ],
-    "sinUbicar": []
+    "zonas": [
+      "La Falda"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "La Falda"
+    ]
   },
   {
     "localidad": "Córdoba",
     "fecha": "2026-11-26",
     "desde": "13:30",
     "hasta": "17:30",
-    "zona": "barrios: Ciudad Villa retiro, El Terraplén, Parque Liceo III y colectora norte de zona rural, en forma parcial.",
+    "zona": "barrios Ciudad Villa retiro, El Terraplén, Parque Liceo III y colectora norte de zona rural, en forma parcial.",
     "afectacion": "parcial",
-    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "fuente": "https://eldoce.tv/actualidad/2026/11/25/multiples-cortes-de-luz-de-epec-para-este-jueves-en-cordoba-barrios-y-localidades-afectadas/",
     "barrios": [
       "Ciudad Villa Retiro",
       "Parque Liceo 3° Sección"

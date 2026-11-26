@@ -275,6 +275,21 @@
   "veces": 3
  },
  {
+  "nombre": "Derivación Grunaut",
+  "localidad": "Villa Ciudad de América",
+  "veces": 3
+ },
+ {
+  "nombre": "Derivación Valle Fantástico",
+  "localidad": "Villa Ciudad de América",
+  "veces": 3
+ },
+ {
+  "nombre": "La Gruta",
+  "localidad": "Villa Ciudad de América",
+  "veces": 3
+ },
+ {
   "nombre": "Mariapolis",
   "localidad": "Villa María",
   "veces": 3
@@ -396,11 +411,6 @@
  },
  {
   "nombre": "Las Vertientes",
-  "localidad": "Córdoba",
-  "veces": 2
- },
- {
-  "nombre": "Localidad Saldan Barrio San Francisco",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -565,21 +575,6 @@
   "veces": 2
  },
  {
-  "nombre": "Derivación Grunaut",
-  "localidad": "Villa Ciudad de América",
-  "veces": 2
- },
- {
-  "nombre": "Derivación Valle Fantástico",
-  "localidad": "Villa Ciudad de América",
-  "veces": 2
- },
- {
-  "nombre": "La Gruta",
-  "localidad": "Villa Ciudad de América",
-  "veces": 2
- },
- {
   "nombre": "El Pedacito",
   "localidad": "Villa del Totoral",
   "veces": 2
@@ -680,11 +675,6 @@
   "veces": 1
  },
  {
-  "nombre": "Antena Claro",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Atahona",
   "localidad": "Córdoba",
   "veces": 1
@@ -696,11 +686,6 @@
  },
  {
   "nombre": "Campillo",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Campo Tagle",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -720,32 +705,7 @@
   "veces": 1
  },
  {
-  "nombre": "Cerro Colmena",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Colectora Norte",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Dela Mea",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Derivacion Forbes",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Derivacion Grunaut",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Derivacion Valle Fantastico",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -765,22 +725,12 @@
   "veces": 1
  },
  {
-  "nombre": "Estancia La Granadilla",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Eva Peron",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Fonavi",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Grasso Cremonini",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -800,32 +750,12 @@
   "veces": 1
  },
  {
-  "nombre": "La Ernestina",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "La Herradura",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "La Localidad Santa Cruz Lago",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "La Posta",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "La Tuna",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Lago Azul",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -850,22 +780,12 @@
   "veces": 1
  },
  {
-  "nombre": "Localidades Villa Ciudad America",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Localidades Villa Totoral",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Localidades Villa Valeria",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Los Espinillos Barrios La Gruta",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -910,11 +830,6 @@
   "veces": 1
  },
  {
-  "nombre": "Pampa Alta",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Parque 9 Julio",
   "localidad": "Córdoba",
   "veces": 1
@@ -935,21 +850,6 @@
   "veces": 1
  },
  {
-  "nombre": "Paso La Pampa",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Potrerillo",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Potrero Garay",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Punta Agua",
   "localidad": "Córdoba",
   "veces": 1
@@ -960,22 +860,12 @@
   "veces": 1
  },
  {
-  "nombre": "Rio San Jose",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Roque Saenz Pena",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "San Basilio",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "San Clemente",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -991,11 +881,6 @@
  },
  {
   "nombre": "Villa Cerro Negro",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Villa Condor",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -1582,6 +1467,56 @@
  {
   "nombre": "Sorrentino",
   "localidad": "Villa Carlos Paz",
+  "veces": 1
+ },
+ {
+  "nombre": "Antena de Claro",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Campo Tagle",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Dela Mea",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Derivación de Forbes",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Estancia La Granadilla",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Grasso Cremonini",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "La Ernestina",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "La Herradura",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Potrerillo",
+  "localidad": "Villa Ciudad de América",
+  "veces": 1
+ },
+ {
+  "nombre": "Río San José",
+  "localidad": "Villa Ciudad de América",
   "veces": 1
  },
  {
