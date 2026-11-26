@@ -10,6 +10,16 @@
   "veces": 6
  },
  {
+  "nombre": "Ballesteros Sur",
+  "localidad": "Córdoba",
+  "veces": 5
+ },
+ {
+  "nombre": "Localidades Ballesteros",
+  "localidad": "Córdoba",
+  "veces": 5
+ },
+ {
   "nombre": "El Caracol",
   "localidad": "Río Ceballos",
   "veces": 5
@@ -150,17 +160,7 @@
   "veces": 3
  },
  {
-  "nombre": "Ballesteros Sur",
-  "localidad": "Córdoba",
-  "veces": 3
- },
- {
   "nombre": "Bruzone",
-  "localidad": "Córdoba",
-  "veces": 3
- },
- {
-  "nombre": "Localidades Ballesteros",
   "localidad": "Córdoba",
   "veces": 3
  },
@@ -385,6 +385,11 @@
   "veces": 2
  },
  {
+  "nombre": "Comuna Leguizamon",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "Comuna San Roque",
   "localidad": "Córdoba",
   "veces": 2
@@ -395,12 +400,22 @@
   "veces": 2
  },
  {
+  "nombre": "La Cesira",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "Las Vertientes",
   "localidad": "Córdoba",
   "veces": 2
  },
  {
   "nombre": "Localidades Campillo",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Localidades Pueblo Italiano",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -416,6 +431,11 @@
  },
  {
   "nombre": "V Achaval",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Viamonte",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -690,6 +710,11 @@
   "veces": 1
  },
  {
+  "nombre": "Buchardo",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Campillo",
   "localidad": "Córdoba",
   "veces": 1
@@ -716,6 +741,11 @@
  },
  {
   "nombre": "Cerro Colmena",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Charlone",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -790,7 +820,17 @@
   "veces": 1
  },
  {
+  "nombre": "Italo",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Jardin Boulevard",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Jovita",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -845,6 +885,11 @@
   "veces": 1
  },
  {
+  "nombre": "Localidades Serrano",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Localidades Villa Ciudad America",
   "localidad": "Córdoba",
   "veces": 1
@@ -881,6 +926,11 @@
  },
  {
   "nombre": "Mayu Sumaj",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Melo",
   "localidad": "Córdoba",
   "veces": 1
  },

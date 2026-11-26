@@ -68751,6 +68751,678 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Laboulaye",
+    "tipo": "localidad",
+    "patron": "^laboulaye$",
+    "osm": "R9440626",
+    "descripcion": "El anuncio no detalla barrios de Laboulaye: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+     [
+      [
+       [
+        -63.41368,
+        -34.11005
+       ],
+       [
+        -63.41361,
+        -34.11689
+       ],
+       [
+        -63.40581,
+        -34.11847
+       ],
+       [
+        -63.40578,
+        -34.12392
+       ],
+       [
+        -63.40884,
+        -34.12395
+       ],
+       [
+        -63.40884,
+        -34.12684
+       ],
+       [
+        -63.40746,
+        -34.12684
+       ],
+       [
+        -63.40754,
+        -34.14509
+       ],
+       [
+        -63.39777,
+        -34.14573
+       ],
+       [
+        -63.39772,
+        -34.15013
+       ],
+       [
+        -63.39461,
+        -34.15008
+       ],
+       [
+        -63.39458,
+        -34.15375
+       ],
+       [
+        -63.39155,
+        -34.15381
+       ],
+       [
+        -63.39151,
+        -34.1501
+       ],
+       [
+        -63.38236,
+        -34.15003
+       ],
+       [
+        -63.38242,
+        -34.14721
+       ],
+       [
+        -63.37176,
+        -34.14875
+       ],
+       [
+        -63.36407,
+        -34.14889
+       ],
+       [
+        -63.36413,
+        -34.14801
+       ],
+       [
+        -63.36941,
+        -34.14741
+       ],
+       [
+        -63.36972,
+        -34.12911
+       ],
+       [
+        -63.36105,
+        -34.1309
+       ],
+       [
+        -63.36101,
+        -34.12879
+       ],
+       [
+        -63.36534,
+        -34.12786
+       ],
+       [
+        -63.36519,
+        -34.12291
+       ],
+       [
+        -63.36983,
+        -34.12289
+       ],
+       [
+        -63.37003,
+        -34.10883
+       ],
+       [
+        -63.40181,
+        -34.10873
+       ],
+       [
+        -63.40184,
+        -34.10657
+       ],
+       [
+        -63.4103,
+        -34.10657
+       ],
+       [
+        -63.40937,
+        -34.10999
+       ],
+       [
+        -63.40566,
+        -34.10997
+       ],
+       [
+        -63.40583,
+        -34.11738
+       ],
+       [
+        -63.40853,
+        -34.11454
+       ],
+       [
+        -63.40989,
+        -34.11006
+       ],
+       [
+        -63.41368,
+        -34.11005
+       ]
+      ]
+     ],
+     [
+      [
+       [
+        -63.40185,
+        -34.14818
+       ],
+       [
+        -63.40017,
+        -34.14819
+       ],
+       [
+        -63.40022,
+        -34.14647
+       ],
+       [
+        -63.40185,
+        -34.14646
+       ],
+       [
+        -63.40185,
+        -34.14818
+       ]
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Pueblo Italiano",
+    "tipo": "localidad",
+    "patron": "^pueblo italiano$",
+    "osm": "R5268624",
+    "descripcion": "El anuncio no detalla barrios de Pueblo Italiano: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.84683,
+       -33.88291
+      ],
+      [
+       -62.84542,
+       -33.88316
+      ],
+      [
+       -62.84566,
+       -33.88409
+      ],
+      [
+       -62.83651,
+       -33.88576
+      ],
+      [
+       -62.83427,
+       -33.87701
+      ],
+      [
+       -62.84489,
+       -33.87514
+      ],
+      [
+       -62.84683,
+       -33.88291
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Viamonte",
+    "tipo": "localidad",
+    "patron": "^viamonte$",
+    "osm": "R5148036",
+    "descripcion": "El anuncio no detalla barrios de Viamonte: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.10908,
+       -33.74787
+      ],
+      [
+       -63.10654,
+       -33.74832
+      ],
+      [
+       -63.10494,
+       -33.7497
+      ],
+      [
+       -63.1079,
+       -33.75954
+      ],
+      [
+       -63.09645,
+       -33.76149
+      ],
+      [
+       -63.09416,
+       -33.75268
+      ],
+      [
+       -63.0903,
+       -33.75006
+      ],
+      [
+       -63.09367,
+       -33.74723
+      ],
+      [
+       -63.09003,
+       -33.74415
+      ],
+      [
+       -63.0897,
+       -33.74175
+      ],
+      [
+       -63.09613,
+       -33.74078
+      ],
+      [
+       -63.09881,
+       -33.74281
+      ],
+      [
+       -63.10078,
+       -33.74112
+      ],
+      [
+       -63.10908,
+       -33.74787
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "La Cesira",
+    "tipo": "localidad",
+    "patron": "^la cesira$",
+    "osm": "R5148048",
+    "descripcion": "El anuncio no detalla barrios de La Cesira: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.99165,
+       -33.95025
+      ],
+      [
+       -62.98337,
+       -33.96721
+      ],
+      [
+       -62.96528,
+       -33.96085
+      ],
+      [
+       -62.96356,
+       -33.95837
+      ],
+      [
+       -62.96497,
+       -33.95064
+      ],
+      [
+       -62.96927,
+       -33.95111
+      ],
+      [
+       -62.9738,
+       -33.94394
+      ],
+      [
+       -62.99165,
+       -33.95025
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Leguizamón",
+    "tipo": "localidad",
+    "patron": "^leguizamon$",
+    "osm": "R5249781",
+    "descripcion": "El anuncio no detalla barrios de Leguizamón: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.98508,
+       -34.20684
+      ],
+      [
+       -62.97236,
+       -34.20951
+      ],
+      [
+       -62.97021,
+       -34.20199
+      ],
+      [
+       -62.97177,
+       -34.20166
+      ],
+      [
+       -62.9709,
+       -34.1985
+      ],
+      [
+       -62.98219,
+       -34.19647
+      ],
+      [
+       -62.98508,
+       -34.20684
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Serrano",
+    "tipo": "localidad",
+    "patron": "^serrano$",
+    "osm": "R5224103",
+    "descripcion": "El anuncio no detalla barrios de Serrano: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.54952,
+       -34.473
+      ],
+      [
+       -63.5397,
+       -34.48181
+      ],
+      [
+       -63.53607,
+       -34.47903
+      ],
+      [
+       -63.53245,
+       -34.48237
+      ],
+      [
+       -63.52546,
+       -34.477
+      ],
+      [
+       -63.52898,
+       -34.47375
+      ],
+      [
+       -63.52189,
+       -34.46835
+      ],
+      [
+       -63.53173,
+       -34.45948
+      ],
+      [
+       -63.53878,
+       -34.46488
+      ],
+      [
+       -63.53983,
+       -34.46421
+      ],
+      [
+       -63.54831,
+       -34.47068
+      ],
+      [
+       -63.54746,
+       -34.47143
+      ],
+      [
+       -63.54952,
+       -34.473
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Buchardo",
+    "tipo": "localidad",
+    "patron": "^buchardo$",
+    "osm": "R5223288",
+    "descripcion": "El anuncio no detalla barrios de Buchardo: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.53086,
+       -34.71827
+      ],
+      [
+       -63.52706,
+       -34.72672
+      ],
+      [
+       -63.52381,
+       -34.73113
+      ],
+      [
+       -63.49815,
+       -34.73091
+      ],
+      [
+       -63.4962,
+       -34.73012
+      ],
+      [
+       -63.49531,
+       -34.72872
+      ],
+      [
+       -63.49663,
+       -34.70763
+      ],
+      [
+       -63.53086,
+       -34.71827
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Italó",
+    "tipo": "localidad",
+    "patron": "^italo$",
+    "osm": "R5223197",
+    "descripcion": "El anuncio no detalla barrios de Italó: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.78826,
+       -34.78645
+      ],
+      [
+       -63.78799,
+       -34.79566
+      ],
+      [
+       -63.77642,
+       -34.79546
+      ],
+      [
+       -63.77664,
+       -34.78625
+      ],
+      [
+       -63.78826,
+       -34.78645
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Melo",
+    "tipo": "localidad",
+    "patron": "^melo$",
+    "osm": "R5224100",
+    "descripcion": "El anuncio no detalla barrios de Melo: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.45909,
+       -34.35038
+      ],
+      [
+       -63.43779,
+       -34.35446
+      ],
+      [
+       -63.43375,
+       -34.3429
+      ],
+      [
+       -63.44724,
+       -34.33975
+      ],
+      [
+       -63.44869,
+       -34.34407
+      ],
+      [
+       -63.45625,
+       -34.34227
+      ],
+      [
+       -63.45909,
+       -34.35038
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "nombre": "Jovita",
+    "tipo": "localidad",
+    "patron": "^jovita$",
+    "osm": "R5224125",
+    "descripcion": "El anuncio no detalla barrios de Jovita: se marca toda la localidad como referencia."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -63.96561,
+       -34.51412
+      ],
+      [
+       -63.96551,
+       -34.51899
+      ],
+      [
+       -63.95554,
+       -34.52491
+      ],
+      [
+       -63.95141,
+       -34.52588
+      ],
+      [
+       -63.93961,
+       -34.52564
+      ],
+      [
+       -63.93954,
+       -34.52468
+      ],
+      [
+       -63.92573,
+       -34.51609
+      ],
+      [
+       -63.92581,
+       -34.51337
+      ],
+      [
+       -63.93374,
+       -34.51343
+      ],
+      [
+       -63.94012,
+       -34.51096
+      ],
+      [
+       -63.94015,
+       -34.50871
+      ],
+      [
+       -63.95784,
+       -34.509
+      ],
+      [
+       -63.95788,
+       -34.51397
+      ],
+      [
+       -63.96561,
+       -34.51412
+      ]
+     ]
+    ]
+   }
   }
  ]
 }

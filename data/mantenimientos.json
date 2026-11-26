@@ -20454,5 +20454,154 @@
     "parciales": [
       "Mendiolaza"
     ]
+  },
+  {
+    "localidad": "Marcos Juarez",
+    "fecha": "2026-11-28",
+    "desde": "13:00",
+    "hasta": "16:00",
+    "zona": "Sector comprendido por calles Fuerza Aérea Argentina, Cabo Bussano, Av. Circunvalación Este y Belgrano Este.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Marcos Juárez"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "05:30",
+    "hasta": "05:45",
+    "zona": "Localidades de Ballesteros, Ballesteros Sur, Ramón J. Cárcano y Zona Rural.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros",
+      "Ballesteros Sud",
+      "Ramón J. Carcano"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Morrison",
+    "fecha": "2026-11-29",
+    "desde": "05:30",
+    "hasta": "11:30",
+    "zona": "Zona Rural de la localidad.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Morrison"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Morrison"
+    ]
+  },
+  {
+    "localidad": "Laboulaye",
+    "fecha": "2026-11-29",
+    "desde": "07:00",
+    "hasta": "12:00",
+    "zona": "Localidad de Laboulaye y Molinos Florencia.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Laboulaye"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:00",
+    "hasta": "07:15",
+    "zona": "Localidades de Pueblo Italiano, Viamonte, La Cesira y Comuna Leguizamón.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pueblo Italiano",
+      "Viamonte",
+      "La Cesira",
+      "Leguizamón"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:00",
+    "hasta": "09:30",
+    "zona": "Localidades de Serrano, Buchardo, Charlone, Italó, Melo y Jovita.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Serrano",
+      "Buchardo",
+      "Italó",
+      "Melo",
+      "Jovita"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-29",
+    "desde": "07:00",
+    "hasta": "10:00",
+    "zona": "Sector comprendido por Frigorífico Coronel Moldes, Cooperativa Las Acequias y Planta Efluente EMOS.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "11:30",
+    "hasta": "11:45",
+    "zona": "Localidades de Ballesteros, Ballesteros Sur, Ramón J. Cárcano y Zona Rural.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Ballesteros",
+      "Ballesteros Sud",
+      "Ramón J. Carcano"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "12:00",
+    "hasta": "12:15",
+    "zona": "Localidades de Pueblo Italiano, Viamonte, La Cesira y Comuna Leguizamón.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pueblo Italiano",
+      "Viamonte",
+      "La Cesira",
+      "Leguizamón"
+    ],
+    "sinUbicar": []
   }
 ]

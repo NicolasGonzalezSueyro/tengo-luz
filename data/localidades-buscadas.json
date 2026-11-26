@@ -1541,5 +1541,137 @@
   }
  ],
  "los espinillos": [],
- "1150 a 12": []
+ "1150 a 12": [],
+ "laboulaye": [
+  {
+   "nombre": "Laboulaye",
+   "osm": "R9440626",
+   "tipo": "town",
+   "rango": 14,
+   "punto": [
+    -63.3905826,
+    -34.1286369
+   ],
+   "departamento": "Presidente Roque Sáenz Peña"
+  }
+ ],
+ "molinos florencia": [],
+ "pueblo italiano": [
+  {
+   "nombre": "Pueblo Italiano",
+   "osm": "R5268624",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -62.8405243,
+    -33.8822805
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "viamonte": [
+  {
+   "nombre": "Viamonte",
+   "osm": "R5148036",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.0974115,
+    -33.7461952
+   ],
+   "departamento": "Unión"
+  }
+ ],
+ "la cesira": [
+  {
+   "nombre": "La Cesira",
+   "osm": "R5148048",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -62.9773581,
+    -33.9535548
+   ],
+   "departamento": "Presidente Roque Sáenz Peña"
+  }
+ ],
+ "leguizamon": [
+  {
+   "nombre": "Leguizamón",
+   "osm": "R5249781",
+   "tipo": "hamlet",
+   "rango": 16,
+   "punto": [
+    -62.9766771,
+    -34.2027259
+   ],
+   "departamento": "Presidente Roque Sáenz Peña"
+  }
+ ],
+ "serrano": [
+  {
+   "nombre": "Serrano",
+   "osm": "R5224103",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.5400798,
+    -34.4710688
+   ],
+   "departamento": "Presidente Roque Sáenz Peña"
+  }
+ ],
+ "buchardo": [
+  {
+   "nombre": "Buchardo",
+   "osm": "R5223288",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.5073178,
+    -34.7238062
+   ],
+   "departamento": "General Roca"
+  }
+ ],
+ "charlone": [],
+ "italo": [
+  {
+   "nombre": "Italó",
+   "osm": "R5223197",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.7804153,
+    -34.7903604
+   ],
+   "departamento": "General Roca"
+  }
+ ],
+ "melo": [
+  {
+   "nombre": "Melo",
+   "osm": "R5224100",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.445206,
+    -34.3487625
+   ],
+   "departamento": "Presidente Roque Sáenz Peña"
+  }
+ ],
+ "jovita": [
+  {
+   "nombre": "Jovita",
+   "osm": "R5224125",
+   "tipo": "village",
+   "rango": 16,
+   "punto": [
+    -63.9440228,
+    -34.518857
+   ],
+   "departamento": "General Roca"
+  }
+ ]
 }
