@@ -5,6 +5,16 @@
   "veces": 9
  },
  {
+  "nombre": "San Francisco",
+  "localidad": "Mendiolaza",
+  "veces": 6
+ },
+ {
+  "nombre": "Talar del Este",
+  "localidad": "Mendiolaza",
+  "veces": 6
+ },
+ {
   "nombre": "Libertador San Martín",
   "localidad": "Río Ceballos",
   "veces": 6
@@ -35,6 +45,31 @@
   "veces": 5
  },
  {
+  "nombre": "Comuna Leguizamon",
+  "localidad": "Córdoba",
+  "veces": 4
+ },
+ {
+  "nombre": "La Cesira",
+  "localidad": "Córdoba",
+  "veces": 4
+ },
+ {
+  "nombre": "Localidades Pueblo Italiano",
+  "localidad": "Córdoba",
+  "veces": 4
+ },
+ {
+  "nombre": "Viamonte",
+  "localidad": "Córdoba",
+  "veces": 4
+ },
+ {
+  "nombre": "Villa Aurora",
+  "localidad": "Córdoba",
+  "veces": 4
+ },
+ {
   "nombre": "Los Prados 1",
   "localidad": "La Calera",
   "veces": 4
@@ -45,12 +80,17 @@
   "veces": 4
  },
  {
-  "nombre": "San Francisco",
+  "nombre": "Estación YPF",
   "localidad": "Mendiolaza",
   "veces": 4
  },
  {
-  "nombre": "Talar del Este",
+  "nombre": "Finca del Sol",
+  "localidad": "Mendiolaza",
+  "veces": 4
+ },
+ {
+  "nombre": "La Pampeana",
   "localidad": "Mendiolaza",
   "veces": 4
  },
@@ -270,6 +310,11 @@
   "veces": 3
  },
  {
+  "nombre": "Golf",
+  "localidad": "Villa Allende",
+  "veces": 3
+ },
+ {
   "nombre": "Parque PYMES",
   "localidad": "Villa Allende",
   "veces": 3
@@ -375,6 +420,21 @@
   "veces": 2
  },
  {
+  "nombre": "Alto Alegre",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Ascochinga",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Buchardo",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "Cabalango",
   "localidad": "Córdoba",
   "veces": 2
@@ -385,7 +445,7 @@
   "veces": 2
  },
  {
-  "nombre": "Comuna Leguizamon",
+  "nombre": "Charlone",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -395,12 +455,67 @@
   "veces": 2
  },
  {
+  "nombre": "Corral Barrancas",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Don Justo Pietri",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "El Cano",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "El Cedro",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "El Tachito",
   "localidad": "Córdoba",
   "veces": 2
  },
  {
-  "nombre": "La Cesira",
+  "nombre": "Ipv Loza",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Ipv Unquillo",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Italo",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Jovita",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "La Granja",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "La Loma",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Las Arrias",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Las Ensenadas",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -410,12 +525,17 @@
   "veces": 2
  },
  {
-  "nombre": "Localidades Campillo",
+  "nombre": "Localidad Rio Ceballos",
   "localidad": "Córdoba",
   "veces": 2
  },
  {
-  "nombre": "Localidades Pueblo Italiano",
+  "nombre": "Localidad Unquillo",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Localidades Campillo",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -425,7 +545,92 @@
   "veces": 2
  },
  {
+  "nombre": "Localidades Serrano",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Localidades Villa Maria Rio Seco",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Lomas Cigarrales",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Lomas Zupay",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Loza",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Melo",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Mutual",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Norte",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Parque Atalaya",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Parque Guerrero",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "Parque Norte",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Parque Serrano",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Quebrada Honda",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Residencial",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Sabato",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "San Miguel",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Simbolar",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Sobremonte",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -435,12 +640,32 @@
   "veces": 2
  },
  {
+  "nombre": "Tulumba",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "V Achaval",
   "localidad": "Córdoba",
   "veces": 2
  },
  {
-  "nombre": "Viamonte",
+  "nombre": "Villa Cabana",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Villa Diaz",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Villa Eleonor",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
+  "nombre": "Villa Herbera",
   "localidad": "Córdoba",
   "veces": 2
  },
@@ -490,22 +715,12 @@
   "veces": 2
  },
  {
+  "nombre": "Country Q2",
+  "localidad": "Mendiolaza",
+  "veces": 2
+ },
+ {
   "nombre": "Cuatro Hojas",
-  "localidad": "Mendiolaza",
-  "veces": 2
- },
- {
-  "nombre": "Estación YPF",
-  "localidad": "Mendiolaza",
-  "veces": 2
- },
- {
-  "nombre": "Finca del Sol",
-  "localidad": "Mendiolaza",
-  "veces": 2
- },
- {
-  "nombre": "La Pampeana",
   "localidad": "Mendiolaza",
   "veces": 2
  },
@@ -552,6 +767,11 @@
  {
   "nombre": "El Pueblito secciones M",
   "localidad": "Salsipuedes",
+  "veces": 2
+ },
+ {
+  "nombre": "Altos del Golf",
+  "localidad": "Villa Allende",
   "veces": 2
  },
  {
@@ -700,6 +920,11 @@
   "veces": 1
  },
  {
+  "nombre": "Agua Oro",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Antena Claro",
   "localidad": "Córdoba",
   "veces": 1
@@ -711,11 +936,6 @@
  },
  {
   "nombre": "Barrancas La Rivera",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Buchardo",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -746,11 +966,6 @@
  },
  {
   "nombre": "Cerro Colmena",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Charlone",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -830,17 +1045,7 @@
   "veces": 1
  },
  {
-  "nombre": "Italo",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
   "nombre": "Jardin Boulevard",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Jovita",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -856,6 +1061,16 @@
  },
  {
   "nombre": "La Localidad Santa Cruz Lago",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "La Paz",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "La Paz Cooperativas Agua Oro",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -890,12 +1105,12 @@
   "veces": 1
  },
  {
-  "nombre": "Localidades Rio Ceballos",
+  "nombre": "Localidades General Paz",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
-  "nombre": "Localidades Serrano",
+  "nombre": "Localidades Rio Ceballos",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -936,11 +1151,6 @@
  },
  {
   "nombre": "Mayu Sumaj",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Melo",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -1375,6 +1585,11 @@
   "veces": 1
  },
  {
+  "nombre": "General Paz",
+  "localidad": "Pilar",
+  "veces": 1
+ },
+ {
   "nombre": "Malvinas",
   "localidad": "Pilar",
   "veces": 1
@@ -1405,6 +1620,11 @@
   "veces": 1
  },
  {
+  "nombre": "Aero Club",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
   "nombre": "Anses",
   "localidad": "Río Cuarto",
   "veces": 1
@@ -1425,7 +1645,17 @@
   "veces": 1
  },
  {
+  "nombre": "Campo de Pariani",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
   "nombre": "Castelli 2",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Empresas Cargil",
   "localidad": "Río Cuarto",
   "veces": 1
  },
@@ -1436,6 +1666,11 @@
  },
  {
   "nombre": "Int Mojica",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "La Romana",
   "localidad": "Río Cuarto",
   "veces": 1
  },
@@ -1467,6 +1702,31 @@
  {
   "nombre": "Roque S Peña",
   "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Sevilla Real",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "Zonas Aledañas",
+  "localidad": "Río Cuarto",
+  "veces": 1
+ },
+ {
+  "nombre": "El Recreo",
+  "localidad": "Río Segundo",
+  "veces": 1
+ },
+ {
+  "nombre": "Francisco Martínez",
+  "localidad": "Río Segundo",
+  "veces": 1
+ },
+ {
+  "nombre": "Zanardo",
+  "localidad": "Río Segundo",
   "veces": 1
  },
  {
@@ -1581,11 +1841,6 @@
  },
  {
   "nombre": "Frigorífico",
-  "localidad": "Villa Allende",
-  "veces": 1
- },
- {
-  "nombre": "Golf",
   "localidad": "Villa Allende",
   "veces": 1
  },

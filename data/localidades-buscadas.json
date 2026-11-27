@@ -1673,5 +1673,20 @@
    ],
    "departamento": "General Roca"
   }
+ ],
+ "en barrios": [],
+ "villa maria rio seco": [],
+ "falda carmen": [
+  {
+   "nombre": "Falda del Carmen",
+   "osm": "N198450218",
+   "tipo": "village",
+   "rango": 19,
+   "punto": [
+    -64.4584267,
+    -31.5884483
+   ],
+   "departamento": "Santa María"
+  }
  ]
 }

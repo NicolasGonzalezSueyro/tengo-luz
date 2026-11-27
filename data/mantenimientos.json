@@ -20521,6 +20521,25 @@
     ]
   },
   {
+    "localidad": "Pilar",
+    "fecha": "2026-11-28",
+    "desde": "06:00",
+    "hasta": "09:00",
+    "zona": "Barrio General Paz y Sector Centro.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pilar"
+    ],
+    "sinUbicar": [
+      "general paz"
+    ],
+    "parciales": [
+      "Pilar"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-28",
     "desde": "07:30",
@@ -20627,6 +20646,29 @@
   {
     "localidad": "Córdoba",
     "fecha": "2026-11-28",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "Localidades General Paz, Agua de Oro en forma parcial, La Granja, Ascochinga y La\nPaz. Cooperativas: Agua de Oro en forma parcial, La Granja, General Paz, Ascochinga y La Paz.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "General Paz"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "localidades general paz",
+      "agua oro",
+      "la granja",
+      "ascochinga",
+      "la paz cooperativas agua oro",
+      "la granja",
+      "ascochinga",
+      "la paz"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
     "desde": "08:30",
     "hasta": "11:30",
     "zona": "calle 25 de Mayo altura del 178 y del 171.",
@@ -20636,6 +20678,27 @@
     "zonas": [],
     "sinUbicar": [
       "calle 25 de mayo altura del 178 y del 171"
+    ]
+  },
+  {
+    "localidad": "Capilla del Monte",
+    "fecha": "2026-11-28",
+    "desde": "09:30",
+    "hasta": "12:30",
+    "zona": "Barrios Balumba, Argentino e IPV.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Balumba (Capilla del Monte)",
+      "Argentino (Capilla del Monte)",
+      "IPV (Capilla del Monte)"
+    ],
+    "zonas": [
+      "Capilla del Monte"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Capilla del Monte"
     ]
   },
   {
@@ -20671,6 +20734,93 @@
     ]
   },
   {
+    "localidad": "Rio Segundo",
+    "fecha": "2026-11-28",
+    "desde": "13:00",
+    "hasta": "17:00",
+    "zona": "Sector comprendido por calles Sarmiento, Tucumán, Marconi, San Martín y San Luis.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Segundo"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Río Segundo"
+    ],
+    "sector": [
+      [
+        -63.91208,
+        -31.65079
+      ],
+      [
+        -63.91202,
+        -31.65097
+      ],
+      [
+        -63.91076,
+        -31.65242
+      ],
+      [
+        -63.91061,
+        -31.65255
+      ],
+      [
+        -63.9104,
+        -31.6526
+      ],
+      [
+        -63.91019,
+        -31.65255
+      ],
+      [
+        -63.90775,
+        -31.65098
+      ],
+      [
+        -63.90759,
+        -31.65085
+      ],
+      [
+        -63.90754,
+        -31.65067
+      ],
+      [
+        -63.90759,
+        -31.65049
+      ],
+      [
+        -63.90838,
+        -31.64958
+      ],
+      [
+        -63.90854,
+        -31.64945
+      ],
+      [
+        -63.90875,
+        -31.6494
+      ],
+      [
+        -63.90896,
+        -31.64945
+      ],
+      [
+        -63.91187,
+        -31.65047
+      ],
+      [
+        -63.91202,
+        -31.65061
+      ],
+      [
+        -63.91208,
+        -31.65079
+      ]
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-28",
     "desde": "13:30",
@@ -20686,6 +20836,102 @@
     "zonas": [],
     "sinUbicar": [
       "santa catalina"
+    ]
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-29",
+    "desde": "05:00",
+    "hasta": "07:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante diez minutos, dentro del horario consignado: barrios El Talar, El Terrón, La Pampeana, Finca del Sol, Talar del Este, Soles Serranos, San Francisco, Las Corzuelas, Estación YPF, El Perchel, La Serena, Mendiolaza Golf, Valle del Sol, Sierra Nueva y Country Q2.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "El Talar de Mendiolaza (Mendiolaza)",
+      "El Terron (Mendiolaza)",
+      "Soles Serranos (Mendiolaza)",
+      "Las Corzuelas (Mendiolaza)",
+      "Barrio EL PERCHEL (Mendiolaza)",
+      "BARRIO LA CERENA (Mendiolaza)",
+      "BARRIO MENDIOLAZA GOLF (Mendiolaza)",
+      "VALLE DEL SOL (Mendiolaza)",
+      "SIERRA NUEVA (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [
+      "la pampeana",
+      "finca sol",
+      "talar este",
+      "san francisco",
+      "estacion ypf",
+      "country q2"
+    ],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-29",
+    "desde": "05:00",
+    "hasta": "07:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante diez minutos, dentro del horario consignado: barrios Golf, Las Rosas, Cóndor Alto, Cóndor Bajo, Altos del Golf, Las Lomitas, Español, Cumbres del Golf, Lomas Oeste, La Amalia, Centro, Cumbres, Industrial, Terrazas de Villa Allende, La Cruz, Villa Brizuela, Las Polinesias, Jardín de Epicuro, Solares de San Alfonso y San Clemente.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Las Rosas (Villa Allende)",
+      "Cóndor Alto (Villa Allende)",
+      "Cóndor Bajo (Villa Allende)",
+      "Las Lomitas (Villa Allende)",
+      "Español (Villa Allende)",
+      "Barrio Privado Cumbres del Golf (Villa Allende)",
+      "Lomas Este (Villa Allende)",
+      "La Amalia (Villa Allende)",
+      "Villa Allende Centro (Villa Allende)",
+      "Cumbres (Villa Allende)",
+      "Barrio Industrial (Villa Allende)",
+      "Terrazas de la Villa (Villa Allende)",
+      "La Cruz (Villa Allende)",
+      "Villa Brizuela (Villa Allende)",
+      "Las Polinesias (Villa Allende)",
+      "Jardín de Epicuro (Villa Allende)",
+      "Solares de San Alfonso (Villa Allende)",
+      "San Clemente (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [
+      "golf",
+      "altos golf"
+    ],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
+    "localidad": "Saldan",
+    "fecha": "2026-11-29",
+    "desde": "05:00",
+    "hasta": "07:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante diez minutos, dentro del horario consignado: barrios San Remo, San Ignacio, Centro, Los Manantiales y Minetti.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Remo (Saldán)",
+      "San Ignacio (Saldán)",
+      "Saldán Centro (Saldán)",
+      "Los Manantiales (Saldán)",
+      "Minetti (Saldán)"
+    ],
+    "zonas": [
+      "Saldán"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Saldán"
     ]
   },
   {
@@ -20719,6 +20965,164 @@
     "sinUbicar": [],
     "parciales": [
       "Morrison"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-29",
+    "desde": "06:00",
+    "hasta": "09:00",
+    "zona": "Empresas Cargil, La Romana, F & C Gruppo S.A. y Sevilla Real.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "empresas cargil",
+      "la romana",
+      "f c gruppo s a",
+      "sevilla real"
+    ],
+    "parciales": [
+      "Río Cuarto"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "06:00",
+    "hasta": "06:15",
+    "zona": "localidad de Río Ceballos: Ruta E53, desde ET Rio Ceballos, hasta barrio Aires del\nNordeste, barrios: Parque Lujan, Los Vascos, Bela Vista y Aires del Nordeste, en forma total; y barrios: El Cedro, Sábato, Prosur, Nuevo Rio Ceballos y Villa Catalina, en forma parcial.\nlocalidad de Unquillo: desde Sabattini de Ruta E53, hasta San Martin, barrios: Loteo La\nBancaria, San Cayetano De La Divina Providencia, Las Talitas y Centro, en forma parcial; barrios: Villa Tortosa Cruz del Norte 1 y 2, San José, Cigarrales B, Villa Las Mercedes, Villa Forchieri, Progreso, Gobernador Pizarro y  Spilimbergo, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "El Cedro (Río Ceballos)",
+      "Villa Catalina (Río Ceballos)",
+      "Bela Vista (Río Ceballos)",
+      "Aires Del Nordeste (Río Ceballos)",
+      "San Jose (Unquillo)",
+      "Los Cigarrales A (Unquillo)",
+      "Villa las Mercedes (Unquillo)",
+      "Villa Forchieri (Unquillo)",
+      "Progreso (Unquillo)",
+      "Gobernador Pizarro (Unquillo)",
+      "Spillimbergo (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "ruta e53",
+      "sabato",
+      "prosur",
+      "nuevo rio ceballos",
+      "villa tortosa cruz norte 1",
+      "villa tortosa cruz norte 2"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
+  },
+  {
+    "localidad": "Rio Segundo",
+    "fecha": "2026-11-29",
+    "desde": "06:30",
+    "hasta": "09:30",
+    "zona": "Barrios Belgrano, Zanardo, Francisco Martínez y El Recreo.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Barrio Belgrano (Río Segundo)"
+    ],
+    "zonas": [
+      "Río Segundo"
+    ],
+    "sinUbicar": [
+      "zanardo",
+      "francisco martinez",
+      "el recreo"
+    ],
+    "parciales": [
+      "Río Segundo"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "06:30",
+    "hasta": "06:45",
+    "zona": "localidad de Rio Ceballos, barrios: Parque Atalaya, Sábato, Don Justo Pietri e IPV Loza, en forma total y barrios: Loza, El Cedro, La Amistad y Parque Guerrero, en forma parcial. \nlocalidad de Unquillo, en barrios: Los Talitas, San Miguel, Providencia, Villa Diaz, Villa Aurora, Lomas de Zupay, Quebrada Honda, Los Quebrachitos, Las Marías, Villa Cabana, Lomas de Cigarrales, La Loma, Villa Herbera, Alto Alegre, Parque Serrano, Residencial, I.P.V. Unquillo, Villa Aurora, Mutual, Villa Eleonor y Corral De Barrancas, en forma total y barrios Norte, Centro y Las Ensenadas, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Loza (Río Ceballos)",
+      "El Cedro (Río Ceballos)",
+      "Los Talitas (Unquillo)",
+      "Villa San Miguel (Unquillo)",
+      "La Providencia (Unquillo)",
+      "Villa Diaz (Unquillo)",
+      "Villa Aurora (Unquillo)",
+      "Lomaz del Zupay (Unquillo)",
+      "Quebrada Honda (Unquillo)",
+      "Los Quebrachitos (Unquillo)",
+      "Las Marías (Unquillo)",
+      "Villa Cabana (Unquillo)",
+      "Loma del Cigarral (Unquillo)",
+      "La Loma (Unquillo)",
+      "Villa Herbera (Unquillo)",
+      "Alto Alegre (Unquillo)",
+      "Parque Serrano (Unquillo)",
+      "Residencial (Unquillo)",
+      "Mutual (Unquillo)",
+      "Corral de Barrancas (Unquillo)",
+      "Norte (Unquillo)",
+      "Centro (Unquillo)",
+      "Las Ensenadas (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "parque atalaya",
+      "sabato",
+      "don justo pietri",
+      "ipv loza",
+      "la amistad",
+      "parque guerrero",
+      "i p v unquillo",
+      "villa eleonor"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
+  },
+  {
+    "localidad": "Rio Cuarto",
+    "fecha": "2026-11-29",
+    "desde": "07:00",
+    "hasta": "11:00",
+    "zona": "Barrios Aero Village, Aero Club, Campo de Pariani y zonas aledañas.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Aero Village (Río Cuarto)"
+    ],
+    "zonas": [
+      "Río Cuarto"
+    ],
+    "sinUbicar": [
+      "aero club",
+      "campo pariani",
+      "zonas aledanas"
+    ],
+    "parciales": [
+      "Río Cuarto"
     ]
   },
   {
@@ -20769,6 +21173,30 @@
       "Jovita"
     ],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:00",
+    "hasta": "07:15",
+    "zona": "Localidades de Villa de María de Río Seco y San Francisco del Chañar. Cooperativas: La Dormida, Las Arrias, Sobremonte, Simbolar, Tulumba y El Cano.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "San Francisco del Chañar"
+    ],
+    "sinUbicar": [
+      "cooperativas la dormida",
+      "las arrias",
+      "sobremonte",
+      "simbolar",
+      "tulumba",
+      "el cano"
+    ],
+    "parciales": [
+      "San Francisco del Chañar"
+    ]
   },
   {
     "localidad": "Rio Cuarto",
@@ -20839,6 +21267,112 @@
   {
     "localidad": "Córdoba",
     "fecha": "2026-11-29",
+    "desde": "07:30",
+    "hasta": "07:45",
+    "zona": "Localidades de Pueblo Italiano, Viamonte, La Cesira y Comuna Leguizamón.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pueblo Italiano",
+      "Viamonte",
+      "La Cesira",
+      "Leguizamón"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:30",
+    "hasta": "10:00",
+    "zona": "Localidades de Serrano, Buchardo, Charlone, Italó, Melo y Jovita.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Serrano",
+      "Buchardo",
+      "Italó",
+      "Melo",
+      "Jovita"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Laboulaye",
+    "fecha": "2026-11-29",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "Sector comprendido por Molinos Florencia.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Laboulaye"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Laboulaye"
+    ],
+    "sector": [
+      [
+        -63.3961,
+        -34.11909
+      ],
+      [
+        -63.39588,
+        -34.11976
+      ],
+      [
+        -63.39528,
+        -34.12025
+      ],
+      [
+        -63.39447,
+        -34.12043
+      ],
+      [
+        -63.39365,
+        -34.12025
+      ],
+      [
+        -63.39306,
+        -34.11976
+      ],
+      [
+        -63.39284,
+        -34.11909
+      ],
+      [
+        -63.39306,
+        -34.11841
+      ],
+      [
+        -63.39365,
+        -34.11792
+      ],
+      [
+        -63.39447,
+        -34.11774
+      ],
+      [
+        -63.39528,
+        -34.11792
+      ],
+      [
+        -63.39588,
+        -34.11841
+      ],
+      [
+        -63.3961,
+        -34.11909
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
     "desde": "08:00",
     "hasta": "10:00",
     "zona": "barrio Carcano en forma parcial.",
@@ -20849,6 +21383,99 @@
     ],
     "zonas": [],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-29",
+    "desde": "08:00",
+    "hasta": "12:00",
+    "zona": "Barrios Residencial Centro, Lomas de Mendiolaza, Country Cuatro Hojas y Los Cigarrales.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "RESIDENCIAL CENTRO (Mendiolaza)",
+      "LOMAS DE MENDIOLAZA (Mendiolaza)",
+      "Country Cuatro Hojas (Mendiolaza)",
+      "Los Cigarrales (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Pilar",
+    "fecha": "2026-11-29",
+    "desde": "08:00",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por calles Amadeo Sabattini e Int. Colazo Castellanos.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pilar"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Pilar"
+    ],
+    "sector": [
+      [
+        -63.86314,
+        -31.6678
+      ],
+      [
+        -63.86297,
+        -31.66834
+      ],
+      [
+        -63.8625,
+        -31.66873
+      ],
+      [
+        -63.86187,
+        -31.66888
+      ],
+      [
+        -63.86124,
+        -31.66873
+      ],
+      [
+        -63.86077,
+        -31.66834
+      ],
+      [
+        -63.8606,
+        -31.6678
+      ],
+      [
+        -63.86077,
+        -31.66726
+      ],
+      [
+        -63.86124,
+        -31.66686
+      ],
+      [
+        -63.86187,
+        -31.66672
+      ],
+      [
+        -63.8625,
+        -31.66686
+      ],
+      [
+        -63.86297,
+        -31.66726
+      ],
+      [
+        -63.86314,
+        -31.6678
+      ]
+    ]
   },
   {
     "localidad": "Córdoba",
@@ -20867,6 +21494,102 @@
     "sinUbicar": []
   },
   {
+    "localidad": "Mendiolaza",
+    "fecha": "2026-11-29",
+    "desde": "12:00",
+    "hasta": "14:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante diez minutos, dentro del horario consignado: barrios El Talar, El Terrón, La Pampeana, Finca del Sol, Talar del Este, Soles Serranos, San Francisco, Las Corzuelas, Estación YPF, El Perchel, La Serena, Mendiolaza Golf, Valle del Sol, Sierra Nueva y Country Q2.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "El Talar de Mendiolaza (Mendiolaza)",
+      "El Terron (Mendiolaza)",
+      "Soles Serranos (Mendiolaza)",
+      "Las Corzuelas (Mendiolaza)",
+      "Barrio EL PERCHEL (Mendiolaza)",
+      "BARRIO LA CERENA (Mendiolaza)",
+      "BARRIO MENDIOLAZA GOLF (Mendiolaza)",
+      "VALLE DEL SOL (Mendiolaza)",
+      "SIERRA NUEVA (Mendiolaza)"
+    ],
+    "zonas": [
+      "Mendiolaza"
+    ],
+    "sinUbicar": [
+      "la pampeana",
+      "finca sol",
+      "talar este",
+      "san francisco",
+      "estacion ypf",
+      "country q2"
+    ],
+    "parciales": [
+      "Mendiolaza"
+    ]
+  },
+  {
+    "localidad": "Villa Allende",
+    "fecha": "2026-11-29",
+    "desde": "12:00",
+    "hasta": "14:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante diez minutos, dentro del horario consignado: barrios Golf, Las Rosas, Cóndor Alto, Cóndor Bajo, Altos del Golf, Las Lomitas, Español, Cumbres del Golf, Lomas Oeste, La Amalia, Centro, Cumbres, Industrial, Terrazas de Villa Allende, La Cruz, Villa Brizuela, Las Polinesias, Jardín de Epicuro, Solares de San Alfonso y San Clemente.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Las Rosas (Villa Allende)",
+      "Cóndor Alto (Villa Allende)",
+      "Cóndor Bajo (Villa Allende)",
+      "Las Lomitas (Villa Allende)",
+      "Español (Villa Allende)",
+      "Barrio Privado Cumbres del Golf (Villa Allende)",
+      "Lomas Este (Villa Allende)",
+      "La Amalia (Villa Allende)",
+      "Villa Allende Centro (Villa Allende)",
+      "Cumbres (Villa Allende)",
+      "Barrio Industrial (Villa Allende)",
+      "Terrazas de la Villa (Villa Allende)",
+      "La Cruz (Villa Allende)",
+      "Villa Brizuela (Villa Allende)",
+      "Las Polinesias (Villa Allende)",
+      "Jardín de Epicuro (Villa Allende)",
+      "Solares de San Alfonso (Villa Allende)",
+      "San Clemente (Villa Allende)"
+    ],
+    "zonas": [
+      "Villa Allende"
+    ],
+    "sinUbicar": [
+      "golf",
+      "altos golf"
+    ],
+    "parciales": [
+      "Villa Allende"
+    ]
+  },
+  {
+    "localidad": "Saldan",
+    "fecha": "2026-11-29",
+    "desde": "12:00",
+    "hasta": "14:00",
+    "zona": "Cada usuario de los siguientes barrios o zonas tendrá una única restricción del servicio durante diez minutos, dentro del horario consignado: barrios San Remo, San Ignacio, Centro, Los Manantiales y Minetti.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "San Remo (Saldán)",
+      "San Ignacio (Saldán)",
+      "Saldán Centro (Saldán)",
+      "Los Manantiales (Saldán)",
+      "Minetti (Saldán)"
+    ],
+    "zonas": [
+      "Saldán"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Saldán"
+    ]
+  },
+  {
     "localidad": "Córdoba",
     "fecha": "2026-11-29",
     "desde": "12:00",
@@ -20882,5 +21605,280 @@
       "Leguizamón"
     ],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "12:30",
+    "hasta": "12:45",
+    "zona": "Localidades de Pueblo Italiano, Viamonte, La Cesira y Comuna Leguizamón.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Pueblo Italiano",
+      "Viamonte",
+      "La Cesira",
+      "Leguizamón"
+    ],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "14:15",
+    "hasta": "14:30",
+    "zona": "localidad de Rio Ceballos, barrios: Parque Atalaya, Sábato, Don Justo Pietri e IPV Loza, en forma total y barrios: Loza, El Cedro, La Amistad y Parque Guerrero, en forma parcial. \nlocalidad de Unquillo, en barrios: Los Talitas, San Miguel, Providencia, Villa Diaz, Villa Aurora, Lomas de Zupay, Quebrada Honda, Los Quebrachitos, Las Marías, Villa Cabana, Lomas de Cigarrales, La Loma, Villa Herbera, Alto Alegre, Parque Serrano, Residencial, I.P.V. Unquillo, Villa Aurora, Mutual, Villa Eleonor y Corral De Barrancas, en forma total y barrios Norte, Centro y Las Ensenadas, en forma parcial.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Loza (Río Ceballos)",
+      "El Cedro (Río Ceballos)",
+      "Los Talitas (Unquillo)",
+      "Villa San Miguel (Unquillo)",
+      "La Providencia (Unquillo)",
+      "Villa Diaz (Unquillo)",
+      "Villa Aurora (Unquillo)",
+      "Lomaz del Zupay (Unquillo)",
+      "Quebrada Honda (Unquillo)",
+      "Los Quebrachitos (Unquillo)",
+      "Las Marías (Unquillo)",
+      "Villa Cabana (Unquillo)",
+      "Loma del Cigarral (Unquillo)",
+      "La Loma (Unquillo)",
+      "Villa Herbera (Unquillo)",
+      "Alto Alegre (Unquillo)",
+      "Parque Serrano (Unquillo)",
+      "Residencial (Unquillo)",
+      "Mutual (Unquillo)",
+      "Corral de Barrancas (Unquillo)",
+      "Norte (Unquillo)",
+      "Centro (Unquillo)",
+      "Las Ensenadas (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "parque atalaya",
+      "sabato",
+      "don justo pietri",
+      "ipv loza",
+      "la amistad",
+      "parque guerrero",
+      "i p v unquillo",
+      "villa eleonor"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "14:45",
+    "hasta": "15:00",
+    "zona": "localidad de Río Ceballos: Ruta E53, desde ET Rio Ceballos, hasta barrio Aires del\nNordeste, barrios: Parque Lujan, Los Vascos, Bela Vista y Aires del Nordeste, en forma total; y barrios: El Cedro, Sábato, Prosur, Nuevo Rio Ceballos y Villa Catalina, en forma parcial.\nlocalidad de Unquillo: desde Sabattini de Ruta E53, hasta San Martin, barrios: Loteo La\nBancaria, San Cayetano De La Divina Providencia, Las Talitas y Centro, en forma parcial; barrios: Villa Tortosa Cruz del Norte 1 y 2, San José, Cigarrales B, Villa Las Mercedes, Villa Forchieri, Progreso, Gobernador Pizarro y  Spilimbergo, en forma total.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "El Cedro (Río Ceballos)",
+      "Villa Catalina (Río Ceballos)",
+      "Bela Vista (Río Ceballos)",
+      "Aires Del Nordeste (Río Ceballos)",
+      "San Jose (Unquillo)",
+      "Los Cigarrales A (Unquillo)",
+      "Villa las Mercedes (Unquillo)",
+      "Villa Forchieri (Unquillo)",
+      "Progreso (Unquillo)",
+      "Gobernador Pizarro (Unquillo)",
+      "Spillimbergo (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "ruta e53",
+      "sabato",
+      "prosur",
+      "nuevo rio ceballos",
+      "villa tortosa cruz norte 1",
+      "villa tortosa cruz norte 2"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "18:00",
+    "hasta": "18:15",
+    "zona": "Localidades de Villa de María de Río Seco y San Francisco del Chañar. Cooperativas: La Dormida, Las Arrias, Sobremonte, Simbolar, Tulumba y El Cano.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "San Francisco del Chañar"
+    ],
+    "sinUbicar": [
+      "cooperativas la dormida",
+      "las arrias",
+      "sobremonte",
+      "simbolar",
+      "tulumba",
+      "el cano"
+    ],
+    "parciales": [
+      "San Francisco del Chañar"
+    ]
+  },
+  {
+    "localidad": "Malagueño",
+    "fecha": "2026-11-30",
+    "desde": "09:00",
+    "hasta": "11:15",
+    "zona": "Sector comprendido por Punta del Agua, Las Cañitas, Valle del Golf, Sierras de Oro y Estación del Carmen.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Malagueño"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Malagueño"
+    ]
+  },
+  {
+    "localidad": "Anisacate",
+    "fecha": "2026-12-01",
+    "desde": "06:30",
+    "hasta": "06:45",
+    "zona": "Sector comprendido por curva de la S, Campo Becerra, Almacenes Becerra y Cooperativa Anisacate.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Anisacate"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Anisacate"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-12-01",
+    "desde": "07:30",
+    "hasta": "13:30",
+    "zona": "Barrio Almirante Brown, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Almirante Brown"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-12-01",
+    "desde": "08:00",
+    "hasta": "11:00",
+    "zona": "Barrio Las Huertillas, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Las Huertillas"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-12-01",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "Barrios Tranviarios y Las Dalias, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Tranviarios",
+      "Las Dalias"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Anisacate",
+    "fecha": "2026-12-01",
+    "desde": "09:00",
+    "hasta": "09:15",
+    "zona": "Sector comprendido por curva de la S, Campo Becerra, Almacenes Becerra y Cooperativa Anisacate.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Anisacate"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Anisacate"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-12-01",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "Barrios Poeta Lugones, Las Magnolias y Alto Verde, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Poeta Lugones",
+      "Las Magnolias",
+      "Alto Verde"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Falda del Carmen",
+    "fecha": "2026-12-02",
+    "desde": "08:00",
+    "hasta": "08:30",
+    "zona": "Sector comprendido por Falta del Cañete, Derivación Villa Sakura, Campo Ternasky, Campo Rossi, Loteo Los Encantos, Colegio Falda del Carmen, Camino Viejo Autódromo y Chediack S.A.I.C.A. \"Base Córdoba\".",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Falda del Carmen"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Falda del Carmen"
+    ]
+  },
+  {
+    "localidad": "Falda del Carmen",
+    "fecha": "2026-12-02",
+    "desde": "10:30",
+    "hasta": "11:00",
+    "zona": "Sector comprendido por Falta del Cañete, Derivación Villa Sakura, Campo Ternasky, Campo Rossi, Loteo Los Encantos, Colegio Falda del Carmen, Camino Viejo Autódromo y Chediack S.A.I.C.A. \"Base Córdoba\".",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Falda del Carmen"
+    ],
+    "sinUbicar": [],
+    "parciales": [
+      "Falda del Carmen"
+    ]
   }
 ]
