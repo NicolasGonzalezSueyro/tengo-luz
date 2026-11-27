@@ -20368,6 +20368,21 @@
     ]
   },
   {
+    "localidad": "Charras",
+    "fecha": "2026-11-27",
+    "desde": "12:30",
+    "hasta": "13:30",
+    "zona": "Localidades de Charras y Olaeta",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [
+      "Charras",
+      "Olaeta"
+    ],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Mendiolaza",
     "fecha": "2026-11-27",
     "desde": "13:00",
@@ -20415,6 +20430,31 @@
     ]
   },
   {
+    "localidad": "Rio Ceballos",
+    "fecha": "2026-11-27",
+    "desde": "13:00",
+    "hasta": "13:15",
+    "zona": "En las localidades de Río Ceballos y Unquillo: Ruta E53 desde ET Rio Ceballos hasta Aires del Nordeste, barrios El Cedro en forma parcial, Parque Lujan, Los Vascos, Sábato en forma parcial, Prosur en forma parcial, Nuevo Rio Ceballos en forma parcial, Bela Vista, Villa Catalina en forma parcial, Aires del Nordeste, Av. Sabattini de Ruta E53 a Av. San Martín, Loteo La Bancaria, San Cayetano de La Divina Providencia en forma parcial y Los Talitas en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Bela Vista (Río Ceballos)",
+      "Aires Del Nordeste (Río Ceballos)",
+      "La Bancaria (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "ruta e53"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
+  },
+  {
     "localidad": "Villa Allende",
     "fecha": "2026-11-27",
     "desde": "13:00",
@@ -20427,6 +20467,31 @@
       "Villa Allende"
     ],
     "sinUbicar": []
+  },
+  {
+    "localidad": "Rio Ceballos",
+    "fecha": "2026-11-27",
+    "desde": "15:45",
+    "hasta": "16:00",
+    "zona": "En las localidades de Río Ceballos y Unquillo: Ruta E53 desde ET Rio Ceballos hasta Aires del Nordeste, barrios El Cedro en forma parcial, Parque Lujan, Los Vascos, Sábato en forma parcial, Prosur en forma parcial, Nuevo Rio Ceballos en forma parcial, Bela Vista, Villa Catalina en forma parcial, Aires del Nordeste, Av. Sabattini de Ruta E53 a Av. San Martín, Loteo La Bancaria, San Cayetano de La Divina Providencia en forma parcial y Los Talitas en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Bela Vista (Río Ceballos)",
+      "Aires Del Nordeste (Río Ceballos)",
+      "La Bancaria (Unquillo)"
+    ],
+    "zonas": [
+      "Río Ceballos",
+      "Unquillo"
+    ],
+    "sinUbicar": [
+      "ruta e53"
+    ],
+    "parciales": [
+      "Río Ceballos",
+      "Unquillo"
+    ]
   },
   {
     "localidad": "Mendiolaza",
@@ -20456,6 +20521,139 @@
     ]
   },
   {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
+    "desde": "07:30",
+    "hasta": "09:30",
+    "zona": "barrios Jorge Newbery y Jerónimo Luis de Cabrera en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Parque Jorge Newbery",
+      "Jerónimo Luis de Cabrera"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
+    "desde": "07:30",
+    "hasta": "10:30",
+    "zona": "calles Belgrano al 700/800 y Achaval Rodríguez al 200/300 de barrio Güemes, en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Güemes"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "calles belgrano al 700 800 y achaval rodriguez al 200 300 de barrio guemes"
+    ],
+    "sector": [
+      [
+        -64.19344,
+        -31.4242
+      ],
+      [
+        -64.19327,
+        -31.42474
+      ],
+      [
+        -64.19281,
+        -31.42514
+      ],
+      [
+        -64.19218,
+        -31.42528
+      ],
+      [
+        -64.19155,
+        -31.42514
+      ],
+      [
+        -64.19108,
+        -31.42474
+      ],
+      [
+        -64.19092,
+        -31.4242
+      ],
+      [
+        -64.19108,
+        -31.42366
+      ],
+      [
+        -64.19155,
+        -31.42327
+      ],
+      [
+        -64.19218,
+        -31.42312
+      ],
+      [
+        -64.19281,
+        -31.42327
+      ],
+      [
+        -64.19327,
+        -31.42366
+      ],
+      [
+        -64.19344,
+        -31.4242
+      ]
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
+    "desde": "08:00",
+    "hasta": "11:30",
+    "zona": "barrios El Mirador de La Recta, Residencial San José, Villa Quisquizacate, Villa Walcarde y Alto Hermoso en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Quisquizacate",
+      "Alto Hermoso",
+      "Residencial San Jorge"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "el mirador la recta",
+      "villa walcarde"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
+    "desde": "08:30",
+    "hasta": "11:30",
+    "zona": "calle 25 de Mayo altura del 178 y del 171.",
+    "afectacion": null,
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [],
+    "zonas": [],
+    "sinUbicar": [
+      "calle 25 de mayo altura del 178 y del 171"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
+    "desde": "09:30",
+    "hasta": "12:30",
+    "zona": "barrios Hipólito Yrigoyen y Panamericano en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Hipólito Yrigoyen",
+      "Panamericano"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
     "localidad": "Marcos Juarez",
     "fecha": "2026-11-28",
     "desde": "13:00",
@@ -20470,6 +20668,24 @@
     "sinUbicar": [],
     "parciales": [
       "Marcos Juárez"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-28",
+    "desde": "13:30",
+    "hasta": "17:30",
+    "zona": "barrios Los Carolinos, Santa Catalina, Portal del Jacaranda y El Refugio en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Barrio Portal del Jacarandá",
+      "El Refugio",
+      "La Carolina"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "santa catalina"
     ]
   },
   {
@@ -20570,6 +20786,69 @@
     "parciales": [
       "Río Cuarto"
     ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:30",
+    "hasta": "12:30",
+    "zona": "barrio Los Boulevares en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Los Boulevares"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:30",
+    "hasta": "11:30",
+    "zona": "barrios Jardín Espinosa, Ampliación Jardín Espinosa, Jockey Club y Jardín en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Jardín Espinosa",
+      "Ampliación Jardín Espinosa",
+      "Jockey Club",
+      "Jardín"
+    ],
+    "zonas": [],
+    "sinUbicar": []
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "07:30",
+    "hasta": "13:30",
+    "zona": "barrios Parque Norte, Parque Esperanza, Bicentenario, y Ciudad de los Niños, en forma total.",
+    "afectacion": "total",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Villa Centenario",
+      "Ciudad Los Ninos"
+    ],
+    "zonas": [],
+    "sinUbicar": [
+      "parque norte",
+      "parque esperanza"
+    ]
+  },
+  {
+    "localidad": "Córdoba",
+    "fecha": "2026-11-29",
+    "desde": "08:00",
+    "hasta": "10:00",
+    "zona": "barrio Carcano en forma parcial.",
+    "afectacion": "parcial",
+    "fuente": "https://www.epec.com.ar/actualidad/trabajos-mejoras",
+    "barrios": [
+      "Ramón J. Cárcano"
+    ],
+    "zonas": [],
+    "sinUbicar": []
   },
   {
     "localidad": "Córdoba",

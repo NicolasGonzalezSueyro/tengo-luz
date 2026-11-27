@@ -425,6 +425,11 @@
   "veces": 2
  },
  {
+  "nombre": "Parque Norte",
+  "localidad": "Córdoba",
+  "veces": 2
+ },
+ {
   "nombre": "Tanti",
   "localidad": "Córdoba",
   "veces": 2
@@ -775,6 +780,11 @@
   "veces": 1
  },
  {
+  "nombre": "El Mirador La Recta",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "El Rincon",
   "localidad": "Córdoba",
   "veces": 1
@@ -965,17 +975,17 @@
   "veces": 1
  },
  {
+  "nombre": "Parque Esperanza",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Parque Industrial Mi Granja",
   "localidad": "Córdoba",
   "veces": 1
  },
  {
   "nombre": "Parque Las Rosas",
-  "localidad": "Córdoba",
-  "veces": 1
- },
- {
-  "nombre": "Parque Norte",
   "localidad": "Córdoba",
   "veces": 1
  },
@@ -1025,6 +1035,11 @@
   "veces": 1
  },
  {
+  "nombre": "Santa Catalina",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
   "nombre": "Unquillo En Los Siguientes Barrios",
   "localidad": "Córdoba",
   "veces": 1
@@ -1046,6 +1061,11 @@
  },
  {
   "nombre": "Villa Gutierrez",
+  "localidad": "Córdoba",
+  "veces": 1
+ },
+ {
+  "nombre": "Villa Walcarde",
   "localidad": "Córdoba",
   "veces": 1
  },
